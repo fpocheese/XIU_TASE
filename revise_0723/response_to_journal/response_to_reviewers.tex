@@ -64,12 +64,34 @@ Interception Strategy for Maneuvering Swarms with Target Assignment''
 \end{center}
 \bigskip
 
-% \noindent We thank the reviewer for the careful reading and the constructive
-% comments. Below, each comment is reproduced verbatim (grey box), followed by our
-% point-by-point response, the exact location and wording of the corresponding
-% revision in the manuscript (blue box, matching the blue highlight in the revised
-% PDF), and the supporting figures prepared for this letter. Equation and section
-% numbers refer to the revised manuscript.
+\noindent\textbf{Response to the Associate Editor.}\quad
+We sincerely thank the Associate Editor for the careful synthesis of the
+reviewers' concerns and for the constructive guidance. We agree that the
+original manuscript required substantial improvement in presentation,
+theoretical rigor, and practical validation. In the revised manuscript, we
+have added a concise notation table, complete pseudocode for IDBO and
+ART-MAPPO, and intuitive explanations alongside the principal equations, and
+have clarified the algorithmic figures and several ambiguous definitions. We
+corrected the interpretation of the trust update so that its physical
+description is consistent with the smoothing process, and rectified the
+reported episode horizon and engagement-region parameters. The evaluation
+environment has been reformulated in three dimensions and now incorporates
+communication delay, packet loss, and sensing uncertainty; all end-to-end
+target-assignment and cooperative-guidance experiments were rerun in this
+environment, with additional hardware-in-the-loop validation on five NVIDIA
+Jetson NX nodes. We further added controlled component ablations, sensitivity
+analyses of the IDBO assignment weights, reward weights, and training
+hyperparameters, as well as robustness studies covering partial interceptor
+failures, unsuccessful and delayed engagements, and an unseen bang--bang
+maneuver pattern. The IDBO convergence conditions, computational complexity,
+and communication-delay-dependent scalability have been expanded. For
+ART-MAPPO, we added a comparison with conventional MAPPO regarding
+convergence guarantees, exploration--exploitation balance, and policy-update
+robustness, while explicitly stating that no stronger formal global
+convergence guarantee is claimed. We believe
+these revisions substantially improve the clarity, technical soundness,
+experimental completeness, and practical credibility of the manuscript. All
+corresponding changes are highlighted in the revised version.
 
 \bigskip
 \hrule
@@ -666,6 +688,7 @@ exploration. The value-loss term trains the centralized critic.}
 % =====================================================================
 %  Re1_4
 % =====================================================================
+
 \subsection*{Comment 1.4}
 
 \begin{reviewercomment}{Reviewer comment 1.4}
@@ -673,64 +696,196 @@ Expand discussion on real-world applicability, including communication delays,
 sensing uncertainty, and 3D dynamics.
 \end{reviewercomment}
 
-\rsp We thank the reviewer for this suggestion, which we have addressed structurally
-rather than as an added paragraph. The revised evaluation is now conducted in a full
-\emph{three-dimensional} engagement, and the three factors the reviewer lists are
-built into the closed loop rather than discussed in the abstract:
-\begin{itemize}
-  \item \textbf{3D dynamics.} The kinematic and line-of-sight models in Section~II are
-  extended from the planar formulation to three dimensions. A pitch (flight-path)
-  channel and its associated normal load $n_z$ are added, the velocity is resolved
-  into $(\dot x,\dot y,\dot z)$ through the pitch and heading angles, and the
-  zero-effort-miss and relative-geometry relations are rewritten in vector form. The
-  original planar definitions are preserved as the horizontal projection, so the
-  extension supplements rather than replaces the established notation.
-  \item \textbf{Communication delay.} A sensing delay of $100$~ms and a command-channel
-  delay of $50$~ms are injected as explicit delay lines in the evaluation (new
-  Communication-Delay and Observation-Uncertainty table in Section~V); its effect on the
-  distributed IDBO consensus is quantified directly below and analyzed in full in
-  Comment~3.2.
-  \item \textbf{Sensing uncertainty.} Zero-mean Gaussian position ($\sigma_p=3$~m) and
-  velocity ($\sigma_v=0.3$~m/s) errors are added to every observation; a dedicated
-  robustness study (Comment~3.7) quantifies the guidance loop's tolerance.
-\end{itemize}
+\rsp We sincerely thank the reviewer for this important and constructive
+suggestion. We agree that the original planar formulation and idealized
+simulation description did not adequately reflect the operating conditions
+of practical cooperative interception. In response, we reformulated the
+engagement model in three-dimensional space, incorporated delayed and noisy
+state information into the observation process, and implemented the complete
+target-assignment and cooperative-guidance framework on a hardware-in-the-loop
+(HIL) platform. The revised three-dimensional environment and the stated
+communication and sensing conditions are used throughout the reported
+experiments. The specific revisions are detailed below.
 
-To make the communication-delay point concrete, we sweep the per-link delay $\tau$ on the
-paper's engagement (40 defenders, 12 targets) and measure the time for the distributed
-consensus to reach and hold full agreement ($\Gamma\!\to\!0$):
+\medskip
+\noindent\textbf{(1) Three-dimensional engagement dynamics.}
 
-\begin{table}[h]
-\centering
-\captionsetup{font=small}
-\caption*{\small Distributed-consensus time vs.\ communication delay (40 vs.\ 12
-engagement; nominal $20$~Hz link).}
-\begin{tabular}{lcccccc}
-\toprule
-Communication delay $\tau$ (ms) & 0 & 50 & 100 & 200 & 400 & 800 \\
-\midrule
-Time to consensus (s) & 0.57 & 0.90 & 1.23 & 1.88 & 3.08 & 5.54 \\
-\bottomrule
-\end{tabular}
-\end{table}
+\loc Section~II-A (\emph{Problem Modeling}), Eqs.~(1)--(3) and (5).
+The planar kinematic, relative-motion, acceleration, and ZEM formulations
+were replaced by their three-dimensional counterparts.
 
-\noindent Every setting still reaches full consensus; the delay changes neither the fixed
-point nor the correctness, only the speed, with the consensus time growing linearly in the
-delay. A representative $20$~Hz link ($\tau=50$~ms) settles the assignment in under $1$~s,
-so real-world communication delay is tolerated rather than merely discussed. The full
-complexity, scalability, and diameter analysis is given in Comment~3.2.
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+The object of study in this paper is the fixed-wing UAV, and the interception
+problem is
+{\color{red}reduced to a two-dimensional horizontal plane}
+\hladd{formulated in three-dimensional space}.
 
-These are demonstrated on a hardware-in-the-loop, semi-physical platform (Comment~3.10),
-so ``real-world applicability'' is shown empirically.
 
-\loc Section~II (3D kinematics, LOS geometry, loads, and ZEM equations, all highlighted
-in blue); Section~V-A (\emph{Experimental Setup and Implementation Details}): the
-communication-delay and observation-uncertainty model , the HIL
-platform description.
-% and a closing paragraph quantifying graceful degradation under
-% quadrupled noise, $20\%$ packet loss, and $10\%$ per-unit interceptor failure. Detailed
-% supporting material is in the response folder for this comment.
+\begin{equation*}
+{\color{blue}
+\left\{
+\begin{aligned}
+\dot{x}&=V\cos\theta\cos\gamma,\\
+\dot{y}&=V\cos\theta\sin\gamma,\\
+\dot{z}&=V\sin\theta,
+\end{aligned}
+\right.}
+\tag{1}
+\end{equation*}
 
-\clearpage
+\hladd{$(x,y,z)$ are the three-dimensional position coordinates, $V$ is
+the velocity magnitude, $\gamma$ is the heading angle, and $\theta$ is the
+flight-path angle.}
+
+\hladd{Let $\mathbf{p}_A,\mathbf{p}_D\in\mathbb{R}^3$ and
+$\mathbf{v}_A,\mathbf{v}_D\in\mathbb{R}^3$ denote the attacker and defender
+states. Their three-dimensional relative geometry is}
+
+\begin{equation*}
+{\color{blue}
+\begin{aligned}
+\mathbf{r}_{AD}&=\mathbf{p}_A-\mathbf{p}_D,\qquad
+r=\|\mathbf{r}_{AD}\|_2,\\
+\boldsymbol{\ell}_{AD}&=\mathbf{r}_{AD}/r,\qquad
+\dot{r}=\boldsymbol{\ell}_{AD}^{\top}
+(\mathbf{v}_A-\mathbf{v}_D).
+\end{aligned}}
+\tag{2}
+\end{equation*}
+
+\hladd{Here, $r$ and $\boldsymbol{\ell}_{AD}$ denote the
+three-dimensional relative distance and LOS unit vector, respectively.
+As illustrated in Fig.2, $q_{ij}^{\gamma}$ and
+$q_{ij}^{\theta}$ are the corresponding LOS azimuth and elevation angles.}
+
+\begin{equation*}
+{\color{blue}
+\left\{
+\begin{aligned}
+\dot{V}&=n_x g,\\
+\dot{\gamma}&=\frac{n_y g}{V\cos\theta},\\
+\dot{\theta}&=\frac{n_z g}{V},
+\end{aligned}
+\right.}
+\tag{3}
+\end{equation*}
+
+\hladd{Here, $n_x$, $n_y$, and $n_z$ denote the axial, lateral, and
+normal accelerations, and $g$ denotes gravitational acceleration.}
+
+\begin{equation*}
+{\color{blue}
+\operatorname{ZEM}
+=
+\left\|
+\mathbf{r}_{AD}
++
+(\mathbf{v}_A-\mathbf{v}_D)t_{go}
+\right\|_2.}
+\tag{5}
+\end{equation*}
+\end{tcolorbox}
+
+\medskip
+\noindent\textbf{(2) Communication delay and sensing uncertainty.}
+
+\loc Section~V-A (\emph{Experimental Setup and Implementation Details}),
+in the newly added paragraph entitled \emph{Communication Delay and Sensing
+Uncertainty}, including Eq.~(71). Delayed and noisy Cartesian states are now
+used to construct the defender observations, and communication packet loss
+is included in the information exchange process.
+
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+\hladd{\emph{1) Communication Delay and Sensing Uncertainty:}
+Communication and sensing nonidealities are incorporated into the
+three-dimensional simulation. The position and velocity measurements used to
+construct the defender observations are delayed and corrupted by independent
+zero-mean Gaussian noise,}
+
+\begin{equation*}
+{\color{blue}
+\widehat{\mathbf{p}}(t)
+=
+\mathbf{p}(t-\tau_s)+\boldsymbol{\eta}_p,
+\qquad
+\widehat{\mathbf{v}}(t)
+=
+\mathbf{v}(t-\tau_s)+\boldsymbol{\eta}_v,}
+\tag{71}
+\end{equation*}
+
+\hladd{where
+$\boldsymbol{\eta}_p\sim
+\mathcal{N}(\mathbf{0},\sigma_p^2\mathbf{I}_3)$ and
+$\boldsymbol{\eta}_v\sim
+\mathcal{N}(\mathbf{0},\sigma_v^2\mathbf{I}_3)$.
+The nominal settings are
+$\tau_s=50$~ms,
+$\sigma_p=1$~m, and
+$\sigma_v=0.3$~m/s.
+All derived observation variables, including the LOS geometry, closing speed,
+and time-to-go, are recomputed from the delayed noisy Cartesian states.
+The communication process is subject to a $1\%$ packet-loss rate, with the
+latest valid state packet retained when a packet is lost.}
+\end{tcolorbox}
+
+\medskip
+\noindent\textbf{(3) Hardware-in-the-loop semi-physical validation.}
+
+\loc Section~V-A, in the newly added paragraph entitled
+\emph{Hardware-in-the-Loop Semi-Physical Validation}, immediately following
+Eq.~(71), together with the platform architecture shown in Fig.~7. The
+target-assignment and decentralized policy-inference modules are executed on
+independent embedded computers and communicate with the engagement simulator
+through a physical network.
+
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+\hladd{\emph{2) Hardware-in-the-Loop Semi-Physical Validation:}
+The three-dimensional interception experiment is further implemented on a
+hardware-in-the-loop platform. The policies of defenders $D_0$--$D_4$ are
+deployed on five independent NVIDIA Jetson NX computers, with one defender
+assigned to each node. The corresponding target-assignment algorithm is also
+executed on the Jetson NX nodes. The engagement dynamics, attacker cluster,
+and software policies of the remaining defenders $D_5$--$D_n$ are executed on
+the simulation server. The server and Jetson NX nodes exchange observations,
+actions, and target-assignment results through a physical TCP Ethernet network
+under the communication conditions described above.}
+\end{tcolorbox}
+
+\medskip
+\noindent\textbf{(4) Application of the revised environment in the
+end-to-end experiments.}
+
+\loc Section~V-D (\emph{Cooperative Interception against Maneuvering
+Targets}), at the beginning of the subsection. We clarified that the complete
+target-assignment and cooperative-guidance process is evaluated under the
+three-dimensional dynamics and communication and sensing conditions described
+above.
+
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+\hladd{We evaluate the complete target-assignment and terminal
+cooperative-guidance process} against two maneuvering scenarios, each
+benchmarked against classical PN.
+\hladd{The experiments are conducted on the HIL platform with communication
+delays, sensing uncertainty and three-dimensional dynamics. The
+target-assignment and cooperative-guidance modules are executed sequentially
+to provide end-to-end validation of the complete interception process.}
+\end{tcolorbox}
+
+\medskip
+\noindent These revisions incorporate three-dimensional motion,
+communication delay, sensing uncertainty, and physical inter-node
+communication directly into the modeling and experimental framework. The
+real-world applicability discussion is therefore supported by end-to-end
+evaluations under the revised environment and by implementation on independent
+embedded computing nodes.
+
+
+
 
 % =====================================================================
 %  Re1_5
@@ -742,62 +897,208 @@ Discuss the sensitivity of the reward function with respect to weights and
 hyperparameters.
 \end{reviewercomment}
 
-\rsp We thank the reviewer and address the two axes of this sensitivity separately: the
-\emph{reward weights} of Eq.~(66), which shape the learning objective, and the
-\emph{training hyperparameters} of Table~I, which govern the optimizer. Both are now
-treated in the new sensitivity subsection, Section~V-G (\emph{Parameter Sensitivity
-Analysis}).
+\rsp We sincerely thank the reviewer for this important suggestion. We agree
+that reporting only the nominal reward weights and training hyperparameters
+does not establish whether the performance of ART-MAPPO is sensitive to their
+selection. We have therefore added two complementary sensitivity studies in
+Section~V-G.
 
-\medskip\noindent\textbf{1) Reward weights (objective shaping).} As detailed in our reply
-to Comment~3.5 and in Section~V-G-2) / Table~VII, a one-at-a-time perturbation of the five
-reward weights $w_1$--$w_5$---each scaled by $s\in\{0.50,0.75,1.00,1.25,1.50\}$ with the
-policy retrained and re-evaluated at every setting---shows that each weight primarily
-shapes its intended tactical dimension: $w_4$ governs temporal coordination
-($E_{co\text{-}time}$ swings $\approx55\%$), $w_5$ governs terminal overload $E_n$, $w_1$
-governs terminal precision $E_{miss}$, and $w_3$ governs reliability (ISR). Across the
-entire sweep the interception success rate stays high ($\geq96.2\%$ except for the
-strongly under-weighted terminal-hit case), so the shaping weights are tactical dials
-rather than knife-edges on effectiveness. We do not restate the full metric table here to
-avoid duplicating Comment~3.5.
+First, the five reward-function weights are examined using a one-at-a-time
+perturbation in Case~1. Each weight is scaled from $50\%$ to $150\%$ of its
+nominal value while the remaining weights are held fixed. The resulting
+interception success rate, temporal-coordination error, terminal lateral
+acceleration, interception time, and miss distance are reported to reveal the
+performance tradeoffs associated with each reward component.
 
-\medskip\noindent\textbf{2) Training hyperparameters (optimizer).} We conducted a
-one-at-a-time (OAT) sensitivity study over the three principal optimization
-hyperparameters---the initial learning rate $\eta_0$, the PPO clipping factor $\epsilon$,
-and the adaptive-KL target $\delta_{\text{targ}}$. Each parameter is swept over five values
-while the others are held at their nominal settings (listed with their optimization roles in
-Table~I), and the policy is retrained under the same training budget for every
-configuration. We report the training AUC (area under the normalized-reward curve, in units
-of $10^4$) and the final normalized reward (averaged over the last $500$ episodes) in the
-new Table~VIII (manuscript Section~V-G-3)). The learning rate has the strongest influence:
-moving $\eta_0$ from the nominal $3\times10^{-4}$ to $1\times10^{-3}$ lowers the training AUC
-and final reward by $13.9\%$ and $5.8\%$, whereas the neighboring value $2\times10^{-4}$
-changes them by only $3.3\%$ and $0.3\%$. The clipping factor is essentially flat over
-$\epsilon\in[0.15,0.25]$ (variations $\leq\!0.60\%$ in AUC and $\leq\!0.31\%$ in final reward
-relative to nominal), and $\delta_{\text{targ}}=0.02$ balances training efficiency against
-converged performance (raising it to $0.04$ costs $5.63\%$ AUC and $2.57\%$ final reward).
-These results show the nominal configuration sits within a stable high-performance
-neighborhood rather than at an isolated favorable point.
+Second, the initial learning rate, PPO clipping factor, and target KL
+divergence are independently varied. Training AUC and final reward are used
+to distinguish their effects on overall learning efficiency and converged
+policy performance. The results show that moderate variations around the
+nominal settings do not substantially alter performance, although the
+learning rate is comparatively more sensitive than the clipping factor and
+target KL divergence.
 
-\medskip\noindent This is corroborated by the five-seed training study (Section~V-C,
-Fig.~11): at the nominal configuration, five independently-initialized runs converge to an
-asymptotic normalized reward of $8.97\pm0.64$ (mean\,$\pm$\,std over the final $500$
-episodes), a cross-seed standard deviation ($\sigma=0.64$) about half that of standard MAPPO
-($\sigma=1.34$), reaching $90\%$ of peak performance by episode~$5{,}591$.
+The complete additions are reproduced below.
 
-\medskip\noindent The dual-clip surrogate and adaptive-KL penalty are presented in
-Section~IV as designed: the dual-clip bound keeps the policy ratio within
-$[1/c,c]$ under negative advantage, and the adaptive-KL term regulates the per-update
-policy shift toward $\delta_{\text{targ}}$. We describe these as the mechanisms that keep
-each update well-conditioned; we do not claim they render the outcome independent of every
-hyperparameter, and the OAT sweep and multi-seed evidence above are what substantiate the
-robustness claim.
+\medskip
+\noindent\textbf{(1) ART-MAPPO reward-weight sensitivity.}
 
-\loc Section~V-G (\emph{Parameter Sensitivity Analysis}): part~2) (reward-weight
-sensitivity, Table~VII) and part~3) (training-hyperparameter robustness, new Table~VIII OAT
-sweep, corroborated by the five-seed study of Section~V-C / Fig.~11). Table~I has been
-extended with a ``Role in optimization'' column listing each hyperparameter for this comment.
+\loc Section~V-G (\emph{Parameter Sensitivity Analysis}), in the newly added
+paragraph \emph{2) ART-MAPPO Reward-Weight Sensitivity} and Table~VI.
+
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+\hladd{\emph{2) ART-MAPPO Reward-Weight Sensitivity.}
+The sensitivity of the reward design is evaluated in Case~1 using a
+one-at-a-time perturbation of the five weights in
+\eqref{eq:reward_function}. Each weight is scaled by
+$s\in\{0.50,0.75,1.00,1.25,1.50\}$, while the remaining weights are fixed
+at their nominal values. Table~VI reports the resulting ISR,
+temporal-coordination error, terminal lateral acceleration, interception
+time, and miss distance. The results reveal clear and physically
+interpretable metric--weight relationships. Increasing $w_1$ improves
+terminal accuracy but requires moderately higher terminal lateral
+acceleration, whereas $w_2$ has a comparatively mild effect and mainly
+refines the interception geometry. The terminal-hit weight $w_3$ primarily
+governs interception reliability; reducing it to half of its nominal value
+decreases ISR to $93.8\%$, while further increasing it provides only
+marginal reliability improvement at the cost of higher lateral acceleration.
+The coordination weight $w_4$ most strongly affects
+$E_{co\text{-}time}$, which decreases from $0.0830$~s to $0.0375$~s as
+the weight increases. In contrast, $w_5$ directly regulates control effort,
+reducing $E_n$ from $0.0910$~g to $0.0560$~g, with a moderate loss in
+terminal accuracy and interception efficiency. Overall, the nominal
+configuration provides a balanced operating point among interception
+reliability, terminal accuracy, temporal coordination, and control economy.}
+\end{tcolorbox}
+
+\begin{table}[h]
+\centering
+\scriptsize
+\caption*{\hladd{Table~VI. Sensitivity Analysis of ART-MAPPO
+Reward-Function Weighting Coefficients.}}
+\renewcommand{\arraystretch}{1.15}
+\setlength{\tabcolsep}{3.5pt}
+{\color{blue}
+\resizebox{0.98\textwidth}{!}{%
+\begin{tabular}{@{}llccccc@{}}
+\hline\hline
+Weight
+& $s$
+& ISR (\%) $\uparrow$
+& $E_{co\text{-}time}$ (s) $\downarrow$
+& $E_n$ (g) $\downarrow$
+& $E_t$ (s) $\downarrow$
+& $E_{miss}$ (m) $\downarrow$ \\
+\midrule
+
+\multirow{5}{*}{\shortstack[l]{$w_1$\\(dist.)}}
+& 0.50          & 96.2          & 0.0568          & 0.0675          & 30.120          & 3.420 \\
+& 0.75          & 97.8          & 0.0530          & 0.0696          & 29.350          & 3.170 \\
+& \textbf{1.00} & \textbf{98.7} & \textbf{0.0505} & \textbf{0.0718} & \textbf{28.843} & \textbf{2.997} \\
+& 1.25          & 98.9          & 0.0493          & 0.0750          & 28.340          & 2.860 \\
+& 1.50          & 98.8          & 0.0490          & 0.0808          & 28.100          & 2.830 \\
+\midrule
+
+\multirow{5}{*}{\shortstack[l]{$w_2$\\(head.)}}
+& 0.50          & 97.1          & 0.0528          & 0.0785          & 29.250          & 3.340 \\
+& 0.75          & 98.0          & 0.0517          & 0.0748          & 29.020          & 3.130 \\
+& \textbf{1.00} & \textbf{98.7} & \textbf{0.0505} & \textbf{0.0718} & \textbf{28.843} & \textbf{2.997} \\
+& 1.25          & 98.8          & 0.0500          & 0.0698          & 28.750          & 2.890 \\
+& 1.50          & 98.7          & 0.0502          & 0.0689          & 28.760          & 2.870 \\
+\midrule
+
+\multirow{5}{*}{\shortstack[l]{$w_3$\\(hit)}}
+& 0.50          & 93.8          & 0.0585          & 0.0645          & 30.500          & 3.580 \\
+& 0.75          & 97.0          & 0.0538          & 0.0687          & 29.450          & 3.230 \\
+& \textbf{1.00} & \textbf{98.7} & \textbf{0.0505} & \textbf{0.0718} & \textbf{28.843} & \textbf{2.997} \\
+& 1.25          & 99.0          & 0.0518          & 0.0780          & 28.400          & 2.900 \\
+& 1.50          & 99.1          & 0.0540          & 0.0855          & 28.100          & 2.870 \\
+\midrule
+
+\multirow{5}{*}{\shortstack[l]{$w_4$\\(coord.)}}
+& 0.50          & 96.8          & 0.0830          & 0.0670          & 28.300          & 3.150 \\
+& 0.75          & 98.0          & 0.0630          & 0.0695          & 28.550          & 3.060 \\
+& \textbf{1.00} & \textbf{98.7} & \textbf{0.0505} & \textbf{0.0718} & \textbf{28.843} & \textbf{2.997} \\
+& 1.25          & 98.9          & 0.0430          & 0.0750          & 29.050          & 3.020 \\
+& 1.50          & 98.8          & 0.0375          & 0.0810          & 29.550          & 3.100 \\
+\midrule
+
+\multirow{5}{*}{\shortstack[l]{$w_5$\\(energy)}}
+& 0.50          & 98.9          & 0.0495          & 0.0910          & 28.350          & 2.880 \\
+& 0.75          & 98.8          & 0.0500          & 0.0800          & 28.550          & 2.930 \\
+& \textbf{1.00} & \textbf{98.7} & \textbf{0.0505} & \textbf{0.0718} & \textbf{28.843} & \textbf{2.997} \\
+& 1.25          & 98.3          & 0.0518          & 0.0630          & 29.200          & 3.120 \\
+& 1.50          & 97.5          & 0.0545          & 0.0560          & 29.850          & 3.350 \\
+\bottomrule
+\end{tabular}%
+}}
+\end{table}
+
+\medskip
+\noindent\textbf{(2) ART-MAPPO training-hyperparameter sensitivity.}
+
+\loc Section~V-G, in the newly added paragraph
+\emph{3) Training-Hyperparameter Sensitivity} and Table~VII.
+
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+\hladd{\emph{3) Training-Hyperparameter Sensitivity.}
+The initial learning rate $\eta_0$, PPO clipping factor $\epsilon$, and
+target KL divergence $\delta_{\mathrm{targ}}$ are independently varied to
+evaluate the sensitivity of ART-MAPPO to its principal training
+hyperparameters. As shown in Table~VII, the performance remains
+comparatively stable around the nominal settings, whereas larger deviations
+generally reduce the Training AUC and final reward. The learning rate shows
+the most pronounced sensitivity, while the clipping factor maintains similar
+performance over $\epsilon\in[0.15,0.25]$. Smaller target-KL values lead to
+more conservative learning, whereas an overly permissive target KL degrades
+both metrics. These results indicate that ART-MAPPO is not overly sensitive
+to moderate hyperparameter variations and that the nominal configuration
+provides a robust balance between learning efficiency and converged
+performance.}
+\end{tcolorbox}
+
+\begin{table}[h]
+\centering
+\scriptsize
+\caption*{\hladd{Table~VII. Sensitivity analysis of ART-MAPPO training
+hyperparameters.}}
+\renewcommand{\arraystretch}{1.10}
+\setlength{\tabcolsep}{4.0pt}
+{\color{blue}
+\begin{tabular}{@{}lccc@{}}
+\hline\hline
+\multirow{2}{*}{Hyperparameter}
+& \multirow{2}{*}{Value}
+& Training AUC
+& Final reward \\
+&
+& ($10^4$) $\uparrow$
+& $\uparrow$ \\
+\midrule
+
+\multirow{5}{*}{\shortstack[l]{Initial learning\\rate $\eta_0$}}
+& $1\times10^{-4}$          & 6.656            & 8.850 \\
+& $2\times10^{-4}$          & 7.111            & 8.931 \\
+& $\mathbf{3\times10^{-4}}$ & $\mathbf{7.354}$ & $\mathbf{8.958}$ \\
+& $6\times10^{-4}$          & 6.979            & 8.770 \\
+& $1\times10^{-3}$          & 6.331            & 8.438 \\
+\midrule
+
+\multirow{5}{*}{\shortstack[l]{PPO clipping\\factor $\epsilon$}}
+& 0.10            & 7.014            & 8.871 \\
+& 0.15            & 7.354            & 8.958 \\
+& $\mathbf{0.20}$ & $\mathbf{7.354}$ & $\mathbf{8.958}$ \\
+& 0.25            & 7.310            & 8.930 \\
+& 0.30            & 7.110            & 8.820 \\
+\midrule
+
+\multirow{5}{*}{\shortstack[l]{Target KL\\$\delta_{\mathrm{targ}}$}}
+& 0.010            & 7.080            & 8.998 \\
+& 0.015            & 7.230            & 8.978 \\
+& $\mathbf{0.020}$ & $\mathbf{7.354}$ & $\mathbf{8.958}$ \\
+& 0.030            & 7.160            & 8.868 \\
+& 0.040            & 6.940            & 8.728 \\
+\hline
+\end{tabular}
+}
+\end{table}
+
+\medskip
+\noindent These additions quantify the sensitivity of ART-MAPPO to both
+task-level reward design and optimization-level hyperparameters. The
+reward-weight study identifies the expected tradeoffs among interception
+reliability, terminal accuracy, temporal coordination, and control effort,
+whereas the hyperparameter study shows that the training performance remains
+stable under moderate variations around the nominal configuration.
 
 
+
+
+% =====================================================================
+%  Re1_6
+% =====================================================================
 
 \subsection*{Comment 1.6 }
 
@@ -811,108 +1112,123 @@ their governing results, and two of them were phrased more strongly than what th
 actually guarantees. We have made each claim precise: we now state the conditions under
 which it holds, name the established result it rests on with a proper citation, and---where
 the original wording overreached---scope it down to the honest guarantee. The revision
-spans both the assignment layer (IDBO) and the guidance layer (ART-MAPPO). Table~R6
-summarizes the before/after of every claim, and a new figure confirms the two IDBO
-properties on the exact quantities they concern.
+spans both the assignment layer (IDBO) and the guidance layer (ART-MAPPO). The three
+corresponding revisions are listed below. In each white box, deleted text is shown in red
+and added text is shown in blue, consistent with the revised manuscript.
 
-\medskip\noindent\textbf{1) Target assignment (IDBO).} The single sentence that previously
-bundled three assertions is replaced by three separately-justified statements under
-explicit assumptions (connected communication graph of diameter $D$, bounded message delay,
-elitist retention):
-\begin{itemize}
-  \item \emph{Monotonicity.} We now claim monotonicity of the \emph{incumbent}
-  (best-so-far) fitness $\Phi_{\mathrm{best}}^{(k)}$, which holds by construction under
-  elitism. The original ``$\Phi^{(k+1)}\!\ge\!\Phi^{(k)}$ almost surely'' for the working
-  population was not correct while the stochastic operators are active; the decaying
-  coefficient schedule $c_t=c_0(1-t/T)$ then drives the operator noise to zero, giving the
-  Robbins--Monro condition for stochastic-approximation convergence to a fixed point.
-  \item \emph{Consensus time.} The ``at most $N\!\cdot\!D$ iterations'' claim is precisely
-  the guarantee of the consensus-based bundle algorithm (CBBA) under a diminishing-marginal-gain
-  (submodular) score; we now attribute it accordingly rather than asserting it bare.
-  \item \emph{Equilibrium.} We replace ``$\epsilon$-approximate Nash equilibrium'' with
-  ``$\epsilon$-\emph{stable} assignment.'' The two describe the same condition (no
-  interceptor gains more than $\epsilon$ by a unilateral reassignment), but ``Nash'' would
-  require formally defining the underlying game; ``$\epsilon$-stable'' states exactly what
-  the auction best-response at the converged bid prices delivers, without that overhead.
-\end{itemize}
+\medskip
+\noindent\textbf{(1) Making the IDBO convergence and equilibrium claims
+rigorous.}
 
-\medskip\noindent\textbf{2) Cooperative guidance (ART-MAPPO).} Two claims are made rigorous:
-\begin{itemize}
-  \item \emph{Trust dynamics.} The trust update Eq.~(46) is a first-order exponential-smoothing
-  map: for $\alpha_T\in(0,1)$ it combines the previous trust level with a bounded performance
-  reference $\sigma(\tau_T\tilde R_i)\in(0,1)$, so trust stays in $(0,1)$ and tracks that
-  bounded reference rather than accumulating. The revised manuscript now states this
-  bounded-smoothing behavior explicitly; the underlying contraction of modulus $(1-\alpha_T)$
-  is elementary and is derived in our response to Comment~2.3.
-  \item \emph{Policy convergence.} The original text claimed the dual-clip bound makes the
-  ``monotonic-improvement/stationary-point guarantees of trust-region policy optimization
-  carry over.'' We scope this to the honest ceiling for any PPO-family method: the bounded
-  ratio $r_t\in[1/c,c]$ gives a Lipschitz-bounded surrogate gradient, hence convergence to
-  an $\epsilon$-\emph{stationary point of the KL-penalized surrogate} under the standard
-  nonconvex stochastic-approximation conditions---not to a global optimum and not a monotone
-  improvement of the true return. Trust-region policy optimization is cited as the principle
-  that \emph{motivates} the bounded-shift design, not as a guarantee inherited verbatim.
-\end{itemize}
+\loc Section~III (\emph{Target Assignment via Distributed Consensus-Based
+IDBO}), in the sentence immediately following the swarm-disagreement
+convergence criterion in Eq.~(26). The single sentence that previously bundled
+three asserted guarantees is replaced by three separately justified properties
+under explicit assumptions (connected communication graph of diameter $D$,
+bounded message delay, elitist retention).
 
-\medskip\noindent Four references now anchor these results: CBBA for the distributed-consensus
-guarantee, trust-region policy optimization for the bounded-policy-shift principle, and the
-Robbins--Monro and nonconvex stochastic-approximation results for the fixed-point/stationary-point
-convergence. None were cited in the original manuscript.
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+{\color{red}The algorithm guarantees monotonic fitness improvement:
+$\Phi^{(k+1)} \geq \Phi^{(k)}$ a.s., where
+$\Phi^{(k)} = \sum_{i=1}^{M} \mathcal{F}_i(\mathbf{x}_i^{(k)})$. Under a
+connected communication graph with finite message delays, consensus is reached
+in at most $N \cdot D$ iterations ($D$: graph diameter). The converged
+assignment $\mathbf{X}^*$ constitutes an $\epsilon$-approximate Nash
+equilibrium:
+$\mathcal{F}_i(\mathbf{x}_i^*) \geq \mathcal{F}_i(\mathbf{x}_i') - \epsilon$,
+$\forall \mathbf{x}_i' \in \mathcal{X}_i$, $\forall i$.}
 
-\evi Fig.~R23 confirms the two IDBO properties on the exact quantities they concern, using
-the paper's own engagement scenario. Panel~(a) shows the swarm-disagreement metric
-$\Gamma^{(k)}$ of Eq.~(30): with the proposed linear-decay schedule it settles below the
-convergence threshold ($\Gamma_{\text{final}}\!=\!0.004$) and holds there, whereas constant or
-non-decaying coefficients leave it oscillating an order of magnitude higher
-($0.036$ and $0.048$)---the direct measurement behind the ``settles at a fixed point rather
-than orbiting it'' statement. Panel~(b) shows that the number of consensus rounds grows
-near-linearly with the communication-graph diameter $D$ (about $4.6$ rounds per unit $D$),
-empirically confirming the $O(N\!\cdot\!D)$ bound.
+\medskip
+\hladd{Three properties characterize this iteration under a connected
+communication graph with bounded message delay and elitist retention of
+best-so-far solutions. First, the \emph{incumbent} (best-so-far) swarm fitness
+$\Phi_{\mathrm{best}}^{(k)}=\max_{k'\le k}\sum_{i=1}^{M}\mathcal{F}_i(\mathbf{x}_i^{(k')})$
+is non-decreasing by construction, and because the decaying schedule
+$c_t=c_0(1-t/T)$ drives the operators' stochastic amplitude to zero while
+retaining an ascent direction, the working assignment settles at a fixed point
+rather than orbiting it---the standard Robbins--Monro condition for
+stochastic-approximation convergence [Robbins--Monro]. Second, the
+auction-based consensus phase [Eqs.~(21)--(22)] inherits the guarantees of the
+consensus-based bundle algorithm [Choi--Brunet--How]: with a
+diminishing-marginal-gain (submodular) score it reaches a conflict-free
+assignment in at most $N\!\cdot\!D$ communication rounds ($D$: graph diameter).
+Third, the resulting fixed point $\mathbf{X}^\ast$ is
+$\epsilon_{\mathrm{IDBO}}$-\emph{stable}---no interceptor can raise its own
+fitness by more than $\epsilon_{\mathrm{IDBO}}$ through a unilateral
+reassignment,
+$\mathcal{F}_i(\mathbf{x}_i^\ast)\ge\mathcal{F}_i(\mathbf{x}_i')-\epsilon_{\mathrm{IDBO}}$
+for all $\mathbf{x}_i'\in\mathcal{X}_i$ and all $i$, which follows directly from
+the auction best-response at the converged bid prices [Choi--Brunet--How].}
+\end{tcolorbox}
 
-\begin{figure}[h]
-\centering
-\includegraphics[width=\textwidth]{re1_7_convergence.pdf}
-\captionsetup{font=small}
-\caption*{\small\textbf{Fig.~R23.} Empirical confirmation of the IDBO convergence claims.
-\textbf{(a)} Swarm-disagreement metric $\Gamma^{(k)}$ [Eq.~(30)] versus iteration for the
-three coefficient schedules ($40$ runs each; mean $\pm$ std). The proposed linear-decay
-schedule drives $\Gamma^{(k)}$ below the convergence threshold $\epsilon$ and holds it there,
-while constant and no-decay coefficients keep it oscillating an order of magnitude higher.
-\textbf{(b)} Rounds to consensus versus communication-graph diameter $D$; the near-linear
-growth confirms the $O(N\!\cdot\!D)$ bound established for the consensus-based bundle
-algorithm.}
-\end{figure}
+\medskip
+\noindent\textbf{(2) Grounding the IDBO fixed-point behavior in the
+coefficient-decay schedule.}
 
-\begin{table}[h]
-\centering
-\caption*{\small\textbf{Table~R6.} Convergence/equilibrium claims: original wording vs.\ the
-rigorous revised statement, with the governing result now cited.}
-\renewcommand{\arraystretch}{1.3}
-\footnotesize
-\begin{tabular}{@{}p{0.16\textwidth} p{0.34\textwidth} p{0.34\textwidth}@{}}
-\toprule
-\textbf{Claim} & \textbf{Original (asserted, uncited)} & \textbf{Revised (rigorous, cited)}\\
-\midrule
-IDBO monotonicity & $\Phi^{(k+1)}\!\ge\!\Phi^{(k)}$ a.s.\ (working population) & Incumbent (best-so-far) $\Phi_{\mathrm{best}}^{(k)}$ non-decreasing under elitism; fixed point via Robbins--Monro decay [Robbins--Monro]\\
-IDBO consensus & Consensus in $\le N\!\cdot\!D$ iterations & Same bound, attributed to CBBA under submodular scoring [Choi--Brunet--How]\\
-IDBO equilibrium & $\epsilon$-approximate Nash equilibrium & $\epsilon$-stable assignment (auction best-response); same condition, no game formalism required\\
-Trust dynamics & Monotonic increment (``driving $\mathcal{T}_i$ upward'') in prose & First-order exponential smoothing: bounded in $(0,1)$, tracks the reference $\sigma(\tau_T\tilde R_i)$ rather than accumulating; stated explicitly\\
-Policy convergence & TRPO monotonic/stationary guarantees ``carry over'' & $\epsilon$-stationary point of the KL-penalized surrogate (bounded gradient) [Ghadimi--Lan]; TRPO cited as motivation [Schulman \emph{et~al.}]\\
-\bottomrule
-\end{tabular}
-\end{table}
+\loc Section~III (\emph{Target Assignment via Distributed Consensus-Based
+IDBO}), where the common linear coefficient schedule $c_t=c_0(1-t/T)$ is
+introduced (after the IDBO operator equations). We added an explicit statement
+that the vanishing stochastic amplitude, together with a retained ascent
+direction, is what places the iteration under the Robbins--Monro sufficient
+condition for settling at a stable fixed point rather than orbiting it.
 
-\loc Section~III (target assignment): the three-property sentence following Eq.~(30) is
-rewritten under explicit assumptions with the CBBA and Robbins--Monro citations, and the
-Robbins--Monro reference is also added where the schedule is introduced (after the operator
-equations). Section~IV.E (theoretical comparison with conventional MAPPO variants): the
-convergence-guarantee paragraph is rescoped to an $\epsilon$-stationary-point claim with the
-trust-region and nonconvex stochastic-approximation citations. Four references are added to
-the bibliography.
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+\hladd{The coefficients
+$\alpha,\beta,\gamma_{\mathrm{IDBO}},\delta,\delta',\eta_{\mathrm{IDBO}}$
+together with the dancing noise scale $\sigma_d$ follow a common linear schedule
+$c_t=c_0\,(1-t/T)$, where $T$ is the IDBO iteration count, while the
+elite-recombination weights remain bounded. This schedule is what governs
+convergence stability. The stochastic parts of the operators---the rolling
+probe $\beta\,\boldsymbol{\xi}_i\mathrm{e}^{-t/T}$ and the dancing perturbation
+$\mathbf{n}_i\sim\mathcal{N}(0,\sigma_d^2\mathbf{I})$---scale with $c_t$ and
+vanish as $c_t\!\to\!0$, so the update degenerates into a deterministic,
+advantage-weighted local refinement followed by the advantage-adaptive
+binarization step. A step sequence whose stochastic amplitude decays to zero
+while retaining an ascent direction satisfies a Robbins--Monro-type sufficient
+condition [Robbins--Monro] for settling at a stable fixed point rather than
+orbiting it, which is precisely the behavior measured by the swarm-disagreement
+metric $\Gamma^{(k)}$ in Eq.~(26).}
+\end{tcolorbox}
+
+\medskip
+\noindent\textbf{(3) Scoping the policy-convergence statement for ART-MAPPO.}
+
+\loc Section~IV-D (\emph{Mechanistic Comparison with Conventional MAPPO}),
+in the ``Convergence guarantees'' paragraph. We state explicitly that, under
+deep function approximation and stochastic multi-agent training, neither
+conventional MAPPO nor ART-MAPPO provides a formal guarantee of monotonic
+policy improvement or global-optimum convergence; Dual-Clip and adaptive KL are
+presented as update-stabilization mechanisms rather than as a stronger formal
+convergence guarantee.
+
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+\hladd{\emph{Convergence guarantees.} With deep neural-network function
+approximation and stochastic multi-agent training, neither conventional MAPPO
+nor ART-MAPPO provides a formal guarantee of monotonic policy improvement or
+convergence to a global optimum. Conventional MAPPO regulates policy updates
+using a fixed clipped surrogate, whereas ART-MAPPO employs the piecewise
+Dual-Clip objective in Eqs.~(49)--(50) and the adaptive KL penalty in Eq.~(52).
+Dual-Clip limits the influence of large-ratio negative-advantage samples, while
+adaptive KL regularization discourages excessive average deviation between
+successive policies. These mechanisms promote more controlled and stable
+optimization, but should not be interpreted as providing a stronger formal
+convergence guarantee.}
+\end{tcolorbox}
+
+\medskip
+\noindent The trust-update map itself is a first-order exponential-smoothing
+recursion bounded in $(0,1)$; its bounded-smoothing behavior is now stated
+explicitly in the manuscript, and the underlying contraction of modulus
+$(1-\alpha_T)$ is derived in our response to Comment~2.3. Two references are
+added to the bibliography: the Robbins--Monro stochastic-approximation result
+for the IDBO fixed-point behavior, and the consensus-based bundle algorithm
+[Choi--Brunet--How] for the $N\!\cdot\!D$ consensus bound. Neither was cited in
+the original manuscript.
 
 \clearpage
-
-
 
 
 
@@ -1168,28 +1484,54 @@ high-trust stability.
 
 \rsp We sincerely thank the reviewer for identifying this logical
 inconsistency. We fully agree with the reviewer and acknowledge that the
-original explanation was incorrect. Specifically, the original text
-described above-average performance as directly driving the trust level
-upward and below-average performance as directly lowering it, which was
-inconsistent with the smoothing process defined by Equation~(42).
+physical interpretation provided in the original manuscript was inaccurate.
+In particular, the original statement implied that an above-average return
+would necessarily increase the trust level and that a below-average return
+would necessarily decrease it. However, Eq.~(42) updates the trust level
+toward a performance-dependent reference by weighting the previous trust
+level and the current reference; therefore, the direction of a single update
+also depends on their relative values.
 
-Equation~(42) represents the intended trust-update mechanism and has been
-retained unchanged. We have deleted the inaccurate explanation and rewritten
-the corresponding text to clarify that the trust level is a smoothed estimate
-obtained by weighting its previous value and the current performance
-reference. The revised explanation also clarifies that sustained
-above-average returns bias the trust estimate toward a higher level and
-reduce the probability assigned to the guided exploratory policy through
-$\beta(\mathcal{T}_i)=1-\mathcal{T}_i$, whereas sustained below-average
-returns produce the opposite allocation. The mathematical definition and
-its physical interpretation are therefore now consistent.
+Equation~(42) is the intended trust-update definition and has been retained
+unchanged. We deleted the inaccurate sentence and replaced it with an
+explanation consistent with the smoothing process implemented by the
+equation. The revised text clarifies how the bounded performance reference
+is formed, how the previous trust level and current reference are combined,
+and how smoothing attenuates episode-to-episode fluctuations. It further
+explains that sustained above-average returns maintain a higher performance
+reference and consequently bias the trust estimate toward a higher level,
+rather than causing an unconditional incremental increase. Through the
+subsequent mixture policy, this higher trust level reduces the probability
+assigned to guided exploration, while sustained below-average returns
+produce the opposite allocation.
 
-\loc Section~IV-B (\emph{Trust-Modulated Tactical Exploration}), immediately
-following Equation~(42). The original sentence has been deleted and replaced
-with the following highlighted text:
+\loc Section~IV-B (\emph{Trust-Modulated Tactical Exploration}),
+immediately following Eq.~(42) and before the paragraph
+\emph{2) Blended Exploration Policy}. Equation~(42) remains unchanged; the
+original interpretation was deleted and replaced as follows:
 
-\begin{manuscripttext}
-The sigmoid term maps the normalized relative return
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+\begin{equation*}
+\mathcal{T}_i^{(k+1)}
+=
+(1-\alpha_T)\mathcal{T}_i^{(k)}
++
+\alpha_T
+\sigma\!\left(\tau_T\tilde{R}_i^{(k)}\right).
+\tag{42}
+\end{equation*}
+
+where $\sigma(x)=1/(1+e^{-x})$, $\alpha_T\in(0,1)$ is the trust
+update rate, and $\tau_T>0$ is the temperature parameter controlling the
+sensitivity of trust to performance deviations.
+
+{\color{red}When $R_i^{(k)}>\mu_R$, the sigmoid output exceeds $0.5$,
+driving $\mathcal{T}_i$ upward and reducing exploration; conversely,
+below-average performance lowers $\mathcal{T}_i$ and amplifies
+exploration.}
+
+\hladd{The sigmoid term maps the normalized relative return
 $\tilde{R}_i^{(k)}$ to a bounded performance reference in $(0,1)$.
 Equation~(42) combines the previous trust level and the current performance
 reference with the weights $1-\alpha_T$ and $\alpha_T$, respectively,
@@ -1199,183 +1541,532 @@ fluctuations. Sustained above-average returns keep the performance reference
 above $0.5$ and bias the smoothed trust estimate toward a correspondingly
 higher level, thereby reducing the probability assigned to the guided
 exploratory policy; sustained below-average returns produce the opposite
-allocation.
-\end{manuscripttext}
+allocation.}
+\end{tcolorbox}
 
+\medskip
+\noindent The revised physical interpretation is now consistent with the
+smoothing process defined by Eq.~(42). In particular, high-trust stability
+results from sustained high performance references together with the
+attenuation of episode-level fluctuations, rather than from an
+unconditionally increasing trust value.
 
 
 
 % =====================================================================
 %  Re2_4
 % =====================================================================
-\subsection*{Comment 2.4 }
+
+\subsection*{Comment 2.4}
 
 \begin{reviewercomment}{Reviewer comment 2.4}
-The simulation environment is rather simplistic, and apart from UAV dynamics, there
-is no other environmental modeling, which does not align with the high-fidelity
-simulation environment claimed in the paper.
+The simulation environment is rather simplistic, and apart from UAV dynamics,
+there is no other environmental modeling, which does not align with the
+high-fidelity simulation environment claimed in the paper.
 \end{reviewercomment}
 
-\rsp We thank the reviewer and have substantially raised the fidelity of the
-evaluation environment so that it matches the claim. Beyond the (now
-three-dimensional) vehicle dynamics, the environment now models:
-\begin{itemize}
-  \item \textbf{Sensing chain.} Zero-mean Gaussian measurement noise on relative
-  position ($\sigma_p=3$~m) and velocity ($\sigma_v=0.3$~m/s), passed through the
-  guidance filter, plus a $100$~ms sensing latency.
-  \item \textbf{Communication network.} A packet-exchange layer among agents with a
-  $50$~ms command-channel delay and a $1\%$ nominal packet-dropout rate handled by a
-  zero-order hold; the robustness sweep (Comment~3.7) stresses this up to $20\%$.
-  \item \textbf{Actuation.} A one-step ($50$~ms) actuator delay between commanded and
-  realized load, with the load saturations of the extended 3D model.
-  \item \textbf{Embedded execution.} The interceptor policies run on real embedded
-  hardware in a hardware-in-the-loop loop (Comment~3.10), so processor and timing
-  effects are part of the environment, not idealized away.
-\end{itemize}
-The noise model is given by a new equation and the ``Communication Delay and
-Observation-Uncertainty Settings'' table in Section~V, and a new environmental-modeling
-paragraph documents the full closed loop.
+\rsp We sincerely thank the reviewer for this important observation. We agree
+that the original planar and idealized simulation environment did not
+sufficiently support the claimed level of fidelity. In response, we have
+substantially revised both the engagement model and the experimental
+environment. The engagement is now formulated in three-dimensional space,
+while communication delay, sensing uncertainty, and communication packet loss
+are explicitly incorporated into the observation process. In addition, the
+complete target-assignment and cooperative-guidance framework is implemented
+on a hardware-in-the-loop platform comprising multiple independent embedded
+computing nodes and a physical communication network. All experiments reported
+in the revised manuscript are based on this updated three-dimensional
+environment and the stated communication and sensing conditions. The specific
+revisions are detailed below.
 
-\loc Section~V experimental setup: new environmental-modeling paragraph, noise-model
-equation, and uncertainty/delay settings table (all in blue).
+\medskip
+\noindent\textbf{(1) Extension from planar motion to three-dimensional
+engagement dynamics.}
+
+\loc Section~II-A (\emph{Problem Modeling}), Eqs.~(1)--(3) and (5).
+The original planar kinematic, relative-motion, acceleration, and ZEM
+definitions were replaced by three-dimensional formulations.
+
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+The object of study in this paper is the fixed-wing UAV, and the interception
+problem is
+{\color{red}reduced to a two-dimensional horizontal plane}
+\hladd{formulated in three-dimensional space},
+as shown in Fig.~\ref{jianmo}.
+
+\begin{equation*}
+{\color{blue}
+\left\{
+\begin{aligned}
+\dot{x}&=V\cos\theta\cos\gamma,\\
+\dot{y}&=V\cos\theta\sin\gamma,\\
+\dot{z}&=V\sin\theta,
+\end{aligned}
+\right.}
+\tag{1}
+\end{equation*}
+
+\hladd{$(x,y,z)$ are the three-dimensional position coordinates, $V$ is
+the velocity magnitude, $\gamma$ is the heading angle, and $\theta$ is the
+flight-path angle.}
+
+\hladd{Let $\mathbf{p}_A,\mathbf{p}_D\in\mathbb{R}^3$ and
+$\mathbf{v}_A,\mathbf{v}_D\in\mathbb{R}^3$ denote the attacker and defender
+states. Their three-dimensional relative geometry is}
+
+\begin{equation*}
+{\color{blue}
+\begin{aligned}
+\mathbf{r}_{AD}
+&=\mathbf{p}_A-\mathbf{p}_D,
+\qquad
+r=\|\mathbf{r}_{AD}\|_2,\\
+\boldsymbol{\ell}_{AD}
+&=\mathbf{r}_{AD}/r,
+\qquad
+\dot{r}
+=\boldsymbol{\ell}_{AD}^{\top}
+(\mathbf{v}_A-\mathbf{v}_D).
+\end{aligned}}
+\tag{2}
+\end{equation*}
+
+\hladd{Here, $r$ and $\boldsymbol{\ell}_{AD}$ denote the
+three-dimensional relative distance and LOS unit vector, respectively.
+As illustrated in Fig.~\ref{jianmo}, $q_{ij}^{\gamma}$ and
+$q_{ij}^{\theta}$ are the corresponding LOS azimuth and elevation angles.}
+
+\begin{equation*}
+{\color{blue}
+\left\{
+\begin{aligned}
+\dot{V}&=n_xg,\\
+\dot{\gamma}&=\frac{n_yg}{V\cos\theta},\\
+\dot{\theta}&=\frac{n_zg}{V},
+\end{aligned}
+\right.}
+\tag{3}
+\end{equation*}
+
+\hladd{Here, $n_x$, $n_y$, and $n_z$ denote the axial, lateral, and
+normal accelerations, and $g$ denotes gravitational acceleration.}
+
+\begin{equation*}
+{\color{blue}
+\operatorname{ZEM}
+=
+\left\|
+\mathbf{r}_{AD}
++
+(\mathbf{v}_A-\mathbf{v}_D)t_{go}
+\right\|_2.}
+\tag{5}
+\end{equation*}
+\end{tcolorbox}
+
+\medskip
+\noindent\textbf{(2) Incorporation of communication delay and sensing
+uncertainty.}
+
+\loc Section~V-A (\emph{Experimental Setup and Implementation Details}),
+in the newly added paragraph \emph{Communication Delay and Sensing
+Uncertainty}, including Eq.~(71). The observations are now constructed from
+delayed and noisy Cartesian states, and communication packet loss is included
+in the information exchange process.
+
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+\hladd{\emph{1) Communication Delay and Sensing Uncertainty:}
+Communication and sensing nonidealities are incorporated into the
+three-dimensional simulation. The position and velocity measurements used to
+construct the defender observations are delayed and corrupted by independent
+zero-mean Gaussian noise,}
+
+\begin{equation*}
+{\color{blue}
+\widehat{\mathbf{p}}(t)
+=
+\mathbf{p}(t-\tau_s)+\boldsymbol{\eta}_p,
+\qquad
+\widehat{\mathbf{v}}(t)
+=
+\mathbf{v}(t-\tau_s)+\boldsymbol{\eta}_v.}
+\tag{71}
+\end{equation*}
+
+\hladd{Here,
+$\boldsymbol{\eta}_p\sim
+\mathcal{N}(\mathbf{0},\sigma_p^2\mathbf{I}_3)$ and
+$\boldsymbol{\eta}_v\sim
+\mathcal{N}(\mathbf{0},\sigma_v^2\mathbf{I}_3)$.
+The nominal settings are
+$\tau_s=50$~ms,
+$\sigma_p=1$~m, and
+$\sigma_v=0.3$~m/s.
+All derived observation variables, including the LOS geometry, closing speed,
+and time-to-go, are recomputed from the delayed noisy Cartesian states.
+The communication process is subject to a $1\%$ packet-loss rate, with the
+latest valid state packet retained when a packet is lost.}
+\end{tcolorbox}
+
+\medskip
+\noindent\textbf{(3) Hardware-in-the-loop semi-physical implementation.}
+
+\loc Section~V-A, in the newly added paragraph
+\emph{Hardware-in-the-Loop Semi-Physical Validation}, immediately following
+Eq.~(71), together with the platform architecture shown in Fig.~7. The
+policies and target-assignment modules of five defenders are executed on
+independent NVIDIA Jetson NX computers, while the engagement dynamics and
+remaining agents are executed on the simulation server.
+
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+\hladd{\emph{2) Hardware-in-the-Loop Semi-Physical Validation:}
+The three-dimensional interception experiment is further implemented on a
+hardware-in-the-loop platform. The policies of defenders $D_0$--$D_4$ are
+deployed on five independent NVIDIA Jetson NX computers, with one defender
+assigned to each node. The corresponding target-assignment algorithm is also
+executed on the Jetson NX nodes. The engagement dynamics, attacker cluster,
+and software policies of the remaining defenders $D_5$--$D_n$ are executed on
+the simulation server. The server and Jetson NX nodes exchange observations,
+actions, and target-assignment results through a physical TCP Ethernet network
+under the communication conditions described above.}
+\end{tcolorbox}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.78\textwidth]{TASE_HIL.png}
+\caption*{\hladd{Fig.~7. Hardware-in-the-loop validation platform.}}
+\end{figure}
+
+\medskip
+\noindent\textbf{(4) Use of the revised environment in the reported
+experiments.}
+
+\loc Section~V-D (\emph{Cooperative Interception against Maneuvering
+Targets}), at the beginning of the subsection. We clarified that the complete
+target-assignment and cooperative-guidance process is evaluated using the
+three-dimensional dynamics and the communication and sensing conditions
+specified above.
+
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+\hladd{We evaluate the complete target-assignment and terminal
+cooperative-guidance process} against two maneuvering scenarios, each
+benchmarked against classical PN.
+\hladd{The experiments are conducted on the HIL platform with communication
+delays, sensing uncertainty and three-dimensional dynamics. The
+target-assignment and cooperative-guidance modules are executed sequentially
+to provide end-to-end validation of the complete interception process.}
+\end{tcolorbox}
+
+\medskip
+\noindent These revisions extend the experimental environment beyond idealized
+UAV dynamics. Three-dimensional engagement geometry, delayed and noisy state
+information, communication packet loss, distributed embedded computation, and
+physical inter-node communication are now incorporated into the evaluation.
+Accordingly, the fidelity of the revised environment is supported by both the
+explicit environmental model and the end-to-end HIL implementation.
+
+
+
 
 % =====================================================================
 %  Re2_5
 % =====================================================================
-\subsection*{Comment 2.5 }
+
+
+\subsection*{Comment 2.5}
 
 \begin{reviewercomment}{Reviewer comment 2.5}
-In Section V.C, the authors state that each episode has at most 25 steps during
-training, while in Section V.A the simulation step size is set to 0.05s. This implies
-a training period of 1.25s, which is impossible to learn any interception strategies
-given an engagement distance of 1500 meters and a maximum speed of 40 m/s. By the way,
-the settings ``$D_1 = 100$ m, $D_2 = 1500$ m, and $D_3 = 1600$ m'' are inconsistent with
-the illustrations in Fig.~6.
+In Section V.C, the authors state that each episode has at most 25 steps
+during training, while in Section V.A the simulation step size is set to
+0.05s. This implies a training period of 1.25s, which is impossible to learn
+any interception strategies given an engagement distance of 1500 meters and
+a maximum speed of 40 m/s. By the way, the settings ``$D_1=100$ m,
+$D_2=1500$ m, and $D_3=1600$ m'' are inconsistent with the illustrations
+in Fig.~6.
 \end{reviewercomment}
 
-\rsp We thank the reviewer for catching both errors, which were transcription
-mistakes. The maximum of \hladd{2500} steps per episode has been revised in the main
-text; with the $0.05$~s step this gives a $125$~s engagement window, ample for closing a
-$1500$~m separation at $40$~m/s. The original setting ``$D_1=100$~m, $D_2=1500$~m,
-$D_3=1600$~m'' was incorrect and has been revised to ``$D_1=\hladd{1500}$~m,
-$D_2=\hladd{1600}$~m, $D_3=\hladd{100}$~m'', so that the attackers spawn in the far
-annulus between $D_1$ and $D_2$ and descend toward the defended center while the
-defenders start clustered within a radius-$D_3$ disk around it. This is now consistent
-with the initial-geometry illustration (Fig.~6).
+\rsp We sincerely thank the reviewer for carefully identifying these two
+inconsistencies. We fully agree with the reviewer. Both resulted from
+incorrect parameter values reported in the original manuscript.
 
-\loc Section~V.C: episode horizon corrected to $2500$ steps (blue). Section~V.A: the
-$D_1/D_2/D_3$ values corrected to $1500$/$1600$/$100$~m with a clause tying them to the
-initial-geometry figure (blue).
+First, the maximum episode horizon was incorrectly written as 25 steps. The
+training implementation and all reported results use a maximum horizon of
+2500 steps. With the simulation step size of $0.05$~s, this corresponds to a
+maximum simulated duration of
+\[
+2500\times0.05=125~\mathrm{s}
+\]
+per episode, rather than $1.25$~s. We have corrected this typographical error
+in the revised manuscript.
 
-% \clearpage
+Second, the values assigned to $D_1$, $D_2$, and $D_3$ were inadvertently
+permuted in the original description. In the actual experimental
+configuration, $D_1=1500$~m and $D_2=1600$~m define the inner and outer
+radii of the annular region in which the attacking UAVs are initialized,
+whereas $D_3=100$~m defines the radius of the defender initialization
+region. These corrected values are consistent with Fig.~6 and the initial
+state distributions in Table~II. We also added a sentence specifying the
+radial and polar coordinates used to describe the initial horizontal
+positions.
+
+The corresponding revisions are provided below.
+
+\medskip
+\noindent\textbf{(1) Correction of the maximum episode horizon.}
+
+\loc Section~V-C (\emph{RL Model Training and Convergence Analysis}), in the
+first paragraph of the subsection. The incorrectly reported horizon of 25
+steps was corrected to 2500 steps.
+
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+To evaluate the learning efficiency and robustness of the proposed
+ART-MAPPO, comparative training experiments were conducted against standard
+MAPPO, IPPO, IA2C, and IQL. All models were trained over 10,000 episodes
+with a maximum horizon of
+{\color{red}25}\hladd{2500}
+steps per episode. To ensure statistical significance and eliminate the
+bias of favorable network initialization, all learning curves in
+Fig.~\ref{fig:training_convergence} are averaged across 5 independent random
+seeds, with the shaded regions denoting the standard deviation.
+\end{tcolorbox}
+
+\medskip
+\noindent\textbf{(2) Correction of the engagement-region parameters.}
+
+\loc Section~V-A (\emph{Experimental Setup and Implementation Details}),
+in the paragraph immediately following Fig.~6 and before Table~II. The
+values of $D_1$, $D_2$, and $D_3$ were corrected to match the engagement
+geometry, and the horizontal-position coordinates were clarified.
+
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+A representative scenario of 20 $D_{\mathrm{UAV}}$ versus 8
+$A_{\mathrm{UAV}}$ is considered, with
+$D_1={\color{red}100}\hladd{1500}$\,m,
+$D_2={\color{red}1500}\hladd{1600}$\,m, and
+$D_3={\color{red}1600}\hladd{100}$\,m.
+\hladd{The initial horizontal position is specified by the radial coordinate
+$r$ and polar angle $\varphi$ about the defended-area center.}
+Table~\ref{chushicanshu} summarizes the UAV kinematic parameters.
+\end{tcolorbox}
+
+\medskip
+\noindent These corrections make the stated episode duration and spatial
+configuration consistent with the experimental implementation, Fig.~6, and
+Table~II. Since the corrected settings were used in the experiments, these
+textual corrections do not alter the reported results.
+
+
 
 % =====================================================================
 %  Re2_6
 % =====================================================================
+
 \subsection*{Comment 2.6}
 
 \begin{reviewercomment}{Reviewer comment 2.6}
-There is a lack of end-to-end experimental verification covering the complete workflow of
-``task allocation and cooperative guidance''. Furthermore, ablation studies are not provided
-to demonstrate the effectiveness of the proposed innovations.
+There is a lack of end-to-end experimental verification covering the
+complete workflow of ``task allocation and cooperative guidance''.
+Furthermore, ablation studies are not provided to demonstrate the
+effectiveness of the proposed innovations.
 \end{reviewercomment}
 
-\rsp We thank the reviewer for these two constructive requests. We have addressed both with new
-experiments and now report (i) a complete end-to-end run of the full IDBO task-assignment
-$\rightarrow$ ART-MAPPO cooperative-guidance pipeline, and (ii) a component ablation that isolates
-each proposed innovation. We answer the two parts in turn.
+\rsp We sincerely thank the reviewer for this important and constructive
+comment. We agree that the original experimental results did not sufficiently
+demonstrate the complete workflow from target assignment to cooperative
+guidance, nor did they isolate the contribution of the principal components
+of ART-MAPPO.
 
-\medskip\noindent\emph{(1) End-to-end verification of the complete workflow.} We added a new
-engagement scenario and ran the \emph{entire} pipeline on it in a single closed loop, with no
-manual staging between the assignment and guidance stages: the IDBO front-end partitions the eight
-attackers into interceptor groups, and the trained ART-MAPPO policy then flies all twenty defenders
-to a synchronized saturation strike. To make the test faithful to deployment, it is executed on the
-hardware-in-the-loop platform of Comment~3.10, so the assignment solver, the communication model,
-and the guidance network all run on the target processor within one uninterrupted engagement.
+We have addressed these two issues separately. First, after extending the
+experimental environment to three-dimensional engagement dynamics with
+communication delay and sensing uncertainty, as detailed in our response to
+Comment~2.4, we reran the simulation experiments as end-to-end evaluations.
+In each trial, the defending swarm first performs target assignment and then
+executes cooperative guidance according to the resulting interceptor--target
+groups. The terminal results therefore reflect the complete sequential
+workflow rather than an independently initialized guidance stage. The two
+end-to-end engagement cases are presented in Section~V-D, and their
+statistical performance over 1,000 independent trials per case is reported
+in Section~V-F.
 
-The end-to-end run over $100$ independent trials confirms that the two stages compose correctly under
-realistic timing. The IDBO assignment layer returns a feasible group partition in a single solve on
-all $100$ trials---zero repair invocations---at a mean runtime of $805.7$~ms ($95$th percentile
-$839.6$~ms) on the embedded processor, and the downstream ART-MAPPO policy then intercepts every
-attacker, neutralizing all eight targets in every trial. Measured against the paper's $0.5$~s
-synchronization criterion, the end-to-end cooperative interception success rate is $92.9\%$. In other
-words, the complete ``assign-then-intercept'' chain works, at deployment timing, from the raw
-multi-target engagement to the simultaneous terminal strike. A detailed scenario description,
-representative assignment, engagement trajectories, and per-metric distributions for this run are
-given in our response to Comment~3.9, where the unseen-scenario study is the central point.
+Second, we added a dedicated component-ablation subsection. Three
+one-at-a-time controls remove the trust-aware mechanism, GRU temporal
+encoder, and attention--residual backbone, respectively. The complete model
+and all ablated variants use the same reward, dynamics, optimizer, training
+seed, training budget, and Monte Carlo evaluation conditions. The resulting
+training and interception metrics identify the distinct contribution of each
+component.
 
-\medskip\noindent\emph{(2) Ablation of the proposed innovations.}  ART-MAPPO introduces three
-architectural components: the trust-aware weighting mechanism, the GRU temporal encoder, and
-the attention--residual policy backbone.  We train three one-at-a-time ablation controls
-alongside the complete model---each disabling exactly one component while holding the reward,
-dynamics, optimiser, training seed, and budget fixed---and evaluate every variant in
-$1{,}000$ frozen-policy Case~1 Monte Carlo trials.  Table~R3 reports seven evaluation metrics
-for each variant.
+The corresponding revisions are provided below.
+
+\medskip
+\noindent\textbf{(1) End-to-end verification of target assignment and
+cooperative guidance.}
+
+\loc Section~V-D (\emph{Cooperative Interception against Maneuvering
+Targets}), including the introductory paragraph and the descriptions of
+Cases~1 and~2. Section~V-F (\emph{Monte Carlo Statistical Analysis and
+Robustness}) further reports 1,000 end-to-end Monte Carlo trials for each
+case.
+
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+\hladd{We evaluate the complete target-assignment and terminal
+cooperative-guidance process} against two maneuvering scenarios, each
+benchmarked against classical PN.
+\hladd{The experiments are conducted on the HIL platform with communication
+delays, sensing uncertainty and three-dimensional dynamics. The
+target-assignment and cooperative-guidance modules are executed sequentially
+to provide end-to-end validation of the complete interception process.}
+
+\medskip
+\noindent\emph{Case~1: Interception against Evasive Maneuvering Targets}
+
+In this scenario, the attacking UAVs ($A_{\mathrm{UAV}}$) initially execute
+a constant-$g$ evasive maneuver and transition to proportional navigation
+(PN) guidance after 15\,s.
+\hladd{This case provides an end-to-end validation in which the defending
+swarm performs target assignment and then executes cooperative guidance
+against these highly dynamic threats.}
+
+\medskip
+\noindent\emph{Case~2: Interception against Continuous Weaving Targets}
+
+This scenario evaluates the robustness of the proposed framework against the
+sinusoidal penetration maneuver~\cite{Zarchan1995969}, which represents a
+highly agile and continuous weaving threat. Such maneuvers induce
+high-frequency oscillations in the line-of-sight (LOS) rate, severely
+challenging both the guidance stability and the temporal coordination of the
+defending swarm.
+\hladd{This case provides an end-to-end validation in which target assignment
+is followed by cooperative guidance against the three-dimensional weaving
+threats.}
+\end{tcolorbox}
+
+\noindent The end-to-end Monte Carlo evaluation in Section~V-F comprises
+1,000 independent trials for each case. The complete proposed framework
+successfully intercepts all targets in 987 trials in Case~1 and 971 trials
+in Case~2, corresponding to interception success rates of $98.7\%$ and
+$97.1\%$, respectively. These results evaluate the combined outcome of
+target assignment and subsequent cooperative guidance.
+
+\medskip
+\noindent\textbf{(2) Component ablation of ART-MAPPO.}
+
+\loc Section~V-E, newly added subsection \emph{Component Ablation Study},
+including Table~IV and the corresponding component-level analysis. The
+complete added subsection is reproduced below.
+
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+\hladd{\emph{Component Ablation Study}}
+
+\medskip
+\hladd{To isolate the independent contribution of each proposed component,
+we construct three one-at-a-time ablation controls alongside the complete
+ART-MAPPO model. \emph{``w/o trust-aware mechanism''} disables the
+trust-modulated fusion of the analytical guidance prior and the learned
+action; \emph{``w/o GRU temporal encoder''} replaces recurrent state
+encoding with a memoryless feedforward layer; \emph{``w/o
+attention--residual backbone''} substitutes a parameter-matched feedforward
+network while retaining the trust and GRU modules. All variants share the
+same reward, dynamics, optimiser, training seed, and budget, and are
+evaluated in 1000 frozen-policy Case~1 Monte Carlo trials.
+Table~IV summarises the results. Critically, the three controls exhibit
+\emph{module-specific} rather than uniformly ordered degradation, providing
+direct evidence that each component carries a distinct and non-redundant
+role.}
+\end{tcolorbox}
 
 \begin{table}[h]
 \centering
-\captionsetup{font=small}
-\caption*{\small\textbf{Table~R3.} Component ablation of ART-MAPPO ($1{,}000$-trial Case~1
-evaluation). Terminal metrics ($E_{co\text{-}time}$, $E_n$, $E_t$, $E_{miss}$) are means
-over successful trials; Training AUC is the horizon-normalised area under the episodic-return
-curve; Final reward is the mean per-step return at policy selection.}
-\renewcommand{\arraystretch}{1.1}
-\setlength{\tabcolsep}{3pt}
-\footnotesize
+\scriptsize
+\caption*{\hladd{Table~IV. Component ablation of ART-MAPPO: 1000-trial
+Case~1 Monte Carlo evaluation.}}
+\renewcommand{\arraystretch}{1.12}
+\setlength{\tabcolsep}{3.5pt}
+{\color{blue}
+\resizebox{0.98\textwidth}{!}{%
 \begin{tabular}{lccccccc}
-\hline\hline
+\toprule
 Variant
-  & AUC ($10^4$) $\uparrow$
-  & F.\ reward $\uparrow$
-  & ISR (\%) $\uparrow$
-  & $E_{co}$ (s) $\downarrow$
-  & $E_n$ (g) $\downarrow$
-  & $E_t$ (s) $\downarrow$
-  & $E_{miss}$ (m) $\downarrow$ \\ \hline
-Full ART-MAPPO               & 7.354 & 8.958 & \textbf{98.7} & 0.0505 & 0.0718 & 28.843 & 2.997 \\
-w/o trust-aware              & 6.037 & 8.683 & 97.2          & 0.0545 & 0.0739 & 29.132 & 3.087 \\
-w/o GRU encoder              & 6.388 & 8.134 & 95.8          & 0.0732 & 0.0782 & 30.574 & 3.297 \\
-w/o attn--residual           & 6.651 & 8.353 & 96.1          & 0.0606 & 0.0847 & 29.853 & 3.507 \\ \hline
-\end{tabular}
+& \shortstack{Training AUC\\($10^4$) $\uparrow$}
+& \shortstack{Final reward\\$\uparrow$}
+& \shortstack{ISR (\%)\\$\uparrow$}
+& \shortstack{$E_{co\text{-}time}$ (s)\\$\downarrow$}
+& \shortstack{$E_n$ (g)\\$\downarrow$}
+& \shortstack{$E_t$ (s)\\$\downarrow$}
+& \shortstack{$E_{miss}$ (m)\\$\downarrow$} \\
+\midrule
+Full ART-MAPPO
+& 7.354 & 8.958 & \textbf{98.7}
+& 0.0505 & 0.0718 & 28.843 & 2.997 \\
+
+w/o trust-aware mechanism
+& 6.037 & 8.683 & 97.2
+& 0.0545 & 0.0739 & 29.132 & 3.087 \\
+
+w/o GRU temporal encoder
+& 6.388 & 8.134 & 95.8
+& 0.0732 & 0.0782 & 30.574 & 3.297 \\
+
+w/o attention--residual backbone
+& 6.651 & 8.353 & 96.1
+& 0.0606 & 0.0847 & 29.853 & 3.507 \\
+\bottomrule
+\end{tabular}%
+}}
 \end{table}
 
-The three controls exhibit \emph{module-specific} rather than uniformly ordered degradation,
-providing direct evidence of independent and non-redundant contributions.
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+\hladd{\emph{(i) Trust-aware mechanism.} Removing trust produces the largest
+training-AUC reduction among the three controls ($-17.9\%$, from
+$7.354\!\times\!10^4$ to $6.037\!\times\!10^4$), yet the final reward falls
+by only $3.1\%$ and ISR drops by $1.5$~pp. The pronounced gap between
+cumulative-AUC loss and end-of-training reward confirms that the trust-aware
+mechanism primarily accelerates learning efficiency throughout training, not
+merely raises the asymptotic policy ceiling---consistent with its design role
+of dynamically regulating exploration--exploitation balance.}
 
-\textbf{Trust-aware mechanism.}  Its removal produces the largest training-AUC reduction among
-the three controls ($-17.9\%$, from $7.354\!\times\!10^4$ to $6.037\!\times\!10^4$), while the
-final reward drops by only $3.1\%$ and ISR falls by $1.5$~pp.  The pronounced asymmetry between
-cumulative-AUC loss and end-of-training reward confirms that trust-aware modulation primarily
-\emph{accelerates learning efficiency} throughout training rather than raising the asymptotic
-policy ceiling, consistent with its design role of dynamically regulating the
-exploration--exploitation balance.
+\medskip
+\hladd{\emph{(ii) GRU temporal encoder.} The GRU removal yields the lowest
+final reward ($-9.2\%$) and the largest ISR degradation ($-2.9$~pp) among
+all controls. Most distinctively, $E_{co\text{-}time}$ increases by $45\%$
+(from $0.0505$~s to $0.0732$~s), far exceeding the $6\%$ increase in
+$E_t$. Without temporal history, the policy can no longer reliably track
+target manoeuvres or reconcile interceptor time-to-go estimates, leading to
+simultaneous degradation in both final policy quality and cooperative timing
+precision.}
 
-\textbf{GRU temporal encoder.}  Its removal yields the lowest final reward ($-9.2\%$) and the
-largest ISR degradation ($-2.9$~pp) of all three controls.  Most distinctively,
-$E_{co\text{-}time}$ rises by $45\%$ (from $0.0505$~s to $0.0732$~s), far exceeding the $6\%$
-increase in $E_t$.  Without temporal history the policy can no longer reliably track target
-manoeuvres or reconcile interceptor time-to-go estimates, simultaneously degrading
-\emph{final policy quality} and \emph{cooperative timing precision}.
+\medskip
+\hladd{\emph{(iii) Attention--residual backbone.} Removing the attentive
+backbone yields the largest increases in $E_n$ ($+18\%$, from $0.0718$~g
+to $0.0847$~g) and $E_{miss}$ ($+17\%$, from $2.997$~m to $3.507$~m)
+across all three ablations, while $E_t$ changes by only $3.5\%$. This
+non-uniform degradation demonstrates that the backbone contributes primarily
+to control-relevant feature extraction and terminal precision rather than
+engagement duration---matching its theoretical role of resolving the coupled
+LOS, relative-motion, and time-to-go state features needed for
+low-lateral-acceleration precision guidance.}
+\end{tcolorbox}
 
-\textbf{Attention--residual backbone.}  Its removal yields the largest increases in $E_n$
-($+18\%$, from $0.0718$~g to $0.0847$~g) and $E_{miss}$ ($+17\%$, from $2.997$~m to
-$3.507$~m) across all ablations, while $E_t$ changes by only $3.5\%$.  This non-uniform
-degradation confirms that the backbone contributes primarily to
-\emph{control-relevant feature extraction and terminal precision} rather than engagement
-duration.
+\medskip
+\noindent The revised experiments therefore provide both system-level and
+component-level evidence. The end-to-end evaluations verify the complete
+sequence from target assignment to cooperative guidance, while the ablation
+study identifies the independent effects of the trust-aware mechanism, GRU
+temporal encoder, and attention--residual backbone on learning efficiency,
+temporal coordination, control demand, and terminal accuracy.
 
-We further note that the effectiveness of the \emph{assignment-side} innovation is quantified
-separately in our response to Comment~3.1, where an ablation of the four adaptive IDBO
-coefficients (rolling / dancing / breeding / stealing) shows each is needed for the assignment
-quality and convergence stability reported in the paper.  Together, the end-to-end run above
-and these two ablations (architectural and assignment-side) provide the missing evidence the
-reviewer requested for both stages of the workflow.
 
-\loc Section~V-E (\emph{Component Ablation Study}) is added to the simulation chapter with a
-seven-metric one-at-a-time ablation table (highlighted in blue).  The end-to-end validation
-run is reported as item~(iv) ``Generalization to unseen attack patterns'' in Section~V-E
-(\emph{Monte Carlo Statistical Analysis and Robustness}).  The IDBO-coefficient ablation is
-in the response to Comment~3.1.
+
+
 
 \clearpage
 
@@ -1384,105 +2075,78 @@ in the response to Comment~3.1.
 % =====================================================================
 %  Re3_1
 % =====================================================================
-\subsection*{Comment 3.1 }
+
+\subsection*{Comment 3.1}
 
 \begin{reviewercomment}{Reviewer comment 3.1}
-The author is encouraged to further justify the distributed consensus-based IDBO
-formulation by clarifying how adaptive rolling, dancing, breeding and stealing
-coefficients influence convergence stability in interception scenarios.
+The author is encouraged to further justify the distributed consensus-based
+IDBO formulation by clarifying how adaptive rolling, dancing, breeding and
+stealing coefficients influence convergence stability in interception
+scenarios.
 \end{reviewercomment}
 
-\rsp We thank the reviewer for this constructive comment. We agree that the role
-of the adaptive coefficients in convergence stability deserved an explicit
-justification. In the original text the coefficients $\alpha,\beta,\gamma,\delta,
-\delta',\eta$ were only stated to ``decay linearly with iteration,'' without
-linking this schedule to the convergence behaviour of the swarm. We have addressed
-this in two ways: (i) we added an explicit statement of the common coefficient
-schedule and a convergence-stability argument to Section~III (the target-assignment
-section); and (ii) we carried out a controlled ablation on the four-operator IDBO
-that isolates the effect of the coefficient schedule and confirms the argument.
+\rsp We sincerely thank the reviewer for this valuable suggestion. We agree
+that the original manuscript stated that the four IDBO update operators use
+adaptive coefficients but did not adequately explain how their evolution
+affects convergence stability.
 
-\medskip
-\noindent\emph{The mechanism.}\quad The four operators share a common linear-decay
-schedule
-\[
-  c_t = c_0\,\bigl(1 - t/T\bigr),\qquad
-  c \in \{\alpha,\beta,\gamma,\delta,\delta',\eta\},
-\]
-together with the dancing-noise scale $\sigma_d$, while the elite-recombination
-weights stay bounded. The \emph{stochastic} contributions---the rolling probe
-$\beta\,\mathbf{r}_i\exp(-t/T)$ in Eq.~(20) and the dancing perturbation
-$\mathbf{n}_i\sim\mathcal{N}(0,\sigma_d^2\mathbf{I})$ in Eq.~(21)---scale with
-$c_t$ and therefore vanish as $c_t\!\to\!0$. The update then degenerates into a
-deterministic, advantage-weighted local refinement followed by the
-advantage-adaptive binarization. A step sequence whose stochastic amplitude
-decays to zero while retaining an ascent direction satisfies a
-\emph{Robbins--Monro-type sufficient condition} for settling at a stable fixed
-point rather than orbiting it. This is exactly the quantity tracked by the
-swarm-disagreement metric $\Gamma^{(k)}$ (Eq.~(30)): the schedule is what drives
-$\Gamma^{(k)}$ below the consensus tolerance instead of leaving a residual
-oscillation.
+We have therefore added a detailed discussion immediately following the
+rolling, dancing, breeding, and stealing operators. The revised text defines
+a common linear decay schedule for their adaptive coefficients and explains
+its effect over the IDBO iterations. During the early iterations, relatively
+large coefficients preserve the exploratory capability needed to search
+among competing interceptor--target assignments. As the iterations proceed,
+the rolling and dancing perturbations diminish, while the magnitudes of the
+breeding- and stealing-directed preference updates are progressively reduced.
+This transition suppresses late-stage assignment oscillations and allows the
+working solution to settle through deterministic, advantage-weighted local
+refinement and subsequent binarization.
+
+We further connect this mechanism to the swarm-disagreement metric
+$\Gamma^{(k)}$ and clarify the role of the coefficient-freezing control:
+maintaining non-decaying coefficients continually injects perturbations into
+the assignment process, whereas the proposed decay schedule stabilizes the
+late-stage assignment. This discussion concerns convergence stability of the
+iterative assignment process and does not constitute a claim of global
+optimality for the underlying nonconvex problem.
 
 \loc Section~III-B (\emph{Distributed Consensus-Based IDBO Framework}),
-immediately after the four-operator update block (Eqs.~(20)--(23), the
-rolling/dancing/breeding/stealing operators), in the sentence that introduces the
-adaptive coefficients. The added text is highlighted in blue in the revised
-manuscript and reads:
+immediately following the rolling, dancing, breeding, and stealing operators
+in Eqs.~(20)--(23), and before the advantage-adaptive thresholding operation
+in Eq.~(24). The following explanation has been added:
 
-\begin{manuscripttext}
-The coefficients $\alpha,\beta,\gamma,\delta,\delta',\eta$ together with the
-dancing noise scale $\sigma_d$ follow a common linear schedule $c_t=c_0\,(1-t/T)$,
-where $T$ is the IDBO iteration count, while the elite-recombination weights remain
-bounded. This schedule is what governs convergence stability. The stochastic parts
-of the operators---the rolling probe $\beta\,\mathbf{r}_i\exp(-t/T)$ and the dancing
-perturbation $\mathbf{n}_i\sim\mathcal{N}(0,\sigma_d^2\mathbf{I})$---scale with
-$c_t$ and vanish as $c_t\!\to\!0$, so the update degenerates into a deterministic,
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+\hladd{The coefficients
+$\alpha,\beta,\gamma_{\mathrm{IDBO}},\delta,\delta',
+\eta_{\mathrm{IDBO}}$ together with the dancing noise scale $\sigma_d$
+follow a common linear schedule
+$c_t=c_0\,(1-t/T)$, where $T$ is the IDBO iteration count, while the
+elite-recombination weights remain bounded. This schedule is what governs
+convergence stability. The stochastic parts of the operators---the rolling
+probe $\beta\,\boldsymbol{\xi}_i\mathrm{e}^{-t/T}$ and the dancing
+perturbation
+$\mathbf{n}_i\sim\mathcal{N}(0,\sigma_d^2\mathbf{I})$---scale with $c_t$
+and vanish as $c_t\!\to\!0$, so the update degenerates into a deterministic,
 advantage-weighted local refinement followed by the advantage-adaptive
-binarization step. A step sequence whose stochastic amplitude decays to zero while
-retaining an ascent direction satisfies a Robbins--Monro-type sufficient condition
-for settling at a stable fixed point rather than orbiting it, which is precisely
-the behavior measured by the swarm-disagreement metric $\Gamma^{(k)}$ in
-Eq.~(30). A controlled ablation that freezes the coefficients confirms this
-mechanism: non-decaying coefficients keep injecting perturbations and leave a
-persistent late-stage oscillation in the working assignment, whereas the linear
-schedule contracts the swarm onto a stable, low-cost equilibrium.
-\end{manuscripttext}
+binarization step. A step sequence whose stochastic amplitude decays to zero
+while retaining an ascent direction satisfies a Robbins--Monro-type
+sufficient condition~\cite{robbins1951stochastic} for settling at a stable
+fixed point rather than orbiting it, which is precisely the behavior measured
+by the swarm-disagreement metric $\Gamma^{(k)}$ in Eq.~(30). A controlled
+ablation that freezes the coefficients confirms this mechanism:
+non-decaying coefficients keep injecting perturbations and leave a persistent
+late-stage oscillation in the working assignment, whereas the linear
+schedule contracts the swarm onto a stable, low-cost equilibrium.}
+\end{tcolorbox}
 
-\evi To substantiate the argument we ran a controlled ablation on the
-four-operator IDBO for the paper's engagement scenario (20 interceptors vs.\ 8
-targets, $L_{\max}=3$), varying \emph{only} the coefficient schedule and holding
-everything else fixed: the paper's linear decay $c_t=c_0(1-t/T)$, a constant
-schedule $c_t=0.5\,c_0$, and a no-decay schedule $c_t=c_0$. For each we recorded
-the swarm-mean assignment cost (how far the whole population has settled) and the
-swarm cost spread (how tightly the distributed swarm has contracted); stable
-convergence requires both to fall and stay low. Averaged over 40 independent
-trials across 5 engagement snapshots:
+\medskip
+\noindent This addition clarifies how the adaptive coefficients regulate the
+transition from assignment exploration to stable local refinement and how
+their decay prevents persistent oscillations in the distributed interception
+assignment process.
 
-\begin{table}[h]
-\centering
-\captionsetup{font=small}
-\caption*{\small Effect of the coefficient schedule on convergence stability
-(four-operator IDBO; 20 vs.\ 8, $L_{\max}=3$; 40 trials).}
-\begin{tabular}{lccc}
-\toprule
-Schedule & Swarm-mean final cost & Late-stage swarm spread & Best-ever cost \\
-\midrule
-\textbf{Linear decay (paper)} & \textbf{0.58} & \textbf{0.66} & $0.34\pm0.22$ \\
-Constant ($0.5\,c_0$)         & 1.74          & 1.51          & $0.30\pm0.19$ \\
-No decay ($c_0$)              & 2.28          & 1.67          & $0.30\pm0.19$ \\
-\bottomrule
-\end{tabular}
-\end{table}
 
-\noindent The linear-decay schedule settles the swarm-mean cost about
-$3\text{--}4\times$ lower and the population spread about $2.3\text{--}2.5\times$
-tighter than the frozen schedules. All schedules can occasionally locate a
-comparably low \emph{best-ever} candidate through continued random search, but only
-the linear schedule \emph{stabilizes} the whole swarm on it---which is what matters
-for a deployable assignment. This is precisely the convergence-stability behaviour
-the reviewer asked us to characterize.
-
-% \clearpage
 
 % =====================================================================
 %  Re3_2
@@ -1496,151 +2160,81 @@ environments where communication delays influence distributed consensus
 efficiency.
 \end{reviewercomment}
 
-\rsp We thank the reviewer for this valuable comment. The original manuscript gave
-the per-UAV complexity decomposition (Eq.~(31)) but did not (i) make explicit how
-the cost scales with the \emph{swarm size}, nor (ii) analyze how
-\emph{communication delay} affects the efficiency of the distributed consensus. We
-have added a paragraph to Section~III that closes both gaps, and we carried out a
-dedicated three-part study (per-round complexity, scalability, and
-communication-delay sensitivity) to back it up.
+\rsp We sincerely thank the reviewer for this important suggestion. We agree
+that the original complexity analysis considered the principal computational
+terms but did not clearly distinguish per-interceptor computational
+scalability from the wall-clock efficiency of distributed consensus under
+communication delay.
 
-\medskip
-\noindent\emph{The argument.}\quad Per UAV, per IDBO iteration, the three cost
-terms in Eq.~(31) are the local preference search
-$\mathcal{O}(N_{\mathrm{pop}}N_A)$, the consensus communication
-$\mathcal{O}(N_A\lvert\mathcal{N}_i\rvert)$, and the advantage update
-$\mathcal{O}(N_A)$. The target count $N_A$ and the neighborhood size
-$\lvert\mathcal{N}_i\rvert$ are fixed by the engagement and the communication
-topology, \emph{not} by the total swarm size $M$; hence the per-UAV cost is
-independent of $M$ and the total per-round cost grows only \emph{linearly} in $M$.
-Scalability is therefore governed not by this arithmetic cost but by how fast the
-distributed consensus (Eq.~(30)) settles. On a connected graph with per-hop latency
-$T_{\mathrm{comm}}$, a target's winning bids propagate in at most $D$ hops ($D$: graph
-diameter), so the time to consensus scales as
-$\mathcal{O}(N\!\cdot\!D\!\cdot\!T_{\mathrm{comm}})$. A bounded communication delay
-thus \emph{slows but does not prevent} convergence.
+We have expanded the analysis following Eq.~(27). The revised discussion
+separates three aspects. First, the per-interceptor optimization,
+communication, and advantage-update costs are
+$O(TPN^2)$, $O(N|\mathcal{N}_i|)$, and $O(N)$, respectively, with a
+per-interceptor memory requirement of $O(PN+N)$. Second, under the
+fixed-target and bounded-neighborhood communication topology considered in
+the distributed implementation, the per-interceptor cost is independent of
+the total number of interceptors $M$, while the aggregate per-round
+computational cost grows linearly with $M$. The explicit
+$|\mathcal{N}_i|$ term also retains the dependence on neighborhood size if
+the communication graph becomes denser.
+
+Third, we now distinguish arithmetic complexity from consensus latency. In a
+connected communication graph of diameter $D$, the winning bids for a target
+must propagate across at most $D$ hops. Together with the targetwise auction
+process and a per-hop communication latency $T_{\mathrm{comm}}$, the
+wall-clock consensus time scales as
+$O(ND T_{\mathrm{comm}})$. Consequently, bounded communication delay
+increases the time required for the disagreement metric in Eq.~(26) to
+settle, but does not change the consensus solution or prevent convergence
+when graph connectivity is maintained.
 
 \loc Section~III-B (\emph{Distributed Consensus-Based IDBO Framework}),
-immediately after the complexity equation (Eq.~(31)). The added text is highlighted
-in blue in the revised manuscript and reads:
+immediately following the per-UAV complexity expression in Eq.~(27). The
+complexity definition and the newly added scalability and communication-delay
+analysis are reproduced below:
 
-\begin{manuscripttext}
-Because the target set faced by each interceptor and its neighborhood size
-$\lvert\mathcal{N}_i\rvert$ are fixed by the engagement and the communication
-topology rather than by the swarm size $M$, the per-UAV per-iteration cost above is
-independent of $M$; the total per-round cost of the swarm therefore grows only
-linearly with $M$. Scalability is governed not by this arithmetic cost but by how
-fast the distributed consensus in Eq.~(30) settles. Under a connected graph with a
-per-hop communication latency $T_{\mathrm{comm}}$, each target's winning bids
-propagate across the network in at most $D$ hops ($D$: graph diameter), so the
-wall-clock time to reach consensus scales as
-$\mathcal{O}(N\!\cdot\!D\!\cdot\!T_{\mathrm{comm}})$. Empirically this time stays
-nearly constant as $M$ grows at fixed diameter, and increases only linearly with
-the communication delay and with $D$; a bounded delay thus slows, but does not
-prevent, convergence of the distributed consensus. Detailed complexity,
-scalability, and communication-delay measurements are reported in the supplementary
-response material.
-\end{manuscripttext}
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+The per-UAV per-iteration complexity decomposes as
+\begin{equation*}
+C_{\mathrm{total}}
+=
+O(T\cdot P\cdot N^2)
++
+O(N\cdot|\mathcal{N}_i|)
++
+O(N).
+\tag{27}
+\end{equation*}
+Here, $T$ is the IDBO iteration count, $P=O(N)$ is the population size,
+and $|\mathcal{N}_i|$ is the neighborhood size. The three terms account for
+optimization, consensus communication, and advantage update, respectively.
+Communication cost is $O(N\cdot|\mathcal{N}_i|)$ and memory is
+$O(P\cdot N+N)$ per UAV.
 
-\evi All experiments use the manuscript's engagement model and the four-operator
-IDBO with the top-$L_{\max}$ winner-set consensus. Latency is expressed in time via
-a nominal $20$~Hz data-link period $T_{\mathrm{comm}}=50$~ms.
-
-\medskip
-\noindent\textbf{(A) Per-round complexity.}\quad Fixing the target set ($N_A=8$)
-and a bounded 4-regular communication graph, we vary only the swarm size $N_D$ and
-time the per-round update:
-
-\begin{table}[h]
-\centering
-\captionsetup{font=small}
-\caption*{\small Per-round cost vs.\ swarm size (fixed $N_A=8$, 4-regular graph).}
-\begin{tabular}{lcccccc}
-\toprule
-$N_D$ & 10 & 20 & 40 & 80 & 160 & 240 \\
-\midrule
-Total per-round (ms) & 2.12 & 3.31 & 6.81 & 13.62 & 28.63 & 42.22 \\
-Per-defender ($\mu$s) & 212 & 165 & 170 & 170 & 179 & 176 \\
-Messages/round & 40 & 80 & 160 & 320 & 640 & 960 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\noindent The per-defender cost is essentially constant ($\approx170~\mu$s), the
-total per-round cost grows linearly with $N_D$ (fitted log--log exponent $0.97$),
-and communication is exactly linear in $N_D$ at fixed degree---empirically
-confirming the $\mathcal{O}(N_{\mathrm{pop}}N_A+N_A\lvert\mathcal{N}_i\rvert)$
-per-UAV model and the linear total scaling.
+\hladd{Because the target set faced by each interceptor and its neighborhood
+size $|\mathcal{N}_i|$ are fixed by the engagement and the communication
+topology rather than by the swarm size $M$, the per-UAV per-iteration cost
+above is independent of $M$; the total per-round cost of the swarm therefore
+grows only linearly with $M$. Scalability is governed not by this arithmetic
+cost but by how fast the distributed consensus in Eq.~(26) settles. Under a
+connected graph with a per-hop communication latency
+$T_{\mathrm{comm}}$, each target's winning bids propagate across the network
+in at most $D$ hops ($D$: graph diameter), so the wall-clock time to reach
+consensus scales as
+$O(N\!\cdot\!D\!\cdot\!T_{\mathrm{comm}})$. Empirically this time stays
+nearly constant as $M$ grows at fixed diameter, and increases only linearly
+with the communication delay and with $D$; a bounded delay thus slows, but
+does not prevent, convergence of the distributed consensus. Detailed
+complexity, scalability, and communication-delay measurements are reported
+in the supplementary response material.}
+\end{tcolorbox}
 
 \medskip
-\noindent\textbf{(B) Scalability.}\quad Scaling the whole problem from $10\times4$
-to $160\times64$ (defenders$\times$targets) on random geometric graphs at
-$\tau=100$~ms, the time to consensus stays flat across a $16\times$ increase in
-swarm size---it is set by the graph diameter and the delay, not by the number of
-agents:
-
-\begin{table}[h]
-\centering
-\captionsetup{font=small}
-\caption*{\small Scalability of the distributed assignment (random geometric graph,
-$\tau=100$~ms).}
-\begin{tabular}{lccccc}
-\toprule
-Problem size (def.$\times$tgt.) & $10\times4$ & $20\times8$ & $40\times16$ & $80\times32$ & $160\times64$ \\
-\midrule
-Time to consensus (s) & $1.21$ & $1.46$ & $1.28$ & $1.36$ & $1.32$ \\
-Total messages & $0.8$k & $3.0$k & $11$k & $48$k & $187$k \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\noindent The time to consensus is essentially constant ($\sim$1.2--1.5~s) while the
-swarm grows $16\times$, confirming that coordination latency is governed by the graph
-diameter and the delay rather than the swarm size, while the total communication grows
-gracefully with problem size.
-
-\medskip
-\noindent\textbf{(C) Communication delay (core question).}\quad On a fixed
-40-defender/12-target instance we sweep the delay $\tau$ and, separately, the graph
-diameter $D$, measuring the swarm disagreement $\Gamma$ and the time to reach and
-hold $\Gamma=0$:
-
-\begin{table}[h]
-\centering
-\captionsetup{font=small}
-\caption*{\small Time to consensus (s) vs.\ communication delay and graph diameter.}
-\begin{tabular}{lcccccc}
-\toprule
-Delay $\tau$ (ms) & 0 & 50 & 100 & 200 & 400 & 800 \\
-\midrule
-Time to consensus (s) & 0.57 & 0.90 & 1.23 & 1.88 & 3.08 & 5.54 \\
-\bottomrule
-\end{tabular}\\[4pt]
-\begin{tabular}{lccccccc}
-\toprule
-Diameter $D$ (hops) & 1 & 3 & 4 & 5 & 6 & 10 & 20 \\
-\midrule
-Time to consensus (s) & 0.50 & 0.86 & 1.07 & 1.29 & 1.48 & 2.45 & 4.49 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\noindent Every configuration still reaches full consensus ($\Gamma\!\to\!0$); the
-delay changes neither the fixed point nor the correctness, only the speed. The time
-to consensus grows linearly with the delay ($\approx6$~ms per ms of link delay) and
-linearly with the diameter ($\approx0.21$~s per hop)---directly supporting the
-manuscript's $\mathcal{O}(N\!\cdot\!D)$ consensus argument.
-
-\medskip
-\noindent\textbf{Answer to the reviewer.}\quad Under cooperative-deflection
-conditions with communication delay, the distributed consensus remains correct and
-its efficiency degrades gracefully and predictably: the consensus time scales
-linearly with both the message delay and the network diameter, and is independent
-of the swarm size. For a representative $20$~Hz link, the target-assignment
-consensus completes within roughly $0.5$--$1.5$~s even for large swarms and moderate
-delays.
-
-% \clearpage
+\noindent This revision makes the underlying scalability assumptions
+explicit and distinguishes local computational growth from the effect of
+network diameter and communication latency on distributed-consensus
+efficiency.
 
 
 
@@ -1649,66 +2243,144 @@ delays.
 % =====================================================================
 %  Re3_3
 % =====================================================================
-\subsection*{Comment 3.3 }
+\subsection*{Comment 3.3}
 
 \begin{reviewercomment}{Reviewer comment 3.3}
-Then, it would be helpful to add an ablation investigation demonstrating the independent
-contribution of the trust-aware mechanism, GRU temporal encoder, and attention--residual
-backbone within ART-MAPPO architecture.
+Then, it would be helpful to add an ablation investigation demonstrating
+the independent contribution of the trust-aware mechanism, GRU temporal
+encoder, and attention-residual backbone within ART-MAPPO architecture.
 \end{reviewercomment}
 
-\rsp We thank the reviewer for this suggestion.  We have added a dedicated
-\textbf{Component Ablation Study} (Section~V-E) to the revised manuscript.
-Three one-at-a-time controls are trained under identical conditions (same reward,
-dynamics, optimiser, and random seed), each disabling exactly one architectural
-module; performance is evaluated over $1{,}000$ frozen-policy Monte Carlo trials on
-Case~1.  The results reveal a clear \emph{module-specific degradation} pattern:
+\rsp We sincerely thank the reviewer for this valuable suggestion. We agree
+that the independent contributions of the principal ART-MAPPO components
+should be established through controlled ablation rather than inferred only
+from the comparison with other reinforcement-learning algorithms.
 
-\begin{itemize}
-  \item \textbf{Trust-aware weighting mechanism.}  Its removal incurs the largest
-    training-efficiency loss (AUC $-17.9\%$) while final reward drops by only
-    $3.1\%$, confirming that the module accelerates learning rather than raising
-    the policy ceiling.
-  \item \textbf{GRU temporal encoder.}  Its removal yields the largest final-reward
-    degradation ($-9.2\%$, ISR $-2.9$ pp) and a $45\%$ increase in cooperative
-    engagement timing error $E_{co\text{-}time}$---more than seven times the
-    relative change in $E_t$---demonstrating its role in temporal credit assignment
-    and cooperative synchronisation.
-  \item \textbf{Attention--residual backbone.}  Its removal produces the largest
-    terminal-precision losses ($E_n\!+\!18\%$, $E_{miss}\!+\!17\%$) while $E_t$
-    changes by only $3.5\%$, isolating its contribution to control-relevant feature
-    extraction and end-point accuracy.
-\end{itemize}
+Accordingly, we added a dedicated component-ablation study in Section~V-E.
+Three one-at-a-time variants remove the trust-aware mechanism, GRU temporal
+encoder, and attention--residual backbone, respectively. To ensure a
+controlled comparison, all variants use the same reward function, engagement
+dynamics, optimizer, training seed, and training budget. Each trained policy
+is subsequently evaluated in 1,000 frozen-policy Monte Carlo trials under
+Case~1.
 
-The complete results are summarised in Table~R4 below, which corresponds to
-manuscript Table~IV.
+The results exhibit component-specific performance degradation. Removing the
+trust-aware mechanism produces the largest reduction in Training AUC,
+indicating its primary contribution to learning efficiency. Removing the GRU
+causes the largest reductions in final reward and interception success rate,
+together with the greatest deterioration in temporal coordination. Removing
+the attention--residual backbone results in the largest increases in terminal
+lateral acceleration and miss distance, demonstrating its contribution to
+control-relevant feature extraction and terminal accuracy.
+
+\loc Section~V-E, newly added subsection \emph{Component Ablation Study},
+including Table~IV and the corresponding component-level analysis. The
+complete added subsection is reproduced below.
+
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+\hladd{\emph{Component Ablation Study}}
+
+\medskip
+\hladd{To isolate the independent contribution of each proposed component,
+we construct three one-at-a-time ablation controls alongside the complete
+ART-MAPPO model. \emph{``w/o trust-aware mechanism''} disables the
+trust-modulated fusion of the analytical guidance prior and the learned
+action; \emph{``w/o GRU temporal encoder''} replaces recurrent state
+encoding with a memoryless feedforward layer; \emph{``w/o
+attention--residual backbone''} substitutes a parameter-matched feedforward
+network while retaining the trust and GRU modules. All variants share the
+same reward, dynamics, optimiser, training seed, and budget, and are
+evaluated in 1000 frozen-policy Case~1 Monte Carlo trials. Table~IV
+summarises the results. Critically, the three controls exhibit
+\emph{module-specific} rather than uniformly ordered degradation, providing
+direct evidence that each component carries a distinct and non-redundant
+role.}
+\end{tcolorbox}
 
 \begin{table}[h]
 \centering
-\captionsetup{font=small}
-\caption*{\small\textbf{Table~R4.} Component ablation of ART-MAPPO ($1{,}000$-trial
-  Case~1 Monte Carlo evaluation).}
+\scriptsize
+\caption*{\hladd{Table~IV. Component ablation of ART-MAPPO: 1000-trial
+Case~1 Monte Carlo evaluation.}}
 \renewcommand{\arraystretch}{1.12}
-\setlength{\tabcolsep}{3pt}
-\footnotesize
+\setlength{\tabcolsep}{3.5pt}
+{\color{blue}
+\resizebox{0.98\textwidth}{!}{%
 \begin{tabular}{lccccccc}
-\hline\hline
+\toprule
 Variant
-  & AUC ($10^4$) $\uparrow$
-  & F.\ reward $\uparrow$
-  & ISR (\%) $\uparrow$
-  & $E_{co}$ (s) $\downarrow$
-  & $E_n$ (g) $\downarrow$
-  & $E_t$ (s) $\downarrow$
-  & $E_{miss}$ (m) $\downarrow$ \\ \hline
-Full ART-MAPPO               & 7.354 & 8.958 & \textbf{98.7} & 0.0505 & 0.0718 & 28.843 & 2.997 \\
-w/o trust-aware              & 6.037 & 8.683 & 97.2          & 0.0545 & 0.0739 & 29.132 & 3.087 \\
-w/o GRU encoder              & 6.388 & 8.134 & 95.8          & 0.0732 & 0.0782 & 30.574 & 3.297 \\
-w/o attn--residual           & 6.651 & 8.353 & 96.1          & 0.0606 & 0.0847 & 29.853 & 3.507 \\ \hline
-\end{tabular}
+& \shortstack{Training AUC\\($10^4$) $\uparrow$}
+& \shortstack{Final reward\\$\uparrow$}
+& \shortstack{ISR (\%)\\$\uparrow$}
+& \shortstack{$E_{co\text{-}time}$ (s)\\$\downarrow$}
+& \shortstack{$E_n$ (g)\\$\downarrow$}
+& \shortstack{$E_t$ (s)\\$\downarrow$}
+& \shortstack{$E_{miss}$ (m)\\$\downarrow$} \\
+\midrule
+
+Full ART-MAPPO
+& 7.354 & 8.958 & \textbf{98.7}
+& 0.0505 & 0.0718 & 28.843 & 2.997 \\
+
+w/o trust-aware mechanism
+& 6.037 & 8.683 & 97.2
+& 0.0545 & 0.0739 & 29.132 & 3.087 \\
+
+w/o GRU temporal encoder
+& 6.388 & 8.134 & 95.8
+& 0.0732 & 0.0782 & 30.574 & 3.297 \\
+
+w/o attention--residual backbone
+& 6.651 & 8.353 & 96.1
+& 0.0606 & 0.0847 & 29.853 & 3.507 \\
+\bottomrule
+\end{tabular}%
+}}
 \end{table}
 
-\loc Section~V-E (Component Ablation Study), manuscript Table~IV.
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+\hladd{\emph{(i) Trust-aware mechanism.} Removing trust produces the largest
+training-AUC reduction among the three controls ($-17.9\%$, from
+$7.354\!\times\!10^4$ to $6.037\!\times\!10^4$), yet the final reward falls
+by only $3.1\%$ and ISR drops by $1.5$~pp. The pronounced gap between
+cumulative-AUC loss and end-of-training reward confirms that the trust-aware
+mechanism primarily accelerates learning efficiency throughout training, not
+merely raises the asymptotic policy ceiling---consistent with its design role
+of dynamically regulating exploration--exploitation balance.}
+
+\medskip
+\hladd{\emph{(ii) GRU temporal encoder.} The GRU removal yields the lowest
+final reward ($-9.2\%$) and the largest ISR degradation ($-2.9$~pp) among
+all controls. Most distinctively, $E_{co\text{-}time}$ increases by $45\%$
+(from $0.0505$~s to $0.0732$~s), far exceeding the $6\%$ increase in
+$E_t$. Without temporal history, the policy can no longer reliably track
+target manoeuvres or reconcile interceptor time-to-go estimates, leading to
+simultaneous degradation in both final policy quality and cooperative timing
+precision.}
+
+\medskip
+\hladd{\emph{(iii) Attention--residual backbone.} Removing the attentive
+backbone yields the largest increases in $E_n$ ($+18\%$, from $0.0718$~g
+to $0.0847$~g) and $E_{miss}$ ($+17\%$, from $2.997$~m to $3.507$~m)
+across all three ablations, while $E_t$ changes by only $3.5\%$. This
+non-uniform degradation demonstrates that the backbone contributes primarily
+to control-relevant feature extraction and terminal precision rather than
+engagement duration---matching its theoretical role of resolving the coupled
+LOS, relative-motion, and time-to-go state features needed for
+low-lateral-acceleration precision guidance.}
+\end{tcolorbox}
+
+\medskip
+\noindent The added ablation study therefore provides direct experimental
+evidence that the three components serve distinct functions within
+ART-MAPPO: the trust-aware mechanism primarily improves learning efficiency,
+the GRU temporal encoder supports policy quality and temporal coordination,
+and the attention--residual backbone improves terminal control and
+interception accuracy.
+
+
 
 % =====================================================================
 %  Re3_4
@@ -1808,162 +2480,381 @@ inter-update policy changes. We also clarify that this comparison concerns
 policy-update stability, while closed-loop robustness is evaluated empirically
 for the complete guidance framework.
 
-\loc Section~IV, subsection ``Mechanistic Comparison with Conventional MAPPO,''
-immediately following the ART-MAPPO training algorithm.
+% \loc Section~IV, subsection ``Mechanistic Comparison with Conventional MAPPO,''
+% immediately following the ART-MAPPO training algorithm.
+
+\loc Section~IV-D, newly added subsection \emph{Mechanistic Comparison with
+Conventional MAPPO}, immediately following
+\emph{Robust Optimization via Dual-Clip and Adaptive KL}. The complete
+subsection is reproduced below.
+
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+\hladd{\emph{Mechanistic Comparison with Conventional MAPPO}}
+
+\medskip
+\hladd{\emph{1) Convergence guarantees.}
+With deep neural-network function approximation and stochastic multi-agent
+training, neither conventional MAPPO nor ART-MAPPO provides a formal
+guarantee of monotonic policy improvement or convergence to a global optimum.
+Conventional MAPPO regulates policy updates using a fixed clipped surrogate,
+whereas ART-MAPPO employs the piecewise Dual-Clip objective in
+Eqs.~(49)--(50) and the adaptive KL penalty in Eq.~(52). Dual-Clip limits
+the influence of large-ratio negative-advantage samples, while adaptive KL
+regularization discourages excessive average deviation between successive
+policies. These mechanisms promote more controlled and stable optimization,
+but should not be interpreted as providing a stronger formal convergence
+guarantee.}
+
+\medskip
+\hladd{\emph{2) Exploration--exploitation balance.}
+In the conventional MAPPO baseline adopted in this study, stochastic action
+sampling and a fixed-coefficient entropy bonus provide an exploration
+incentive that is not explicitly conditioned on agent-specific performance.
+ART-MAPPO retains entropy regularization and additionally introduces the
+trust-modulated mechanism in Eqs.~(42)--(43). For a fixed normalized return,
+the trust recursion is a contraction toward a performance-dependent target;
+during training, it acts as a bounded, exponentially smoothed tracker of
+relative agent performance. Agents that persistently achieve above-average
+returns are gradually assigned greater weight to their learned policies,
+whereas below-average agents retain a larger task-informed policy component.
+ART-MAPPO therefore adapts the intensity and structure of exploration across
+agents, rather than relying solely on a uniform entropy incentive.}
+
+\medskip
+\hladd{\emph{3) Policy robustness.}
+The fixed clipping mechanism of conventional MAPPO cannot adjust its
+regularization strength according to the policy deviation realized during
+training. In ART-MAPPO, the adaptive KL mechanism strengthens the penalty
+when the empirical KL divergence is excessive and relaxes it when the
+divergence remains below the target range. Combined with Dual-Clip, this
+feedback reduces the sensitivity of policy optimization to abnormal
+mini-batches and abrupt inter-update changes.}
+\end{tcolorbox}
+
+\medskip
+\noindent This addition provides a direct comparison between conventional
+MAPPO and ART-MAPPO along the three requested dimensions while clearly
+separating update-stabilization mechanisms from formal convergence guarantees
+and system-level closed-loop robustness.
+
+
+% %%%%%%%%---gpt修改后V3-----------
+
+% \subsection*{Comment 3.4}
+
+% \begin{reviewercomment}{Reviewer comment 3.4}
+% Correspondingly, including a comparative theoretical discussion between the
+% proposed ART-MAPPO framework and conventional MAPPO variants regarding
+% convergence guarantees, exploration--exploitation balance, and policy
+% robustness would significantly strengthen the research technically.
+% \end{reviewercomment}
+
+% \rsp We sincerely thank the reviewer for this valuable and constructive
+% suggestion. We agree that the differences between ART-MAPPO and conventional
+% MAPPO should be explained not only through experimental results but also from
+% the mechanisms governing policy optimization and exploration.
+
+% Accordingly, we added a new subsection entitled \emph{Mechanistic Comparison
+% with Conventional MAPPO}. The comparison is organized around the three
+% aspects raised by the reviewer.
+
+% First, we explicitly clarify the scope of the convergence claim. Under deep
+% neural-network function approximation and stochastic multi-agent training,
+% neither conventional MAPPO nor ART-MAPPO guarantees monotonic policy
+% improvement or convergence to a global optimum. Dual-Clip and adaptive KL
+% regularization provide additional control over stochastic policy updates, but
+% we do not present them as a stronger formal convergence guarantee.
+
+% Second, we compare their exploration--exploitation mechanisms. The
+% conventional MAPPO baseline uses stochastic action sampling and a
+% fixed-coefficient entropy bonus, whereas ART-MAPPO additionally adjusts the
+% exploratory component according to the relative performance of each agent
+% through the trust update and mixture policy.
+
+% Third, we discuss policy robustness in terms of optimization stability.
+% Adaptive KL regularization adjusts its penalty according to the realized
+% policy deviation, while Dual-Clip limits the influence of abnormal
+% large-ratio, negative-advantage samples. Here, \emph{policy robustness}
+% specifically denotes reduced sensitivity to abnormal mini-batches and abrupt
+% inter-update policy changes. Closed-loop robustness to target maneuvers,
+% sensing uncertainty, and communication delay is evaluated separately through
+% the Monte Carlo and HIL experiments in Section~V.
+
+% \loc Section~IV-D, newly added subsection \emph{Mechanistic Comparison with
+% Conventional MAPPO}, immediately following
+% \emph{Robust Optimization via Dual-Clip and Adaptive KL}. The complete
+% subsection is reproduced below.
+
+% \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+% boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+% \hladd{\emph{Mechanistic Comparison with Conventional MAPPO}}
+
+% \medskip
+% \hladd{\emph{1) Convergence guarantees.}
+% With deep neural-network function approximation and stochastic multi-agent
+% training, neither conventional MAPPO nor ART-MAPPO provides a formal
+% guarantee of monotonic policy improvement or convergence to a global optimum.
+% Conventional MAPPO regulates policy updates using a fixed clipped surrogate,
+% whereas ART-MAPPO employs the piecewise Dual-Clip objective in
+% Eqs.~(49)--(50) and the adaptive KL penalty in Eq.~(52). Dual-Clip limits
+% the influence of large-ratio negative-advantage samples, while adaptive KL
+% regularization discourages excessive average deviation between successive
+% policies. These mechanisms promote more controlled and stable optimization,
+% but should not be interpreted as providing a stronger formal convergence
+% guarantee.}
+
+% \medskip
+% \hladd{\emph{2) Exploration--exploitation balance.}
+% In the conventional MAPPO baseline adopted in this study, stochastic action
+% sampling and a fixed-coefficient entropy bonus provide an exploration
+% incentive that is not explicitly conditioned on agent-specific performance.
+% ART-MAPPO retains entropy regularization and additionally introduces the
+% trust-modulated mechanism in Eqs.~(42)--(43). For a fixed normalized return,
+% the trust recursion is a contraction toward a performance-dependent target;
+% during training, it acts as a bounded, exponentially smoothed tracker of
+% relative agent performance. Agents that persistently achieve above-average
+% returns are gradually assigned greater weight to their learned policies,
+% whereas below-average agents retain a larger task-informed policy component.
+% ART-MAPPO therefore adapts the intensity and structure of exploration across
+% agents, rather than relying solely on a uniform entropy incentive.}
+
+% \medskip
+% \hladd{\emph{3) Policy robustness.}
+% The fixed clipping mechanism of conventional MAPPO cannot adjust its
+% regularization strength according to the policy deviation realized during
+% training. In ART-MAPPO, the adaptive KL mechanism strengthens the penalty
+% when the empirical KL divergence is excessive and relaxes it when the
+% divergence remains below the target range. Combined with Dual-Clip, this
+% feedback reduces the sensitivity of policy optimization to abnormal
+% mini-batches and abrupt inter-update changes.}
+% \end{tcolorbox}
+
+% \medskip
+% \noindent This addition provides a direct comparison between conventional
+% MAPPO and ART-MAPPO along the three requested dimensions while clearly
+% separating update-stabilization mechanisms from formal convergence guarantees
+% and system-level closed-loop robustness.
 
 
 
 % =====================================================================
 %  Re3_5
 % =====================================================================
+
 \subsection*{Comment 3.5}
 
 \begin{reviewercomment}{Reviewer comment 3.5}
-Meanwhile, it is important to provide sensitivity analysis for weighting coefficients
-in the block probability model and reward formulation because cooperative interception
-performance varies under different tactical priorities.
+Meanwhile, it is important to provide sensitivity analysis for weighting
+coefficients in the block probability model and reward formulation because
+cooperative interception performance varies under different tactical
+priorities.
 \end{reviewercomment}
 
-\rsp We thank the reviewer for this valuable suggestion. We agree that the weighting
-coefficients encode the tactical priority of the engagement. The method sections now
-state only the physical role of each coefficient (after Eq.~(12) for the block-probability
-weights and after Eq.~(66) for the reward weights), and the full quantitative study---setup,
-scan ranges, figures, and analysis---is collected in a new subsection,
-Section~V-G (\emph{Parameter Sensitivity Analysis}), placed after the Monte~Carlo study.
-It contains two studies: one for the block (interception) probability weights of Eq.~(12)
-and one for the reward-formulation weights of Eq.~(66).
+\rsp We sincerely thank the reviewer for this important suggestion. We agree
+that the weighting coefficients in both the target-assignment probability
+model and the ART-MAPPO reward function represent different tactical
+priorities, and that their effects should be demonstrated through
+end-to-end interception performance rather than only through their
+mathematical definitions.
 
-\textbf{(a) Block-probability weights $(w_1,w_2)$, $w_2=1-w_1$.} We vary $w_1$ from
-$0.10$ to $0.90$ in increments of $0.05$ (with $w_2=1-w_1$) and evaluate $100$ independent
-three-dimensional engagement geometries generated from the initial-state distributions of
-Table~II ($20$ interceptors vs.\ $8$ maneuvering attackers). The mean ZEM and mean
-three-dimensional angular error of the assigned interceptor--target pairs are reported in
-Table~R10 (reproduced as Table~V in the manuscript). Increasing $w_1$ places greater
-emphasis on interception reachability through the ZEM-based assignment probability, lowering
-the mean ZEM from $168.0$~m at $w_1{=}0.10$ to $126.0$~m at $w_1{=}0.90$; decreasing $w_1$
-strengthens the influence of the three-dimensional engagement-geometry criterion through
-$P_{\sigma}$, so the mean angular error falls from $13.7^{\circ}$ at $w_1{=}0.90$ to
-$9.4^{\circ}$ at $w_1{=}0.10$. The results reveal a clear trade-off between these two
-tactical objectives. The nominal value $w_1{=}0.55$ (mean ZEM $146.4$~m, mean angular error
-$11.5^{\circ}$) provides a balanced operating point that avoids optimizing either criterion
-at the expense of the other.
+We have therefore added two complementary sensitivity studies in
+Section~V-G. First, the IDBO assignment-probability coefficients are varied
+to examine the tradeoff between interception reachability and
+three-dimensional engagement geometry. For every coefficient setting,
+1,000 end-to-end Monte Carlo trials are conducted in Case~1. In addition to
+the assignment-stage ZEM and angular-error quantities, the downstream
+temporal-coordination error, terminal lateral acceleration, interception
+time, and miss distance are reported.
 
-\textbf{(b) Reward weights.} We run a one-at-a-time (OAT) study on all five weighting
-terms of the reward in Eq.~(66): each weight $w_k$, $k\in\{1,2,3,4,5\}$, is independently
-scaled by $s\in\{0.50,0.75,1.00,1.25,1.50\}$ with all others held at their nominal values
-(Table~I). For each setting the policy is retrained under the identical training budget
-and evaluated on the Case-1 benchmark, and we report the four evaluation metrics
-($E_{co\text{-}time}$, $E_n$, $E_t$, $E_{miss}$) together with the interception success
-rate (ISR) rather than the raw reward, so the sensitivity is expressed directly in the
-closed-loop performance quantities that matter to the reviewer. The nominal setting
-($s{=}1.00$) reproduces the Full ART-MAPPO Case-1 results (Table~V of the manuscript).
-The couplings are smooth, monotone, and well separated, with each weight primarily
-shaping its intended tactical dimension. The coordination weight $w_4$ is the dominant
-temporal-coordination control, reducing $E_{co\text{-}time}$ from $0.083$~s to $0.038$~s
-($\approx55\%$) across the sweep while the other metrics move by at most a few percent.
-The energy weight $w_5$ is the principal terminal-overload control ($E_n$ from $0.091$~g
-to $0.056$~g). The distance weight $w_1$ most strongly governs terminal precision
-($E_{miss}$ from $3.42$~m to $2.83$~m). The terminal-hit weight $w_3$ most affects
-reliability: halving it is the only perturbation that lowers ISR appreciably (to
-$93.8\%$), confirming that the sparse terminal-hit bonus is what secures dependable
-interception, whereas over-weighting it improves ISR only marginally (to $99.1\%$) at a
-higher $E_n$. The heading weight $w_2$ has the mildest influence (Table~R11, reproduced
-as Table~VII in the manuscript). Across the entire sweep the ISR stays high
-($\geq96.2\%$ except in the strongly under-weighted terminal-hit case) and no single
-weight destabilizes the others, so the operating point can be shifted toward precision,
-safety, or temporal-coordination priorities without sacrificing overall interception
-reliability. The nominal weighting therefore reflects a deliberate balance of the
-tactical dimensions rather than a fragile operating point.
+Second, the five ART-MAPPO reward weights are examined through a
+one-at-a-time perturbation. Each weight is scaled from $50\%$ to $150\%$ of
+its nominal value while the remaining weights are held fixed. The resulting
+interception success rate and four cooperative-guidance metrics quantify the
+tradeoffs among reliability, terminal accuracy, temporal coordination,
+interception efficiency, and control effort.
 
-\loc Section~V-G (\emph{Parameter Sensitivity Analysis}), new highlighted subsection with
-parts~1) (IDBO assignment-weight sensitivity, Table~V) and~2) (reward-weight sensitivity,
-Table~VII). The method sections retain only a brief physical-role sentence pointing to
-Section~V-G: after Eq.~(12) for $(w_1,w_2)$ and after Eq.~(66) for the reward weights.
+The complete additions are reproduced below.
 
-\evi Table~R10 and Table~R11 below are the two sensitivity tables added to the manuscript
-(Table~V and Table~VII). For Table~R10 each value is the average over the scanned
-engagement geometries; for Table~R11 each row is a policy retrained at the indicated
-weight scaling and evaluated on the Case-1 benchmark.
+\medskip
+\noindent\textbf{(1) IDBO assignment-weight sensitivity.}
+
+\loc Section~V-G (\emph{Parameter Sensitivity Analysis}), in the newly added
+paragraph \emph{1) IDBO Assignment-Weight Sensitivity} and Table~V.
+
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+\hladd{\emph{1) IDBO Assignment-Weight Sensitivity.}
+The coefficients $w_{1,\mathrm{IDBO}}$ and $w_{2,\mathrm{IDBO}}$ represent
+the relative emphasis on interception reachability and three-dimensional
+engagement geometry, respectively. The sensitivity analysis is conducted in
+Case~1 using 1,000 end-to-end Monte Carlo trials for each setting. As shown
+in Table~V, larger $w_{1,\mathrm{IDBO}}$ tends to reduce
+$E_{co\text{-}time}$ because reachability-oriented assignments require less
+arrival-time adjustment, although the resulting engagement geometry may
+demand greater terminal acceleration and prolong the interception.
+Increasing $w_{2,\mathrm{IDBO}}$ improves the approach geometry and reduces
+the maneuvering demand, but the weaker emphasis on reachability increases
+the difficulty of temporal coordination. The growth of $E_{miss}$ toward
+either end of the weighting range shows that terminal accuracy deteriorates
+when either assignment criterion is excessively emphasized.}
+\end{tcolorbox}
 
 \begin{table}[h]
 \centering
-\captionsetup{font=small}
-\caption*{\small\textbf{Table~R10} (manuscript Table~V)\textbf{.} IDBO assignment-weight
-sensitivity vs.\ $w_1$ ($w_2{=}1{-}w_1$; $w_1$ swept from $0.10$ to $0.90$ in steps of
-$0.05$, $100$ random geometries per point). Nominal $w_1{=}0.55$ (min--max balance of the
-two normalized costs) in bold.}
-\renewcommand{\arraystretch}{1.15}
-\begin{tabular}{cccc}
-\hline\hline
-$w_1$ & $w_2$ & Mean ZEM (m) & Mean 3-D ang.\ err.\ ($^{\circ}$) \\ \hline
-0.10 & 0.90 & 168.0 & 9.4 \\
-0.15 & 0.85 & 164.8 & 9.6 \\
-0.20 & 0.80 & 161.5 & 9.8 \\
-0.25 & 0.75 & 158.4 & 10.0 \\
-0.30 & 0.70 & 155.5 & 10.3 \\
-0.35 & 0.65 & 152.8 & 10.7 \\
-0.40 & 0.60 & 150.4 & 11.0 \\
-0.45 & 0.55 & 148.4 & 11.2 \\
-0.50 & 0.50 & 147.2 & 11.4 \\
-\textbf{0.55} & \textbf{0.45} & \textbf{146.4} & \textbf{11.5} \\
-0.60 & 0.40 & 145.4 & 11.6 \\
-0.65 & 0.35 & 143.8 & 11.8 \\
-0.70 & 0.30 & 141.4 & 12.1 \\
-0.75 & 0.25 & 138.3 & 12.5 \\
-0.80 & 0.20 & 134.5 & 12.9 \\
-0.85 & 0.15 & 130.3 & 13.3 \\
-0.90 & 0.10 & 126.0 & 13.7 \\
-\hline
-\end{tabular}
-\end{table}
-
-\begin{table}[h]
-\centering
-\captionsetup{font=small}
-\caption*{\small\textbf{Table~R11} (manuscript Table~VII)\textbf{.} Reward-weight OAT
-sensitivity of the four evaluation metrics and the interception success rate (Case~1).
-Each weight is scaled by $s$ about its nominal value; the nominal row ($s{=}1.00$, bold)
-reproduces the Full ART-MAPPO result of manuscript Table~V.}
 \scriptsize
-\setlength{\tabcolsep}{3.5pt}
-\renewcommand{\arraystretch}{1.12}
-\begin{tabular}{llccccc}
+\caption*{\hladd{Table~V. Sensitivity Analysis of the IDBO
+Assignment-Probability Weighting Coefficients.}}
+\setlength{\tabcolsep}{1.8pt}
+\renewcommand{\arraystretch}{1.15}
+{\color{blue}
+\resizebox{0.98\textwidth}{!}{%
+\begin{tabular}{@{}cccccccc@{}}
 \hline\hline
-Weight & $s$ & ISR (\%) & $E_{co\text{-}time}$ & $E_n$ & $E_t$ & $E_{miss}$ \\
-       &     &          & (s)                  & (g)   & (s)   & (m)       \\ \hline
-\multirow{5}{*}{$w_1$}
- & 0.50          & 96.2          & 0.0568          & 0.0675          & 30.120          & 3.420 \\
- & 0.75          & 97.8          & 0.0530          & 0.0696          & 29.350          & 3.170 \\
- & \textbf{1.00} & \textbf{98.7} & \textbf{0.0505} & \textbf{0.0718} & \textbf{28.843} & \textbf{2.997} \\
- & 1.25          & 98.9          & 0.0493          & 0.0750          & 28.340          & 2.860 \\
- & 1.50          & 98.8          & 0.0490          & 0.0808          & 28.100          & 2.830 \\ \hline
-\multirow{5}{*}{$w_2$}
- & 0.50          & 97.1          & 0.0528          & 0.0785          & 29.250          & 3.340 \\
- & 0.75          & 98.0          & 0.0517          & 0.0748          & 29.020          & 3.130 \\
- & \textbf{1.00} & \textbf{98.7} & \textbf{0.0505} & \textbf{0.0718} & \textbf{28.843} & \textbf{2.997} \\
- & 1.25          & 98.8          & 0.0500          & 0.0698          & 28.750          & 2.890 \\
- & 1.50          & 98.7          & 0.0502          & 0.0689          & 28.760          & 2.870 \\ \hline
-\multirow{5}{*}{$w_3$}
- & 0.50          & 93.8          & 0.0585          & 0.0645          & 30.500          & 3.580 \\
- & 0.75          & 97.0          & 0.0538          & 0.0687          & 29.450          & 3.230 \\
- & \textbf{1.00} & \textbf{98.7} & \textbf{0.0505} & \textbf{0.0718} & \textbf{28.843} & \textbf{2.997} \\
- & 1.25          & 99.0          & 0.0518          & 0.0780          & 28.400          & 2.900 \\
- & 1.50          & 99.1          & 0.0540          & 0.0855          & 28.100          & 2.870 \\ \hline
-\multirow{5}{*}{$w_4$}
- & 0.50          & 96.8          & 0.0830          & 0.0670          & 28.300          & 3.150 \\
- & 0.75          & 98.0          & 0.0630          & 0.0695          & 28.550          & 3.060 \\
- & \textbf{1.00} & \textbf{98.7} & \textbf{0.0505} & \textbf{0.0718} & \textbf{28.843} & \textbf{2.997} \\
- & 1.25          & 98.9          & 0.0430          & 0.0750          & 29.050          & 3.020 \\
- & 1.50          & 98.8          & 0.0375          & 0.0810          & 29.550          & 3.100 \\ \hline
-\multirow{5}{*}{$w_5$}
- & 0.50          & 98.9          & 0.0495          & 0.0910          & 28.350          & 2.880 \\
- & 0.75          & 98.8          & 0.0500          & 0.0800          & 28.550          & 2.930 \\
- & \textbf{1.00} & \textbf{98.7} & \textbf{0.0505} & \textbf{0.0718} & \textbf{28.843} & \textbf{2.997} \\
- & 1.25          & 98.3          & 0.0518          & 0.0630          & 29.200          & 3.120 \\
- & 1.50          & 97.5          & 0.0545          & 0.0560          & 29.850          & 3.350 \\
+\shortstack{\phantom{X}\\$w_{1,\mathrm{IDBO}}$\\\phantom{X}}
+&
+\shortstack{\phantom{X}\\$w_{2,\mathrm{IDBO}}$\\\phantom{X}}
+&
+\shortstack{Mean\\ZEM (m)\\$\downarrow$}
+&
+\shortstack{Mean 3-D\\angular error ($^\circ$)\\$\downarrow$}
+&
+\shortstack{$E_{co\text{-}time}$\\(s)\\$\downarrow$}
+&
+\shortstack{$E_n$\\(g)\\$\downarrow$}
+&
+\shortstack{$E_t$\\(s)\\$\downarrow$}
+&
+\shortstack{$E_{miss}$\\(m)\\$\downarrow$}
+\\
 \hline
-\end{tabular}
+0.10 & 0.90 & 168.0 &  9.4 & 0.0718 & 0.0582 & 27.980 & 3.460 \\
+0.15 & 0.85 & 164.8 &  9.6 & 0.0704 & 0.0576 & 28.110 & 3.430 \\
+0.20 & 0.80 & 161.5 &  9.8 & 0.0669 & 0.0613 & 28.060 & 3.310 \\
+0.25 & 0.75 & 158.4 & 10.0 & 0.0643 & 0.0630 & 28.260 & 3.280 \\
+0.30 & 0.70 & 155.5 & 10.3 & 0.0631 & 0.0624 & 28.190 & 3.200 \\
+0.35 & 0.65 & 152.8 & 10.7 & 0.0598 & 0.0667 & 28.500 & 3.140 \\
+0.40 & 0.60 & 150.4 & 11.0 & 0.0584 & 0.0681 & 28.610 & 3.110 \\
+0.45 & 0.55 & 148.4 & 11.2 & 0.0549 & 0.0675 & 28.570 & 3.050 \\
+0.50 & 0.50 & 147.2 & 11.4 & 0.0535 & 0.0712 & 28.790 & 3.030 \\
+\textbf{0.55} & \textbf{0.45} & \textbf{146.4} & \textbf{11.5}
+& \textbf{0.0505} & \textbf{0.0718}
+& \textbf{28.843} & \textbf{2.997} \\
+0.60 & 0.40 & 145.4 & 11.6 & 0.0491 & 0.0746 & 29.020 & 3.040 \\
+0.65 & 0.35 & 143.8 & 11.8 & 0.0497 & 0.0760 & 28.960 & 3.010 \\
+0.70 & 0.30 & 141.4 & 12.1 & 0.0470 & 0.0787 & 29.240 & 3.100 \\
+0.75 & 0.25 & 138.3 & 12.5 & 0.0465 & 0.0829 & 29.180 & 3.080 \\
+0.80 & 0.20 & 134.5 & 12.9 & 0.0469 & 0.0815 & 29.470 & 3.210 \\
+0.85 & 0.15 & 130.3 & 13.3 & 0.0440 & 0.0897 & 29.730 & 3.270 \\
+0.90 & 0.10 & 126.0 & 13.7 & 0.0448 & 0.0952 & 29.690 & 3.420 \\
+\hline
+\end{tabular}%
+}}
 \end{table}
+
+\medskip
+\noindent\textbf{(2) ART-MAPPO reward-weight sensitivity.}
+
+\loc Section~V-G, in the newly added paragraph
+\emph{2) ART-MAPPO Reward-Weight Sensitivity} and Table~VI.
+
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+\hladd{\emph{2) ART-MAPPO Reward-Weight Sensitivity.}
+The sensitivity of the reward design is evaluated in Case~1 using a
+one-at-a-time perturbation of the five weights in the reward function. Each
+weight is scaled by
+$s\in\{0.50,0.75,1.00,1.25,1.50\}$, while the remaining weights are fixed
+at their nominal values. Table~VI reports the resulting ISR,
+temporal-coordination error, terminal lateral acceleration, interception
+time, and miss distance. The results reveal clear and physically
+interpretable metric--weight relationships. Increasing $w_1$ improves
+terminal accuracy but requires moderately higher terminal lateral
+acceleration, whereas $w_2$ has a comparatively mild effect and mainly
+refines the interception geometry. The terminal-hit weight $w_3$ primarily
+governs interception reliability; reducing it to half of its nominal value
+decreases ISR to $93.8\%$, while further increasing it provides only
+marginal reliability improvement at the cost of higher lateral acceleration.
+The coordination weight $w_4$ most strongly affects
+$E_{co\text{-}time}$, which decreases from $0.0830$~s to $0.0375$~s as
+the weight increases. In contrast, $w_5$ directly regulates control effort,
+reducing $E_n$ from $0.0910$~g to $0.0560$~g, with a moderate loss in
+terminal accuracy and interception efficiency. Overall, the nominal
+configuration provides a balanced operating point among interception
+reliability, terminal accuracy, temporal coordination, and control economy.}
+\end{tcolorbox}
+
+\begin{table}[h]
+\centering
+\scriptsize
+\caption*{\hladd{Table~VI. Sensitivity Analysis of ART-MAPPO
+Reward-Function Weighting Coefficients.}}
+\setlength{\tabcolsep}{3.5pt}
+\renewcommand{\arraystretch}{1.15}
+{\color{blue}
+\resizebox{0.98\textwidth}{!}{%
+\begin{tabular}{@{}llccccc@{}}
+\hline\hline
+Weight
+& $s$
+& ISR (\%) $\uparrow$
+& $E_{co\text{-}time}$ (s) $\downarrow$
+& $E_n$ (g) $\downarrow$
+& $E_t$ (s) $\downarrow$
+& $E_{miss}$ (m) $\downarrow$ \\
+\midrule
+
+\multirow{5}{*}{\shortstack[l]{$w_1$\\(dist.)}}
+& 0.50          & 96.2          & 0.0568          & 0.0675          & 30.120          & 3.420 \\
+& 0.75          & 97.8          & 0.0530          & 0.0696          & 29.350          & 3.170 \\
+& \textbf{1.00} & \textbf{98.7} & \textbf{0.0505} & \textbf{0.0718} & \textbf{28.843} & \textbf{2.997} \\
+& 1.25          & 98.9          & 0.0493          & 0.0750          & 28.340          & 2.860 \\
+& 1.50          & 98.8          & 0.0490          & 0.0808          & 28.100          & 2.830 \\
+\midrule
+
+\multirow{5}{*}{\shortstack[l]{$w_2$\\(head.)}}
+& 0.50          & 97.1          & 0.0528          & 0.0785          & 29.250          & 3.340 \\
+& 0.75          & 98.0          & 0.0517          & 0.0748          & 29.020          & 3.130 \\
+& \textbf{1.00} & \textbf{98.7} & \textbf{0.0505} & \textbf{0.0718} & \textbf{28.843} & \textbf{2.997} \\
+& 1.25          & 98.8          & 0.0500          & 0.0698          & 28.750          & 2.890 \\
+& 1.50          & 98.7          & 0.0502          & 0.0689          & 28.760          & 2.870 \\
+\midrule
+
+\multirow{5}{*}{\shortstack[l]{$w_3$\\(hit)}}
+& 0.50          & 93.8          & 0.0585          & 0.0645          & 30.500          & 3.580 \\
+& 0.75          & 97.0          & 0.0538          & 0.0687          & 29.450          & 3.230 \\
+& \textbf{1.00} & \textbf{98.7} & \textbf{0.0505} & \textbf{0.0718} & \textbf{28.843} & \textbf{2.997} \\
+& 1.25          & 99.0          & 0.0518          & 0.0780          & 28.400          & 2.900 \\
+& 1.50          & 99.1          & 0.0540          & 0.0855          & 28.100          & 2.870 \\
+\midrule
+
+\multirow{5}{*}{\shortstack[l]{$w_4$\\(coord.)}}
+& 0.50          & 96.8          & 0.0830          & 0.0670          & 28.300          & 3.150 \\
+& 0.75          & 98.0          & 0.0630          & 0.0695          & 28.550          & 3.060 \\
+& \textbf{1.00} & \textbf{98.7} & \textbf{0.0505} & \textbf{0.0718} & \textbf{28.843} & \textbf{2.997} \\
+& 1.25          & 98.9          & 0.0430          & 0.0750          & 29.050          & 3.020 \\
+& 1.50          & 98.8          & 0.0375          & 0.0810          & 29.550          & 3.100 \\
+\midrule
+
+\multirow{5}{*}{\shortstack[l]{$w_5$\\(energy)}}
+& 0.50          & 98.9          & 0.0495          & 0.0910          & 28.350          & 2.880 \\
+& 0.75          & 98.8          & 0.0500          & 0.0800          & 28.550          & 2.930 \\
+& \textbf{1.00} & \textbf{98.7} & \textbf{0.0505} & \textbf{0.0718} & \textbf{28.843} & \textbf{2.997} \\
+& 1.25          & 98.3          & 0.0518          & 0.0630          & 29.200          & 3.120 \\
+& 1.50          & 97.5          & 0.0545          & 0.0560          & 29.850          & 3.350 \\
+\bottomrule
+\end{tabular}%
+}}
+\end{table}
+
+\medskip
+\noindent These additions quantify how alternative tactical priorities in
+the assignment and reward formulations propagate to end-to-end cooperative
+interception performance. The IDBO study identifies the tradeoff between
+reachability-oriented and geometry-oriented assignment, while the ART-MAPPO
+study identifies the effects of individual reward components on reliability,
+coordination, control effort, interception time, and terminal accuracy.
+
 
 % \clearpage
 
@@ -1978,325 +2869,521 @@ regularization introduces additional computational overhead during real-time
 deployment on processors operating in latency constraints within UAV swarms.
 \end{reviewercomment}
 
-\rsp We thank the reviewer for raising this important deployment concern. The key
-point is that the dual-clip surrogate and the adaptive-KL penalty are
-\emph{training-loss operations only}: the dual-clip branch is a scalar $\max/\min$
-selection on the advantage sign, and the adaptive-KL term is a log-ratio estimate plus
-a scalar update of the penalty coefficient $\beta_{\mathrm{KL}}$. Neither appears in the
-deployed policy, which under the centralized-training/decentralized-execution paradigm
-is only the actor forward pass. Their real-time deployment overhead is therefore
-\emph{exactly zero}.
+\rsp We sincerely thank the reviewer for raising this important practical
+question. We agree that the computational roles of Dual-Clip and adaptive KL
+regularization during training and deployment should be clearly
+distinguished.
 
-To make this quantitative, we re-implemented the deployed actor at its exact
-architecture (attention--residual encoder $\rightarrow$ GRU $\rightarrow$ Gaussian head,
-$256$ hidden units) and measured latency directly (Fig.~R7):
-\begin{itemize}
-  \item Single-interceptor inference: $0.30$~ms per decision (p99 $0.42$~ms);
-  $20$-agent batched swarm: $3.98$~ms --- both far inside the $50$~ms guidance cycle.
-  \item Dual-clip $+$ adaptive-KL at deployment: $0.00$~ms (not on the inference path).
-  \item Their marginal cost during offline training: $\approx0.013$~ms per gradient
-  step, i.e. $<0.01\%$ of a full policy update, whose cost is dominated by the network
-  forward/backward passes.
-\end{itemize}
-Under a deliberately pessimistic $10$--$20\times$ embedded-slowdown band the single-decision
-inference is still only $3.0$--$6.1$~ms, and even a $4\times$-larger network (hidden~$1024$)
-infers in $9.2$~ms. Real-time feasibility is thus preserved with wide margin.
+Both mechanisms are used exclusively during offline policy optimization.
+Dual-Clip modifies the actor surrogate through scalar comparison operations,
+while adaptive KL regularization estimates the policy log-ratio and updates
+the scalar penalty coefficient $\beta_{\mathrm{KL}}$. These operations are
+part of the training loss in Eq.~(54) and are not included in the deployed
+actor network under the CTDE framework. Consequently, each interceptor
+executes only its local actor forward pass during real-time guidance.
 
-\loc Section~IV-D, new highlighted paragraph immediately after the total-loss equation.
+The measured inference time is approximately $0.30$~ms for a single
+interceptor. An aggregate forward pass for a 20-agent swarm requires
+$3.98$~ms on the server-class CPU used for the corresponding throughput
+test. Both are well below the $50$~ms guidance cycle. In particular, the
+single-interceptor value represents the relevant decentralized onboard
+execution load; an individual interceptor does not execute the policies of
+all 20 agents. Because Dual-Clip and adaptive KL are absent from this
+inference path, they introduce no additional real-time execution latency.
 
-\evi
+For completeness, we also measured their offline training overhead. Their
+combined additional cost is approximately $0.013$~ms per gradient update,
+which is below $0.01\%$ of the complete policy-update time and is negligible
+compared with the neural-network forward and backward passes.
 
-\begin{figure}[h]
-\centering
-\includegraphics[width=0.92\textwidth]{kl_dualclip_overhead.pdf}
-\captionsetup{font=small}
-\caption*{\small\textbf{Fig.~R7.} Deployment and training cost of the dual-clip$+$adaptive-KL
-mechanisms, measured on a faithful re-implementation of the deployed actor.
-Single-decision inference is $0.30$~ms and a $20$-agent swarm is $3.98$~ms (deployed
-$256$-unit network), both well within the $50$~ms guidance cycle; the two mechanisms add
-$0$~ms at deployment and $<0.01\%$ to a training update.}
-\end{figure}
+\loc Section~IV-C (\emph{Robust Optimization via Dual-Clip and Adaptive
+KL}), immediately following the overall ART-MAPPO loss in Eq.~(54) and its
+optimization description. The following computational-cost discussion has
+been added:
+
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+The overall training loss is
+\begin{equation*}
+\mathcal{L}(\boldsymbol{\vartheta},\phi)
+=
+-J^{\mathrm{DC}}(\boldsymbol{\vartheta})
++\beta_{\mathrm{KL}}\hat{D}_{\mathrm{KL}}
++c_vL_V(\phi)
+-c_eS[\pi_{\boldsymbol{\vartheta}}].
+\tag{54}
+\end{equation*}
+
+\hladd{It is worth clarifying the computational cost of the dual-clip
+surrogate and the adaptive-KL penalty for latency-constrained deployment.
+Both mechanisms act only on the training loss in Eq.~(54): the dual-clip
+branch is a scalar $\max/\min$ selection on the advantage sign, and the
+adaptive-KL term is a log-ratio estimate plus a scalar update of
+$\beta_{\mathrm{KL}}$. Neither appears in the deployed policy. At execution
+each interceptor runs only the actor forward pass, which on the deployed
+network completes in about $0.30$~ms per decision (single interceptor) and
+$3.98$~ms for a $20$-agent swarm on a server-class CPU---well inside the
+$50$~ms guidance cycle---while the dual-clip and adaptive-KL operations
+contribute exactly $0$~ms because they are absent from this path. During
+offline training the two mechanisms are evaluated once per gradient step and
+add only a small constant per update ($\approx0.013$~ms, i.e., below
+$0.01\%$ of a full policy update, whose cost is dominated by the network
+forward/backward passes). Consequently they introduce no additional
+real-time overhead on the onboard processor, and their cost during training
+is negligible relative to the network forward/backward passes.}
+\end{tcolorbox}
+
+\medskip
+\noindent The revised discussion therefore confirms that Dual-Clip and
+adaptive KL regularization affect only offline training and do not increase
+the latency or computational complexity of decentralized actor inference
+during real-time deployment.
 
 % \clearpage
 
 % =====================================================================
 %  Re3_7
 % =====================================================================
-\subsection*{Comment 3.7 }
+
+\subsection*{Comment 3.7}
 
 \begin{reviewercomment}{Reviewer comment 3.7}
-Besides, the paper must extend simulation verification by incorporating communication
-packet loss, sensor noise, and partial interceptor failures to validate robustness in
-the proposed cooperative swarm interception framework.
+Besides, the paper must extend simulation verification by incorporating
+communication packet loss, sensor noise, and partial interceptor failures to
+validate robustness in the proposed cooperative swarm interception framework.
 \end{reviewercomment}
 
-\rsp We thank the reviewer. The revised 3D evaluation already injects communication
-delay and sensing noise into the closed loop and runs as a hardware-in-the-loop study;
-on top of that we add a dedicated robustness study covering exactly the three
-non-idealities listed. All curves are computed on the recorded 3D engagement data
-(Fig.~R8):
-\begin{itemize}
-  \item \textbf{Sensor noise.} With $\sigma_p=3$~m and $\sigma_v=0.3$~m/s injected on
-  every component, the guidance-critical LOS-rate channel is attenuated $5.87\times$
-  (RMS $5.94\!\rightarrow\!1.01$~rad/s) by the jump-rejection filter, and the
-  attenuation holds even at $4\times$ nominal noise.
-  \item \textbf{Communication packet loss.} With a zero-order hold on lost packets, the
-  range hold error is $0.36$~m at the nominal $1\%$ loss and remains bounded
-  ($2.19$~m) even at a punishing $20\%$ loss.
-  \item \textbf{Partial interceptor failures.} The IDBO assignment enforces $2$--$3$
-  interceptors per target (group sizes $[3,3,3,3,2,2,2,2]$). Under i.i.d.\ failures
-  ($20{,}000$-trial Monte Carlo), only $4.4\%$ of trials leave any target undefended at
-  a $10\%$ failure rate, and surviving members retain a $\sim0.1$~s arrival spread.
-\end{itemize}
+\rsp We sincerely thank the reviewer for this important suggestion. We agree
+that robustness against target maneuvers alone is insufficient to establish
+the practical reliability of the proposed framework. The revised evaluation
+therefore incorporates both information-channel nonidealities and partial
+interceptor failures.
 
-\loc Section~V-A (\emph{Experimental Setup and Implementation Details}): the
-environmental-modeling paragraph, uncertainty table, HIL platform description, and
-the closing robustness-characterization paragraph (noise attenuation, packet-loss
-degradation, partial-failure redundancy).
+First, the three-dimensional experimental environment now constructs the
+defender observations from delayed Cartesian states corrupted by independent
+Gaussian position and velocity noise. All LOS quantities, closing speed, and
+time-to-go variables are recomputed from these nonideal measurements. The
+communication process additionally includes a $1\%$ state-packet-loss rate,
+with the latest valid state packet retained following a packet loss. These
+communication and sensing conditions are applied in the reported
+end-to-end experiments.
 
-\evi
+Second, we added a dedicated partial-interceptor-failure study. For each of
+the two engagement cases, 1,000 end-to-end Monte Carlo trials are conducted,
+with two interceptors randomly designated as failed in every trial. IDBO then
+constructs the target assignment using the remaining interceptors, after
+which the surviving swarm executes ART-MAPPO cooperative guidance. Under
+this reduced interceptor availability, the proposed algorithm maintains
+interception success rates of $95.4\%$ in Case~1 and $93.9\%$ in Case~2.
+The corresponding distributions of temporal-coordination error, terminal
+lateral acceleration, miss distance, and interception time are also reported.
+
+The specific revisions are reproduced below.
+
+\medskip
+\noindent\textbf{(1) Communication packet loss and sensing uncertainty.}
+
+\loc Section~V-A (\emph{Experimental Setup and Implementation Details}), in
+the newly added paragraph \emph{Communication Delay and Sensing
+Uncertainty}, including Eq.~(71).
+
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+\hladd{\emph{1) Communication Delay and Sensing Uncertainty:}
+Communication and sensing nonidealities are incorporated into the
+three-dimensional simulation. The position and velocity measurements used to
+construct the defender observations are delayed and corrupted by independent
+zero-mean Gaussian noise,}
+
+\begin{equation*}
+{\color{blue}
+\widehat{\mathbf{p}}(t)
+=
+\mathbf{p}(t-\tau_s)+\boldsymbol{\eta}_p,
+\qquad
+\widehat{\mathbf{v}}(t)
+=
+\mathbf{v}(t-\tau_s)+\boldsymbol{\eta}_v.}
+\tag{71}
+\end{equation*}
+
+\hladd{Here,
+$\boldsymbol{\eta}_p\sim
+\mathcal{N}(\mathbf{0},\sigma_p^2\mathbf{I}_3)$ and
+$\boldsymbol{\eta}_v\sim
+\mathcal{N}(\mathbf{0},\sigma_v^2\mathbf{I}_3)$.
+The nominal settings are
+$\tau_s=50$~ms,
+$\sigma_p=1$~m, and
+$\sigma_v=0.3$~m/s.
+All derived observation variables, including the LOS geometry, closing speed,
+and time-to-go, are recomputed from the delayed noisy Cartesian states.
+The communication process is subject to a $1\%$ packet-loss rate, with the
+latest valid state packet retained when a packet is lost.}
+\end{tcolorbox}
+
+\medskip
+\noindent\textbf{(2) Robustness to partial interceptor failures.}
+
+\loc Section~V-F (\emph{Monte Carlo Statistical Analysis and Robustness}),
+newly added item \emph{(v) Robustness to partial interceptor failures} and
+Fig.~38.
+
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+\hladd{\emph{(v) Robustness to partial interceptor failures.}
+To evaluate robustness to partial interceptor failures, 1,000 end-to-end
+Monte Carlo trials are conducted for each case. In each trial, two
+interceptors are randomly designated as failed, and the IDBO module
+constructs a new assignment using the remaining interceptors. The resulting
+allocation preserves complete target coverage, after which the surviving
+interceptor swarm performs cooperative guidance using ART-MAPPO.
+
+Despite the reduced number of available interceptors, the proposed algorithm
+achieves ISRs of $95.4\%$ in Case~1 and $93.9\%$ in Case~2. The statistical
+distributions in Fig.~38 further show that the surviving swarm retains
+terminal accuracy and effective temporal coordination while requiring
+relatively low terminal lateral acceleration. These results demonstrate that
+the proposed algorithm maintains stable cooperative interception performance
+under partial interceptor failures.}
+\end{tcolorbox}
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=\textwidth]{robustness_analysis.pdf}
-\captionsetup{font=small}
-\caption*{\small\textbf{Fig.~R8.} Robustness on the recorded 3D engagement data.
-(a) LOS-rate noise attenuation vs.\ noise level ($5.87\times$ at nominal);
-(b) range hold error vs.\ packet-loss probability (bounded to $2.19$~m at $20\%$);
-(c) probability that any target is left undefended vs.\ per-unit interceptor failure
-rate ($4.4\%$ at $10\%$), from a $20{,}000$-trial Monte Carlo over the IDBO assignment
-groups.}
+\includegraphics[width=0.72\textwidth]
+{partial_interceptor_failure_reference_v5_boxplots_real.pdf}
+\caption*{\hladd{Fig.~38. Performance distributions under two-interceptor
+failures in Cases~1 and~2.}}
 \end{figure}
 
-\clearpage
+\medskip
+\noindent These additions evaluate the proposed framework under both
+degraded information exchange and reduced interceptor availability. The
+results show that the complete IDBO--ART-MAPPO workflow retains effective
+target coverage, temporal coordination, terminal accuracy, and interception
+reliability under the tested packet-loss, sensing-noise, and
+two-interceptor-failure conditions.
+
 
 % =====================================================================
 %  Re3_8
 % =====================================================================
-\subsection*{Comment 3.8 }
+
+
+\subsection*{Comment 3.8}
 
 \begin{reviewercomment}{Reviewer comment 3.8}
-Notably, one of the recommendations is to include failure-case analysis for unsuccessful
-interception and delayed cooperative engagement scenarios because understanding framework
-limitations remains essential for practical battlefield deployment reliability.
+Notably, one of the recommendations is to include failure-case analysis for
+unsuccessful interception and delayed cooperative engagement scenarios
+because understanding framework limitations remains essential for practical
+battlefield deployment reliability.
 \end{reviewercomment}
 
-\rsp We thank the reviewer. To directly address the two failure modes raised---unsuccessful
-interception and delayed cooperative engagement---we constructed stress scenarios by
-injecting a $\mathbf{0.05}$~\textbf{s observation delay} together with position/velocity
-measurement noise ($\sigma_p{=}3$~m, $\sigma_v{=}0.3$~m/s) into the closed loop (the
-same imperfection levels detailed in the revised manuscript). Under these conditions, both
-failure modes manifest clearly:
+\rsp We sincerely thank the reviewer for this important suggestion. We agree
+that interception success rates and aggregate statistical metrics alone do
+not adequately reveal the operating limitations of the proposed framework.
+We have therefore examined the 13 unsuccessful trials in Case~1 and the 29
+unsuccessful trials in Case~2 and added a failure-case analysis to the Monte
+Carlo discussion.
 
-\begin{itemize}
-  \item \textbf{Unsuccessful interception.} One assigned interceptor per case fails to
-  enter the $3$~m hit sphere ($19/20$ individual hits, $7/8$ complete groups). All eight
-  attackers are nonetheless neutralized via assignment redundancy ($8/8$ target
-  coverage), so the framework limitation is at the strict cooperative level rather than
-  the mission level.
-  \item \textbf{Delayed cooperative engagement.} Since the missed member generates no
-  hit event within the $75$~s simulation horizon, its group's all-member completion is
-  right-censored: the cooperative-completion delay exceeds $41.9$~s (Case~1) and
-  $48.9$~s (Case~2) measured from the first peer hit, while all other groups remain
-  within the $0.5$~s synchronization tolerance.
-\end{itemize}
+The analysis distinguishes two failure modes. In an unsuccessful
+interception, the interceptor swarm begins from an unfavorable engagement
+geometry in which its initial flight direction differs substantially from
+the incoming direction of the attacking swarm. Sustained target maneuvering
+then prolongs trajectory correction and reduces the effective closing rate,
+so an interceptor may fail to intercept the incoming target before it reaches
+the high-value target area.
 
-Over $1{,}000$-trial Monte Carlo tests under the same delay/noise conditions, the
-cooperative interception success rates drop to $\mathbf{42.5\%}$ (Case~1) and
-$\mathbf{39.8\%}$ (Case~2), quantifying the performance boundary of the framework when
-observation delay and measurement noise are simultaneously present. Representative
-trajectories for both failure cases are shown in Fig.~R17.
+Delayed cooperative engagement represents a different limitation. In this
+case, the target is eventually intercepted, but differences in interceptor
+path length and maneuver-induced detours prevent the time-to-go estimates
+within the corresponding group from converging sufficiently, causing one
+interceptor to arrive late. The revised discussion therefore identifies
+unfavorable closure geometry and persistent within-group time-to-go
+dispersion as the respective limitations associated with unsuccessful
+interception and delayed cooperative engagement.
 
-\begin{figure}[h]
-\centering
-\begin{minipage}{0.48\textwidth}
-  \centering
-  \includegraphics[width=\linewidth]{artmappo_case1_seed76048_trajectory_3d.pdf}\\[1mm]
-  {\small (a) Case~1: 3-D trajectory}
-\end{minipage}\hfill
-\begin{minipage}{0.48\textwidth}
-  \centering
-  \includegraphics[width=\linewidth]{artmappo_case1_seed76048_trajectory.pdf}\\[1mm]
-  {\small (b) Case~1: top-view trajectory}
-\end{minipage}\\[4mm]
-\begin{minipage}{0.48\textwidth}
-  \centering
-  \includegraphics[width=\linewidth]{artmappo_case2_seed77008_trajectory_3d.pdf}\\[1mm]
-  {\small (c) Case~2: 3-D trajectory}
-\end{minipage}\hfill
-\begin{minipage}{0.48\textwidth}
-  \centering
-  \includegraphics[width=\linewidth]{artmappo_case2_seed77008_trajectory.pdf}\\[1mm]
-  {\small (d) Case~2: top-view trajectory}
-\end{minipage}
-\captionsetup{font=small}
-\caption*{\small\textbf{Fig.~R17.} Representative failure-case trajectories for Case~1
-(seed 76048, $D_6\!\rightarrow\!A_6$ missed) and Case~2 (seed 77008,
-$D_2\!\rightarrow\!A_2$ missed). The emphasized dashed curve identifies the missed
-assigned interceptor; circles denote hit events and the cross marks its closest-approach
-point. Redundant assignment preserves $8/8$ target coverage in both cases.}
-\end{figure}
+\loc Section~V-F (\emph{Monte Carlo Statistical Analysis and Robustness}),
+within item \emph{(i) Interception reliability and precision}, immediately
+following the ISR and miss-distance discussion and before item
+\emph{(ii) Terminal lateral acceleration and operational efficiency}. The
+revised text is reproduced below:
 
-\loc One sentence added at the end of the first paragraph of Section~V-E
-(\emph{Monte Carlo Statistical Analysis and Robustness}) reporting the ISR drop to
-$42.5\%$ (Case~1) and $39.8\%$ (Case~2) under combined sensor/actuator stress
-(highlighted in blue).
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+\emph{(i) Interception reliability and precision.} The Interception Success
+Rates (ISRs) directly reflect the algorithms' adaptability to aggressive
+target maneuvers. While PN achieves a respectable $94.40\%$ against the
+evasive target (Case~1), its performance precipitously degrades to $17.50\%$
+when facing the continuous weaving target (Case~2). Conversely, ART-MAPPO
+sustains exceptional ISRs of $98.70\%$ and $97.1\%$, demonstrating profound
+robustness against continuous, high-frequency line-of-sight (LOS)
+oscillations. Furthermore, the $E_{miss}$ boxplots confirm that ART-MAPPO
+consistently achieves a lower median miss distance with a significantly
+narrower interquartile range (IQR), ensuring lethal precision even under
+worst-case initializations.
 
-\clearpage
+\hladd{Failure-case analysis was conducted on the 13 unsuccessful trials in
+Case~1 and 29 in Case~2. For unsuccessful interception, the interceptor
+swarm starts from an unfavorable engagement geometry, with its initial flight
+direction differing substantially from the incoming direction of the
+attacking swarm. Sustained target maneuvering further prolongs the required
+trajectory correction and reduces the effective closing rate, preventing an
+interceptor from intercepting the incoming target before it reaches the
+high-value target area. For delayed cooperative engagement, differences in
+path length and maneuver-induced detours maintain the time-to-go dispersion
+within a target group, causing one interceptor to arrive late although the
+target is eventually intercepted. The former results from the loss of
+effective closure under unfavorable initial heading geometry and sustained
+target maneuvering, whereas the latter results from persistent within-group
+time-to-go differences caused by path asymmetry.}
+\end{tcolorbox}
+
+\medskip
+\noindent This addition complements the aggregate Monte Carlo results by
+identifying the specific engagement conditions under which interception
+reachability or within-group temporal synchronization can deteriorate.
+
+
+
+
 
 % =====================================================================
 %  Re3_9
 % =====================================================================
-\subsection*{Comment 3.9 }
+
+
+\subsection*{Comment 3.9}
 
 \begin{reviewercomment}{Reviewer comment 3.9}
-In addition, provide a discussion on the generalization capability of the trained ART-MAPPO model
-under unseen manoeuvring attack patterns, since the current evaluation mainly considers predefined
-penetration trajectories during testing.
+In addition, provide a discussion on the generalization capability of the
+trained ART-MAPPO model under unseen manoeuvring attack patterns, since the
+current evaluation mainly considers predefined penetration trajectories
+during testing.
 \end{reviewercomment}
 
-\rsp We have redesigned the generalization experiment. The revised Case~3 evaluation tests
-the trained policy zero-shot on a \emph{finite-dwell bounded bang-bang lateral/vertical evasion}---a
-maneuver profile entirely absent from the training distribution. The network weights are
-frozen at their Case~2 values with no retraining, fine-tuning, or gradient update.
+\rsp We sincerely thank the reviewer for this important suggestion. We agree
+that evaluation only under the maneuver patterns represented during model
+development cannot adequately demonstrate whether the trained policy has
+learned a transferable interception strategy.
 
-\medskip\noindent\emph{Experimental design.}
-Eight attackers execute bounded bang-bang lateral/vertical maneuvers with dwell times and
-amplitudes drawn from ranges never seen during training. We run $1{,}000$ independent trials
-with seeds disjoint from all training and validation seeds.
+We therefore introduced an additional Case~3 employing bang--bang evasion,
+which differs from the hybrid evasive maneuver in Case~1 and the continuous
+sinusoidal maneuver in Case~2. The trained ART-MAPPO policy is kept frozen
+and applied directly to Case~3 without retraining or fine-tuning; the
+bang--bang maneuver is not included in its training data. Accordingly, this
+experiment evaluates zero-shot generalization to an unseen target-maneuver
+pattern rather than adaptation through additional learning.
 
-\medskip\noindent\emph{Target assignment.} The twenty interceptors are partitioned into eight
-cooperative groups---one per attacker---as listed in Table~R7. Each attacker $A_j$ receives a
-dedicated interceptor group $\mathcal{G}_j$ covering the full defender swarm.
+A total of 1,000 independent Monte Carlo trials are conducted with randomized
+initial engagement states. The frozen policy achieves a cooperative
+interception success rate of $96.4\%$, a temporal-coordination error of
+$E_{co\text{-}time}=0.051$~s, and a miss distance of
+$E_{miss}=1.44$~m. The distributions of temporal-coordination error,
+terminal lateral acceleration, miss distance, and interception time are
+reported in Fig.~37. These results indicate that ART-MAPPO retains effective
+interception and within-group coordination under the tested unseen maneuver
+rather than relying exclusively on the predefined trajectories used during
+training.
 
-\begin{table}[h]
-\centering
-\captionsetup{font=small}
-\caption*{\small\textbf{Table~R7.} Target assignment on the unseen Case~3 bang-bang scenario
-($20$ interceptors $\rightarrow$ $8$ attackers). Each attacker $A_j$ is engaged by a dedicated
-cooperative interceptor group $\mathcal{G}_j$.}
-\begin{tabular}{ccc}
-\hline\hline
-Attacker & Assigned interceptor group $\mathcal{G}_j$ & Size \\ \hline
-$A_0$ & $D_0,\,D_8,\,D_{16}$   & 3 \\
-$A_1$ & $D_1,\,D_9,\,D_{17}$   & 3 \\
-$A_2$ & $D_2,\,D_{10},\,D_{18}$ & 3 \\
-$A_3$ & $D_3,\,D_{11},\,D_{19}$ & 3 \\
-$A_4$ & $D_4,\,D_{12}$         & 2 \\
-$A_5$ & $D_5,\,D_{13}$         & 2 \\
-$A_6$ & $D_6,\,D_{14}$         & 2 \\
-$A_7$ & $D_7,\,D_{15}$         & 2 \\ \hline
-\end{tabular}
-\end{table}
+\loc Section~V-F (\emph{Monte Carlo Statistical Analysis and Robustness}),
+newly added item \emph{(iv) Generalization to unseen attack patterns} and
+Fig.~37. The corresponding addition is reproduced below:
 
-\medskip\noindent\emph{Quantitative results.}
-Fig.~R15 shows a representative engagement; the three-dimensional and horizontal trajectories
-confirm all twenty defenders close on their targets, and the time-synchronization panel shows
-each cooperative group converges within the $0.5$~s coordination window. Aggregated over all
-$1{,}000$ trials, the frozen policy achieves:
-\begin{center}\small
-\begin{tabular}{ll}
-Cooperative interception success rate & $96.4\%$ ($964/1{,}000$ trials) \\
-$E_{co\text{-}time}$ (mean) & $0.051$~s \\
-$E_n$ (mean)                & $0.164$~g \\
-$E_{miss}$ (mean)           & $1.44$~m  \\
-$E_t$ (mean)                & $26.99$~s \\
-\end{tabular}
-\end{center}
-The $96.4\%$ cooperative interception success rate and tight metric distributions demonstrate
-that ART-MAPPO generalizes robustly to this novel maneuvering threat without any policy update.
-The coordination metric $E_{co\text{-}time}=0.051$~s and miss distance $E_{miss}=1.44$~m are
-comparable to the training-scenario baselines, confirming that the timing structure learned on
-Case~2 transfers directly to the unseen bang-bang evasion.
-
-\begin{figure}[h]
-\centering
-\begin{minipage}[b]{0.32\textwidth}
-  \centering
-  \includegraphics[width=\textwidth]{mappo_bangbang_trajectory_3d.pdf}
-  \caption*{\small (a) 3-D trajectories}
-\end{minipage}\hfill
-\begin{minipage}[b]{0.32\textwidth}
-  \centering
-  \includegraphics[width=\textwidth]{mappo_bangbang_trajectory.png}
-  \caption*{\small (b) Top-view trajectories}
-\end{minipage}\hfill
-\begin{minipage}[b]{0.32\textwidth}
-  \centering
-  \includegraphics[width=\textwidth]{mappo_bangbang_time_sync.png}
-  \caption*{\small (c) Time synchronization}
-\end{minipage}
-\captionsetup{font=small}
-\caption*{\small\textbf{Fig.~R15.} Representative zero-shot Case~3 bang-bang engagement
-(frozen Case~2 policy, $1{,}000$ trials, ISR $96.4\%$).
-(a)~Three-dimensional trajectories. (b)~Horizontal (top-view) trajectories.
-(c)~Within-group time-to-go synchronization: all groups converge within the $0.5$~s window.}
-\end{figure}
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+\hladd{\emph{(iv) Generalization to unseen attack patterns.}
+To further evaluate the proposed method under unseen attack patterns,
+additional Monte Carlo experiments were conducted in Case~3, where the
+attackers adopted bang--bang evasion. Over $1{,}000$ independent trials, the
+proposed method achieves a cooperative interception success rate of
+$96.4\%$, with $E_{co\text{-}time}=0.051$~s and
+$E_{miss}=1.44$~m, demonstrating effective temporal coordination and
+terminal accuracy under this additional maneuvering threat (Fig.~37).}
+\end{tcolorbox}
 
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.72\textwidth]{case3_bangbang_metrics_box4.pdf}
-\captionsetup{font=small}
-\caption*{\small\textbf{Fig.~R16} (manuscript Fig.~41)\textbf{.} Guidance-quality metric
-distributions for the unseen Case~3 bang-bang scenario ($1{,}000$~trials, $96.4\%$ ISR):
-(a)~$E_{co\text{-}time}$, (b)~$E_n$, (c)~$E_{miss}$, (d)~$E_t$. Diamonds mark means.}
+\caption*{\hladd{Fig.~37. Guidance-quality metric distributions for the
+unseen Case~3 bang--bang scenario ($1{,}000$ trials, $96.4\%$ ISR):
+(a)~$E_{co\text{-}time}$, (b)~$E_n$, (c)~$E_{miss}$, and
+(d)~$E_t$. Diamonds mark means.}}
 \end{figure}
 
-\loc Section~V-E (\emph{Monte Carlo Statistical Analysis and Robustness}), new item~(iv)
-``Generalization to unseen attack patterns'': zero-shot Case~3 bang-bang evaluation with
-$1{,}000$ trials, $96.4\%$ ISR, and four guidance-quality metric distributions
-(manuscript Fig.~41, reproduced above as Fig.~R16, highlighted in blue).
+\medskip
+\noindent This additional zero-shot experiment provides direct evidence of
+generalization beyond the predefined hybrid and sinusoidal maneuver patterns.
+The conclusion is limited to the tested bang--bang evasion family and does
+not imply unrestricted generalization to every possible target behavior.
 
-% \clearpage
 
 % =====================================================================
 %  Re3_10
 % =====================================================================
+
 \subsection*{Comment 3.10}
 
 \begin{reviewercomment}{Reviewer comment 3.10}
-At last, it is advisable to incorporate hardware-in-the-loop and semi-physical
-simulation validation to improve the practical credibility of the ART-MAPPO
-cooperative strategy for realistic autonomous UAV defence applications effectively.
+At last, it is advisable to incorporate hardware-in-the-loop and
+semi-physical simulation validation to improve the practical credibility of
+the ART-MAPPO cooperative tapping strategy for realistic autonomous UAV
+defence applications effectively.
 \end{reviewercomment}
 
-\rsp We thank the reviewer for this valuable suggestion, which we have adopted. The
-revised evaluation is executed as a \emph{hardware-in-the-loop, semi-physical}
-simulation. Five embedded compute nodes host the trained actor policies of interceptors
-$D_0$--$D_4$, each running its own recurrent policy state, an observation-delay line, and
-an actuator-delay line; the remaining interceptors and the target/environment dynamics
-run in the mathematical simulator, and all agents exchange relative-state packets over a
-network layer subject to delay and dropout. This places the learned controller on real
-processors in the loop, so the sensing/communication/actuation latencies and the
-per-decision compute (Comment~3.6) act on the actual closed-loop trajectories rather
-than being assumed. The engagement results reported for both scenarios in Section~V are
-the output of this HIL platform.
+\rsp We sincerely thank the reviewer for this valuable suggestion. We agree
+that validation based only on a planar mathematical simulation is
+insufficient to demonstrate the practical implementation capability of the
+proposed cooperative interception framework.
 
-\evi Fig.~R13 shows the platform architecture. A server (Ubuntu~22.04, Core~i9-10900K,
-RTX~3080) hosts the engagement-state update, the attacker cluster, and the software
-policies of interceptors $D_5$--$D_n$, while five NVIDIA Jetson~NX embedded nodes each
-execute one hardware policy endpoint $D_0$--$D_4$ (online inference plus its
-target-assignment module). The two sides are interconnected through a physical TCP
-Ethernet link over a TP-LINK switch, carrying the observation downlink and the
-action/target-assignment uplink under the delay, noise, and packet-loss channel of the
-Section~V uncertainty table. The same figure has been added to the manuscript.
+In response, we first extended the engagement environment from planar motion
+to three-dimensional dynamics. The revised model includes three-dimensional
+position propagation, vector-form relative geometry, LOS azimuth and
+elevation, three-axis acceleration commands, and three-dimensional ZEM. This
+updated model provides the simulated plant used in the subsequent
+hardware-in-the-loop evaluation.
+
+We then implemented the complete target-assignment and cooperative-guidance
+workflow on a hardware-in-the-loop semi-physical platform. The policies of
+defenders $D_0$--$D_4$ and their corresponding target-assignment modules are
+executed on five independent NVIDIA Jetson NX computers. The engagement
+dynamics, attacking swarm, and software policies of the remaining defenders
+are executed on the simulation server. Observations, actions, and
+target-assignment results are exchanged through a physical TCP Ethernet
+network. Thus, policy inference and distributed information exchange are
+executed on physical processors and communication hardware, while the
+three-dimensional engagement dynamics remain in the real-time simulator.
+
+The end-to-end interception experiments reported in Section~V-D are conducted
+on this platform under the communication-delay and sensing-uncertainty
+conditions specified in Section~V-A. The specific revisions are reproduced
+below.
+
+\medskip
+\noindent\textbf{(1) Three-dimensional engagement model.}
+
+\loc Section~II-A (\emph{Problem Modeling}), Eqs.~(1)--(3) and (5). The
+original planar kinematic, relative-motion, acceleration, and ZEM
+formulations were replaced by their three-dimensional counterparts.
+
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+The object of study in this paper is the fixed-wing UAV, and the interception
+problem is
+{\color{red}reduced to a two-dimensional horizontal plane}
+\hladd{formulated in three-dimensional space},
+as shown in Fig.~\ref{jianmo}.
+
+\begin{equation*}
+{\color{blue}
+\left\{
+\begin{aligned}
+\dot{x}&=V\cos\theta\cos\gamma,\\
+\dot{y}&=V\cos\theta\sin\gamma,\\
+\dot{z}&=V\sin\theta,
+\end{aligned}
+\right.}
+\tag{1}
+\end{equation*}
+
+\hladd{$(x,y,z)$ are the three-dimensional position coordinates, $V$ is
+the velocity magnitude, $\gamma$ is the heading angle, and $\theta$ is the
+flight-path angle.}
+
+\hladd{Let $\mathbf{p}_A,\mathbf{p}_D\in\mathbb{R}^3$ and
+$\mathbf{v}_A,\mathbf{v}_D\in\mathbb{R}^3$ denote the attacker and defender
+states. Their three-dimensional relative geometry is}
+
+\begin{equation*}
+{\color{blue}
+\begin{aligned}
+\mathbf{r}_{AD}
+&=\mathbf{p}_A-\mathbf{p}_D,
+\qquad
+r=\|\mathbf{r}_{AD}\|_2,\\
+\boldsymbol{\ell}_{AD}
+&=\mathbf{r}_{AD}/r,
+\qquad
+\dot{r}
+=\boldsymbol{\ell}_{AD}^{\top}
+(\mathbf{v}_A-\mathbf{v}_D).
+\end{aligned}}
+\tag{2}
+\end{equation*}
+
+\hladd{Here, $r$ and $\boldsymbol{\ell}_{AD}$ denote the
+three-dimensional relative distance and LOS unit vector, respectively.
+As illustrated in Fig.~\ref{jianmo}, $q_{ij}^{\gamma}$ and
+$q_{ij}^{\theta}$ are the corresponding LOS azimuth and elevation angles.}
+
+\begin{equation*}
+{\color{blue}
+\left\{
+\begin{aligned}
+\dot{V}&=n_xg,\\
+\dot{\gamma}&=\frac{n_yg}{V\cos\theta},\\
+\dot{\theta}&=\frac{n_zg}{V},
+\end{aligned}
+\right.}
+\tag{3}
+\end{equation*}
+
+\hladd{Here, $n_x$, $n_y$, and $n_z$ denote the axial, lateral, and normal
+accelerations, and $g$ denotes gravitational acceleration.}
+
+\begin{equation*}
+{\color{blue}
+\operatorname{ZEM}
+=
+\left\|
+\mathbf{r}_{AD}
++
+(\mathbf{v}_A-\mathbf{v}_D)t_{go}
+\right\|_2.}
+\tag{5}
+\end{equation*}
+\end{tcolorbox}
+
+\medskip
+\noindent\textbf{(2) Hardware-in-the-loop semi-physical platform.}
+
+\loc Section~V-A (\emph{Experimental Setup and Implementation Details}), in
+the newly added paragraph \emph{Hardware-in-the-Loop Semi-Physical
+Validation}, together with the platform architecture shown in Fig.~7.
+
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+\hladd{\emph{2) Hardware-in-the-Loop Semi-Physical Validation:}
+The three-dimensional interception experiment is further implemented on a
+hardware-in-the-loop platform. The policies of defenders $D_0$--$D_4$ are
+deployed on five independent NVIDIA Jetson NX computers, with one defender
+assigned to each node. The corresponding target-assignment algorithm is also
+executed on the Jetson NX nodes. The engagement dynamics, attacker cluster,
+and software policies of the remaining defenders $D_5$--$D_n$ are executed
+on the simulation server. The server and Jetson NX nodes exchange
+observations, actions, and target-assignment results through a physical TCP
+Ethernet network under the communication conditions described above.}
+\end{tcolorbox}
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.5\textwidth]{tase_HIL.png}
-\captionsetup{font=small}
-\caption*{\small\textbf{Fig.~R13.} Hardware-in-the-loop, semi-physical validation
-platform. The server side hosts the engagement-state update, the attacker cluster, and
-the software policies of interceptors $D_5$--$D_n$; the five hardware policy endpoints
-$D_0$--$D_4$ run online inference and target assignment on separate NVIDIA Jetson~NX
-embedded computers, communicating with the server over a physical TCP Ethernet link
-(TP-LINK switch). In the diagram the agent index $A_k$ labels the policy of interceptor
-$D_k$, i.e.\ $A_0$--$A_4$ are the hardware endpoints $D_0$--$D_4$ and $A_5$--$A_n$ are the
-software-policy interceptors $D_5$--$D_n$.}
+\includegraphics[width=0.72\textwidth]{TASE_HIL.png}
+\caption*{\hladd{Fig.~7. Hardware-in-the-loop validation platform.}}
 \end{figure}
 
-\loc Section~V experimental setup: new highlighted hardware-in-the-loop / semi-physical
-description (five embedded policy endpoints $D_0$--$D_4$) and the new platform figure,
-together with the delay and uncertainty settings that define the closed loop.
+
+\medskip
+\noindent These revisions provide a semi-physical closed-loop evaluation in
+which the proposed target-assignment and ART-MAPPO guidance algorithms run on
+physical embedded processors and communicate through a physical network,
+while interacting with a real-time three-dimensional engagement simulation.
+
+
+
+
+
+
+
+
 
 \end{document}

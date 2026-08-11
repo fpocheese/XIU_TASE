@@ -1215,45 +1215,69 @@ inter-update changes. }
 \end{aligned}}
 \end{equation}
 \hladd{The six components are defined as:}
-% \begin{align}
-% o_i^{(t),1} &= \begin{cases} \dfrac{V_i \dot{q}_t}{g}, & |\dot{q}_t - \dot{q}_{t-1}| \leq \Delta\dot{q}_{\max} \\[6pt] \dfrac{V_i \dot{q}_{t-1}}{g}, & |\dot{q}_t - \dot{q}_{t-1}| > \Delta\dot{q}_{\max} \end{cases} \label{eq:o1} \\[6pt]
-% o_i^{(t),2} &= \gamma_{D_i} - q_i \label{eq:o2} \\[4pt]
-% o_i^{(t),3} &= \left(n_{x_i}^2 + n_{y_i}^2\right) \cdot \Delta t \label{eq:o3} \\[4pt]
-% o_i^{(t),4} &= \frac{r_i}{\min_{j \in \mathcal{G}_i} t_{go_j}} - V_i \label{eq:o4}
-% \end{align}
-\begin{align}
-\hladd{o_i^{(t),1}} &=
-\hladd{\begin{cases}
+\begin{equation}
+\label{eq:o1}
+\hladd{
+o_i^{(t),1} =
+\begin{cases}
 \dfrac{V_i \dot{q}_i^{\gamma}(t)}{g}, &
-\left|\dot{q}_i^{\gamma}(t) - \dot{q}_i^{\gamma}(t-1)\right| \leq \Delta \dot{q}_{\max}
+\left|\dot{q}_i^{\gamma}(t) - \dot{q}_i^{\gamma}(t-1)\right|
+\leq \Delta \dot{q}_{\max}
 \\[0pt]
 \dfrac{V_i \dot{q}_i^{\gamma}(t-1)}{g}, &
-\left|\dot{q}_i^{\gamma}(t) - \dot{q}_i^{\gamma}(t-1)\right| > \Delta \dot{q}_{\max}
-\end{cases}}
-\label{eq:o1}
-\\[0pt]
-\hladd{o_i^{(t),2}} &= \hladd{\gamma_i-q_i^{\gamma}}
+\left|\dot{q}_i^{\gamma}(t) - \dot{q}_i^{\gamma}(t-1)\right|
+> \Delta \dot{q}_{\max}
+\end{cases}
+}
+\end{equation}
+
+\begin{equation}
 \label{eq:o2}
-\\[0pt]
-\hladd{o_i^{(t),3}} &=
-\hladd{\begin{cases}
+\hladd{
+o_i^{(t),2} = \gamma_i-q_i^{\gamma}
+}
+\end{equation}
+
+\begin{equation}
+\label{eq:o3}
+\hladd{
+o_i^{(t),3} =
+\begin{cases}
 \dfrac{V_i \dot{q}_i^{\theta}(t)}{g}, &
-\left|\dot{q}_i^{\theta}(t) - \dot{q}_i^{\theta}(t-1)\right| \leq \Delta \dot{q}_{\max}
+\left|\dot{q}_i^{\theta}(t) - \dot{q}_i^{\theta}(t-1)\right|
+\leq \Delta \dot{q}_{\max}
 \\[0pt]
 \dfrac{V_i \dot{q}_i^{\theta}(t-1)}{g}, &
-\left|\dot{q}_i^{\theta}(t) - \dot{q}_i^{\theta}(t-1)\right| > \Delta \dot{q}_{\max}
-\end{cases}}
-\label{eq:o3}
-\\[0pt]
-\hladd{o_i^{(t),4}} &= \hladd{\theta_i-q_i^{\theta}}
+\left|\dot{q}_i^{\theta}(t) - \dot{q}_i^{\theta}(t-1)\right|
+> \Delta \dot{q}_{\max}
+\end{cases}
+}
+\end{equation}
+
+\begin{equation}
 \label{eq:o4}
-\\[0pt]
-\hladd{o_i^{(t),5}} &= \hladd{\left(n_{x_i}^2+n_{y_i}^2+n_{z_i}^2\right)\Delta t}
+\hladd{
+o_i^{(t),4} = \theta_i-q_i^{\theta}
+}
+\end{equation}
+
+\begin{equation}
 \label{eq:o5}
-\\[0pt]
-\hladd{o_i^{(t),6}} &= \hladd{\frac{r_i}{\min_{j \in \mathcal{G}_i} t_{go_j}}-V_i}
+\hladd{
+o_i^{(t),5}
+=
+\left(n_{x_i}^2+n_{y_i}^2+n_{z_i}^2\right)\Delta t
+}
+\end{equation}
+
+\begin{equation}
 \label{eq:o6}
-\end{align}
+\hladd{
+o_i^{(t),6}
+=
+\frac{r_i}{\min_{j\in\mathcal{G}_i}t_{go_j}}-V_i
+}
+\end{equation}
 where $\Delta\dot{q}_{\max}=0.03$~rad/s is the LOS-rate noise threshold, $\mathcal{G}_i$ denotes the set of interceptors assigned to the same target as interceptor $i$, and $\Delta t$ is the simulation timestep. 
 \hladd{Component $o_i^{(t),1}$ is a smoothed lateral acceleration proportional to $V_i\dot q_i^{\gamma}/g$, where the previous LOS-rate estimate is retained when the instantaneous measurement jump exceeds $\Delta\dot q_{\max}$.
 Component $o_i^{(t),2}$ is the horizontal lead-angle deviation $\gamma_i-q_i^{\gamma}$.
@@ -1890,7 +1914,7 @@ Consequently, the ultimate validation of ART-MAPPO's saturation strike capabilit
 \label{fig:case2_time_sync}
 \end{figure}
 
-\FloatBarrier
+% \FloatBarrier
 
 % Component Ablation Study — Re2_6
 \subsection{\hladd{Component Ablation Study}}
@@ -1969,7 +1993,7 @@ relative-motion, and time-to-go state features needed for low-lateral-accelerati
 \label{subsec:montecarlo}
 
 To rigorously quantify the robustness of the proposed framework, 1000 independent Monte Carlo trials are conducted for each case. It is important to note that the statistical distributions presented in Fig.~\ref{fig:mc_boxplots} ($E_{co\text{-}time}$, $E_n$, $E_{miss}$, and $E_t$) are exclusively derived from the successful interception trials. Specifically, out of the 1000 trials in Case~1, ART-MAPPO and PN successfully intercepted the targets 987 and 944 times, respectively. In the highly dynamic Case~2, ART-MAPPO maintained a remarkable 971 successful interceptions, whereas the baseline PN succeeded only 175 times.
-\hladd{It is worth noting that under combined observation delay ($0.3$~s) and measurement noise ($\sigma_p{=}3$~m, $\sigma_v{=}0.3$~m/s), the cooperative interception success rates decrease to $42.5\%$ (Case~1) and $39.8\%$ (Case~2), indicating the sensitivity limit of the framework under coupled sensor and actuator imperfections.}
+% \hladd{It is worth noting that under combined observation delay ($0.3$~s) and measurement noise ($\sigma_p{=}3$~m, $\sigma_v{=}0.3$~m/s), the cooperative interception success rates decrease to $42.5\%$ (Case~1) and $39.8\%$ (Case~2), indicating the sensitivity limit of the framework under coupled sensor and actuator imperfections.}
 
 \begin{figure}[!t]
 \centering
@@ -2437,7 +2461,7 @@ with explicit completion deadlines, and integration with realistic constraints s
 
 \hladd{Table~\ref{tab:notation} consolidates the principal variables and symbols used throughout the paper.}
 
-\begin{table}[!t]
+\begin{table}[!hbt]
 \centering
 \caption{\hladd{Key Variables and Symbols in Sections II--IV}}
 \label{tab:notation}
