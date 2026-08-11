@@ -1,0 +1,48 @@
+% Submission-ready response text for the ART-MAPPO component-ablation comment.
+\noindent\textbf{Reviewer comment:}
+\emph{Then, it would be helpful to add an ablation investigation
+demonstrating the independent contribution of the trust-aware mechanism, GRU
+temporal encoder, and attention-residual backbone within ART-MAPPO
+architecture.}
+
+\medskip
+\noindent\textbf{Response:}
+Thank you for this constructive suggestion. We added a controlled
+component-ablation experiment comparing full ART-MAPPO with three
+single-component removals: without trust-aware training, without the GRU
+temporal encoder, and without the attention--residual backbone. The MLP used
+for the last ablation is parameter matched (actor: 732,774 versus 733,200
+parameters; critic: 749,761 versus 749,932), while the environment, reward,
+optimizer, target assignment, guidance settings, and rollout budget remain
+fixed.
+
+Each variant was trained with five paired seeds in both three-dimensional
+interception cases (0.6 and 1.8 million environment steps for Cases 1 and 2).
+Every trained seed was evaluated over 20 common held-out deterministic
+episodes, yielding 800 episodes. Trust-guided exploration was disabled during
+evaluation, so the trust comparison measures its training-time contribution.
+We report 95\% Student-\(t\) confidence intervals over seed-level estimates
+and use paired two-sided exact sign-flip tests with Holm correction.
+
+Removing the attention--residual backbone gives the clearest degradation:
+the full model improves pooled final return by \(1.709\times10^6\), with
+\(d_z=0.884\) and \(p_{\mathrm{Holm}}=0.0469\). In Case 2, it also improves
+per-target interception and synchronized interception by 6.00 and 6.875
+percentage points. The trust-aware mechanism gives directional difficult-case
+gains: interception rises from 34.0\% to 44.625\% and synchronization from
+24.0\% to 30.5\%, although the pooled corrected target-level tests are not
+significant. The full model has a positive pooled final-return difference
+over no-GRU (\(d_z=0.678\)), but this comparison is also not significant after
+correction and no-GRU remains competitive in Case 2. We therefore revised the
+paper to support the backbone contribution strongly, describe the trust
+effect as task dependent, and avoid claiming that GRU is universally
+indispensable.
+
+For transparency, strict all-target metrics are retained in the data. Full
+ART-MAPPO achieves 100\% all-target interception and 90\% all-target
+synchronized interception in Case 1. The all-eight-target Case-2 indicator is
+zero for every variant at this budget, producing a floor effect; hence the
+figure displays per-target rates while the strict metrics remain reported in
+the accompanying CSV files. The complete raw curves, 800 episode records,
+statistics, code snapshot, and validation records are supplied with the
+revision.

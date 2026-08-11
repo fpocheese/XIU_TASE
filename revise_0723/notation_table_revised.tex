@@ -1,0 +1,55 @@
+\section{Notation Table}
+\label{app:notation}
+
+Table~\ref{tab:notation} groups the main symbols by role. Symbols used only as temporary
+indices inside a single equation are explained locally and omitted here.
+
+\begin{table*}[!t]
+\centering
+\caption{Grouped Notation Summary}
+\label{tab:notation}
+\renewcommand{\arraystretch}{1.12}
+\footnotesize
+\begin{tabular}{@{}p{0.14\textwidth}p{0.32\textwidth}p{0.14\textwidth}p{0.32\textwidth}@{}}
+\toprule
+Symbol & Description & Symbol & Description \\
+\midrule
+\multicolumn{4}{l}{\emph{Sets, indices, and physical quantities}}\\
+$\mathcal D,\mathcal T$ & Defender and target sets. &
+$N_D,N_A$ & Numbers of defenders and targets.\\
+$i,j,k,t$ & Defender, target, assignment/episode, and guidance-step indices. &
+$\mathcal N_i,\mathcal G_j$ & Communication neighbors of defender $i$ and defenders assigned to target $j$.\\
+$\mathbf p_i,\mathbf v_i,V_i$ & Position, velocity vector, and speed of defender $i$. &
+$\boldsymbol\ell_i,\gamma_{D_i},\theta_{D_i}$ & LOS unit vector, defender heading, and flight-path angle.\\
+$d_i,t_{go,i}$ & Defender--target range and estimated time-to-go. &
+$n_{x_i},n_{y_i},n_{z_i}$ & Axial, horizontal-normal, and vertical-normal load-factor commands.\\
+\midrule
+\multicolumn{4}{l}{\emph{Target-assignment quantities}}\\
+$X_{ij},\mathbf X$ & Binary assignment variable and assignment matrix. &
+$L_{\max}$ & Maximum defenders assigned to one target.\\
+$p_{ij}^{\mathrm{int}}$ & Pairwise interception-probability proxy. &
+$\boldsymbol\xi_i,\pi_{ij}$ & Latent and sigmoid-mapped target preferences.\\
+$u_{ij},\chi_{ij}$ & Target-specific local utility and combat advantage. &
+$b_{ij},\mathcal W_{i,j}$ & Target bid and defender $i$'s local winner set for target $j$.\\
+$\Gamma^{(k)}$ & Pairwise assignment-consensus disagreement. &
+$N_{\mathrm{pop}},K_{\mathrm{IDBO}}$ & Local population size and number of IDBO iterations.\\
+\midrule
+\multicolumn{4}{l}{\emph{Learning quantities}}\\
+$\mathbf o_i^{(t)},\mathbf s_t$ & Local actor observation and joint critic state. &
+$\mathbf H_i,\mathbf h_i,\mathbf g_i$ & Attention tokens, residual feature, and GRU state.\\
+$\mathbf a_i^{(t)},\mathcal A$ & Three-dimensional load command and feasible action set. &
+$\pi_\theta,V_\phi$ & Shared decentralized actor and centralized value function.\\
+$\mathcal T_i,G_i^{(k)}$ & Training-time trust state and episodic return. &
+$\varrho_t,\widehat A_t$ & PPO importance ratio and GAE advantage estimate.\\
+$\varepsilon_{\mathrm{PPO}},c_{\mathrm{DC}}$ & PPO clipping factor and dual-clip parameter. &
+$\delta_{\mathrm{KL}},\beta_{\mathrm{KL}}$ & Target KL divergence and adaptive KL penalty.\\
+$r_i^{(t)},\gamma_{\mathrm{RL}}$ & Per-step reward and RL discount factor. &
+$H_{\mathrm{ep}}$ & Episode horizon.\\
+\midrule
+\multicolumn{4}{l}{\emph{Evaluation quantities}}\\
+$t_i^{\mathrm{arr}},\mathcal W_i$ & Arrival time and terminal measurement window. &
+$E_{\mathrm{co\text{-}time}},E_n$ & Arrival-time dispersion and terminal-window load metric.\\
+$E_{\mathrm{miss}},E_t$ & Terminal miss distance and coordinated engagement duration. & & \\
+\bottomrule
+\end{tabular}
+\end{table*}

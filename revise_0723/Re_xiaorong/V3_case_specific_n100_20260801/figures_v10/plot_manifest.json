@@ -1,0 +1,23 @@
+{
+  "style": "IEEE TASE V10",
+  "double_column_width_in": 7.16,
+  "single_column_width_in": 3.5,
+  "png_dpi": 600,
+  "training_visual_smoothing_window_updates": 51,
+  "monte_carlo_values_smoothed": false,
+  "missing_values_imputed": false,
+  "generated_stems": [
+    "ablation_training_case1_v10",
+    "ablation_training_reward_case1_v10",
+    "ablation_training_critic_loss_case1_v10",
+    "ablation_training_policy_entropy_case1_v10",
+    "ablation_training_case2_v10",
+    "ablation_training_reward_case2_v10",
+    "ablation_training_critic_loss_case2_v10",
+    "ablation_training_policy_entropy_case2_v10",
+    "ablation_monte_carlo_case1_v10",
+    "ablation_terminal_metrics_case1_v10",
+    "ablation_monte_carlo_case2_v10",
+    "ablation_terminal_metrics_case2_v10"
+  ]
+}

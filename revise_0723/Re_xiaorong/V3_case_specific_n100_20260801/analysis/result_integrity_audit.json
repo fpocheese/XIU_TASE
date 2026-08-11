@@ -1,0 +1,14 @@
+{
+  "training_trace_count": 8,
+  "expected_training_trace_count": 8,
+  "test_episode_count": 800,
+  "expected_test_episode_count": 800,
+  "each_variant_case_has_100_unique_seeds": true,
+  "paired_test_seeds_across_variants": true,
+  "selection_uses_test_seeds": false,
+  "training_performed_during_evaluation": false,
+  "optimizer_steps_during_evaluation": 0,
+  "backpropagation_during_evaluation": false,
+  "training_numeric_nan_inf": false,
+  "episode_rates_bounded": true
+}

@@ -1,0 +1,52 @@
+{
+  "training_input_validation": {
+    "passed": true,
+    "training_runs": 40,
+    "seeds_per_variant_case": 5,
+    "case1_updates": 100,
+    "case2_updates": 300,
+    "errors": []
+  },
+  "evaluation_runs": 40,
+  "evaluation_episodes": 800,
+  "monte_carlo_trials_per_variant_case": 100,
+  "raw_fields": {
+    "reward": "mean_episode_return",
+    "critic_loss": "value_loss",
+    "entropy": "entropy"
+  },
+  "reference_data_interface": {
+    "per_seed_npy_suffixes": [
+      "_rewards.npy",
+      "_critic_loss.npy",
+      "_entropy.npy"
+    ],
+    "plotted_csv_columns": [
+      "environment_steps_k",
+      "mean",
+      "shadow_lower",
+      "shadow_upper"
+    ]
+  },
+  "processing": {
+    "case1_moving_average_window_updates": 5,
+    "case2_moving_average_window_updates": 15,
+    "confidence_band": "95% Student-t CI across 5 independent seeds",
+    "synthetic_curve_blending": false,
+    "synthetic_noise": false,
+    "manual_data_modification": false
+  },
+  "figure_outputs": {
+    "standalone_metrics": [
+      "reward",
+      "critic_loss",
+      "entropy"
+    ],
+    "formats": [
+      "PDF",
+      "SVG",
+      "PNG"
+    ],
+    "png_dpi": 600
+  }
+}

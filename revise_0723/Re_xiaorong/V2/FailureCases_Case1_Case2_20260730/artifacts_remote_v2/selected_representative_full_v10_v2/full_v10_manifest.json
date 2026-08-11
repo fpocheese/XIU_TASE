@@ -1,0 +1,53 @@
+{
+  "selected_runs": {
+    "case1": 76048,
+    "case2": 77008
+  },
+  "figure_types_per_case": [
+    "trajectory",
+    "trajectory_3d",
+    "nx",
+    "ny",
+    "nz",
+    "velocity",
+    "heading",
+    "yaw",
+    "pitch",
+    "tgo",
+    "tgo_error",
+    "distance",
+    "time_sync"
+  ],
+  "selection_rule": "Both runs satisfy 8/8 target coverage, 19/20 interceptor hits, seven complete groups, and observed hit spread <=0.5 s. Case 2 uses the earliest qualifying seed. Case 1 uses the earliest exactly-one-miss qualifying seed whose incomplete group differs from Case 2's A2 group; this yields A6 without altering any trajectory samples.",
+  "all_figures_derived_from_native_trajectories": true,
+  "training_performed": false,
+  "optimizer_steps": 0,
+  "rows": [
+    {
+      "case": "case1",
+      "seed": 76048,
+      "selection": "earliest exactly-one-miss qualifying Case-1 seed whose incomplete group differs from the Case-2 A2 group",
+      "interceptor_hits": 19,
+      "target_coverage": 8,
+      "missed_defender_id": 5,
+      "assigned_target_id": 25,
+      "missed_min_distance_m": 3.243160704674884,
+      "miss_margin_m": 0.24316070467488382,
+      "closest_approach_time_s": 33.1,
+      "training_performed": false
+    },
+    {
+      "case": "case2",
+      "seed": 77008,
+      "selection": "earliest qualifying Case-2 seed",
+      "interceptor_hits": 19,
+      "target_coverage": 8,
+      "missed_defender_id": 1,
+      "assigned_target_id": 21,
+      "missed_min_distance_m": 3.5743973919113023,
+      "miss_margin_m": 0.5743973919113023,
+      "closest_approach_time_s": 26.150000000000002,
+      "training_performed": false
+    }
+  ]
+}

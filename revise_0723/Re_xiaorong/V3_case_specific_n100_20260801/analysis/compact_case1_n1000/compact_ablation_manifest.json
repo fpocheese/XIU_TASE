@@ -1,0 +1,14 @@
+{
+  "training_updates_per_model": 585,
+  "test_trials_per_algorithm": 1000,
+  "test_scenario": "case1",
+  "test_batch_counts_per_algorithm": [
+    100,
+    500,
+    400
+  ],
+  "test_is_frozen_policy_inference": true,
+  "training_or_optimizer_updates_during_test": false,
+  "paired_seed_design": true,
+  "required_values_all_finite": true
+}

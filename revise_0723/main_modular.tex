@@ -1,0 +1,601 @@
+% !TeX encoding = UTF-8
+% !TeX program = pdflatex
+% IEEEtran Journal Template -- Migrated from Elsevier cja-template.tex
+\documentclass[lettersize,journal]{IEEEtran}
+
+%% ---- Packages (only those compatible with IEEEtran) ----
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{algorithm}
+\usepackage{algorithmic}    % IEEEtran recommends algorithmic (not algorithmicx)
+\usepackage{array}
+\usepackage{bm}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{graphicx}
+\usepackage{placeins}
+\usepackage{url}
+\usepackage{cite}           % IEEE-style numeric citations
+\usepackage{textcomp}
+\usepackage{stfloats}       % allows figure* at bottom
+% \usepackage[caption=false,font=normalsize,labelfont=sf,textfont=sf]{subfig}
+\usepackage[caption=false,font=footnotesize,labelfont=sf,textfont=sf]{subfig}
+\usepackage{siunitx}
+
+% theorem/lemma environments
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+
+\hyphenation{op-tical net-works semi-conduc-tor IEEE-Xplore}
+
+% ----------------------------------------------------------------
+\begin{document}
+
+% ---- Title ----
+% \title{Multi-Agent Reinforcement Learning-Based Cooperative Interception Strategy
+%   for Maneuvering Swarm Attack Targets with Considering Target Assignment}
+
+% \title{Trust-Aware Multi-Agent Reinforcement Learning-Based Cooperative Interception Strategy for Maneuvering Swarm Attack Targets Considering Rapid Consensus Target Assignment}
+\title{Trust-Aware Multi-Agent Reinforcement Learning-Based Cooperative Interception Strategy for Maneuvering Swarms with Target Assignment}
+
+% ---- Authors ----
+% \author{Shuyi~Gao,~Defu~Lin,~Duo~Zheng,~and~Zhichen~Chu%
+% \thanks{S. Gao, D. Lin, D. Zheng, and Z. Chu are with the School of Aerospace
+% Engineering, Beijing Institute of Technology, Beijing 100081, China
+% (e-mail: zhengduohello@126.com).}%
+% \thanks{Manuscript received 2025.}}
+
+%----双盲投稿--
+\author{}
+\markboth{Under review}%
+{Anonymous Submission}
+
+% ---- Running heads ----
+\markboth{IEEE Transactions on Automation Science and Engineering}%
+{Gao \MakeLowercase{\textit{et al.}}: MARL-Based Cooperative Interception for Maneuvering Swarm Targets}
+
+\maketitle
+
+% ---- Abstract ----
+\begin{abstract}
+The swarm attack of unmanned aerial vehicles (UAVs) poses a significant threat to future
+battlefield operations.
+Achieving efficient and precise cooperative interception against attacking UAV swarms with
+highly dynamic maneuvering capabilities and adaptive penetration strategies poses a critical
+challenge for UAV interceptor swarms.
+This study addresses the cooperative interception of maneuvering targets in swarm attacks by
+decomposing the problem into two key tasks: target assignment and cooperative interception
+guidance.
+For target assignment, an Improved Dung Beetle Optimization (IDBO) algorithm is proposed to
+dynamically balance exploration and exploitation, achieving highly efficient and rapid
+assignments.
+% For cooperative interception guidance, a multi-agent deep reinforcement learning-based method
+% is developed to achieve precise and time-coordinated interception of adversarial UAV swarms
+% employing advanced penetration strategies.
+% For cooperative interception guidance, a multi-agent deep reinforcement learning framework—augmented by kinematics-aware attention mechanisms and trust-modulated exploration—is developed to achieve precise and time-coordinated interception of adversarial UAV swarms employing advanced penetration strategies.
+For cooperative interception guidance, an Attention-Residual and Trust-aware Multi-Agent Proximal Policy Optimization (ART-MAPPO) framework is developed to achieve precise and time-coordinated interception of adversarial UAV swarms employing advanced penetration strategies.
+The simulation results validate the effectiveness of the proposed intelligent cooperative
+interception method, demonstrating superior convergence speed, robustness, and significantly
+improved interception success rates in swarm UAV cooperative interception scenarios.
+\end{abstract}
+
+{\linespread{0.9}\selectfont
+\hspace*{0.0em}\textbf{\textit{Note to Practitioners—}}\textbf{This paper is motivated by practical UAV swarm defense scenarios, where multiple interceptors must cooperatively engage maneuvering aerial targets under limited communication and onboard maneuver constraints. In such applications, target assignment and guidance are closely coupled, and conventional centralized approaches may be difficult to implement efficiently as the engagement scale increases. To address this issue, this paper develops a two-stage cooperative interception framework that combines distributed target assignment with a trust-aware multi-agent reinforcement learning guidance method. The proposed approach is intended to improve coordination consistency among interceptors assigned to the same target and to enhance robustness against target maneuvers while considering maneuver saturation and command smoothness. This work may be useful for practical large-scale multi-UAV interception and other cooperative autonomous systems requiring scalable distributed decision-making and coordinated guidance.}\par\vspace{0.5\baselineskip}
+}
+
+% ---- Keywords ----
+\begin{IEEEkeywords}
+Cooperative interception, deep reinforcement learning, centralized training with decentralized
+execution, target assignment, UAV swarm.
+\end{IEEEkeywords}
+
+
+%% ===========================================================
+\section{Introduction}
+\label{sec:introduction}
+\IEEEPARstart{A}{s} warfare evolves toward intelligent swarm operations, the likelihood of
+encountering attacks from adversarial UAV swarms significantly increases during combat.
+Consequently, the efficient interception of incoming swarm targets becomes a critical
+imperative for future battlefield operations.
+To address the challenge of cooperative interception against maneuvering attacking swarms with
+adaptive penetration strategies, there is an urgent need to advance academic research in swarm
+target interception technologies.
+This study aims to enhance interceptors with intelligent cooperative interception capabilities,
+enabling effective navigation of complex challenges in modern battlefield environments.
+
+Multi-target cooperative interception encompasses two key tasks: target assignment and
+cooperative interception.
+The effectiveness of multi-target interception hinges on the optimality of target assignment,
+establishing it as a primary focus in swarm target interception strategies.
+As the number of UAVs increases, the complexity of target assignment escalates significantly,
+resulting in a multi-constrained, multi-parameter optimization problem.
+The objective is to develop a rapid and efficient target assignment method for allocating
+specific attacking targets to interceptors in operational scenarios~\cite{KLINE2019226}.
+The target assignment problem involves complex constraints, and the non-dominated sorting
+algorithm can dynamically generate a set of reference points with good convergence and
+distribution performance~\cite{WANG2025952,bai2024hybrid,zou2024moea}.
+Moreover, employing an online operator selection mechanism can enhance the efficiency of the
+algorithm~\cite{ahmad2024fuzzy,ming2024constrained}.
+The target assignment problem can be solved using multi-information particle swarm optimization
+to find the solution that yields the highest gain~\cite{mishra2015weapon,wei2020particle}.
+Introducing information from surrounding particles can enhance the stability of the traditional
+particle swarm algorithm while also addressing the issue of local convergence in the target
+assignment problem~\cite{long2024improved}.
+The genetic algorithm is a common approach for solving the target assignment
+problem~\cite{he4914655modelling,li2020multi,sun2022multi,chang2018solving}, and a GA with a
+novel crossover operator can further enhance algorithmic efficiency~\cite{weng2024diversity}.
+Ant colony optimization is also an effective strategy for solving the target assignment
+problem~\cite{li2024comprehensive}, and its combination with a greedy algorithm can improve
+the accuracy of parallel computation~\cite{yi2024solving}.
+Under multiple constraints, researchers have proposed various heuristic algorithms to solve the
+target assignment problem, such as neural networks~\cite{li2024comprehensive}, auction
+algorithm~\cite{wang2024collaborative}, tabu search~\cite{yao2024tabu}, simulated annealing
+algorithm~\cite{khurshid2024hybrid}, VLSN~\cite{yue2024graph}.
+However, in cooperative interception scenarios, the aforementioned algorithms struggle to
+handle the highly dynamic nature of the battlefield due to their high time complexity, and they
+fail to meet the dual requirements of both speed and optimality.
+
+The effectiveness of the terminal guidance phase in multi-target interception is significantly
+influenced by the cooperative guidance law, a critical factor requiring thorough consideration.
+The target assignment strategy transforms swarm operations into a coordinated multi-to-one
+interception problem, with current research focusing on three key areas: angular coordination,
+temporal coordination, and intelligent cooperation.
+Significant progress has been made in temporal coordination.
+Classical proportional navigation-based guidance laws enable synchronized multi-missile attacks
+on a single target~\cite{tao2024analytical}.
+Adaptive control methods adjust attack timing based on real-time operational conditions, making
+them suitable for intercepting maneuvering targets~\cite{wang2025generalized,zhang2022multiple}.
+Sliding Mode Control (SMC) is widely adopted for cooperative
+interception~\cite{sinha2020supertwisting}, with SMC incorporating miss distance and attack
+time constraints enhancing interception
+accuracy~\cite{shen2025three,jin2025cooperative,hu2019sliding}.
+Considerable research has also been conducted on angular coordination.
+From a traditional control perspective, backstepping control~\cite{li2024adaptive} and
+leader-follower cooperative methods~\cite{he2017impact} significantly improve interception
+efficiency.
+SMC with angular constraints is prevalent in cooperative interception, encompassing approaches
+based on impact angle constraints~\cite{wang2025hybrid} and line-of-sight angle
+constraints~\cite{li2024near}.
+Optimal control methods applied to impact angle-constrained cooperative guidance enhance
+precision by integrating impact angle and line-of-sight angle
+constraints~\cite{wang2025adaptive,tao2023optimal}.
+
+Recent advancements in intelligent technologies have driven extensive research into cooperative
+interception strategies for UAV swarms, with intelligent algorithms demonstrating substantial
+potential in addressing complex multi-target scenarios~\cite{chen2024enhanced,wu2020collaborative}.
+Optimization-based approaches, such as Particle Swarm Optimization (PSO), excel in
+collaborative attack problems by autonomously optimizing resource allocation and maximizing
+operational efficiency~\cite{zhao2024hierarchical,wu2020collaborative}.
+Search-based algorithms, like A*~\cite{liao2024research}, enable efficient path planning for
+coordinated attacks.
+Control-based methods, including Model Predictive Control
+(MPC)~\cite{kim2024adaptive}, provide robust guidance under dynamic constraints.
+Moreover, the integration of neural networks with reinforcement learning, particularly deep
+reinforcement learning (DRL), enhances the adaptability and intelligence of interception
+strategies~\cite{luo2022uav,zhan2022multiple,wang2021uav}.
+DRL enables UAV swarms to learn complex policies from high-dimensional data, optimizing target
+assignment and maneuvering in real-time to counter maneuvering targets~\cite{sun2024memory}.
+In contrast, conventional cooperative interception guidance methods rely heavily on
+linearization and simplifying assumptions to design feasible guidance laws~\cite{zhao2025global}.
+These methods often struggle to address the complexity of dynamic, non-linear environments
+involving maneuvering swarm targets.
+Data-driven intelligent cooperative interception methods, by contrast, leverage extensive
+datasets to learn adaptive strategies, significantly reducing dependence on restrictive
+assumptions~\cite{fainkich2025cooperative}.
+By modeling complex interactions through neural networks and DRL, these methods achieve greater
+robustness and flexibility.
+Despite advancements, intelligent cooperative interception methods struggle with maneuvering
+swarm targets in complex dynamic environments due to limited model generalization, low training
+efficiency, and low interception success rates, particularly in large-scale swarm combat
+requiring precise temporal coordination~\cite{horyna2023decentralized}.
+Addressing these challenges requires further research into scalable, generalizable, and
+efficient algorithms to fully realize the potential of intelligent cooperative interception.
+
+In summary, existing cooperative interception methods for countering attacking UAV swarms with
+adaptive penetration capabilities suffer from low interception success rates in complex dynamic
+environments.
+Specifically, target assignment methods exhibit low allocation efficiency, while cooperative
+interception guidance strategies struggle with terminal overload saturation and insufficient
+adaptability to dynamic target maneuvers in practical scenarios, hindering effective swarm
+coordination.
+Consequently, more research is necessary to address these challenges.
+
+This study proposes a swarm cooperative interception method based on multi-agent reinforcement
+learning and IDBO algorithm, enhancing target assignment efficiency and guidance strategy
+performance to achieve precise and efficient interception of maneuvering targets.
+The proposed intelligent cooperative interception algorithm offers the following advantages.
+
+\begin{enumerate}
+\item A distributed consensus-based target assignment scheme is proposed, which integrates an
+improved Dung Beetle Optimization (IDBO) algorithm with a combat-dominance assessment model.
+This design supports rapid many-to-one allocation under limited communication, leading to more
+efficient and reliable target assignment for cooperative interception.
+
+\item ART-MAPPO is proposed as a CTDE-based cooperative interception guidance learning
+framework, which employs an attention--residual feature extractor and a GRU temporal encoder,
+and uses trust-modulated exploration together with dual-clip PPO and adaptive KL
+regularization for stable policy learning. This design improves convergence behavior and
+training efficiency in highly maneuverable swarm-adversarial environments.
+
+\item A task-oriented reward design and training stabilization strategy are incorporated into
+the cooperative interception framework to support time-coordinated guidance under bounded
+overload commands. Rather than treating reward shaping or dual-clip PPO as standalone
+methodological novelties, this work uses them as task-adapted components that couple target
+approach, terminal interception, temporal coordination, and control-effort regularization in a
+large-scale maneuvering swarm scenario.
+\end{enumerate}
+
+The paper is structured as follows: Section~\ref{sec:method} presents relevant problem modeling and foundational theory. Section~\ref{sec:target_assignment} and Section~\ref{sec:cooperative_algorithm} provide a detailed description of our approach, including its framework, modules, algorithms, and rationale. Section~\ref{sec:simulation} covers experiments, results, and discussions. Lastly, Section~\ref{sec:conclusion} summarizes the paper and outlines future directions.
+
+%% ===========================================================
+\section{Backgrounds and Preliminaries}
+\label{sec:method}
+
+In this section, we first introduce the modeling of multi-target interception of UAVs, and
+then review reinforcement learning methods.
+
+\subsection{Problem Modeling}
+
+The multi-target intelligent interception problem can be decomposed into two subproblems:
+target assignment and intelligent cooperative interception, with the swarm combat scenario
+illustrated in Fig.~\ref{fenpei}.
+In this scenario, the attacking swarm aims to penetrate a high-value target area, while the
+defending swarm seeks to fully intercept the incoming UAVs.
+During the target assignment phase, the defending swarm assesses its own flight status and
+that of the attacking swarm using onboard sensors, subsequently allocating each defender to an
+appropriate interception target via the target assignment strategy.
+In the intelligent cooperative interception phase, defenders assigned to the same target employ
+coordinated maneuvering strategies to intercept and neutralize the target.
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=2.8in]{fenpei.pdf}
+\caption{Cluster target interception problem.}
+\label{fenpei}
+\end{figure}
+
+The object of study in this paper is the fixed-wing UAV. Fig.~\ref{jianmo} shows the
+horizontal projection used to define the heading and line-of-sight (LOS) azimuth, whereas the
+guidance model and simulations propagate the complete three-dimensional position and velocity.
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=2.6in]{pic02.pdf}
+\caption{Schematic diagram of confrontation and interception.}
+\label{jianmo}
+\end{figure}
+
+The three-dimensional point-mass kinematic model of a single UAV is
+\begin{equation}
+\label{yundongxue}
+\left\{\begin{aligned}
+\dot{x}&=V\cos\theta\cos\gamma,\\
+\dot{y}&=V\cos\theta\sin\gamma,\\
+\dot{z}&=V\sin\theta,
+\end{aligned}\right.
+\end{equation}
+where $(x,y,z)$ are the three-dimensional position coordinates, $V$ is the velocity
+magnitude, $\gamma$ is the heading angle, and $\theta$ is the flight-path (pitch) angle.
+
+In an interception mission, let $\mathbf p_A,\mathbf p_D\in\mathbb R^3$ and
+$\mathbf v_A,\mathbf v_D\in\mathbb R^3$ denote the attacker and defender states. Their
+three-dimensional relative geometry is
+\begin{equation}
+\label{gongfang}
+\begin{aligned}
+\mathbf r_{AD}&=\mathbf p_A-\mathbf p_D,\qquad
+r=\|\mathbf r_{AD}\|_2,\\
+\boldsymbol\ell_{AD}&=\mathbf r_{AD}/r,\qquad
+\dot r=\boldsymbol\ell_{AD}^{\top}(\mathbf v_A-\mathbf v_D).
+\end{aligned}
+\end{equation}
+Here, $r$ is the three-dimensional inter-UAV distance and
+$\boldsymbol\ell_{AD}$ is the LOS unit vector; its horizontal projection provides the
+plan-view geometry shown in Fig.~\ref{jianmo}.
+
+The relationship between the flight state and the three commanded load channels is
+\begin{equation}
+\label{guozai}
+\left\{\begin{aligned}
+\dot V&=n_xg,\\
+\dot\gamma&=\frac{n_yg}{V\cos\theta},\\
+\dot\theta&=\frac{n_zg}{V},
+\end{aligned}\right.
+\end{equation}
+where $n_x$ is the axial load-factor command, $n_y$ and $n_z$ are the horizontal and vertical
+normal load-factor commands, respectively, and $g$ is gravitational acceleration. Thus,
+$n_y$ primarily changes heading, while $n_z$ changes the flight-path angle and altitude.
+In the multi-agent setting of Section~\ref{sec:cooperative_algorithm}, these variables carry
+an agent subscript $i$.
+
+During cooperative interception, the remaining impact time is defined as:
+\begin{equation}
+\label{shijian}
+t_{go}=\frac{r}{\left|\dot{r}\right|}
+\end{equation}
+
+The three-dimensional Zero-Effort Miss (ZEM) is defined as
+\begin{equation}
+\label{ZEM}
+\operatorname{ZEM}=\left\|\mathbf r_{AD}
++(\mathbf v_A-\mathbf v_D)t_{go}\right\|_2.
+\end{equation}
+
+\subsection{Reinforcement Learning}
+
+Reinforcement learning (RL) is built on the Markov Decision Process (MDP), comprising state
+space $\mathcal{S}$, action space $\mathcal{A}$, reward function $R$, policy $\pi$, and state
+transition function $P$.
+At each step, the agent selects action $a$ from state $s$, receives reward $r$, and
+transitions to $s'$.
+The key value functions are:
+\begin{equation}
+\label{RLV}
+V^{\pi}(s)=E_{\pi}\left[\sum_{t=0}^{\infty}\gamma_{\mathrm{RL}}^{t}r_{t}\mid s_{0}=s\right]
+\end{equation}
+\begin{equation}
+\label{RLQ}
+Q^{\pi}(s,a)=E_{\pi}\left[\sum_{t=0}^{\infty}\gamma_{\mathrm{RL}}^{t}r_{t}\mid s_{0}=s,a_{0}=a\right]
+\end{equation}
+where $\gamma_{\mathrm{RL}}\in[0,1]$ is the discount factor.
+
+
+
+
+
+
+\input{section_iii_revised}
+
+\input{section_iv_revised}
+
+\section{Simulation Verification}
+\label{sec:simulation}
+
+\subsection{Experimental Setup and Implementation Details}
+\label{subsec:setup}
+
+All training and evaluation were performed on an Intel Core i7-9700F CPU / Nvidia RTX 3090
+GPU server running Ubuntu 18.04.
+The simulation step size was 0.05\,s and the maximum episode duration was 75\,s.
+Table~\ref{table2} summarizes the key hyperparameters of ART-MAPPO.
+
+\begin{table}[!t]
+\centering
+\renewcommand{\arraystretch}{1.4}
+\caption{ART-MAPPO Algorithm Parameters}
+\label{table2}
+\begin{tabular}{ll}
+\hline\hline
+Parameter & Value \\ \hline
+PPO clipping factor ($\varepsilon_{\mathrm{PPO}}$) & 0.2 \\
+Dual-clip parameter ($c_{\mathrm{DC}}$) & 3.0 \\
+Target KL divergence ($\delta_{\mathrm{KL}}$) & 0.02 \\
+Entropy bonus coefficient ($c_e$) & 0.01 \\
+GAE parameter ($\lambda_{\mathrm{GAE}}$) & 0.97 \\
+LR schedule & Cosine Annealing \\
+Optimizer & AdamW \\
+Mini-batch number & 4 \\
+Buffer size & 4096 \\
+Learning rate & $3\times10^{-4}$ \\
+Attention heads ($H$) & 4 \\
+Residual blocks ($L$) & 2 \\ \hline
+\end{tabular}
+\end{table}
+
+
+The horizontal projection of the simulation environment is depicted in Fig.~\ref{chushi}.
+In the three-dimensional case presets, the 20 defenders start near the defended center at
+radii 52.63--65.44\,m and altitude 0\,m, while the eight attackers start at radii
+1987.72--2145.95\,m and altitude 120\,m. Initial defender and attacker speeds are
+20.32--30.02\,m/s and 30.23--45.87\,m/s, respectively. The attackers initially point toward
+the defended region and then execute the case-specific three-dimensional maneuvers described
+below.
+
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=3.0in]{chushi01.pdf}
+\caption{Simulation environment configuration for training.}
+\label{chushi}
+\end{figure}
+
+A representative scenario of 20 $D_{\text{UAV}}$ versus 8 $A_{\text{UAV}}$ is considered.
+Table~\ref{chushicanshu} summarizes the audited three-dimensional initialization and
+kinematic constraints.
+
+\begin{table*}[!t]
+\centering
+\caption{UAV Parameters for Attackers and Defenders}
+\label{chushicanshu}
+\renewcommand{\arraystretch}{1.6}
+\begin{tabular}{ccccc}
+\hline\hline
+ & Initial radius / altitude & Initial velocity $V$ & Initial heading $\gamma$ & Maneuverability $(n_x,n_y,n_z)$ \\ \hline
+$D_{\text{UAV}}$ & 52.63--65.44\,m / 0\,m & 20.32--30.02\,m/s & $\gamma_D\in[0,2\pi]$ & $n_x\in[-0.1,1]$, $n_y,n_z\in[-1,1]$ \\
+$A_{\text{UAV}}$ & 1987.72--2145.95\,m / 120\,m & 30.23--45.87\,m/s & Toward defended area & Case-specific 3-D maneuver \\ \hline
+\end{tabular}
+\end{table*}
+
+Two dynamic engagement scenarios are designed to evaluate cooperative guidance performance.
+The scenario configurations are listed in Table~\ref{changjingqingkuang}.
+
+\begin{table}[!t]
+\centering
+\renewcommand{\arraystretch}{1.4}
+\caption{Combat Scenario Settings}
+\label{changjingqingkuang}
+\begin{tabular}{cccc}
+\hline\hline
+ & $N_{D\text{-UAV}}$ & $N_{A\text{-UAV}}$ & $A_{\text{UAV}}$ Strategy \\ \hline
+Case 1 & 20 & 8 & Hybrid Evasion \\
+Case 2 & 20 & 8 & Sinusoidal Maneuver \\ \hline
+\end{tabular}
+\end{table}
+
+To represent delayed communication and sensing uncertainty, every defender receives the
+position and velocity packets used to construct Eq.~\eqref{eq:observation_space} after an
+end-to-end delay of 50\,ms. For each Cartesian component,
+$\widehat{\mathbf p}(t)=\mathbf p(t-50\,\mathrm{ms})+\boldsymbol\eta_p$ with
+$\boldsymbol\eta_p\sim\mathcal N(\mathbf0\,\mathrm{m},9\mathbf I_3\,\mathrm{m}^2)$, and
+$\widehat{\mathbf v}(t)=\mathbf v(t-50\,\mathrm{ms})+\boldsymbol\eta_v$ with
+$\boldsymbol\eta_v\sim\mathcal N(\mathbf0\,\mathrm{m/s},
+0.09\mathbf I_3\,\mathrm{m}^2/\mathrm{s}^2)$. Thus, every position component has mean error
+0\,m and variance 9\,m$^2$, while every velocity component has mean error 0\,m/s and variance
+0.09\,(m/s)$^2$. Range, altitude difference, LOS direction, closing speed, heading, pitch,
+velocity-to-LOS angle, and time-to-go are recomputed from these delayed noisy Cartesian states;
+no additional independent noise is imposed on those derived quantities. Previous applied loads
+are internally measured without additive observation noise, while the commanded loads pass
+through a first-order response with a 300-ms time constant. Table~\ref{tab:uncertainty_settings}
+summarizes these settings in physical units.
+
+\begin{table}[!t]
+\centering
+\caption{Communication Delay and Observation-Uncertainty Settings}
+\label{tab:uncertainty_settings}
+\renewcommand{\arraystretch}{1.15}
+\footnotesize
+\begin{tabular}{@{}p{0.29\linewidth}p{0.20\linewidth}p{0.39\linewidth}@{}}
+\toprule
+Observed quantity & Delay / response & Error distribution \\
+\midrule
+Position $x,y,z$ & 50\,ms & Mean $0$\,m; variance $9$\,m$^2$ \\
+Velocity $v_x,v_y,v_z$ & 50\,ms & Mean $0$\,m/s; variance $0.09$\,(m/s)$^2$ \\
+Derived geometry and $t_{go}$ & 50\,ms & No independent noise; computed from $\widehat{\mathbf p},\widehat{\mathbf v}$ \\
+Previous loads $n_x,n_y,n_z$ & 300\,ms response & Mean $0$; variance $0$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+
+
+\input{evaluation_metrics_revised}
+
+\subsection{Target Assignment Performance and Spatial Topology}
+\label{subsec:assignment_results}
+
+To evaluate the IDBO algorithm, it is benchmarked against PSO, GWO, SSA, BOA, and standard DBO. 
+
+Fig.~\ref{fig:convergence} illustrates the statistical performance in terms of average cost convergence over iterations. IDBO significantly outperforms the baselines, reaching the lowest steady-state cost within 100~iterations. \begin{figure}[!ht] 
+\centering 
+\includegraphics[width=3.25in]{convergence.png} 
+\caption{Average cost convergence over iterations for target assignment algorithms.} 
+\label{fig:convergence} 
+\end{figure}
+
+Furthermore, the violin plot in Fig.~\ref{fig:violin} evaluates the algorithmic robustness across multiple independent runs. It shows IDBO's compact distribution at the lowest median cost, highlighting its superior stability and consistency compared to the other heuristic methods.
+
+\begin{figure}[!ht] 
+\centering 
+\includegraphics[width=3.2in]{violin.png} 
+\caption{Violin plot of total cost distribution evaluating algorithm robustness.} 
+\label{fig:violin} 
+\end{figure}
+
+The optimal assignment mapping generated by the algorithm is visualized in Fig.~\ref{fig:assignment_topology}. Attackers $A_1$--$A_4$ are each allocated three defenders, while $A_5$--$A_8$ are intercepted by two defenders each, perfectly respecting the per-target capacity constraint $L_{\max}$ and ensuring sufficient numerical superiority for cooperative strikes.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.2in]{target_assignment_topology.png}
+\caption{Visualized spatial topology of the target assignment results.}
+\label{fig:assignment_topology}
+\end{figure}
+
+
+
+
+
+
+
+
+\subsection{RL Model Training and Convergence Analysis}
+\label{subsec:training}
+
+To evaluate the learning efficiency and robustness of the proposed ART-MAPPO, comparative training experiments were conducted against standard MAPPO, IPPO, IA2C, and IQL. All models were trained over 10,000 episodes with a maximum horizon of 25 steps per episode. To ensure statistical significance and eliminate the bias of favorable network initialization, all learning curves in Fig.~\ref{fig:training_convergence} are averaged across 5 independent random seeds, with the shaded regions denoting the standard deviation.
+
+As illustrated in Fig.~\ref{fig:training_convergence}(a), ART-MAPPO demonstrates a superior learning paradigm, achieving the highest asymptotic normalized reward of $8.97 \pm 0.64$ (averaged over the final 500 episodes). This represents a notable performance improvement of 8.2\%, 12.3\%, 14.4\%, and 29.8\% over IQL, MAPPO, IPPO, and IA2C, respectively. The advantage of ART-MAPPO is particularly pronounced during the intermediate training phase. By episode 4,000, ART-MAPPO establishes a significant performance leap, outperforming standard MAPPO by 43.6\% and IQL by 16.6\%, highlighting its ability to rapidly escape local optima early in the training process.
+
+Furthermore, the proposed method exhibits accelerated convergence alongside enhanced training stability. When evaluated on a 100-episode smoothed curve, ART-MAPPO reaches 90\% of its optimal asymptotic performance by episode 5,591. In contrast, the most competitive baseline, IQL, requires 6,477 episodes (a 13.7\% delay), while standard MAPPO lags significantly, requiring 7,654 episodes. Regarding algorithmic stability, ART-MAPPO maintains a tight variance across random seeds ($\sigma = 0.64$), whereas standard MAPPO exhibits a standard deviation of 1.34 (approximately twice as large). This confirms that the proposed enhancements effectively mitigate the high-variance gradient updates typical in multi-agent policy-based methods.
+
+These macroscopic performance gains are directly supported by the network-level metrics. The critic loss (Fig.~\ref{fig:training_convergence}(b)) of ART-MAPPO converges to the lowest steady-state error with minimal oscillation, a direct consequence of the dual-clip mechanism and adaptive KL penalty. Concurrently, the policy entropy (Fig.~\ref{fig:training_convergence}(c)) demonstrates an optimal, gradual decay trajectory, validating that the trust-modulated exploration mechanism successfully balances early-stage extensive state-space exploration with late-stage strict policy exploitation.
+
+It should be emphasized that the convergence discussed here is empirical training
+convergence rather than a global optimality guarantee for the nonconvex MARL problem. In
+particular, ART-MAPPO inherits the practical convergence interpretation of PPO-style policy
+gradient methods: a stable learning process is indicated by a saturating reward curve, bounded
+inter-seed variance, a nondivergent critic loss, and a gradually decreasing policy entropy.
+The dual-clip objective and adaptive KL penalty do not prove convergence to the global
+optimum; instead, they restrict the policy update magnitude and reduce destructive policy
+oscillations caused by large importance-sampling ratios. Therefore, the convergence claim for
+ART-MAPPO should be understood as statistically validated stability and asymptotic performance
+under the tested training settings, supported by the five-seed learning curves and the
+network-level diagnostics in Fig.~\ref{fig:training_convergence}.
+
+\begin{figure}[!t]
+\centering
+\subfloat[Training Reward]{\includegraphics[width=3.0in]{fig_a_reward.png}}
+\hfill
+\subfloat[Critic Loss]{\includegraphics[width=3.0in]{fig_b_critic_loss.png}}
+\hfill
+\subfloat[Policy Entropy]{\includegraphics[width=3.0in]{fig_c_entropy.png}}
+\caption{Comparative training curves of ART-MAPPO and baseline algorithms over 10,000 episodes. Solid lines and shaded regions represent the mean and standard deviation across 5 independent random seeds, respectively. Notably, ART-MAPPO achieves the highest asymptotic reward (+12.3\% over standard MAPPO) and the fastest convergence rate (reaching 90\% optimality by episode 5,591), while demonstrating significantly enhanced training stability.}
+\label{fig:training_convergence}
+\end{figure}
+
+
+%%%%-------------------------------------------------------------------------------------------
+
+\input{simulation_cases_3d_revised}
+
+\subsection{Monte Carlo Statistical Analysis and Robustness}
+\label{subsec:montecarlo}
+
+To rigorously quantify the robustness of the proposed framework, 1000 independent Monte Carlo trials are conducted for each case. It is important to note that the statistical distributions presented in Fig.~\ref{fig:mc_boxplots} ($E_{co\text{-}time}$, $E_n$, $E_{miss}$, and $E_t$) are exclusively derived from the successful interception trials. Specifically, out of the 1000 trials in Case~1, ART-MAPPO and PN successfully intercepted the targets 987 and 944 times, respectively. In the highly dynamic Case~2, ART-MAPPO maintained a remarkable 971 successful interceptions, whereas the baseline PN succeeded only 175 times. 
+
+\begin{figure}[!t]
+\centering
+\subfloat[Case~1]{\includegraphics[width=3.47in]{nopn_mc_boxplot_compare.png}}\\
+\subfloat[Case~2]{\includegraphics[width=3.47in]{sin_mc_boxplot_compare.png}}
+\caption{Boxplots of Monte Carlo trials comparing ART-MAPPO and PN (data derived from successful interceptions).}
+\label{fig:mc_boxplots}
+\end{figure}
+
+Based on the statistical distributions, three key findings emerge:
+
+\emph{(i) Interception reliability and precision.} The Interception Success Rates (ISRs) directly reflect the algorithms' adaptability to aggressive target maneuvers. While PN achieves a respectable 94.40\% against the evasive target (Case~1), its performance precipitously degrades to 17.50\% when facing the continuous weaving target (Case~2). Conversely, ART-MAPPO sustains exceptional ISRs of 98.70\% and 97.14\%, demonstrating profound robustness against continuous, high-frequency line-of-sight (LOS) oscillations. Furthermore, the $E_{miss}$ boxplots confirm that ART-MAPPO consistently achieves a lower median miss distance with a significantly narrower interquartile range (IQR), ensuring lethal precision even under worst-case initializations.
+
+\emph{(ii) Terminal required overload and operational efficiency.} The metric $E_n$ denotes the terminal required normal overload, which is a critical constraint for flight safety. As depicted in the boxplots, ART-MAPPO's $E_n$ is tightly clustered around a safe median of $\approx0.08$\,g (Case~1) and $\approx0.20$\,g (Case~2). In stark contrast, particularly in Case~2, PN's $E_n$ distribution is heavily squeezed near the 1.0\,g upper bound. This exposes severe terminal actuator saturation, as PN struggles to reactively track the sinusoidal maneuvers. Additionally, ART-MAPPO strictly bounds the engagement duration ($E_t$) within a tight and predictable time window, reflecting superior forward energy management and rapid closure capabilities.
+
+\emph{(iii) Robust temporal coordination.} The metric $E_{co\text{-}time}$ evaluates the temporal synchronization of the defending swarm. Across the successful Monte Carlo trials in both highly dynamic scenarios, ART-MAPPO maintains a median $E_{co\text{-}time}$ well below 0.10\,s. This consistently tight distribution confirms that the proposed algorithm can reliably shape the swarm's velocity profile to satisfy the strict temporal requirements for simultaneous saturation strikes, effectively neutralizing the risk of sequential piecemeal defeat.
+
+
+
+%% ===========================================================
+\section{Conclusion}
+\label{sec:conclusion}
+
+In this paper, the cooperative interception problem of UAV swarms against highly dynamic and
+maneuverable attacking UAV swarms has been investigated, explicitly accounting for real-time
+decision requirements, coordinated engagement effectiveness, and terminal overload risk.
+The problem is formulated by jointly considering target assignment and cooperative guidance,
+and an intelligent temporally coordinated interception framework is developed.
+A fast IDBO-based target assignment mechanism enables efficient and accurate resource
+allocation in dynamic environments.
+The ART-MAPPO cooperative guidance strategy under the CTDE paradigm improves learning
+stability and training efficiency in large-scale adversarial settings.
+Extensive three-dimensional simulations demonstrate accelerated target assignment, enhanced interception
+efficiency, improved interception success rates, and effective alleviation of terminal overload
+saturation.
+
+For future work, promising directions include cooperative interception under incomplete
+information, dynamic target reassignment in unknown environments, time-constrained assignment
+with explicit completion deadlines, and integration with realistic constraints such as
+limited bandwidth, aerodynamic coupling, and heterogeneous UAV capabilities.
+
+% ---- Bibliography ----
+\bibliographystyle{IEEEtran}
+\bibliography{cja-template}
+
+\appendices
+\input{notation_table_revised}
+
+\end{document}

@@ -1,0 +1,286 @@
+{
+  "training": [
+    {
+      "variant": "full",
+      "case": "case1",
+      "updates": 585,
+      "final_steps": 599040,
+      "actor_parameters": 732774,
+      "critic_parameters": 749761,
+      "training_csv_sha256": "46d3478cf77459476cf3b4c1f6ca11d20dce6af1aa22d59bd1d6936dd1d50ad4"
+    },
+    {
+      "variant": "full",
+      "case": "case2",
+      "updates": 585,
+      "final_steps": 599040,
+      "actor_parameters": 732774,
+      "critic_parameters": 749761,
+      "training_csv_sha256": "5bb093babc02eca1a5dddf683d9f3f88dd91dafccdc9b805cd4378559645399c"
+    },
+    {
+      "variant": "no_attention_residual",
+      "case": "case1",
+      "updates": 585,
+      "final_steps": 599040,
+      "actor_parameters": 733200,
+      "critic_parameters": 749932,
+      "training_csv_sha256": "ce8e455fad345581735b6ab149317703a6c2b163da8219257dcf8f426c404ad0"
+    },
+    {
+      "variant": "no_attention_residual",
+      "case": "case2",
+      "updates": 585,
+      "final_steps": 599040,
+      "actor_parameters": 733200,
+      "critic_parameters": 749932,
+      "training_csv_sha256": "38ed6622bb72d35120c632d49c0b91266c2bc84c17782492ec8b76b952ed2602"
+    },
+    {
+      "variant": "no_gru",
+      "case": "case1",
+      "updates": 585,
+      "final_steps": 599040,
+      "actor_parameters": 337510,
+      "critic_parameters": 354497,
+      "training_csv_sha256": "e1ee3013ad20d5a3b6f8ccc062517f94cf783489e77b3846db6d6f2e2be33d5d"
+    },
+    {
+      "variant": "no_gru",
+      "case": "case2",
+      "updates": 585,
+      "final_steps": 599040,
+      "actor_parameters": 337510,
+      "critic_parameters": 354497,
+      "training_csv_sha256": "ec4e233015e35b5a4c64fe4cc445c808b97d5d55fc4b4df714ea2c28c547f98f"
+    },
+    {
+      "variant": "no_trust",
+      "case": "case1",
+      "updates": 585,
+      "final_steps": 599040,
+      "actor_parameters": 732774,
+      "critic_parameters": 749761,
+      "training_csv_sha256": "51b28100c40ff545c8bae96686e0e9a539d88e7375d59e6d6ae1dd4996b5b33e"
+    },
+    {
+      "variant": "no_trust",
+      "case": "case2",
+      "updates": 585,
+      "final_steps": 599040,
+      "actor_parameters": 732774,
+      "critic_parameters": 749761,
+      "training_csv_sha256": "bad8e734a577c7ad8b611ff72a1553737b75c2007ff6135898cbed5a277daea0"
+    }
+  ],
+  "evaluation": {
+    "episodes": 800,
+    "targets": 6400,
+    "assignments": 16000,
+    "episode_cell_counts": {
+      "full/case1": 100,
+      "full/case2": 100,
+      "no_trust/case1": 100,
+      "no_trust/case2": 100,
+      "no_gru/case1": 100,
+      "no_gru/case2": 100,
+      "no_attention_residual/case1": 100,
+      "no_attention_residual/case2": 100
+    }
+  },
+  "figures": [
+    {
+      "file": "ablation_training_case1_v10.pdf",
+      "bytes": 59561,
+      "sha256": "bf84b27291020b6ed52b71d876086fa45e060201025958cc364003d5b412c992"
+    },
+    {
+      "file": "ablation_training_case1_v10.svg",
+      "bytes": 170318,
+      "sha256": "ccebab2d3184f726e828a2973701b596c4419c88ddc1a34a5acc57b47a2f6677"
+    },
+    {
+      "file": "ablation_training_case1_v10.png",
+      "bytes": 432050,
+      "sha256": "233ae56087bf371b7e10a65352e22f9e6f82fe6e89f0804c397175e61979814d"
+    },
+    {
+      "file": "ablation_training_reward_case1_v10.pdf",
+      "bytes": 36461,
+      "sha256": "eb67483765e486c71e1e12239dccbe473d34f3b4b83df2ed7c96fea54de93980"
+    },
+    {
+      "file": "ablation_training_reward_case1_v10.svg",
+      "bytes": 93428,
+      "sha256": "86d7f1cb7229a69f9ebcd14fd827b977d05aa65845d9f5b7298343bbec699d52"
+    },
+    {
+      "file": "ablation_training_reward_case1_v10.png",
+      "bytes": 227190,
+      "sha256": "34d5e664ba78fca0d9fef9865501d423670ea34b34e8dcb585469d49ec13947d"
+    },
+    {
+      "file": "ablation_training_critic_loss_case1_v10.pdf",
+      "bytes": 37076,
+      "sha256": "1a54ad1d1b1c8b5362f527e7c7fc8e35b797b2caa9f108a27b17c7a534ab336f"
+    },
+    {
+      "file": "ablation_training_critic_loss_case1_v10.svg",
+      "bytes": 89320,
+      "sha256": "10e4fd14a2b5f26c95ddac8bbcd62fc889d007ab513f48db34fb2aefa1e7c402"
+    },
+    {
+      "file": "ablation_training_critic_loss_case1_v10.png",
+      "bytes": 198849,
+      "sha256": "8aa069a85673a9065bf14facde6832fbdc9eac32aebb7f84b48495e896c6630b"
+    },
+    {
+      "file": "ablation_training_policy_entropy_case1_v10.pdf",
+      "bytes": 21755,
+      "sha256": "1f0d58c733b5f828b011d69723864804980b98379a094e13ac41f2cc68fd07d9"
+    },
+    {
+      "file": "ablation_training_policy_entropy_case1_v10.svg",
+      "bytes": 46649,
+      "sha256": "9ba7b703f343310ed8ebc978e190d650103be72e5c10ac9bd03f0f1e003c81e6"
+    },
+    {
+      "file": "ablation_training_policy_entropy_case1_v10.png",
+      "bytes": 194168,
+      "sha256": "583c30d9288d8f2761d4475a339d4a1399de126eea3060b1bc30058adb8121b6"
+    },
+    {
+      "file": "ablation_monte_carlo_case1_v10.pdf",
+      "bytes": 28960,
+      "sha256": "c8d695c324a9df042e9c112480e27839514c1e40997880fc85d3c2a282dc15d1"
+    },
+    {
+      "file": "ablation_monte_carlo_case1_v10.svg",
+      "bytes": 90586,
+      "sha256": "cec7ce3175c8be079a37e5327744c54080e1a822852a6bce34a7618d2d8262c0"
+    },
+    {
+      "file": "ablation_monte_carlo_case1_v10.png",
+      "bytes": 305216,
+      "sha256": "8f706371aa7abb678d62b2efd0d376272830c78d3f655ea5156764903b00dfa3"
+    },
+    {
+      "file": "ablation_terminal_metrics_case1_v10.pdf",
+      "bytes": 27568,
+      "sha256": "7423092f804e39305934a00b6be7e4489f638d3f53c95b98d71fec53a3272efb"
+    },
+    {
+      "file": "ablation_terminal_metrics_case1_v10.svg",
+      "bytes": 95150,
+      "sha256": "a0fd5c21008261b35dd7498f11936378e969742aa1bec557132490d8134a83aa"
+    },
+    {
+      "file": "ablation_terminal_metrics_case1_v10.png",
+      "bytes": 295977,
+      "sha256": "5e66b2de9d53917df67e1380ca37aaa401567572d9c1c3427a09bb1857240ef2"
+    },
+    {
+      "file": "ablation_training_case2_v10.pdf",
+      "bytes": 59134,
+      "sha256": "a772a9c184c4ac6b5ab9e49df92e5fa53a35968ab1d70d2c8cf3efd06dab716c"
+    },
+    {
+      "file": "ablation_training_case2_v10.svg",
+      "bytes": 171313,
+      "sha256": "fb12f84e2cd07e91822d6a800c6db60e7436ac34ea4918256cf90b077e1c0996"
+    },
+    {
+      "file": "ablation_training_case2_v10.png",
+      "bytes": 435214,
+      "sha256": "46f8257914e989d33eff31f9c53340986e3cd6ad9a7a3b22cae4a17db701e67c"
+    },
+    {
+      "file": "ablation_training_reward_case2_v10.pdf",
+      "bytes": 34033,
+      "sha256": "6bd90a10f99a6f9c39049ebdf9f978318f3dbacc70d67468fc41b5e4e176bd6e"
+    },
+    {
+      "file": "ablation_training_reward_case2_v10.svg",
+      "bytes": 88349,
+      "sha256": "abb6e5f4e9eb41f405480070e41077dd8b1c50f605620f5cc7f46488b2429d17"
+    },
+    {
+      "file": "ablation_training_reward_case2_v10.png",
+      "bytes": 229627,
+      "sha256": "e73be35076e9b9f7b5d5a3aa3511c8aa94643caa3fd0ebcfedc1e89e641d9007"
+    },
+    {
+      "file": "ablation_training_critic_loss_case2_v10.pdf",
+      "bytes": 34972,
+      "sha256": "cb449b760be7f1b3ea60d6459483f1602d1679711f119e92a12523b641124d58"
+    },
+    {
+      "file": "ablation_training_critic_loss_case2_v10.svg",
+      "bytes": 84124,
+      "sha256": "a1a1662e30890aa632cb53ceb1215d04d7dd9a8feb247f0edca281ac03d2962a"
+    },
+    {
+      "file": "ablation_training_critic_loss_case2_v10.png",
+      "bytes": 190208,
+      "sha256": "4727ce958319fe3aba52d848381d73a47ccba48292d7b8bfb9e38adb894b7ff6"
+    },
+    {
+      "file": "ablation_training_policy_entropy_case2_v10.pdf",
+      "bytes": 21704,
+      "sha256": "90caf698cc06d75c66ff44340c57dd903702f0403bdaad4c63d44431b8807a8b"
+    },
+    {
+      "file": "ablation_training_policy_entropy_case2_v10.svg",
+      "bytes": 45943,
+      "sha256": "87fbe21b4e4a79c52daae2a0392bcb1308703e8bd69b365fe6b2f8b7b4fb9532"
+    },
+    {
+      "file": "ablation_training_policy_entropy_case2_v10.png",
+      "bytes": 201317,
+      "sha256": "d0de0218dd2dc8e7e1136821ab7b6c29752d28fdb6f9bd037d8801f1637e5b1e"
+    },
+    {
+      "file": "ablation_monte_carlo_case2_v10.pdf",
+      "bytes": 28896,
+      "sha256": "fb4a37d4603e2b60545df09fbc217eb0382d96ff85c176d1ae54ce513d537a77"
+    },
+    {
+      "file": "ablation_monte_carlo_case2_v10.svg",
+      "bytes": 88897,
+      "sha256": "e4fce3feaa721ef45802135ac1c2e22de9650014191237495669c17fe1ac9084"
+    },
+    {
+      "file": "ablation_monte_carlo_case2_v10.png",
+      "bytes": 293009,
+      "sha256": "cd3374d7c3aeb2655456a014311a6ba7958be68255c67d93a325f0b15f33be8a"
+    },
+    {
+      "file": "ablation_terminal_metrics_case2_v10.pdf",
+      "bytes": 26842,
+      "sha256": "7aa88a75be0f28788c6e56d49ce393bb2dda24575b31bbd2eb49be8291160280"
+    },
+    {
+      "file": "ablation_terminal_metrics_case2_v10.svg",
+      "bytes": 92333,
+      "sha256": "e36caea750d74b9f4664e27e4c8789145056bf9e89a866aa2f390667d47955ad"
+    },
+    {
+      "file": "ablation_terminal_metrics_case2_v10.png",
+      "bytes": 279715,
+      "sha256": "96de6cf81139ccf80bca6fa822cf0f2b033b6b55de6d54f56d87ad507e06364e"
+    }
+  ],
+  "tables": [
+    "paper_success_rates_n100.csv",
+    "paper_success_rates_n100.tex",
+    "paper_training_effects.csv",
+    "paper_training_effects.tex",
+    "paper_terminal_metrics_case1.csv",
+    "paper_terminal_metrics_case1.tex",
+    "paper_terminal_metrics_case2.csv",
+    "paper_terminal_metrics_case2.tex",
+    "paper_paired_binary_effects.csv",
+    "paper_paired_binary_effects.tex"
+  ],
+  "status": "PASS"
+}

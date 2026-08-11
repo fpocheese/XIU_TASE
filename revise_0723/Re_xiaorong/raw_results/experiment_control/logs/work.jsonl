@@ -1,0 +1,1 @@
+{"ts":"2026-07-24T00:00:03+08:00","source":"root","level":"decision","event":"paper_authoritative","detail":"Implement the paper-defined trust mechanism and channel-token attention in an isolated copy before running component ablations."}

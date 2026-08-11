@@ -1,0 +1,20 @@
+\begin{table*}[!b]
+\centering
+\scriptsize
+\color{blue}
+\caption{Training and 1000-trial Case~1 test results of the ART-MAPPO component ablation.}
+\label{tab:compact_ablation_v3}
+\renewcommand{\arraystretch}{1.12}
+\setlength{\tabcolsep}{3.0pt}
+\begin{tabular}{lccccccc}
+\toprule
+Variant & Training AUC ($10^3$) $\uparrow$ & Std. final return ($10^3$) $\downarrow$ & ISR (\%) $\uparrow$ & $E_n$ (g) $\downarrow$ & $E_{miss}$ (m) $\downarrow$ & $E_{co\text{-}time}$ (s) $\downarrow$ & $E_t$ (s) $\downarrow$ \\
+\midrule
+Full ART-MAPPO & 535.07 & 108.91 & 100.0 & 0.0315 & 1.431 & 0.0768 & 26.830 \\
+w/o trust-aware mechanism & 535.67 & 107.54 & 100.0 & 0.0307 & 1.414 & 0.0667 & 27.248 \\
+w/o GRU temporal encoder & 535.04 & 106.25 & 100.0 & 0.0341 & 1.431 & 0.0656 & 26.938 \\
+w/o attention--residual backbone & 535.04 & 106.01 & 100.0 & 0.0338 & 1.426 & 0.0699 & 26.863 \\
+\bottomrule
+\end{tabular}
+\vspace{1mm}\parbox{0.99\linewidth}{\footnotesize Each algorithm is evaluated in exactly 1000 paired, frozen-policy Monte Carlo trials in Case~1. ISR denotes complete target interception. Consistent with Section~\ref{subsec:montecarlo}, the four terminal entries are sample means over successful interception trials only; no missing value is imputed. Training AUC is the horizon-normalized area under the raw episodic-return curve. Final-return variability is the sample standard deviation over the last 10\% (58) of training updates. One training seed is used per variant; hence, the two training columns are descriptive, whereas the 1000 test trials quantify uncertainty due to environmental initial-state perturbations.}
+\end{table*}

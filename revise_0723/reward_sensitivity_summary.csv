@@ -1,0 +1,5 @@
+Parameter,Symbol,Nominal value,Perturbation range,Sensitivity index,Main effect,Episodes
+Hit weight,$w_{\rm hit}$,200.0,0.5-1.5x,0.9959128828411882,Linear scaling of the sparse terminal-hit reward,100
+Coordination weight,$w_{\rm coord}$,18.0,0.5-1.5x,0.0013168396375746003,Linear scaling of the time-to-go mismatch penalty,100
+Energy weight,$w_{\rm energy}$,0.005,0.5-1.5x,1.3450692040706208e-08,Linear scaling of the three-axis control-effort penalty,100
+Distance-shaping parameter,$\alpha_d$,0.0002,0.5-1.5x,0.000823296854783666,Nonlinear change in the distance-reward decay range,100

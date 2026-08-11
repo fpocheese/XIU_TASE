@@ -1,0 +1,46 @@
+{
+  "case": "case2",
+  "components": {
+    "attention_residual": true,
+    "gru": true,
+    "trust_aware": true
+  },
+  "optimization": {
+    "dual_clip": 3.0,
+    "episode_length": 1500,
+    "gae_lambda": 0.97,
+    "learning_rate": 0.0003,
+    "log_ratio_clip": 20.0,
+    "min_learning_rate": 1e-06,
+    "mini_batches": 4,
+    "num_env_steps": 1800000,
+    "ppo_clip": 0.2,
+    "ppo_epochs": 5,
+    "rollout_threads": 4,
+    "target_kl": 0.02
+  },
+  "paper_guidance_profile": {
+    "base_gain": 2.4,
+    "command_lag_tau": 0.4,
+    "lead": 1.7,
+    "residual_scale": 0.05,
+    "tau": 0.4
+  },
+  "parameter_count": {
+    "actor": 732774,
+    "critic": 749761
+  },
+  "seed": 703,
+  "trust_hyperparameters": {
+    "alpha": 0.1,
+    "guide_weights": [
+      0.6,
+      0.2,
+      0.2
+    ],
+    "initial": 0.8,
+    "rho": 0.05,
+    "tau": 1.0
+  },
+  "variant": "full"
+}

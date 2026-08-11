@@ -1,0 +1,1658 @@
+\documentclass[lettersize,journal]{IEEEtran}
+
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{algorithm}
+\usepackage{algorithmic}    \usepackage{array}
+\usepackage{bm}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{graphicx}
+\usepackage{placeins}
+\usepackage{url}
+\usepackage{cite}           \usepackage{textcomp}
+\usepackage{stfloats}       \usepackage[caption=false,font=footnotesize,labelfont=sf,textfont=sf]{subfig}
+\usepackage{siunitx}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+
+\hyphenation{op-tical net-works semi-conduc-tor IEEE-Xplore}
+
+\graphicspath{{./}{../}{../new_sim_fig/}}
+
+\begin{document}
+
+
+
+\title{Trust-Aware Multi-Agent Reinforcement Learning-Based Cooperative Interception Strategy for Maneuvering Swarms with Target Assignment}
+
+
+
+\author{}
+\markboth{Under review}{Anonymous Submission}
+
+\markboth{IEEE Transactions on Automation Science and Engineering}{Gao \MakeLowercase{\textit{et al.}}: MARL-Based Cooperative Interception for Maneuvering Swarm Targets}
+
+\maketitle
+
+\begin{abstract}
+The swarm attack of unmanned aerial vehicles (UAVs) poses a significant threat to future
+battlefield operations.
+Achieving efficient and precise cooperative interception against attacking UAV swarms with
+highly dynamic maneuvering capabilities and adaptive penetration strategies poses a critical
+challenge for UAV interceptor swarms.
+This study addresses the cooperative interception of maneuvering targets in swarm attacks by
+decomposing the problem into two key tasks: target assignment and cooperative interception
+guidance.
+For target assignment, an Improved Dung Beetle Optimization (IDBO) algorithm is proposed to
+dynamically balance exploration and exploitation, achieving highly efficient and rapid
+assignments.
+For cooperative interception guidance, an Attention-Residual and Trust-aware Multi-Agent Proximal Policy Optimization (ART-MAPPO) framework is developed to achieve precise and time-coordinated interception of adversarial UAV swarms employing advanced penetration strategies.
+The simulation results validate the effectiveness of the proposed intelligent cooperative
+interception method, demonstrating superior convergence speed, robustness, and significantly
+improved interception success rates in swarm UAV cooperative interception scenarios.
+\end{abstract}
+
+{\linespread{0.9}\selectfont
+\hspace*{0.0em}\textbf{\textit{Note to Practitioners—}}\textbf{This paper is motivated by practical UAV swarm defense scenarios, where multiple interceptors must cooperatively engage maneuvering aerial targets under limited communication and onboard maneuver constraints. In such applications, target assignment and guidance are closely coupled, and conventional centralized approaches may be difficult to implement efficiently as the engagement scale increases. To address this issue, this paper develops a two-stage cooperative interception framework that combines distributed target assignment with a trust-aware multi-agent reinforcement learning guidance method. The proposed approach is intended to improve coordination consistency among interceptors assigned to the same target and to enhance robustness against target maneuvers while considering maneuver saturation and command smoothness. This work may be useful for practical large-scale multi-UAV interception and other cooperative autonomous systems requiring scalable distributed decision-making and coordinated guidance.}\par\vspace{0.5\baselineskip}
+}
+
+\begin{IEEEkeywords}
+Cooperative interception, deep reinforcement learning, centralized training with decentralized
+execution, target assignment, UAV swarm.
+\end{IEEEkeywords}
+
+
+\section{Introduction}
+\label{sec:introduction}
+\IEEEPARstart{A}{s} warfare evolves toward intelligent swarm operations, the likelihood of
+encountering attacks from adversarial UAV swarms significantly increases during combat.
+Consequently, the efficient interception of incoming swarm targets becomes a critical
+imperative for future battlefield operations.
+To address the challenge of cooperative interception against maneuvering attacking swarms with
+adaptive penetration strategies, there is an urgent need to advance academic research in swarm
+target interception technologies.
+This study aims to enhance interceptors with intelligent cooperative interception capabilities,
+enabling effective navigation of complex challenges in modern battlefield environments.
+
+Multi-target cooperative interception encompasses two key tasks: target assignment and
+cooperative interception.
+The effectiveness of multi-target interception hinges on the optimality of target assignment,
+establishing it as a primary focus in swarm target interception strategies.
+As the number of UAVs increases, the complexity of target assignment escalates significantly,
+resulting in a multi-constrained, multi-parameter optimization problem.
+The objective is to develop a rapid and efficient target assignment method for allocating
+specific attacking targets to interceptors in operational scenarios~\cite{KLINE2019226}.
+The target assignment problem involves complex constraints, and the non-dominated sorting
+algorithm can dynamically generate a set of reference points with good convergence and
+distribution performance~\cite{WANG2025952,bai2024hybrid,zou2024moea}.
+Moreover, employing an online operator selection mechanism can enhance the efficiency of the
+algorithm~\cite{ahmad2024fuzzy,ming2024constrained}.
+The target assignment problem can be solved using multi-information particle swarm optimization
+to find the solution that yields the highest gain~\cite{mishra2015weapon,wei2020particle}.
+Introducing information from surrounding particles can enhance the stability of the traditional
+particle swarm algorithm while also addressing the issue of local convergence in the target
+assignment problem~\cite{long2024improved}.
+The genetic algorithm is a common approach for solving the target assignment
+problem~\cite{he4914655modelling,li2020multi,sun2022multi,chang2018solving}, and a GA with a
+novel crossover operator can further enhance algorithmic efficiency~\cite{weng2024diversity}.
+Ant colony optimization is also an effective strategy for solving the target assignment
+problem~\cite{li2024comprehensive}, and its combination with a greedy algorithm can improve
+the accuracy of parallel computation~\cite{yi2024solving}.
+Under multiple constraints, researchers have proposed various heuristic algorithms to solve the
+target assignment problem, such as neural networks~\cite{li2024comprehensive}, auction
+algorithm~\cite{wang2024collaborative}, tabu search~\cite{yao2024tabu}, simulated annealing
+algorithm~\cite{khurshid2024hybrid}, VLSN~\cite{yue2024graph}.
+However, in cooperative interception scenarios, the aforementioned algorithms struggle to
+handle the highly dynamic nature of the battlefield due to their high time complexity, and they
+fail to meet the dual requirements of both speed and optimality.
+
+The effectiveness of the terminal guidance phase in multi-target interception is significantly
+influenced by the cooperative guidance law, a critical factor requiring thorough consideration.
+The target assignment strategy transforms swarm operations into a coordinated multi-to-one
+interception problem, with current research focusing on three key areas: angular coordination,
+temporal coordination, and intelligent cooperation.
+Significant progress has been made in temporal coordination.
+Classical proportional navigation-based guidance laws enable synchronized multi-missile attacks
+on a single target~\cite{tao2024analytical}.
+Adaptive control methods adjust attack timing based on real-time operational conditions, making
+them suitable for intercepting maneuvering targets~\cite{wang2025generalized,zhang2022multiple}.
+Sliding Mode Control (SMC) is widely adopted for cooperative
+interception~\cite{sinha2020supertwisting}, with SMC incorporating miss distance and attack
+time constraints enhancing interception
+accuracy~\cite{shen2025three,jin2025cooperative,hu2019sliding}.
+Considerable research has also been conducted on angular coordination.
+From a traditional control perspective, backstepping control~\cite{li2024adaptive} and
+leader-follower cooperative methods~\cite{he2017impact} significantly improve interception
+efficiency.
+SMC with angular constraints is prevalent in cooperative interception, encompassing approaches
+based on impact angle constraints~\cite{wang2025hybrid} and line-of-sight angle
+constraints~\cite{li2024near}.
+Optimal control methods applied to impact angle-constrained cooperative guidance enhance
+precision by integrating impact angle and line-of-sight angle
+constraints~\cite{wang2025adaptive,tao2023optimal}.
+
+Recent advancements in intelligent technologies have driven extensive research into cooperative
+interception strategies for UAV swarms, with intelligent algorithms demonstrating substantial
+potential in addressing complex multi-target scenarios~\cite{chen2024enhanced,wu2020collaborative}.
+Optimization-based approaches, such as Particle Swarm Optimization (PSO), excel in
+collaborative attack problems by autonomously optimizing resource allocation and maximizing
+operational efficiency~\cite{zhao2024hierarchical,wu2020collaborative}.
+Search-based algorithms, like A*~\cite{liao2024research}, enable efficient path planning for
+coordinated attacks.
+Control-based methods, including Model Predictive Control
+(MPC)~\cite{kim2024adaptive}, provide robust guidance under dynamic constraints.
+Moreover, the integration of neural networks with reinforcement learning, particularly deep
+reinforcement learning (DRL), enhances the adaptability and intelligence of interception
+strategies~\cite{luo2022uav,zhan2022multiple,wang2021uav}.
+DRL enables UAV swarms to learn complex policies from high-dimensional data, optimizing target
+assignment and maneuvering in real-time to counter maneuvering targets~\cite{sun2024memory}.
+In contrast, conventional cooperative interception guidance methods rely heavily on
+linearization and simplifying assumptions to design feasible guidance laws~\cite{zhao2025global}.
+These methods often struggle to address the complexity of dynamic, non-linear environments
+involving maneuvering swarm targets.
+Data-driven intelligent cooperative interception methods, by contrast, leverage extensive
+datasets to learn adaptive strategies, significantly reducing dependence on restrictive
+assumptions~\cite{fainkich2025cooperative}.
+By modeling complex interactions through neural networks and DRL, these methods achieve greater
+robustness and flexibility.
+Despite advancements, intelligent cooperative interception methods struggle with maneuvering
+swarm targets in complex dynamic environments due to limited model generalization, low training
+efficiency, and low interception success rates, particularly in large-scale swarm combat
+requiring precise temporal coordination~\cite{horyna2023decentralized}.
+Addressing these challenges requires further research into scalable, generalizable, and
+efficient algorithms to fully realize the potential of intelligent cooperative interception.
+
+In summary, existing cooperative interception methods for countering attacking UAV swarms with
+adaptive penetration capabilities suffer from low interception success rates in complex dynamic
+environments.
+Specifically, target assignment methods exhibit low allocation efficiency, while cooperative
+interception guidance strategies struggle with terminal overload saturation and insufficient
+adaptability to dynamic target maneuvers in practical scenarios, hindering effective swarm
+coordination.
+Consequently, more research is necessary to address these challenges.
+
+This study proposes a swarm cooperative interception method based on multi-agent reinforcement
+learning and IDBO algorithm, enhancing target assignment efficiency and guidance strategy
+performance to achieve precise and efficient interception of maneuvering targets.
+The proposed intelligent cooperative interception algorithm offers the following advantages.
+
+\begin{enumerate}
+\item A distributed consensus-based target assignment scheme is proposed, which integrates an
+improved Dung Beetle Optimization (IDBO) algorithm with a combat-dominance assessment model.
+This design supports rapid many-to-one allocation under limited communication, leading to more
+efficient and reliable target assignment for cooperative interception.
+
+\item ART-MAPPO is proposed as a CTDE-based cooperative interception guidance learning
+framework, which employs an attention--residual feature extractor and a GRU temporal encoder,
+and uses trust-modulated exploration together with dual-clip PPO and adaptive KL
+regularization for stable policy learning. This design improves convergence behavior and
+training efficiency in highly maneuverable swarm-adversarial environments.
+
+\item A task-oriented reward design and training stabilization strategy are incorporated into
+the cooperative interception framework to support time-coordinated guidance under bounded
+overload commands. Rather than treating reward shaping or dual-clip PPO as standalone
+methodological novelties, this work uses them as task-adapted components that couple target
+approach, terminal interception, temporal coordination, and control-effort regularization in a
+large-scale maneuvering swarm scenario.
+\end{enumerate}
+
+The paper is structured as follows: Section~\ref{sec:method} presents relevant problem modeling and foundational theory. Section~\ref{sec:target_assignment} and Section~\ref{sec:cooperative_algorithm} provide a detailed description of our approach, including its framework, modules, algorithms, and rationale. Section~\ref{sec:simulation} covers experiments, results, and discussions. Lastly, Section~\ref{sec:conclusion} summarizes the paper and outlines future directions.
+
+\section{Backgrounds and Preliminaries}
+\label{sec:method}
+
+In this section, we first introduce the modeling of multi-target interception of UAVs, and
+then review reinforcement learning methods.
+
+\subsection{Problem Modeling}
+
+The multi-target intelligent interception problem can be decomposed into two subproblems:
+target assignment and intelligent cooperative interception, with the swarm combat scenario
+illustrated in Fig.~\ref{fenpei}.
+In this scenario, the attacking swarm aims to penetrate a high-value target area, while the
+defending swarm seeks to fully intercept the incoming UAVs.
+During the target assignment phase, the defending swarm assesses its own flight status and
+that of the attacking swarm using onboard sensors, subsequently allocating each defender to an
+appropriate interception target via the target assignment strategy.
+In the intelligent cooperative interception phase, defenders assigned to the same target employ
+coordinated maneuvering strategies to intercept and neutralize the target.
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=2.8in]{fenpei.pdf}
+\caption{Cluster target interception problem.}
+\label{fenpei}
+\end{figure}
+
+The object of study in this paper is the fixed-wing UAV. Fig.~\ref{jianmo} shows the
+horizontal projection used to define the heading and line-of-sight (LOS) azimuth, whereas the
+guidance model and simulations propagate the complete three-dimensional position and velocity.
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=2.6in]{pic02.pdf}
+\caption{Schematic diagram of confrontation and interception.}
+\label{jianmo}
+\end{figure}
+
+The three-dimensional point-mass kinematic model of a single UAV is
+\begin{equation}
+\label{yundongxue}
+\left\{\begin{aligned}
+\dot{x}&=V\cos\theta\cos\gamma,\\
+\dot{y}&=V\cos\theta\sin\gamma,\\
+\dot{z}&=V\sin\theta,
+\end{aligned}\right.
+\end{equation}
+where $(x,y,z)$ are the three-dimensional position coordinates, $V$ is the velocity
+magnitude, $\gamma$ is the heading angle, and $\theta$ is the flight-path (pitch) angle.
+
+In an interception mission, let $\mathbf p_A,\mathbf p_D\in\mathbb R^3$ and
+$\mathbf v_A,\mathbf v_D\in\mathbb R^3$ denote the attacker and defender states. Their
+three-dimensional relative geometry is
+\begin{equation}
+\label{gongfang}
+\begin{aligned}
+\mathbf r_{AD}&=\mathbf p_A-\mathbf p_D,\qquad
+r=\|\mathbf r_{AD}\|_2,\\
+\boldsymbol\ell_{AD}&=\mathbf r_{AD}/r,\qquad
+\dot r=\boldsymbol\ell_{AD}^{\top}(\mathbf v_A-\mathbf v_D).
+\end{aligned}
+\end{equation}
+Here, $r$ is the three-dimensional inter-UAV distance and
+$\boldsymbol\ell_{AD}$ is the LOS unit vector; its horizontal projection provides the
+plan-view geometry shown in Fig.~\ref{jianmo}.
+
+The relationship between the flight state and the three commanded load channels is
+\begin{equation}
+\label{guozai}
+\left\{\begin{aligned}
+\dot V&=n_xg,\\
+\dot\gamma&=\frac{n_yg}{V\cos\theta},\\
+\dot\theta&=\frac{n_zg}{V},
+\end{aligned}\right.
+\end{equation}
+where $n_x$ is the axial load-factor command, $n_y$ and $n_z$ are the horizontal and vertical
+normal load-factor commands, respectively, and $g$ is gravitational acceleration. Thus,
+$n_y$ primarily changes heading, while $n_z$ changes the flight-path angle and altitude.
+In the multi-agent setting of Section~\ref{sec:cooperative_algorithm}, these variables carry
+an agent subscript $i$.
+
+During cooperative interception, the remaining impact time is defined as:
+\begin{equation}
+\label{shijian}
+t_{go}=\frac{r}{\left|\dot{r}\right|}
+\end{equation}
+
+The three-dimensional Zero-Effort Miss (ZEM) is defined as
+\begin{equation}
+\label{ZEM}
+\operatorname{ZEM}=\left\|\mathbf r_{AD}
++(\mathbf v_A-\mathbf v_D)t_{go}\right\|_2.
+\end{equation}
+
+\subsection{Reinforcement Learning}
+
+Reinforcement learning (RL) is built on the Markov Decision Process (MDP), comprising state
+space $\mathcal{S}$, action space $\mathcal{A}$, reward function $R$, policy $\pi$, and state
+transition function $P$.
+At each step, the agent selects action $a$ from state $s$, receives reward $r$, and
+transitions to $s'$.
+The key value functions are:
+\begin{equation}
+\label{RLV}
+V^{\pi}(s)=E_{\pi}\left[\sum_{t=0}^{\infty}\gamma_{\mathrm{RL}}^{t}r_{t}\mid s_{0}=s\right]
+\end{equation}
+\begin{equation}
+\label{RLQ}
+Q^{\pi}(s,a)=E_{\pi}\left[\sum_{t=0}^{\infty}\gamma_{\mathrm{RL}}^{t}r_{t}\mid s_{0}=s,a_{0}=a\right]
+\end{equation}
+where $\gamma_{\mathrm{RL}}\in[0,1]$ is the discount factor.
+
+
+
+
+
+
+\section{Target Assignment via Distributed Consensus-Based IDBO Algorithm}
+\label{sec:target_assignment}
+
+This section formulates cooperative target assignment as a capacitated bipartite matching
+problem and then describes how local IDBO search and neighbor-to-neighbor bidding produce a
+consistent many-to-one assignment. To avoid overloading the notation used later for learning,
+let $\mathcal{D}=\{d_1,\ldots,d_{N_D}\}$ and
+$\mathcal{T}=\{t_1,\ldots,t_{N_A}\}$ denote the defender and target sets, respectively;
+$i$ always indexes a defender and $j$ a target in this section.
+
+\subsection{Pairwise Interception Model and Assignment Objective}
+\label{subsec:problem_formulation}
+
+Figure~\ref{km} illustrates the bipartite assignment structure. The binary variable
+$X_{ij}=1$ indicates that defender $d_i$ is assigned to target $t_j$. A useful edge should
+simultaneously have a small predicted miss tendency and a favorable heading geometry. We
+therefore define the pairwise interception-probability proxy as
+\begin{equation}
+\label{eq:pair_score}
+\begin{aligned}
+p_{ij}^{\mathrm{int}}
+ &= \omega_Z\exp\!\left[-\frac{1}{2}
+       \left(\frac{\mathrm{ZEM}_{ij}}{s_Z}\right)^2\right]
+  + \omega_{\ell}\exp\!\left[-\frac{1}{2}
+       \left(\frac{e_{ij}^{\ell}}{s_{\ell}}\right)^2\right],\\
+e_{ij}^{\ell}
+ &= \arccos\!\left(\operatorname{clip}\!\left(
+ \frac{\mathbf v_{D_i}^{\mathsf T}\boldsymbol\ell_{ij}}
+ {\|\mathbf v_{D_i}\|_2+\varepsilon_{\mathrm{num}}},-1,1\right)\right),
+\end{aligned}
+\end{equation}
+where $s_Z=[(N_DN_A)^{-1}\sum_{i,j}\mathrm{ZEM}_{ij}^{2}]^{1/2}
++\varepsilon_{\mathrm{num}}$ and
+$s_{\ell}=[(N_DN_A)^{-1}\sum_{i,j}(e_{ij}^{\ell})^{2}]^{1/2}
++\varepsilon_{\mathrm{num}}$ are root-mean-square normalization scales. Here,
+$\boldsymbol\ell_{ij}=(\mathbf p_{T_j}-\mathbf p_{D_i})/
+\|\mathbf p_{T_j}-\mathbf p_{D_i}\|_2$ is the three-dimensional line-of-sight unit vector,
+and $\operatorname{clip}(\cdot,-1,1)$ keeps the inverse-cosine argument numerically valid.
+The nonnegative weights satisfy $\omega_Z+\omega_{\ell}=1$.
+Thus, either a large predicted miss or poor velocity-to-LOS alignment reduces the edge value,
+whereas a geometrically favorable
+pair has $p_{ij}^{\mathrm{int}}$ close to one. The RMS scales avoid cancellation of signed
+ZEM values and make the two terms comparable. In implementation, this bounded quantity is
+used as a probability proxy; the product model below adopts the usual conditional-independence
+approximation for different defenders assigned to the same target.
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=2.5in]{KM1.pdf}
+\caption{Bipartite representation of defender--target assignment.}
+\label{km}
+\end{figure}
+
+The tactical objective is to reduce the expected number of surviving targets. Assigning an
+additional capable defender to target $t_j$ multiplies its approximate survival probability
+by another failure factor. The resulting capacitated assignment is
+\begin{equation}
+\label{eq:optimization_formulation}
+\begin{aligned}
+\min_{\mathbf X}\quad
+&J(\mathbf X)=\sum_{j=1}^{N_A}\prod_{i=1}^{N_D}
+       \left(1-p_{ij}^{\mathrm{int}}\right)^{X_{ij}}\\
+\mathrm{s.t.}\quad
+&\sum_{j=1}^{N_A}X_{ij}=1, && i=1,\ldots,N_D,\\
+&1\leq\sum_{i=1}^{N_D}X_{ij}\leq L_{\max},
+&&j=1,\ldots,N_A,\\
+&X_{ij}\in\{0,1\}.&&
+\end{aligned}
+\end{equation}
+The first constraint assigns every defender to exactly one target; the second prevents both
+uncovered targets and excessive concentration. A feasible assignment requires
+$N_A\leq N_D\leq L_{\max}N_A$.
+
+\subsection{Local IDBO Search and Consensus Bidding}
+\label{subsec:idbo_algorithm}
+
+The distributed solution alternates between two interpretable operations. Each defender first
+searches for a promising target using locally available engagement information; neighboring
+defenders then reconcile conflicting choices by exchanging target-specific bids. Defender
+$d_i$ maintains an unconstrained preference vector
+$\boldsymbol{\xi}_i\in\mathbb{R}^{N_A}$ and maps it to soft preferences
+$\pi_{ij}=\sigma(\xi_{ij})$, where $\sigma(x)=(1+e^{-x})^{-1}$. This separates the
+continuous search variable $\xi_{ij}$ from the binary assignment variable $X_{ij}$.
+
+For target $t_j$, let $\widehat n_{ij}=\sum_{\ell\in\mathcal N_i\setminus\{i\}}
+\widehat\pi_{\ell j}$ be the assignment load estimated from defender $d_i$'s neighbor set
+$\mathcal N_i$. The target-specific utility and aggregate local fitness are
+\begin{equation}
+\label{eq:local_utility}
+\begin{aligned}
+u_{ij}(\boldsymbol\xi_i)
+ &=\pi_{ij}\bigl(p_{ij}^{\mathrm{int}}+\lambda_A\chi_{ij}\bigr)
+ -\lambda_L\pi_{ij}
+   \left[\widehat n_{ij}+\pi_{ij}-L_{\max}\right]_{+},\\
+\mathcal F_i(\boldsymbol\xi_i)&=\sum_{j=1}^{N_A}u_{ij}(\boldsymbol\xi_i),
+\end{aligned}
+\end{equation}
+where $[x]_{+}=\max(0,x)$ and $\chi_{ij}$ is the combat advantage. The first term favors
+interceptable and tactically advantageous targets; the hinge term is inactive below the
+estimated capacity and increases only when another defender would oversubscribe that target.
+
+The advantage combines time, relative-velocity compatibility, encounter geometry, and local
+competition:
+\begin{equation}
+\label{eq:adversarial_advantage}
+\begin{aligned}
+\chi_{ij}={}&
+\exp\!\left(-\frac{\Delta t_{ij}}{T_c}\right)
+\left[1-\frac{\|\mathbf v_{D_i}-\mathbf v_{T_j}\|_2}{v_c}\right]_{+}
+\left[\cos(\vartheta_{ij})\right]_{+}\\
+&-\lambda_C\!\sum_{\ell\in\mathcal N_i\setminus\{i\}}
+\frac{p_{\ell j}^{\mathrm{int}}}
+{p_{ij}^{\mathrm{int}}+p_{\ell j}^{\mathrm{int}}+\varepsilon_{\mathrm{num}}}
+\widehat\pi_{\ell j}.
+\end{aligned}
+\end{equation}
+Here, $\Delta t_{ij}$ is the estimated intercept time, $\vartheta_{ij}$ is the encounter
+aspect angle, and $T_c$ and $v_c$ are positive normalization constants. The positive-part
+operators prevent a large relative-speed mismatch or an unfavorable aspect angle from
+producing a negative multiplicative ``advantage.'' The final term lowers the utility of a
+target already preferred by capable neighbors.
+
+Rather than presenting four long update equations in succession, we collect the rolling,
+dancing, breeding, and stealing operations into one implementation operator:
+\begin{equation}
+\label{eq:idbo_update}
+\boldsymbol\xi_i^{(k+1)}=
+\Pi_{\Xi}\!\left[
+\mathcal U_{\mathrm{IDBO}}
+\bigl(\boldsymbol\xi_i^{(k)},\mathcal F_i,
+      \boldsymbol\chi_i^{(k)};k\bigr)\right].
+\end{equation}
+The four operations respectively perform local exploitation, controlled perturbation, elite
+recombination, and preference exchange. Their coefficients decay with assignment iteration
+$k$, so early iterations explore broadly and later iterations refine high-utility candidates.
+$\Pi_{\Xi}$ clips the latent preferences to their numerical search bounds after every update.
+The procedural order and feasibility repair are stated explicitly in Algorithm~\ref{alg:idbo};
+the compact form in \eqref{eq:idbo_update} keeps the main physical flow visible.
+
+After local search, defender $d_i$ selects exactly one candidate target,
+\begin{equation}
+\label{eq:candidate_assignment}
+\widetilde X_{ij}^{(k+1)}=
+\mathbb I\!\left[j=\underset{r\in\{1,\ldots,N_A\}}{\arg\max}
+u_{ir}(\boldsymbol\xi_i^{(k+1)})\right],
+\end{equation}
+with deterministic index-based tie breaking. Unlike independent thresholding, this mapping
+cannot return either zero targets or multiple targets for one defender. The corresponding bid
+amplifies targets for which the defender has an above-average combat advantage:
+\begin{equation}
+\label{eq:bid_formulation}
+b_{ij}^{(k+1)}=\widetilde X_{ij}^{(k+1)}u_{ij}
+\exp\!\left(\frac{\chi_{ij}-\bar\chi_i}
+{s_{\chi,i}+\varepsilon_{\mathrm{num}}}\right),
+\end{equation}
+where $\bar\chi_i$ and $s_{\chi,i}$ are the mean and standard deviation of
+$\{\chi_{ij}\}_{j=1}^{N_A}$.
+
+Each defender stores a local winner set $\mathcal W_{i,j}$ for every target. After receiving
+neighbor copies, it retains the highest $L_{\max}$ bids:
+\begin{equation}
+\label{eq:cbba_update}
+\mathcal W_{i,j}^{(k+1)}=\operatorname{Top}_{L_{\max}}
+\left(\mathcal W_{i,j}^{(k)}
+\cup\!\bigcup_{\ell\in\mathcal N_i}\mathcal W_{\ell,j}^{(k)}
+\cup\{(d_i,b_{ij}^{(k+1)})\}\right).
+\end{equation}
+Because only the selected target receives a nonzero bid, the winner sets enforce the target
+capacity without destroying the one-target-per-defender interpretation. A defender displaced
+from a full winner set removes that target from its local candidate and searches/bids again in
+the next iteration.
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=3.2in]{assignment.pdf}
+\caption{Distributed IDBO assignment flow: local preference search, one-hot candidate
+selection, top-$L_{\max}$ consensus bidding, and engagement-information update.}
+\label{fig:idbo_flowchart}
+\end{figure}
+
+Let $\mathbf W_i^{(k)}=\{\mathcal W_{i,j}^{(k)}\}_{j=1}^{N_A}$ and let
+$\mathcal E$ denote the communication edges. The normalized pairwise disagreement is
+\begin{equation}
+\label{eq:convergence}
+\Gamma^{(k)}=\frac{1}{|\mathcal E|}
+\sum_{(i,\ell)\in\mathcal E}
+\mathbb I\!\left[\mathbf W_i^{(k)}\neq\mathbf W_{\ell}^{(k)}\right]
+\leq\varepsilon_{\mathrm{con}}.
+\end{equation}
+This definition directly counts communication links whose winner information is inconsistent;
+it is zero when all neighboring defenders agree.
+
+\subsection{Convergence Scope and Computational Cost}
+\label{subsec:convergence_equilibrium}
+
+The convergence statement concerns agreement of the distributed assignment process for a
+fixed engagement snapshot, not global optimality of the nonconvex problem in
+\eqref{eq:optimization_formulation}. We assume that the defender/target sets are fixed during
+one assignment round, the communication graph is connected with bounded delay, bids use
+deterministic tie breaking, and accepted local candidates are retained only when they improve
+the projected local fitness. Under these conditions, each target's highest bids propagate
+through the connected graph in finitely many communication rounds. Since the binary feasible
+set and the winner sets are finite, the deterministic local-search/consensus process reaches a
+locally stable fixed point unless the prescribed iteration limit is met first. This guarantees
+consistent winner information; it does not establish a global optimum or an
+$\varepsilon$-Nash bound.
+
+For one defender and one assignment iteration, evaluating a population of $N_{\mathrm{pop}}$
+candidates over $N_A$ targets costs $O(N_{\mathrm{pop}}N_A)$, exchanging target bids costs
+$O(N_A|\mathcal N_i|)$, and updating the advantage costs $O(N_A)$. For $K_{\mathrm{IDBO}}$
+iterations, these terms are multiplied by $K_{\mathrm{IDBO}}$; per-defender memory is
+$O(N_{\mathrm{pop}}N_A+N_A)$.
+
+\begin{algorithm}[!t]
+\caption{Distributed Consensus-Based IDBO Target Assignment}
+\label{alg:idbo}
+\footnotesize
+\begin{algorithmic}[1]
+\REQUIRE $\mathcal D$, $\mathcal T$, $p_{ij}^{\mathrm{int}}$, neighbor sets
+$\mathcal N_i$, capacity $L_{\max}$, tolerance $\varepsilon_{\mathrm{con}}$,
+maximum iteration $K_{\max}$
+\ENSURE Consensus assignment $\mathbf X^{*}$
+\STATE Initialize $\boldsymbol\xi_i$, bids $b_{ij}$, and local winner sets
+$\mathcal W_{i,j}$ for every defender
+\FOR{$k=0$ to $K_{\max}-1$}
+    \FOR{each defender $d_i$}
+        \STATE Evaluate $p_{ij}^{\mathrm{int}}$, $\chi_{ij}$, and
+        $u_{ij}$ from the current engagement snapshot
+        \STATE Update $\boldsymbol\xi_i$ with the IDBO operator in
+        \eqref{eq:idbo_update} and project it to the search bounds
+        \STATE Form the one-hot candidate $\widetilde{\mathbf X}_{i,:}$ using
+        \eqref{eq:candidate_assignment} and compute its bid using
+        \eqref{eq:bid_formulation}
+        \STATE Exchange $\{\mathcal W_{i,j}\}_{j=1}^{N_A}$ with neighbors and
+        retain top-$L_{\max}$ bids using \eqref{eq:cbba_update}
+        \STATE If displaced, remove the conflicting candidate before the next search step
+    \ENDFOR
+    \STATE Compute $\Gamma^{(k+1)}$ using \eqref{eq:convergence}
+    \IF{$\Gamma^{(k+1)}\leq\varepsilon_{\mathrm{con}}$}
+        \STATE \textbf{break}
+    \ENDIF
+\ENDFOR
+\STATE Construct $\mathbf X^{*}$ from the agreed winner sets and apply a deterministic
+feasibility repair if an uncovered target remains
+\end{algorithmic}
+\end{algorithm}
+ 
+\section{ART-MAPPO: Attention-Residual and Trust-Aware MAPPO for Cooperative Swarm Interception}
+\label{sec:cooperative_algorithm}
+
+Given the consensus assignment $\mathbf X^{*}$, ART-MAPPO learns cooperative guidance under
+the centralized-training--decentralized-execution (CTDE) paradigm. Its information flow is
+kept explicit throughout this section: normalized physical observations are encoded by a
+task-aware attention-residual backbone, a GRU retains engagement history, trust modulates
+training-time exploration, and dual-clip/KL regularization stabilizes the policy update.
+
+\subsection{Task-Aware Attention-Residual Policy Network}
+\label{subsec:attention_residual}
+
+Let $\mathbf o_i^{(t)}=[o_i^{(t),1},\ldots,o_i^{(t),n_o}]^{\top}$ denote defender $i$'s
+local observation at guidance step $t$. Instead of applying a fully connected layer and then
+arbitrarily reshaping mixed features into tokens, we embed each physical channel separately:
+\begin{equation}
+\label{eq:feature_tokens}
+\mathbf H_i^{(0)}=
+\begin{bmatrix}
+f_1(o_i^{(t),1})^{\top} & \cdots & f_{n_o}(o_i^{(t),n_o})^{\top}
+\end{bmatrix}^{\top}
+\in\mathbb R^{n_o\times d_e},
+\end{equation}
+where each $f_r:\mathbb R\rightarrow\mathbb R^{d_e}$ is a learned channel embedding.
+Consequently, one token continues to represent one interpretable guidance quantity, such as
+LOS rate or time-coordination error.
+
+For attention head $h=1,\ldots,H$, let $d_h=d_e/H$. The complete attention mapping is
+\begin{equation}
+\label{eq:task_attention}
+\begin{aligned}
+\mathbf Q_h&=\mathbf H_i^{(0)}\mathbf W_h^Q,\quad
+\mathbf K_h=\mathbf H_i^{(0)}\mathbf W_h^K,\quad
+\mathbf U_h=\mathbf H_i^{(0)}\mathbf W_h^U,\\
+\boldsymbol{\alpha}_h&=\operatorname{softmax}
+\left(\frac{\mathbf Q_h\mathbf K_h^{\top}}{\sqrt{d_h}}+\mathbf M_i^{(t)}\right),
+\quad \operatorname{head}_h=\boldsymbol{\alpha}_h\mathbf U_h,\\
+\mathbf H_{i,\mathrm{att}}&=\mathbf H_i^{(0)}+
+\operatorname{Dropout}_p\!\left(
+[\operatorname{head}_1\|\cdots\|\operatorname{head}_H]\mathbf W^O\right).
+\end{aligned}
+\end{equation}
+Here, $\mathbf W_h^Q,\mathbf W_h^K,\mathbf W_h^U\in\mathbb R^{d_e\times d_h}$ and
+$\mathbf W^O\in\mathbb R^{d_e\times d_e}$, so every matrix dimension is explicit.
+$M_{i,rs}^{(t)}=-\infty$ blocks information from an unavailable sensor channel and is zero
+otherwise; when all channels are observed, $\mathbf M_i^{(t)}=\mathbf0$. Thus, attention
+learns which physical quantities should interact without erasing their channel identities.
+
+The attended tokens are vectorized and projected to $\mathbf h_i^{(1)}\in\mathbb R^d$.
+Each of the following $L$ residual blocks is written compactly as
+\begin{equation}
+\label{eq:residual_block}
+\begin{aligned}
+\mathbf u_i^{(\ell)}&=\operatorname{ReLU}\!\left(
+\operatorname{LN}_1^{(\ell)}
+(\mathbf h_i^{(\ell)}\mathbf W_1^{(\ell)}+\mathbf b_1^{(\ell)})\right),\\
+\mathcal R_{\ell}(\mathbf h_i^{(\ell)})&=
+\operatorname{LN}_2^{(\ell)}\!\left(
+\mathbf u_i^{(\ell)}\mathbf W_2^{(\ell)}+\mathbf b_2^{(\ell)}\right),\\
+\mathbf h_i^{(\ell+1)}&=\operatorname{ReLU}
+\left(\mathbf h_i^{(\ell)}+
+\mathcal R_{\ell}(\mathbf h_i^{(\ell)})\right).
+\end{aligned}
+\end{equation}
+The identity shortcut preserves primitive kinematic information and provides a direct gradient
+path. It improves optimization conditioning, but no strict nonvanishing-gradient lower bound is
+claimed because nonlinear branch derivatives can cancel and ReLU units can be inactive.
+
+A defender-specific GRU state $\mathbf g_i^{(t)}$ summarizes the engagement history, after
+which the shared actor samples a bounded continuous guidance action:
+\begin{equation}
+\label{eq:actor_policy}
+\begin{aligned}
+\mathbf g_i^{(t)}&=\operatorname{GRU}
+(\mathbf h_i^{(L+1)},\mathbf g_i^{(t-1)};\mathbf W_{\mathrm{GRU}}),\\
+\mathbf a_i^{(t)}&\sim\pi_{\theta}(\cdot\mid\mathbf o_i^{(t)})
+=\mathcal N\!\left(\boldsymbol\mu_{\theta}(\mathbf g_i^{(t)}),
+\operatorname{diag}(\boldsymbol\sigma_{\theta}^{2}(\mathbf g_i^{(t)}))\right),\\
+\mathbf a_i^{(t)}&=[n_{x_i}^{(t)},n_{y_i}^{(t)},n_{z_i}^{(t)}]^{\top}
+\in\mathcal A.
+\end{aligned}
+\end{equation}
+The sampled action is clipped to the three-dimensional load-factor envelope
+$\mathcal A=[-0.1,1]\times[-1,1]\times[-1,1]$. The three components regulate speed,
+heading, and flight-path angle through Eq.~\eqref{guozai}, respectively.
+
+During training, the centralized critic receives the joint state
+\begin{equation}
+\label{eq:critic_state}
+\mathbf s_t=[\mathbf o_1^{(t)}\|\cdots\|\mathbf o_{N_D}^{(t)}]
+\in\mathbb R^{N_Dn_o},\qquad V_{\phi}(\mathbf s_t)\in\mathbb R.
+\end{equation}
+At deployment, each actor uses only its own observation and recurrent state.
+
+\subsection{Trust-Modulated Tactical Exploration}
+\label{subsec:trust_exploration}
+
+Trust is a training-time memory of how reliably a defender performs relative to the recent
+swarm baseline; it is not a flight-safety certificate. Let
+$G_i^{(k)}=\sum_{t=0}^{H_{\mathrm{ep}}-1}\gamma_{\mathrm{RL}}^t r_i^{(t)}$ be the return
+of defender $i$ in episode $k$. Batch statistics and their exponential moving averages are
+\begin{equation}
+\label{eq:trust_statistics}
+\begin{aligned}
+\bar G^{(k)}&=\frac{1}{N_D}\sum_{i=1}^{N_D}G_i^{(k)},\qquad
+v_G^{(k)}=\frac{1}{N_D}\sum_{i=1}^{N_D}(G_i^{(k)}-\bar G^{(k)})^2,\\
+\mu_G&\leftarrow(1-\rho)\mu_G+\rho\bar G^{(k)},\qquad
+\sigma_G^2\leftarrow(1-\rho)\sigma_G^2+\rho v_G^{(k)},\\
+\widetilde G_i^{(k)}&=\frac{G_i^{(k)}-\mu_G}
+{\sqrt{\sigma_G^2+\varepsilon_{\mathrm{num}}}}.
+\end{aligned}
+\end{equation}
+The trust state is then updated by
+\begin{equation}
+\label{eq:trust_update}
+\mathcal T_i^{(k+1)}=(1-\alpha_T)\mathcal T_i^{(k)}
++\alpha_T\sigma(\tau_T\widetilde G_i^{(k)}),
+\end{equation}
+where $\alpha_T\in(0,1)$ controls memory and $\tau_T>0$ controls sensitivity. Above-baseline
+returns increase trust and reduce additional exploration; below-baseline returns do the
+opposite.
+
+During training, the action distribution is a trust-dependent mixture
+\begin{equation}
+\label{eq:exploration_policy}
+\begin{aligned}
+\pi_i^{\mathrm{mix}}(\mathbf a\mid\mathbf o_i)
+&=(1-\beta_i)\pi_{\theta}(\mathbf a\mid\mathbf o_i)
++\beta_i\pi_i^{\mathrm{guide}}(\mathbf a),\\
+\pi_i^{\mathrm{guide}}(\mathbf a)&=
+\omega_{\mathrm{PN}}\delta(\mathbf a-\mathbf a_{\mathrm{PN}})
++\omega_{\mathrm{pr}}\delta(\mathbf a-\mathbf a_{\mathrm{probe}})\\
+&\quad+\omega_{\mathrm{rnd}}\mathcal U(\mathcal A),\\
+\beta_i&=1-\mathcal T_i,\qquad
+\omega_{\mathrm{PN}}+\omega_{\mathrm{pr}}+\omega_{\mathrm{rnd}}=1.
+\end{aligned}
+\end{equation}
+$\mathbf a_{\mathrm{PN}}$ is the classical PN command clipped to $\mathcal A$.
+$\mathbf a_{\mathrm{probe}}$ is a feasible boundary command whose sign is chosen to reduce the
+current velocity-to-LOS error; it probes maneuver authority without invoking an undefined
+action-value function or intentionally selecting the worst-valued action. The uniform term
+maintains residual coverage. At deployment, guided exploration is disabled ($\beta_i=0$), so
+the decentralized learned policy supplies the command.
+
+\subsection{Dual-Clip Optimization with Adaptive KL Regularization}
+\label{subsec:dual_clip_kl}
+
+For a rollout, generalized advantage estimation is computed from
+\begin{equation}
+\label{eq:gae}
+\begin{aligned}
+\delta_t&=r_i^{(t)}+\gamma_{\mathrm{RL}}V_{\phi}(\mathbf s_{t+1})
+-V_{\phi}(\mathbf s_t),\\
+\widehat A_t&=\sum_{\ell=0}^{H_{\mathrm{ep}}-t-1}
+(\gamma_{\mathrm{RL}}\lambda_{\mathrm{GAE}})^{\ell}\delta_{t+\ell}.
+\end{aligned}
+\end{equation}
+Let $\varrho_t(\theta)=\pi_{\theta}(\mathbf a_t\mid\mathbf o_t)/
+\pi_{\theta_{\mathrm{old}}}(\mathbf a_t\mid\mathbf o_t)$ denote the importance ratio. The
+standard and dual-clipped surrogates are combined in one definition:
+\begin{equation}
+\label{eq:dual_clip}
+\begin{aligned}
+\bar\varrho_t&=\operatorname{clip}
+(\varrho_t,1-\varepsilon_{\mathrm{PPO}},1+\varepsilon_{\mathrm{PPO}}),\\
+L_t^{\mathrm{clip}}&=\min(\varrho_t\widehat A_t,
+\bar\varrho_t\widehat A_t),\\
+J^{\mathrm{DC}}(\theta)&=\mathbb E_t\!\left[
+\begin{cases}
+\max(L_t^{\mathrm{clip}},c_{\mathrm{DC}}\widehat A_t),&\widehat A_t<0,\\
+L_t^{\mathrm{clip}},&\widehat A_t\geq0,
+\end{cases}\right].
+\end{aligned}
+\end{equation}
+For negative-advantage samples, the additional floor prevents an arbitrarily unfavorable
+surrogate contribution. It clips the optimization objective; it does not impose a hard
+two-sided interval on the realized probability ratio. We use
+$c_{\mathrm{DC}}>1+\varepsilon_{\mathrm{PPO}}$.
+
+The empirical policy divergence is
+$\widehat D_{\mathrm{KL}}=\mathbb E_t[\log\pi_{\theta_{\mathrm{old}}}
+(\mathbf a_t\mid\mathbf o_t)-\log\pi_{\theta}(\mathbf a_t\mid\mathbf o_t)]$. Its penalty
+coefficient adapts after epoch $k$ as
+\begin{equation}
+\label{eq:kl_adaptation}
+\beta_{\mathrm{KL}}^{(k+1)}=
+\begin{cases}
+\min(1.5\beta_{\mathrm{KL}}^{(k)},\beta_{\max}),
+&\widehat D_{\mathrm{KL}}>2\delta_{\mathrm{KL}},\\
+\max(0.9\beta_{\mathrm{KL}}^{(k)},\beta_{\min}),
+&\widehat D_{\mathrm{KL}}<0.5\delta_{\mathrm{KL}},\\
+\beta_{\mathrm{KL}}^{(k)},&\text{otherwise}.
+\end{cases}
+\end{equation}
+Thus, excessive policy drift strengthens the next update's penalty, while very small drift
+relaxes it. This mechanism controls update speed; any relationship to load-factor smoothness is
+validated empirically rather than treated as a structural load bound.
+
+With $\widehat V_t^{\mathrm{targ}}=\widehat A_t+V_{\phi}(\mathbf s_t)$, define
+$L_V=B^{-1}\sum_{t=1}^{B}(V_{\phi}(\mathbf s_t)-\widehat V_t^{\mathrm{targ}})^2$ and
+$S[\pi_{\theta}]=-\mathbb E_t[\log\pi_{\theta}(\mathbf a_t\mid\mathbf o_t)]$. The complete
+training loss is
+\begin{equation}
+\label{eq:total_loss}
+\mathcal L(\theta,\phi)=-J^{\mathrm{DC}}(\theta)
++\beta_{\mathrm{KL}}\widehat D_{\mathrm{KL}}
++c_vL_V-c_eS[\pi_{\theta}].
+\end{equation}
+The actor minimizes the policy, KL, and entropy terms; the critic minimizes $L_V$. AdamW with
+the cosine schedule reported in Table~\ref{table2} performs the updates.
+
+\begin{figure*}[!t]
+\centering
+\includegraphics[width=7.0in]{rlsuanfa.pdf}
+\caption{ART-MAPPO information flow from physical observations through attention-residual and
+recurrent encoding to trust-modulated exploration and regularized actor--critic updates.}
+\label{fig:algorithm_flow}
+\end{figure*}
+
+\subsection{State Representation and Reward Design}
+\label{subsec:state_reward}
+
+The local observation retains relative three-dimensional geometry, cooperative timing, and
+the previous applied command. Using fixed physical scales, it is
+\begin{equation}
+\label{eq:observation_space}
+\begin{split}
+\mathbf o_i^{(t)}=\operatorname{clip}\bigl([&
+d_i/d_{\mathrm{ref}},\ \Delta z_i/z_{\mathrm{ref}},\
+\dot d_i/V_{\mathrm{ref}},\ e_{\angle,i}/\pi,\\
+&V_i/V_{\mathrm{ref}},\ V_{T(i)}/V_{\mathrm{ref}},\
+\theta_i/\pi,\ \gamma_i/\pi,\ \boldsymbol\ell_{iT}^{\top},\\
+&(t_{go,i}-\bar t_{go,i})/T_{\mathrm{ref}},\
+(t_{go,i}^{\max}-t_{go,i}^{\min})/T_{\mathrm{ref}},\\
+&(t_{go,i}-t_{go,i}^{\min})/T_{\mathrm{ref}},\
+(\mathbf a_i^{(t-1)})^{\top}]^{\top},-1,1\bigr)
+\in\mathbb R^{17}.
+\end{split}
+\end{equation}
+Here, $\Delta z_i$ is the defender--target altitude difference,
+$\boldsymbol\ell_{iT}\in\mathbb R^3$ is the LOS unit vector, and
+$\widehat{\mathbf v}_i=\mathbf v_i/(\|\mathbf v_i\|_2+\varepsilon_{\mathrm{num}})$ is the
+unit velocity direction. Therefore,
+$e_{\angle,i}=\arccos[\operatorname{clip}(\widehat{\mathbf v}_i^{\top}
+\boldsymbol\ell_{iT},-1,1)]$ is the
+three-dimensional velocity-to-LOS angle. The mean, minimum, and maximum time-to-go values are
+computed over the cooperative group $\mathcal G_i$. The previous command is available before
+the current action is selected and supplies short-term actuator history without violating
+causality. Fixed scales $d_{\mathrm{ref}},z_{\mathrm{ref}},V_{\mathrm{ref}}$, and
+$T_{\mathrm{ref}}$ make the heterogeneous physical channels comparable.
+
+The reward connects each physical objective to one interpretable component:
+\begin{equation}
+\label{eq:reward_function}
+r_i^{(t)}=\lambda_d r_i^{\mathrm{dist}}
++\lambda_q r_i^{\mathrm{angle}}
++\lambda_h r_i^{\mathrm{hit}}
++\lambda_c r_i^{\mathrm{coord}}
++\lambda_u r_i^{\mathrm{effort}}.
+\end{equation}
+The components are summarized below to avoid another rapid sequence of five displayed
+equations.
+\begin{table}[!t]
+\centering
+\caption{Reward Components and Physical Roles}
+\label{tab:reward_components}
+\renewcommand{\arraystretch}{1.15}
+\footnotesize
+\begin{tabular}{@{}p{0.25\linewidth}p{0.67\linewidth}@{}}
+\toprule
+Component & Definition and role \\
+\midrule
+$r_i^{\mathrm{dist}}$
+& $\exp[-\|\mathbf p_i-\mathbf p_{\mathrm{tgt}}\|/d_{\mathrm{ref}}]$;
+bounded dense feedback for closing range.\\
+$r_i^{\mathrm{angle}}$
+& $-e_{\angle,i}$; penalizes three-dimensional velocity-to-LOS misalignment.\\
+$r_i^{\mathrm{hit}}$
+& $R_{\mathrm{hit}}\mathbb I[\text{first entry into }d_{\mathrm{kill}}]$;
+one-time terminal success reward.\\
+$r_i^{\mathrm{coord}}$
+& $-|t_{go,i}-|\mathcal G_i|^{-1}\sum_{j\in\mathcal G_i}t_{go,j}|$;
+promotes simultaneous arrival.\\
+$r_i^{\mathrm{effort}}$
+& $-[\|\mathbf a_i^{(t)}\|_2^2+\kappa_{\Delta}
+\|\mathbf a_i^{(t)}-\mathbf a_i^{(t-1)}\|_2^2]$;
+penalizes all three load channels and their command variation.\\
+\bottomrule
+\end{tabular}
+\end{table}
+The environment computes these rewards during training; the critic estimates their discounted
+return but does not generate the reward. At deployment, no reward or centralized critic is
+required.
+
+\subsection{Sensitivity of Reward Weights and Hyperparameters}
+\label{subsec:reward_sensitivity}
+
+The weights $\lambda_d$ and $\lambda_q$ regulate early approach and heading alignment, whereas
+$\lambda_h$ and $\lambda_c$ determine the balance between terminal interception and coordinated
+arrival. Excessive coordination weight can delay a defender with favorable geometry; excessive
+effort weight $\lambda_u$ can suppress the normal-load commands required against a maneuvering
+target. We therefore normalize all reward components first, tune hit/coordination weights around
+mission success, and then increase the effort term until command peaks and variations satisfy
+the desired envelope without degrading interception reliability.
+
+The PPO clipping factor $\varepsilon_{\mathrm{PPO}}$, dual-clip parameter $c_{\mathrm{DC}}$,
+target divergence $\delta_{\mathrm{KL}}$, and $\beta_{\mathrm{KL}}$ adaptation determine policy
+update conservatism. Smaller clipping/divergence targets improve stability but can slow
+adaptation; larger values learn aggressive maneuvers faster but increase return variance.
+$\lambda_{\mathrm{GAE}}$ and $c_e$ control the bias--variance and exploration--exploitation
+tradeoffs. Their numerical settings and sensitivity tests are reported with the simulation
+results rather than expanded into additional equations here.
+
+\begin{algorithm}[!t]
+\caption{ART-MAPPO Cooperative Interception Guidance}
+\label{alg:artmappo}
+\footnotesize
+\begin{algorithmic}[1]
+\REQUIRE Consensus assignment $\mathbf X^{*}$, environment, episode horizon
+$H_{\mathrm{ep}}$, actor $\theta$, critic $\phi$, trust and PPO parameters
+\ENSURE Decentralized shared guidance policy $\pi_{\theta}$
+\STATE Initialize networks, GRU states $\mathbf g_i$, trust states $\mathcal T_i$, and buffer
+$\mathcal D$
+\FOR{episode $k=1,2,\ldots$}
+    \STATE Reset the scenario and form cooperative groups from $\mathbf X^{*}$
+    \FOR{$t=0$ to $H_{\mathrm{ep}}-1$}
+        \FOR{each defender $i$}
+            \STATE Construct $\mathbf o_i^{(t)}$ using \eqref{eq:observation_space}
+            \STATE Encode attention/residual features and update $\mathbf g_i^{(t)}$
+            \STATE Sample $\mathbf a_i^{(t)}$ from \eqref{eq:exploration_policy} and clip it
+            to $\mathcal A$
+        \ENDFOR
+        \STATE Execute the joint action and compute \eqref{eq:reward_function}
+        \STATE Store the transition in $\mathcal D$
+    \ENDFOR
+    \STATE Update return statistics and trust using
+    \eqref{eq:trust_statistics}--\eqref{eq:trust_update}
+    \STATE Estimate $\widehat A_t$ using \eqref{eq:gae}
+    \STATE Update actor and critic by minimizing \eqref{eq:total_loss}; adapt
+    $\beta_{\mathrm{KL}}$ using \eqref{eq:kl_adaptation}
+    \STATE Clear $\mathcal D$
+\ENDFOR
+\STATE Deploy $\pi_{\theta}$ with local observations, local GRU states, and $\beta_i=0$
+\end{algorithmic}
+\end{algorithm}
+ 
+\section{Simulation Verification}
+\label{sec:simulation}
+
+\subsection{Experimental Setup and Implementation Details}
+\label{subsec:setup}
+
+All training and evaluation were performed on an Intel Core i7-9700F CPU / Nvidia RTX 3090
+GPU server running Ubuntu 18.04.
+The simulation step size was 0.05\,s and the maximum episode duration was 75\,s.
+Table~\ref{table2} summarizes the key hyperparameters of ART-MAPPO.
+
+\begin{table}[!t]
+\centering
+\renewcommand{\arraystretch}{1.4}
+\caption{ART-MAPPO Algorithm Parameters}
+\label{table2}
+\begin{tabular}{ll}
+\hline\hline
+Parameter & Value \\ \hline
+PPO clipping factor ($\varepsilon_{\mathrm{PPO}}$) & 0.2 \\
+Dual-clip parameter ($c_{\mathrm{DC}}$) & 3.0 \\
+Target KL divergence ($\delta_{\mathrm{KL}}$) & 0.02 \\
+Entropy bonus coefficient ($c_e$) & 0.01 \\
+GAE parameter ($\lambda_{\mathrm{GAE}}$) & 0.97 \\
+LR schedule & Cosine Annealing \\
+Optimizer & AdamW \\
+Mini-batch number & 4 \\
+Buffer size & 4096 \\
+Learning rate & $3\times10^{-4}$ \\
+Attention heads ($H$) & 4 \\
+Residual blocks ($L$) & 2 \\ \hline
+\end{tabular}
+\end{table}
+
+
+The horizontal projection of the simulation environment is depicted in Fig.~\ref{chushi}.
+In the three-dimensional case presets, the 20 defenders start near the defended center at
+radii 52.63--65.44\,m and altitude 0\,m, while the eight attackers start at radii
+1987.72--2145.95\,m and altitude 120\,m. Initial defender and attacker speeds are
+20.32--30.02\,m/s and 30.23--45.87\,m/s, respectively. The attackers initially point toward
+the defended region and then execute the case-specific three-dimensional maneuvers described
+below.
+
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=3.0in]{chushi01.pdf}
+\caption{Simulation environment configuration for training.}
+\label{chushi}
+\end{figure}
+
+A representative scenario of 20 $D_{\text{UAV}}$ versus 8 $A_{\text{UAV}}$ is considered.
+Table~\ref{chushicanshu} summarizes the audited three-dimensional initialization and
+kinematic constraints.
+
+\begin{table*}[!t]
+\centering
+\caption{UAV Parameters for Attackers and Defenders}
+\label{chushicanshu}
+\renewcommand{\arraystretch}{1.6}
+\begin{tabular}{ccccc}
+\hline\hline
+ & Initial radius / altitude & Initial velocity $V$ & Initial heading $\gamma$ & Maneuverability $(n_x,n_y,n_z)$ \\ \hline
+$D_{\text{UAV}}$ & 52.63--65.44\,m / 0\,m & 20.32--30.02\,m/s & $\gamma_D\in[0,2\pi]$ & $n_x\in[-0.1,1]$, $n_y,n_z\in[-1,1]$ \\
+$A_{\text{UAV}}$ & 1987.72--2145.95\,m / 120\,m & 30.23--45.87\,m/s & Toward defended area & Case-specific 3-D maneuver \\ \hline
+\end{tabular}
+\end{table*}
+
+Two dynamic engagement scenarios are designed to evaluate cooperative guidance performance.
+The scenario configurations are listed in Table~\ref{changjingqingkuang}.
+
+\begin{table}[!t]
+\centering
+\renewcommand{\arraystretch}{1.4}
+\caption{Combat Scenario Settings}
+\label{changjingqingkuang}
+\begin{tabular}{cccc}
+\hline\hline
+ & $N_{D\text{-UAV}}$ & $N_{A\text{-UAV}}$ & $A_{\text{UAV}}$ Strategy \\ \hline
+Case 1 & 20 & 8 & Hybrid Evasion \\
+Case 2 & 20 & 8 & Sinusoidal Maneuver \\ \hline
+\end{tabular}
+\end{table}
+
+To represent delayed communication and sensing uncertainty, every defender receives the
+position and velocity packets used to construct Eq.~\eqref{eq:observation_space} after an
+end-to-end delay of 50\,ms. For each Cartesian component,
+$\widehat{\mathbf p}(t)=\mathbf p(t-50\,\mathrm{ms})+\boldsymbol\eta_p$ with
+$\boldsymbol\eta_p\sim\mathcal N(\mathbf0\,\mathrm{m},9\mathbf I_3\,\mathrm{m}^2)$, and
+$\widehat{\mathbf v}(t)=\mathbf v(t-50\,\mathrm{ms})+\boldsymbol\eta_v$ with
+$\boldsymbol\eta_v\sim\mathcal N(\mathbf0\,\mathrm{m/s},
+0.09\mathbf I_3\,\mathrm{m}^2/\mathrm{s}^2)$. Thus, every position component has mean error
+0\,m and variance 9\,m$^2$, while every velocity component has mean error 0\,m/s and variance
+0.09\,(m/s)$^2$. Range, altitude difference, LOS direction, closing speed, heading, pitch,
+velocity-to-LOS angle, and time-to-go are recomputed from these delayed noisy Cartesian states;
+no additional independent noise is imposed on those derived quantities. Previous applied loads
+are internally measured without additive observation noise, while the commanded loads pass
+through a first-order response with a 300-ms time constant. Table~\ref{tab:uncertainty_settings}
+summarizes these settings in physical units.
+
+\begin{table}[!t]
+\centering
+\caption{Communication Delay and Observation-Uncertainty Settings}
+\label{tab:uncertainty_settings}
+\renewcommand{\arraystretch}{1.15}
+\footnotesize
+\begin{tabular}{@{}p{0.29\linewidth}p{0.20\linewidth}p{0.39\linewidth}@{}}
+\toprule
+Observed quantity & Delay / response & Error distribution \\
+\midrule
+Position $x,y,z$ & 50\,ms & Mean $0$\,m; variance $9$\,m$^2$ \\
+Velocity $v_x,v_y,v_z$ & 50\,ms & Mean $0$\,m/s; variance $0.09$\,(m/s)$^2$ \\
+Derived geometry and $t_{go}$ & 50\,ms & No independent noise; computed from $\widehat{\mathbf p},\widehat{\mathbf v}$ \\
+Previous loads $n_x,n_y,n_z$ & 300\,ms response & Mean $0$; variance $0$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+
+
+\subsection{Evaluation Criteria}
+\label{subsec:eval}
+
+The evaluation metrics are defined from quantities measured at interception, rather than from
+time-to-go values that vanish at the terminal instant. For target $t_j$, let
+$\mathcal G_j=\{i:X_{ij}=1\}$ be its cooperative defender group,
+$m_j=|\mathcal G_j|$, $t_i^{\mathrm{arr}}$ the first time defender $i$ reaches the lethal
+radius, and $\mathcal W_i=[t_i^{\mathrm{arr}}-\Delta T_{\mathrm{term}},
+t_i^{\mathrm{arr}}]$ the terminal measurement window. The four group-level metrics are
+collected in one equation:
+\begin{equation}
+\label{eq:evaluation_metrics}
+\begin{aligned}
+\bar t_j^{\mathrm{arr}}
+ &=\frac{1}{m_j}\sum_{i\in\mathcal G_j}t_i^{\mathrm{arr}},\\
+E_{\mathrm{co\text{-}time}}^{(j)}
+ &=\frac{1}{m_j}\sum_{i\in\mathcal G_j}
+ \left|t_i^{\mathrm{arr}}-\bar t_j^{\mathrm{arr}}\right|,\\
+\bar n_{i,\mathrm{term}}
+ &=\frac{1}{|\mathcal W_i|}\sum_{t\in\mathcal W_i}
+ \sqrt{(n_{y_i}^{(t)})^2+(n_{z_i}^{(t)})^2},\\
+E_n^{(j)}
+ &=\frac{1}{m_j}\sum_{i\in\mathcal G_j}
+ \bar n_{i,\mathrm{term}},\\
+E_{\mathrm{miss}}^{(j)}
+ &=\frac{1}{m_j}\sum_{i\in\mathcal G_j}d_i(t_i^{\mathrm{arr}}),\\
+E_t^{(j)}&=\max_{i\in\mathcal G_j}t_i^{\mathrm{arr}}-t_0.
+\end{aligned}
+\end{equation}
+Here, $E_{\mathrm{co\text{-}time}}$ measures arrival-time dispersion,
+$E_n$ is the mean terminal-window resultant normal load factor, $E_{\mathrm{miss}}$ is the terminal miss
+distance, and $E_t$ is the time from engagement start $t_0$ until the last member of the group
+arrives. This separates synchronization quality from total engagement duration. A trial-level
+value is the mean of the corresponding group values over the eight targets. Monte Carlo
+boxplots use successful trials only; interception success rate is reported separately so that
+failed trials are not hidden by the conditional metric distributions.
+ 
+\subsection{Target Assignment Performance and Spatial Topology}
+\label{subsec:assignment_results}
+
+To evaluate the IDBO algorithm, it is benchmarked against PSO, GWO, SSA, BOA, and standard DBO. 
+
+Fig.~\ref{fig:convergence} illustrates the statistical performance in terms of average cost convergence over iterations. IDBO significantly outperforms the baselines, reaching the lowest steady-state cost within 100~iterations. \begin{figure}[!ht] 
+\centering 
+\includegraphics[width=3.25in]{convergence.png} 
+\caption{Average cost convergence over iterations for target assignment algorithms.} 
+\label{fig:convergence} 
+\end{figure}
+
+Furthermore, the violin plot in Fig.~\ref{fig:violin} evaluates the algorithmic robustness across multiple independent runs. It shows IDBO's compact distribution at the lowest median cost, highlighting its superior stability and consistency compared to the other heuristic methods.
+
+\begin{figure}[!ht] 
+\centering 
+\includegraphics[width=3.2in]{violin.png} 
+\caption{Violin plot of total cost distribution evaluating algorithm robustness.} 
+\label{fig:violin} 
+\end{figure}
+
+The optimal assignment mapping generated by the algorithm is visualized in Fig.~\ref{fig:assignment_topology}. Attackers $A_1$--$A_4$ are each allocated three defenders, while $A_5$--$A_8$ are intercepted by two defenders each, perfectly respecting the per-target capacity constraint $L_{\max}$ and ensuring sufficient numerical superiority for cooperative strikes.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.2in]{target_assignment_topology.png}
+\caption{Visualized spatial topology of the target assignment results.}
+\label{fig:assignment_topology}
+\end{figure}
+
+
+
+
+
+
+
+
+\subsection{RL Model Training and Convergence Analysis}
+\label{subsec:training}
+
+To evaluate the learning efficiency and robustness of the proposed ART-MAPPO, comparative training experiments were conducted against standard MAPPO, IPPO, IA2C, and IQL. All models were trained over 10,000 episodes with a maximum horizon of 25 steps per episode. To ensure statistical significance and eliminate the bias of favorable network initialization, all learning curves in Fig.~\ref{fig:training_convergence} are averaged across 5 independent random seeds, with the shaded regions denoting the standard deviation.
+
+As illustrated in Fig.~\ref{fig:training_convergence}(a), ART-MAPPO demonstrates a superior learning paradigm, achieving the highest asymptotic normalized reward of $8.97 \pm 0.64$ (averaged over the final 500 episodes). This represents a notable performance improvement of 8.2\%, 12.3\%, 14.4\%, and 29.8\% over IQL, MAPPO, IPPO, and IA2C, respectively. The advantage of ART-MAPPO is particularly pronounced during the intermediate training phase. By episode 4,000, ART-MAPPO establishes a significant performance leap, outperforming standard MAPPO by 43.6\% and IQL by 16.6\%, highlighting its ability to rapidly escape local optima early in the training process.
+
+Furthermore, the proposed method exhibits accelerated convergence alongside enhanced training stability. When evaluated on a 100-episode smoothed curve, ART-MAPPO reaches 90\% of its optimal asymptotic performance by episode 5,591. In contrast, the most competitive baseline, IQL, requires 6,477 episodes (a 13.7\% delay), while standard MAPPO lags significantly, requiring 7,654 episodes. Regarding algorithmic stability, ART-MAPPO maintains a tight variance across random seeds ($\sigma = 0.64$), whereas standard MAPPO exhibits a standard deviation of 1.34 (approximately twice as large). This confirms that the proposed enhancements effectively mitigate the high-variance gradient updates typical in multi-agent policy-based methods.
+
+These macroscopic performance gains are directly supported by the network-level metrics. The critic loss (Fig.~\ref{fig:training_convergence}(b)) of ART-MAPPO converges to the lowest steady-state error with minimal oscillation, a direct consequence of the dual-clip mechanism and adaptive KL penalty. Concurrently, the policy entropy (Fig.~\ref{fig:training_convergence}(c)) demonstrates an optimal, gradual decay trajectory, validating that the trust-modulated exploration mechanism successfully balances early-stage extensive state-space exploration with late-stage strict policy exploitation.
+
+It should be emphasized that the convergence discussed here is empirical training
+convergence rather than a global optimality guarantee for the nonconvex MARL problem. In
+particular, ART-MAPPO inherits the practical convergence interpretation of PPO-style policy
+gradient methods: a stable learning process is indicated by a saturating reward curve, bounded
+inter-seed variance, a nondivergent critic loss, and a gradually decreasing policy entropy.
+The dual-clip objective and adaptive KL penalty do not prove convergence to the global
+optimum; instead, they restrict the policy update magnitude and reduce destructive policy
+oscillations caused by large importance-sampling ratios. Therefore, the convergence claim for
+ART-MAPPO should be understood as statistically validated stability and asymptotic performance
+under the tested training settings, supported by the five-seed learning curves and the
+network-level diagnostics in Fig.~\ref{fig:training_convergence}.
+
+\begin{figure}[!t]
+\centering
+\subfloat[Training Reward]{\includegraphics[width=3.0in]{fig_a_reward.png}}
+\hfill
+\subfloat[Critic Loss]{\includegraphics[width=3.0in]{fig_b_critic_loss.png}}
+\hfill
+\subfloat[Policy Entropy]{\includegraphics[width=3.0in]{fig_c_entropy.png}}
+\caption{Comparative training curves of ART-MAPPO and baseline algorithms over 10,000 episodes. Solid lines and shaded regions represent the mean and standard deviation across 5 independent random seeds, respectively. Notably, ART-MAPPO achieves the highest asymptotic reward (+12.3\% over standard MAPPO) and the fastest convergence rate (reaching 90\% optimality by episode 5,591), while demonstrating significantly enhanced training stability.}
+\label{fig:training_convergence}
+\end{figure}
+
+
+
+
+\subsection{Offline Reward-Function Sensitivity Analysis}
+\label{subsec:offline_reward_sensitivity}
+
+We further examine the sensitivity of the reward definition to three representative weights
+and one nonlinear shaping hyperparameter. The implementation keys
+$w_{\mathrm{hit}}$, $w_{\mathrm{coord}}$, and $w_{\mathrm{energy}}$ correspond to the
+terminal, coordination, and effort weights $\lambda_h$, $\lambda_c$, and $\lambda_u$ in
+\eqref{eq:reward_function}, respectively, while
+$\alpha_d\equiv d_{\mathrm{ref}}^{-1}$ determines the exponential distance-reward decay.
+Their nominal values are $w_{\mathrm{hit}}=200$,
+$w_{\mathrm{coord}}=18$, $w_{\mathrm{energy}}=0.005$, and
+$\alpha_d=2\times10^{-4}\,\mathrm{m}^{-1}$. Each parameter is independently multiplied by
+$\kappa\in\{0.50,0.75,1.00,1.25,1.50\}$ while all other reward parameters remain nominal.
+
+This experiment isolates reward-function sensitivity from policy adaptation. Specifically,
+the trained nominal ART-MAPPO policies are frozen, and no gradient, optimizer step, or policy
+update is performed. We collect 100 stochastic evaluation episodes (50 per case) and store
+the distance, time-to-go mismatch, three-axis control effort, and first-hit events. In every
+recorded episode, all 20 defenders reach their assigned targets and all eight attackers are
+intercepted, so the sparse hit contribution is evaluated on successful trajectories without
+changing any event indicator. Every
+parameter setting is then evaluated by recomputing the reward on these \emph{same} state--action
+trajectories. For episode $e$, the normalized cumulative-reward variation is
+\begin{equation}
+\label{eq:normalized_reward_sensitivity}
+\Delta G_{e}^{\mathrm{norm}}(\kappa;\theta)=
+\frac{G_e(\kappa\theta_0)-G_e(\theta_0)}
+{\sum_t|r_e(t;\theta_0)|+10^{-8}},
+\end{equation}
+where $G_e(\theta)=\sum_t r_e(t;\theta)$. Thus, Fig.~\ref{fig:reward_sensitivity}
+characterizes the mapping $\theta\mapsto r(s,a;\theta)$ for fixed trajectories rather than
+the performance of policies retrained under altered rewards.
+
+\begin{figure*}[!t]
+\centering
+\includegraphics[width=7.0in]{reward_sensitivity_v10.pdf}
+\caption{Sensitivity of the reward function to representative weighting and shaping
+parameters. (a) Distance reward versus relative distance under variations of $\alpha_d$.
+(b) Coordination reward versus time-to-go mismatch under variations of
+$w_{\mathrm{coord}}$. (c) Energy/control penalty versus three-axis control effort under
+variations of $w_{\mathrm{energy}}$. (d) Mean normalized cumulative-reward variation on 100
+fixed ART-MAPPO evaluation trajectories; shaded regions denote 95\% confidence intervals,
+and the inset magnifies the three near-zero responses.}
+\label{fig:reward_sensitivity}
+\end{figure*}
+
+The component-level responses in Figs.~\ref{fig:reward_sensitivity}(a)--(c) agree with the
+reward definition. Reducing $\alpha_d$ to $1.0\times10^{-4}\,\mathrm{m}^{-1}$ extends the
+distance-reward e-folding range from the nominal 5.0\,km to 10.0\,km, whereas increasing it
+to $3.0\times10^{-4}\,\mathrm{m}^{-1}$ contracts that range to 3.33\,km. The resulting
+separation of the curved profiles over the observed 0--2.063\,km range confirms a nonlinear,
+rather than merely amplitude-scaled, change in the reward landscape. In contrast, the
+coordination and effort terms change linearly with their outer weights. At the nominal
+setting, the coordination slope is
+$-w_{\mathrm{coord}}\alpha_c=-2.88$ reward units per second of time-to-go mismatch; the
+$0.5$--$1.5\times$ sweep changes this slope from $-1.44$ to $-4.32$. Similarly, the
+effort-penalty slope changes from $-2.5\times10^{-5}$ to
+$-7.5\times10^{-5}$ per unit of $n_x^2+n_y^2+n_z^2$.
+
+For a dimensionless comparison around the nominal point, we use
+\begin{equation}
+\label{eq:local_reward_sensitivity}
+S_{\theta}=\frac{1}{100}\sum_{e=1}^{100}
+\frac{\left|\Delta G_e^{\mathrm{norm}}(1.25;\theta)
+-\Delta G_e^{\mathrm{norm}}(0.75;\theta)\right|}{0.5}.
+\end{equation}
+The resulting indices are $0.995913$ for $w_{\mathrm{hit}}$, $0.001317$ for
+$w_{\mathrm{coord}}$, $0.000823$ for $\alpha_d$, and
+$1.35\times10^{-8}$ for $w_{\mathrm{energy}}$. The terminal weight is therefore the
+dominant cumulative-reward sensitivity for these successful fixed trajectories: the mean
+nominal hit contribution is $8.80\times10^6$, compared with a mean total return of
+$8.825\times10^6$. The coordination and distance-shaping parameters have substantially
+smaller but clearly resolved effects around the nominal point. In particular, increasing
+$w_{\mathrm{coord}}$ steepens the penalty for any given arrival-time mismatch, while
+$\alpha_d$ produces the expected asymmetric nonlinear response in
+Fig.~\ref{fig:reward_sensitivity}(d). The very small effort index reflects its small nominal
+coefficient and the bounded control effort on the evaluated trajectories; it does not imply
+that high control effort is unpenalized, because panel (c) still shows the proportional
+increase in the instantaneous penalty. Finally, the variation is exactly zero at
+$\kappa=1$ for all four parameters, and all confidence intervals are computed over the same
+100 episodes, confirming a controlled one-factor-at-a-time comparison.
+
+\subsection{Cooperative Interception against Maneuvering Targets}
+\label{subsec:cases}
+
+Based on the optimal assignment topology, we evaluate three-dimensional cooperative guidance
+in two maneuvering scenarios. ART-MAPPO and the capacity-matched PN reference use the same
+initial states, target assignment, hit radius, speed limits, load-factor envelope, and other
+scenario settings described in Section~\ref{subsec:setup}. For each
+method and case, we report the three-dimensional trajectory, its horizontal projection, all
+three load commands and their associated attitude/speed responses, time-to-go histories, and
+terminal arrival-time differences.
+
+\subsubsection{Case~1: Interception against Evasive Maneuvering Targets}
+
+In Case~1, the attacking UAVs initially execute a constant-load evasive maneuver and transition
+to PN guidance after 15\,s. This creates simultaneous horizontal and vertical closing demands
+while the defenders must preserve the assignment groups and coordinate their terminal arrival
+times.
+
+\emph{1) ART-MAPPO:} Fig.~\ref{fig:case1_mappo_traj_3d} shows the complete spatial
+engagement. Starting below the attackers, the defenders climb from the defended region and
+close on the eight elevated target trajectories. The horizontal projection in
+Fig.~\ref{fig:case1_mappo_traj_xy} preserves the original plan-view interpretation and shows
+that all 20 defenders converge on the targets specified by the assignment topology.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.15in]{../new_sim_fig/figures_v10/mappo/mappo_nopn_trajectory_3d.png}
+\caption{Three-dimensional engagement trajectories of the defending swarm using ART-MAPPO in
+Case~1.}
+\label{fig:case1_mappo_traj_3d}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.15in]{../new_sim_fig/figures_v10/mappo/mappo_nopn_trajectory.png}
+\caption{Horizontal projection of the ART-MAPPO engagement trajectories in Case~1.}
+\label{fig:case1_mappo_traj_xy}
+\end{figure}
+
+The corresponding command and state histories are separated into three physically related
+pairs in Figs.~\ref{fig:case1_mappo_yaw}--\ref{fig:case1_mappo_axial}. The horizontal normal
+command $n_y$ and heading $\gamma_D$ form the yaw-plane response, while $n_z$ and pitch
+$\theta_D$ show the vertical response that is absent from a planar model. ART-MAPPO keeps
+$n_y$ inside the $\pm1$ envelope and uses a substantially smaller vertical command for most
+of the engagement. The smooth pitch histories confirm gradual altitude capture. Meanwhile,
+$n_x$ and $V_D$ show how the policy regulates closing speed without decoupling temporal
+coordination from the two normal-load channels.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.1in]{../new_sim_fig/figures_v10/mappo/standalone_duav_legend.png}\\[-2pt]
+\subfloat[Normal load $n_y$]{\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/mappo/mappo_nopn_ny.png}}\\[-2pt]
+\subfloat[Heading $\gamma_D$]{\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/mappo/mappo_nopn_heading.png}}
+\caption{Yaw-plane command and response of ART-MAPPO in Case~1.}
+\label{fig:case1_mappo_yaw}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.1in]{../new_sim_fig/figures_v10/mappo/standalone_duav_legend.png}\\[-2pt]
+\subfloat[Vertical load $n_z$]{\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/mappo/mappo_nopn_nz.png}}\\[-2pt]
+\subfloat[Pitch $\theta_D$]{\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/mappo/mappo_nopn_pitch.png}}
+\caption{Pitch-plane command and response of ART-MAPPO in Case~1.}
+\label{fig:case1_mappo_pitch}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.1in]{../new_sim_fig/figures_v10/mappo/standalone_duav_legend.png}\\[-2pt]
+\subfloat[Axial load $n_x$]{\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/mappo/mappo_nopn_nx.png}}\\[-2pt]
+\subfloat[Velocity $V_D$]{\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/mappo/mappo_nopn_velocity.png}}
+\caption{Axial command and speed response of ART-MAPPO in Case~1.}
+\label{fig:case1_mappo_axial}
+\end{figure}
+
+The $t_{go}$ histories in Fig.~\ref{fig:case1_mappo_tgo} converge within the eight target
+groups despite the three-dimensional engagement geometry. The terminal
+summary in Fig.~\ref{fig:case1_mappo_sync} reports a maximum within-group arrival spread of
+0.25\,s, below the 0.5-s synchronization criterion.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/mappo/mappo_nopn_tgo.png}
+\caption{Time-to-go ($t_{go}$) profiles of the defending swarm using ART-MAPPO in Case~1.}
+\label{fig:case1_mappo_tgo}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.0in]{../new_sim_fig/figures_v10/mappo/mappo_nopn_time_sync.png}
+\caption{Terminal arrival time differences $\Delta t$ within each ART-MAPPO interceptor group
+in Case~1.}
+\label{fig:case1_mappo_sync}
+\end{figure}
+
+\emph{2) PN baseline:} The capacity-matched PN reference is shown in
+Figs.~\ref{fig:case1_pn_traj_3d} and~\ref{fig:case1_pn_traj_xy}. PN also completes the selected
+engagement, but its purely reactive commands produce visibly different spatial curvature and
+control transients. The same command limits are imposed on both methods, so the comparison does
+not attribute physically unavailable load authority to the baseline.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.15in]{../new_sim_fig/figures_v10/pn/pn_nopn_trajectory_3d.png}
+\caption{Three-dimensional engagement trajectories of the defending swarm using the PN
+baseline in Case~1.}
+\label{fig:case1_pn_traj_3d}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.15in]{../new_sim_fig/figures_v10/pn/pn_nopn_trajectory.png}
+\caption{Horizontal projection of the PN engagement trajectories in Case~1.}
+\label{fig:case1_pn_traj_xy}
+\end{figure}
+
+Figures~\ref{fig:case1_pn_yaw}--\ref{fig:case1_pn_axial} give the corresponding yaw-plane,
+pitch-plane, and axial responses. The PN commands are clipped to $n_x\in[-0.1,1]$ and
+$n_y,n_z\in[-1,1]$, and the command histories show more direct use of the available bounds.
+The pitch response remains finite and the speed histories remain within the common vehicle
+envelope, providing a physically matched three-dimensional reference.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.1in]{../new_sim_fig/figures_v10/pn/standalone_duav_legend.png}\\[-2pt]
+\subfloat[Normal load $n_y$]{\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/pn/pn_nopn_ny.png}}\\[-2pt]
+\subfloat[Heading $\gamma_D$]{\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/pn/pn_nopn_heading.png}}
+\caption{Yaw-plane command and response of the capacity-matched PN baseline in Case~1.}
+\label{fig:case1_pn_yaw}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.1in]{../new_sim_fig/figures_v10/pn/standalone_duav_legend.png}\\[-2pt]
+\subfloat[Vertical load $n_z$]{\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/pn/pn_nopn_nz.png}}\\[-2pt]
+\subfloat[Pitch $\theta_D$]{\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/pn/pn_nopn_pitch.png}}
+\caption{Pitch-plane command and response of the capacity-matched PN baseline in Case~1.}
+\label{fig:case1_pn_pitch}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.1in]{../new_sim_fig/figures_v10/pn/standalone_duav_legend.png}\\[-2pt]
+\subfloat[Axial load $n_x$]{\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/pn/pn_nopn_nx.png}}\\[-2pt]
+\subfloat[Velocity $V_D$]{\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/pn/pn_nopn_velocity.png}}
+\caption{Axial command and speed response of the capacity-matched PN baseline in Case~1.}
+\label{fig:case1_pn_axial}
+\end{figure}
+
+The PN $t_{go}$ histories also converge in this selected run, as shown in
+Fig.~\ref{fig:case1_pn_tgo}. Its maximum terminal group spread is 0.40\,s
+(Fig.~\ref{fig:case1_pn_sync}), compared with 0.25\,s for ART-MAPPO. Both satisfy the 0.5-s
+criterion, while the learned policy gives the tighter representative Case~1 synchronization.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/pn/pn_nopn_tgo.png}
+\caption{Time-to-go ($t_{go}$) profiles of the defending swarm using the PN baseline in
+Case~1.}
+\label{fig:case1_pn_tgo}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.0in]{../new_sim_fig/figures_v10/pn/pn_nopn_time_sync.png}
+\caption{Terminal arrival time differences $\Delta t$ within each PN interceptor group in
+Case~1.}
+\label{fig:case1_pn_sync}
+\end{figure}
+\FloatBarrier
+
+\subsubsection{Case~2: Interception against Continuous Weaving Targets}
+
+Case~2 uses a sinusoidal penetration maneuver~\cite{Zarchan1995969}. Its continuous horizontal
+and vertical LOS variation provides a more persistent disturbance than the Case~1 transition
+and tests whether group timing can be maintained while all three command channels respond.
+
+\emph{1) ART-MAPPO:} The three-dimensional paths in
+Fig.~\ref{fig:case2_mappo_traj_3d} show that all eight groups maintain spatial closure against
+the weaving targets. The horizontal projection in Fig.~\ref{fig:case2_mappo_traj_xy} exposes
+the lateral curvature without hiding the altitude evolution shown in the 3-D view.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.15in]{../new_sim_fig/figures_v10/mappo/mappo_sin_trajectory_3d.png}
+\caption{Three-dimensional ART-MAPPO engagement trajectories against continuous weaving
+targets in Case~2.}
+\label{fig:case2_mappo_traj_3d}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.15in]{../new_sim_fig/figures_v10/mappo/mappo_sin_trajectory.png}
+\caption{Horizontal projection of the ART-MAPPO engagement trajectories in Case~2.}
+\label{fig:case2_mappo_traj_xy}
+\end{figure}
+
+As shown in Figs.~\ref{fig:case2_mappo_yaw}--\ref{fig:case2_mappo_axial}, ART-MAPPO adapts
+$n_y$ to the continuous lateral disturbance while using $n_z$ to regulate vertical closure.
+The heading and pitch histories
+remain smooth relative to the command variations, and all load channels remain inside the
+prescribed envelope. The axial command raises or preserves closing speed without eliminating
+the control authority required in the yaw and pitch planes.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.1in]{../new_sim_fig/figures_v10/mappo/standalone_duav_legend.png}\\[-2pt]
+\subfloat[Normal load $n_y$]{\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/mappo/mappo_sin_ny.png}}\\[-2pt]
+\subfloat[Heading $\gamma_D$]{\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/mappo/mappo_sin_heading.png}}
+\caption{Yaw-plane command and response of ART-MAPPO in Case~2.}
+\label{fig:case2_mappo_yaw}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.1in]{../new_sim_fig/figures_v10/mappo/standalone_duav_legend.png}\\[-2pt]
+\subfloat[Vertical load $n_z$]{\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/mappo/mappo_sin_nz.png}}\\[-2pt]
+\subfloat[Pitch $\theta_D$]{\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/mappo/mappo_sin_pitch.png}}
+\caption{Pitch-plane command and response of ART-MAPPO in Case~2.}
+\label{fig:case2_mappo_pitch}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.1in]{../new_sim_fig/figures_v10/mappo/standalone_duav_legend.png}\\[-2pt]
+\subfloat[Axial load $n_x$]{\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/mappo/mappo_sin_nx.png}}\\[-2pt]
+\subfloat[Velocity $V_D$]{\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/mappo/mappo_sin_velocity.png}}
+\caption{Axial command and speed response of ART-MAPPO in Case~2.}
+\label{fig:case2_mappo_axial}
+\end{figure}
+
+Despite the continuous LOS disturbance, the ART-MAPPO $t_{go}$ curves converge within their
+assigned groups (Fig.~\ref{fig:case2_mappo_tgo}). The largest terminal arrival-time difference
+is 0.30\,s in Fig.~\ref{fig:case2_mappo_sync}, demonstrating that the timing objective remains
+active in the three-dimensional engagement.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/mappo/mappo_sin_tgo.png}
+\caption{Time-to-go ($t_{go}$) profiles of the defending swarm using ART-MAPPO in Case~2.}
+\label{fig:case2_mappo_tgo}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.0in]{../new_sim_fig/figures_v10/mappo/mappo_sin_time_sync.png}
+\caption{Terminal arrival time differences $\Delta t$ within each ART-MAPPO interceptor group
+in Case~2.}
+\label{fig:case2_mappo_sync}
+\end{figure}
+
+\emph{2) PN baseline:} Figures~\ref{fig:case2_pn_traj_3d}
+and~\ref{fig:case2_pn_traj_xy} show that the constrained PN baseline also reaches all assigned
+targets in the selected Case~2 engagement. The spatial paths exhibit the reactive response to
+the continuously varying LOS, while the plan view and 3-D view together distinguish lateral
+curvature from vertical closure.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.15in]{../new_sim_fig/figures_v10/pn/pn_sin_trajectory_3d.png}
+\caption{Three-dimensional engagement trajectories of the defending swarm using the PN
+baseline in Case~2.}
+\label{fig:case2_pn_traj_3d}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.15in]{../new_sim_fig/figures_v10/pn/pn_sin_trajectory.png}
+\caption{Horizontal projection of the PN engagement trajectories in Case~2.}
+\label{fig:case2_pn_traj_xy}
+\end{figure}
+
+The PN profiles in Figs.~\ref{fig:case2_pn_yaw}--\ref{fig:case2_pn_axial} show sustained
+reactive changes in the horizontal channel together with the vertical and axial responses.
+Since all commands are
+clipped to the same envelope as ART-MAPPO, excursions that reach the plotted $\pm1$ lines
+represent saturation of available authority rather than an unrealizable command.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.1in]{../new_sim_fig/figures_v10/pn/standalone_duav_legend.png}\\[-2pt]
+\subfloat[Normal load $n_y$]{\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/pn/pn_sin_ny.png}}\\[-2pt]
+\subfloat[Heading $\gamma_D$]{\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/pn/pn_sin_heading.png}}
+\caption{Yaw-plane command and response of the capacity-matched PN baseline in Case~2.}
+\label{fig:case2_pn_yaw}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.1in]{../new_sim_fig/figures_v10/pn/standalone_duav_legend.png}\\[-2pt]
+\subfloat[Vertical load $n_z$]{\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/pn/pn_sin_nz.png}}\\[-2pt]
+\subfloat[Pitch $\theta_D$]{\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/pn/pn_sin_pitch.png}}
+\caption{Pitch-plane command and response of the capacity-matched PN baseline in Case~2.}
+\label{fig:case2_pn_pitch}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.1in]{../new_sim_fig/figures_v10/pn/standalone_duav_legend.png}\\[-2pt]
+\subfloat[Axial load $n_x$]{\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/pn/pn_sin_nx.png}}\\[-2pt]
+\subfloat[Velocity $V_D$]{\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/pn/pn_sin_velocity.png}}
+\caption{Axial command and speed response of the capacity-matched PN baseline in Case~2.}
+\label{fig:case2_pn_axial}
+\end{figure}
+
+Figure~\ref{fig:case2_pn_tgo} shows that the selected PN engagement also achieves groupwise
+time-to-go convergence. Its maximum arrival spread is 0.35\,s
+(Fig.~\ref{fig:case2_pn_sync}), whereas ART-MAPPO gives 0.30\,s. These representative runs
+therefore show successful three-dimensional interception for both methods and slightly tighter
+terminal timing for ART-MAPPO; the Monte Carlo analysis below remains the basis for broader
+reliability comparisons.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/pn/pn_sin_tgo.png}
+\caption{Time-to-go ($t_{go}$) profiles of the defending swarm using the PN baseline in
+Case~2.}
+\label{fig:case2_pn_tgo}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.0in]{../new_sim_fig/figures_v10/pn/pn_sin_time_sync.png}
+\caption{Terminal arrival time differences $\Delta t$ within each PN interceptor group in
+Case~2.}
+\label{fig:case2_pn_sync}
+\end{figure}
+\FloatBarrier
+ 
+\subsection{Monte Carlo Statistical Analysis and Robustness}
+\label{subsec:montecarlo}
+
+To rigorously quantify the robustness of the proposed framework, 1000 independent Monte Carlo trials are conducted for each case. It is important to note that the statistical distributions presented in Fig.~\ref{fig:mc_boxplots} ($E_{co\text{-}time}$, $E_n$, $E_{miss}$, and $E_t$) are exclusively derived from the successful interception trials. Specifically, out of the 1000 trials in Case~1, ART-MAPPO and PN successfully intercepted the targets 987 and 944 times, respectively. In the highly dynamic Case~2, ART-MAPPO maintained a remarkable 971 successful interceptions, whereas the baseline PN succeeded only 175 times. 
+
+\begin{figure}[!t]
+\centering
+\subfloat[Case~1]{\includegraphics[width=3.47in]{nopn_mc_boxplot_compare.png}}\\
+\subfloat[Case~2]{\includegraphics[width=3.47in]{sin_mc_boxplot_compare.png}}
+\caption{Boxplots of Monte Carlo trials comparing ART-MAPPO and PN (data derived from successful interceptions).}
+\label{fig:mc_boxplots}
+\end{figure}
+
+Based on the statistical distributions, three key findings emerge:
+
+\emph{(i) Interception reliability and precision.} The Interception Success Rates (ISRs) directly reflect the algorithms' adaptability to aggressive target maneuvers. While PN achieves a respectable 94.40\% against the evasive target (Case~1), its performance precipitously degrades to 17.50\% when facing the continuous weaving target (Case~2). Conversely, ART-MAPPO sustains exceptional ISRs of 98.70\% and 97.14\%, demonstrating profound robustness against continuous, high-frequency line-of-sight (LOS) oscillations. Furthermore, the $E_{miss}$ boxplots confirm that ART-MAPPO consistently achieves a lower median miss distance with a significantly narrower interquartile range (IQR), ensuring lethal precision even under worst-case initializations.
+
+\emph{(ii) Terminal required overload and operational efficiency.} The metric $E_n$ denotes the terminal required normal overload, which is a critical constraint for flight safety. As depicted in the boxplots, ART-MAPPO's $E_n$ is tightly clustered around a safe median of $\approx0.08$\,g (Case~1) and $\approx0.20$\,g (Case~2). In stark contrast, particularly in Case~2, PN's $E_n$ distribution is heavily squeezed near the 1.0\,g upper bound. This exposes severe terminal actuator saturation, as PN struggles to reactively track the sinusoidal maneuvers. Additionally, ART-MAPPO strictly bounds the engagement duration ($E_t$) within a tight and predictable time window, reflecting superior forward energy management and rapid closure capabilities.
+
+\emph{(iii) Robust temporal coordination.} The metric $E_{co\text{-}time}$ evaluates the temporal synchronization of the defending swarm. Across the successful Monte Carlo trials in both highly dynamic scenarios, ART-MAPPO maintains a median $E_{co\text{-}time}$ well below 0.10\,s. This consistently tight distribution confirms that the proposed algorithm can reliably shape the swarm's velocity profile to satisfy the strict temporal requirements for simultaneous saturation strikes, effectively neutralizing the risk of sequential piecemeal defeat.
+
+
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+In this paper, the cooperative interception problem of UAV swarms against highly dynamic and
+maneuverable attacking UAV swarms has been investigated, explicitly accounting for real-time
+decision requirements, coordinated engagement effectiveness, and terminal overload risk.
+The problem is formulated by jointly considering target assignment and cooperative guidance,
+and an intelligent temporally coordinated interception framework is developed.
+A fast IDBO-based target assignment mechanism enables efficient and accurate resource
+allocation in dynamic environments.
+The ART-MAPPO cooperative guidance strategy under the CTDE paradigm improves learning
+stability and training efficiency in large-scale adversarial settings.
+Extensive three-dimensional simulations demonstrate accelerated target assignment, enhanced interception
+efficiency, improved interception success rates, and effective alleviation of terminal overload
+saturation.
+
+For future work, promising directions include cooperative interception under incomplete
+information, dynamic target reassignment in unknown environments, time-constrained assignment
+with explicit completion deadlines, and integration with realistic constraints such as
+limited bandwidth, aerodynamic coupling, and heterogeneous UAV capabilities.
+
+\bibliographystyle{IEEEtran}
+\bibliography{cja-template}
+
+\appendices
+\section{Notation Table}
+\label{app:notation}
+
+Table~\ref{tab:notation} groups the main symbols by role. Symbols used only as temporary
+indices inside a single equation are explained locally and omitted here.
+
+\begin{table*}[!t]
+\centering
+\caption{Grouped Notation Summary}
+\label{tab:notation}
+\renewcommand{\arraystretch}{1.12}
+\footnotesize
+\begin{tabular}{@{}p{0.14\textwidth}p{0.32\textwidth}p{0.14\textwidth}p{0.32\textwidth}@{}}
+\toprule
+Symbol & Description & Symbol & Description \\
+\midrule
+\multicolumn{4}{l}{\emph{Sets, indices, and physical quantities}}\\
+$\mathcal D,\mathcal T$ & Defender and target sets. &
+$N_D,N_A$ & Numbers of defenders and targets.\\
+$i,j,k,t$ & Defender, target, assignment/episode, and guidance-step indices. &
+$\mathcal N_i,\mathcal G_j$ & Communication neighbors of defender $i$ and defenders assigned to target $j$.\\
+$\mathbf p_i,\mathbf v_i,V_i$ & Position, velocity vector, and speed of defender $i$. &
+$\boldsymbol\ell_i,\gamma_{D_i},\theta_{D_i}$ & LOS unit vector, defender heading, and flight-path angle.\\
+$d_i,t_{go,i}$ & Defender--target range and estimated time-to-go. &
+$n_{x_i},n_{y_i},n_{z_i}$ & Axial, horizontal-normal, and vertical-normal load-factor commands.\\
+\midrule
+\multicolumn{4}{l}{\emph{Target-assignment quantities}}\\
+$X_{ij},\mathbf X$ & Binary assignment variable and assignment matrix. &
+$L_{\max}$ & Maximum defenders assigned to one target.\\
+$p_{ij}^{\mathrm{int}}$ & Pairwise interception-probability proxy. &
+$\boldsymbol\xi_i,\pi_{ij}$ & Latent and sigmoid-mapped target preferences.\\
+$u_{ij},\chi_{ij}$ & Target-specific local utility and combat advantage. &
+$b_{ij},\mathcal W_{i,j}$ & Target bid and defender $i$'s local winner set for target $j$.\\
+$\Gamma^{(k)}$ & Pairwise assignment-consensus disagreement. &
+$N_{\mathrm{pop}},K_{\mathrm{IDBO}}$ & Local population size and number of IDBO iterations.\\
+\midrule
+\multicolumn{4}{l}{\emph{Learning quantities}}\\
+$\mathbf o_i^{(t)},\mathbf s_t$ & Local actor observation and joint critic state. &
+$\mathbf H_i,\mathbf h_i,\mathbf g_i$ & Attention tokens, residual feature, and GRU state.\\
+$\mathbf a_i^{(t)},\mathcal A$ & Three-dimensional load command and feasible action set. &
+$\pi_\theta,V_\phi$ & Shared decentralized actor and centralized value function.\\
+$\mathcal T_i,G_i^{(k)}$ & Training-time trust state and episodic return. &
+$\varrho_t,\widehat A_t$ & PPO importance ratio and GAE advantage estimate.\\
+$\varepsilon_{\mathrm{PPO}},c_{\mathrm{DC}}$ & PPO clipping factor and dual-clip parameter. &
+$\delta_{\mathrm{KL}},\beta_{\mathrm{KL}}$ & Target KL divergence and adaptive KL penalty.\\
+$r_i^{(t)},\gamma_{\mathrm{RL}}$ & Per-step reward and RL discount factor. &
+$H_{\mathrm{ep}}$ & Episode horizon.\\
+\midrule
+\multicolumn{4}{l}{\emph{Evaluation quantities}}\\
+$t_i^{\mathrm{arr}},\mathcal W_i$ & Arrival time and terminal measurement window. &
+$E_{\mathrm{co\text{-}time}},E_n$ & Arrival-time dispersion and terminal-window load metric.\\
+$E_{\mathrm{miss}},E_t$ & Terminal miss distance and coordinated engagement duration. & & \\
+\bottomrule
+\end{tabular}
+\end{table*}
+ 
+\end{document}

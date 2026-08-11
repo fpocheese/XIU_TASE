@@ -1,0 +1,17 @@
+case,target_internal_id,target_paper_label,assigned_interceptor_count,observed_hit_count,complete_group,first_hit_time_s,last_observed_hit_time_s,observed_within_group_spread_s,strict_completion_delay_lower_bound_s
+case1,20,A1,3,3,True,31.3,31.35,0.05000000000000071,
+case1,21,A2,3,3,True,28.35,28.35,0.0,
+case1,22,A3,3,3,True,33.05,33.1,0.05000000000000426,
+case1,23,A4,3,3,True,30.15,30.2,0.05000000000000071,
+case1,24,A5,2,2,True,26.75,26.75,0.0,
+case1,25,A6,2,1,False,33.1,33.1,0.0,41.9
+case1,26,A7,2,2,True,29.2,29.25,0.05000000000000071,
+case1,27,A8,2,2,True,28.5,28.5,0.0,
+case2,20,A1,3,3,True,29.1,29.3,0.1999999999999993,
+case2,21,A2,3,2,False,26.1,26.15,0.04999999999999716,48.9
+case2,22,A3,3,3,True,64.55,64.9,0.3500000000000085,
+case2,23,A4,3,3,True,27.95,28.15,0.1999999999999993,
+case2,24,A5,2,2,True,24.85,24.9,0.04999999999999716,
+case2,25,A6,2,2,True,26.75,26.75,0.0,
+case2,26,A7,2,2,True,26.25,26.3,0.05000000000000071,
+case2,27,A8,2,2,True,27.55,27.55,0.0,

@@ -1,0 +1,22 @@
+\begin{table*}[!t]
+\centering
+\small
+\caption{Effect of each module on training dynamics.}
+\label{tab:ablation_training_effects}
+\renewcommand{\arraystretch}{1.12}
+\begin{tabular}{llrrrrrrr}
+\toprule
+Case & Variant & Actor (k) & Conv. (k steps) & Training AUC $\uparrow$ & Final return $\uparrow$ & Std. final return $\downarrow$ & Critic loss $\downarrow$ & $\Delta H$ (\%) \\
+\midrule
+Case 1 & Full ART-MAPPO & 732.8 & -- & 535.07 & 534.16 & 108.91 & 0.0583 & -52.4 \\
+Case 1 & No trust & 732.8 & -- & 535.67 & 535.66 & 107.54 & 0.0581 & -78.5 \\
+Case 1 & No GRU & 337.5 & -- & 535.04 & 533.40 & 106.25 & 0.3095 & -51.6 \\
+Case 1 & No attention--residual & 733.2 & -- & 535.04 & 533.41 & 106.01 & 0.0576 & -52.0 \\
+Case 2 & Full ART-MAPPO & 732.8 & 205.8 & 606.96 & 608.14 & 151.91 & 0.0348 & -46.8 \\
+Case 2 & No trust & 732.8 & 205.8 & 606.95 & 608.13 & 146.56 & 0.0351 & -69.7 \\
+Case 2 & No GRU & 337.5 & 202.8 & 606.96 & 608.14 & 154.14 & 0.2330 & -55.9 \\
+Case 2 & No attention--residual & 733.2 & 202.8 & 606.96 & 608.14 & 163.48 & 0.0353 & -51.8 \\
+\bottomrule
+\end{tabular}
+\vspace{1mm}\parbox{0.98\linewidth}{\footnotesize Training AUC is the horizon-normalized area under the raw episodic-return curve. AUC, final return, and its within-run standard deviation are reported in $10^3$ return units. Final statistics use the last 10\% of updates (58 updates here). The standard deviation measures update-to-update fluctuation within one run; it is not a cross-seed uncertainty estimate. Convergence is the first sustained attainment of 90\% of each run's own asymptotic return improvement. No visual smoothing enters any table value.}
+\end{table*}

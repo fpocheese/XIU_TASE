@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "v2_root": "/home/uav/00gao_xueshu/DT_PAPER/XIU_tase_paper_V1/revise_0723/Re_xiaorong/V2",
+  "raw_root": "/home/uav/00gao_xueshu/DT_PAPER/XIU_tase_paper_V1/revise_0723/Re_xiaorong/raw_results",
+  "raw_training_runs_checked": 40,
+  "raw_npy_arrays_checked": 160,
+  "plot_csv_files": 24,
+  "figure_files": 15,
+  "errors": []
+}

@@ -1,0 +1,5 @@
+variant,variant_label,target_interception_rate_percent,target_sync_rate_percent,all_target_interception_percent,all_target_sync_percent,final_return_million
+full,Full ART-MAPPO,44.625,30.500,0.000,0.000,162.106945
+no_trust,w/o trust-aware,34.000,24.000,0.000,0.000,166.279933
+no_gru,w/o GRU,50.125,33.250,0.000,0.000,161.728232
+no_attention_residual,w/o attention-residual,38.625,23.625,0.000,0.000,161.654093

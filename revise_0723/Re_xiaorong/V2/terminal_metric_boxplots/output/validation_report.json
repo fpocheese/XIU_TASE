@@ -1,0 +1,28 @@
+{
+  "input_run_count": 40,
+  "episode_count": 800,
+  "complete_group_row_count": 4190,
+  "strict_complete_episode_counts": {
+    "case1:full": 90,
+    "case1:no_trust": 90,
+    "case1:no_gru": 92,
+    "case1:no_attention_residual": 81,
+    "case2:full": 0,
+    "case2:no_trust": 0,
+    "case2:no_gru": 0,
+    "case2:no_attention_residual": 0
+  },
+  "complete_group_conditioned_episode_counts": {
+    "case1:full": 100,
+    "case1:no_trust": 100,
+    "case1:no_gru": 100,
+    "case1:no_attention_residual": 100,
+    "case2:full": 100,
+    "case2:no_trust": 82,
+    "case2:no_gru": 100,
+    "case2:no_attention_residual": 99
+  },
+  "nan_inf_in_group_metrics": 0,
+  "nan_metrics_only_when_no_complete_group": true,
+  "metric_note": "E_n_terminal_sample_g is the mean resultant load recorded at first arrival; the current event logs do not contain the complete terminal measurement window."
+}

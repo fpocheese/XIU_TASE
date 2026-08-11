@@ -1,0 +1,28 @@
+{
+  "training_runs": 40,
+  "evaluation_seed_case_runs": 40,
+  "variants": [
+    "full",
+    "no_trust",
+    "no_gru",
+    "no_attention_residual"
+  ],
+  "statistics": "paired by training seed and case; two-sided exact sign-flip tests with Holm correction within each metric",
+  "confidence_intervals": "95% Student-t intervals over independent seed-level estimates",
+  "figure_evaluation_metrics": [
+    "target_interception_rate",
+    "target_sync_rate"
+  ],
+  "strict_trial_metrics_retained_in_csv": [
+    "all_target_interception",
+    "all_target_sync"
+  ],
+  "input_validation": {
+    "passed": true,
+    "training_runs": 40,
+    "evaluation_seed_case_runs": 40,
+    "expected_runs": 40,
+    "episodes_per_seed_case": 20,
+    "errors": []
+  }
+}

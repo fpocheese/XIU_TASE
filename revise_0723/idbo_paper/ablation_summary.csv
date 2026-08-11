@@ -1,0 +1,4 @@
+schedule,best_cost_mean,best_cost_std,mean_cost_final,late_pop_spread,gamma_final_mean
+linear,0.339881,0.218538,0.582405,0.662601,0.003500
+constant,0.299937,0.189607,1.741579,1.509046,0.035875
+none,0.294967,0.189832,2.281969,1.666057,0.048125

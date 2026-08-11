@@ -1,0 +1,7 @@
+[
+  {
+    "iteration": 1,
+    "direction": "Audit paper-to-code architectural correspondence before designing ablations",
+    "result": "Found missing trust mechanism and degenerate length-one attention"
+  }
+]

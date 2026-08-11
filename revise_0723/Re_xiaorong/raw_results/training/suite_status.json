@@ -1,0 +1,635 @@
+{
+  "case_steps": {
+    "case1": 600000,
+    "case2": 1800000
+  },
+  "failures": [],
+  "finished_at": 1785028067.3552177,
+  "jobs": {
+    "full/case1/seed701": {
+      "skipped": true,
+      "status": "complete"
+    },
+    "full/case1/seed702": {
+      "skipped": true,
+      "status": "complete"
+    },
+    "full/case1/seed703": {
+      "skipped": true,
+      "status": "complete"
+    },
+    "full/case1/seed704": {
+      "skipped": true,
+      "status": "complete"
+    },
+    "full/case1/seed705": {
+      "skipped": true,
+      "status": "complete"
+    },
+    "full/case2/seed701": {
+      "attempt": 0,
+      "command": [
+        "/home/a2rl/miniconda3/envs/rlgpu/bin/python",
+        "/home/a2rl/reviewer_art_mappo_ablation_20260724/on-policy-main/onpolicy/scripts/train_art_mappo_ablation_3d.py",
+        "--variant",
+        "full",
+        "--case_3d",
+        "case2",
+        "--seed",
+        "701",
+        "--save_dir",
+        "/home/a2rl/reviewer_art_mappo_ablation_20260724/formal_paper_ablation_5seed",
+        "--compare_steps",
+        "1800000",
+        "--episode_length",
+        "1500",
+        "--n_rollout_threads",
+        "4",
+        "--resume"
+      ],
+      "finished_at": 1784974887.2200432,
+      "heartbeat": 1784974887.219534,
+      "index": 21,
+      "started_at": 1784968130.7700453,
+      "status": "complete"
+    },
+    "full/case2/seed702": {
+      "attempt": 0,
+      "command": [
+        "/home/a2rl/miniconda3/envs/rlgpu/bin/python",
+        "/home/a2rl/reviewer_art_mappo_ablation_20260724/on-policy-main/onpolicy/scripts/train_art_mappo_ablation_3d.py",
+        "--variant",
+        "full",
+        "--case_3d",
+        "case2",
+        "--seed",
+        "702",
+        "--save_dir",
+        "/home/a2rl/reviewer_art_mappo_ablation_20260724/formal_paper_ablation_5seed",
+        "--compare_steps",
+        "1800000",
+        "--episode_length",
+        "1500",
+        "--n_rollout_threads",
+        "4",
+        "--resume"
+      ],
+      "finished_at": 1784985367.112491,
+      "heartbeat": 1784985367.1119108,
+      "index": 25,
+      "started_at": 1784975608.1387806,
+      "status": "complete"
+    },
+    "full/case2/seed703": {
+      "attempt": 0,
+      "command": [
+        "/home/a2rl/miniconda3/envs/rlgpu/bin/python",
+        "/home/a2rl/reviewer_art_mappo_ablation_20260724/on-policy-main/onpolicy/scripts/train_art_mappo_ablation_3d.py",
+        "--variant",
+        "full",
+        "--case_3d",
+        "case2",
+        "--seed",
+        "703",
+        "--save_dir",
+        "/home/a2rl/reviewer_art_mappo_ablation_20260724/formal_paper_ablation_5seed",
+        "--compare_steps",
+        "1800000",
+        "--episode_length",
+        "1500",
+        "--n_rollout_threads",
+        "4",
+        "--resume"
+      ],
+      "finished_at": 1784995036.2854445,
+      "heartbeat": 1784995036.2847621,
+      "index": 29,
+      "started_at": 1784985367.1129553,
+      "status": "complete"
+    },
+    "full/case2/seed704": {
+      "attempt": 0,
+      "command": [
+        "/home/a2rl/miniconda3/envs/rlgpu/bin/python",
+        "/home/a2rl/reviewer_art_mappo_ablation_20260724/on-policy-main/onpolicy/scripts/train_art_mappo_ablation_3d.py",
+        "--variant",
+        "full",
+        "--case_3d",
+        "case2",
+        "--seed",
+        "704",
+        "--save_dir",
+        "/home/a2rl/reviewer_art_mappo_ablation_20260724/formal_paper_ablation_5seed",
+        "--compare_steps",
+        "1800000",
+        "--episode_length",
+        "1500",
+        "--n_rollout_threads",
+        "4",
+        "--resume"
+      ],
+      "finished_at": 1785011221.6649945,
+      "heartbeat": 1785011221.664264,
+      "index": 33,
+      "started_at": 1785001191.9883213,
+      "status": "complete"
+    },
+    "full/case2/seed705": {
+      "attempt": 0,
+      "command": [
+        "/home/a2rl/miniconda3/envs/rlgpu/bin/python",
+        "/home/a2rl/reviewer_art_mappo_ablation_20260724/on-policy-main/onpolicy/scripts/train_art_mappo_ablation_3d.py",
+        "--variant",
+        "full",
+        "--case_3d",
+        "case2",
+        "--seed",
+        "705",
+        "--save_dir",
+        "/home/a2rl/reviewer_art_mappo_ablation_20260724/formal_paper_ablation_5seed",
+        "--compare_steps",
+        "1800000",
+        "--episode_length",
+        "1500",
+        "--n_rollout_threads",
+        "4",
+        "--resume"
+      ],
+      "finished_at": 1785021401.3856246,
+      "heartbeat": 1785021401.3848944,
+      "index": 37,
+      "started_at": 1785011672.1631439,
+      "status": "complete"
+    },
+    "no_attention_residual/case1/seed701": {
+      "skipped": true,
+      "status": "complete"
+    },
+    "no_attention_residual/case1/seed702": {
+      "skipped": true,
+      "status": "complete"
+    },
+    "no_attention_residual/case1/seed703": {
+      "skipped": true,
+      "status": "complete"
+    },
+    "no_attention_residual/case1/seed704": {
+      "skipped": true,
+      "status": "complete"
+    },
+    "no_attention_residual/case1/seed705": {
+      "skipped": true,
+      "status": "complete"
+    },
+    "no_attention_residual/case2/seed701": {
+      "attempt": 0,
+      "command": [
+        "/home/a2rl/miniconda3/envs/rlgpu/bin/python",
+        "/home/a2rl/reviewer_art_mappo_ablation_20260724/on-policy-main/onpolicy/scripts/train_art_mappo_ablation_3d.py",
+        "--variant",
+        "no_attention_residual",
+        "--case_3d",
+        "case2",
+        "--seed",
+        "701",
+        "--save_dir",
+        "/home/a2rl/reviewer_art_mappo_ablation_20260724/formal_paper_ablation_5seed",
+        "--compare_steps",
+        "1800000",
+        "--episode_length",
+        "1500",
+        "--n_rollout_threads",
+        "4",
+        "--resume"
+      ],
+      "finished_at": 1784983535.312459,
+      "heartbeat": 1784983535.3119285,
+      "index": 24,
+      "started_at": 1784974887.257111,
+      "status": "complete"
+    },
+    "no_attention_residual/case2/seed702": {
+      "attempt": 0,
+      "command": [
+        "/home/a2rl/miniconda3/envs/rlgpu/bin/python",
+        "/home/a2rl/reviewer_art_mappo_ablation_20260724/on-policy-main/onpolicy/scripts/train_art_mappo_ablation_3d.py",
+        "--variant",
+        "no_attention_residual",
+        "--case_3d",
+        "case2",
+        "--seed",
+        "702",
+        "--save_dir",
+        "/home/a2rl/reviewer_art_mappo_ablation_20260724/formal_paper_ablation_5seed",
+        "--compare_steps",
+        "1800000",
+        "--episode_length",
+        "1500",
+        "--n_rollout_threads",
+        "4",
+        "--resume"
+      ],
+      "finished_at": 1784993775.0935335,
+      "heartbeat": 1784993775.092909,
+      "index": 28,
+      "started_at": 1784985006.9901936,
+      "status": "complete"
+    },
+    "no_attention_residual/case2/seed703": {
+      "attempt": 0,
+      "command": [
+        "/home/a2rl/miniconda3/envs/rlgpu/bin/python",
+        "/home/a2rl/reviewer_art_mappo_ablation_20260724/on-policy-main/onpolicy/scripts/train_art_mappo_ablation_3d.py",
+        "--variant",
+        "no_attention_residual",
+        "--case_3d",
+        "case2",
+        "--seed",
+        "703",
+        "--save_dir",
+        "/home/a2rl/reviewer_art_mappo_ablation_20260724/formal_paper_ablation_5seed",
+        "--compare_steps",
+        "1800000",
+        "--episode_length",
+        "1500",
+        "--n_rollout_threads",
+        "4",
+        "--resume"
+      ],
+      "finished_at": 1785003834.5413096,
+      "heartbeat": 1785003834.5406384,
+      "index": 32,
+      "started_at": 1784995036.2858987,
+      "status": "complete"
+    },
+    "no_attention_residual/case2/seed704": {
+      "attempt": 0,
+      "command": [
+        "/home/a2rl/miniconda3/envs/rlgpu/bin/python",
+        "/home/a2rl/reviewer_art_mappo_ablation_20260724/on-policy-main/onpolicy/scripts/train_art_mappo_ablation_3d.py",
+        "--variant",
+        "no_attention_residual",
+        "--case_3d",
+        "case2",
+        "--seed",
+        "704",
+        "--save_dir",
+        "/home/a2rl/reviewer_art_mappo_ablation_20260724/formal_paper_ablation_5seed",
+        "--compare_steps",
+        "1800000",
+        "--episode_length",
+        "1500",
+        "--n_rollout_threads",
+        "4",
+        "--resume"
+      ],
+      "finished_at": 1785020050.2514231,
+      "heartbeat": 1785020050.2431016,
+      "index": 36,
+      "started_at": 1785011221.7027364,
+      "status": "complete"
+    },
+    "no_attention_residual/case2/seed705": {
+      "attempt": 0,
+      "command": [
+        "/home/a2rl/miniconda3/envs/rlgpu/bin/python",
+        "/home/a2rl/reviewer_art_mappo_ablation_20260724/on-policy-main/onpolicy/scripts/train_art_mappo_ablation_3d.py",
+        "--variant",
+        "no_attention_residual",
+        "--case_3d",
+        "case2",
+        "--seed",
+        "705",
+        "--save_dir",
+        "/home/a2rl/reviewer_art_mappo_ablation_20260724/formal_paper_ablation_5seed",
+        "--compare_steps",
+        "1800000",
+        "--episode_length",
+        "1500",
+        "--n_rollout_threads",
+        "4",
+        "--resume"
+      ],
+      "finished_at": 1785028067.318998,
+      "heartbeat": 1785028067.315008,
+      "index": 40,
+      "started_at": 1785021401.4231071,
+      "status": "complete"
+    },
+    "no_gru/case1/seed701": {
+      "skipped": true,
+      "status": "complete"
+    },
+    "no_gru/case1/seed702": {
+      "skipped": true,
+      "status": "complete"
+    },
+    "no_gru/case1/seed703": {
+      "skipped": true,
+      "status": "complete"
+    },
+    "no_gru/case1/seed704": {
+      "skipped": true,
+      "status": "complete"
+    },
+    "no_gru/case1/seed705": {
+      "skipped": true,
+      "status": "complete"
+    },
+    "no_gru/case2/seed701": {
+      "attempt": 0,
+      "command": [
+        "/home/a2rl/miniconda3/envs/rlgpu/bin/python",
+        "/home/a2rl/reviewer_art_mappo_ablation_20260724/on-policy-main/onpolicy/scripts/train_art_mappo_ablation_3d.py",
+        "--variant",
+        "no_gru",
+        "--case_3d",
+        "case2",
+        "--seed",
+        "701",
+        "--save_dir",
+        "/home/a2rl/reviewer_art_mappo_ablation_20260724/formal_paper_ablation_5seed",
+        "--compare_steps",
+        "1800000",
+        "--episode_length",
+        "1500",
+        "--n_rollout_threads",
+        "4",
+        "--resume"
+      ],
+      "finished_at": 1784976478.8897202,
+      "heartbeat": 1784976478.8888793,
+      "index": 23,
+      "started_at": 1784968130.7703714,
+      "status": "complete"
+    },
+    "no_gru/case2/seed702": {
+      "attempt": 0,
+      "command": [
+        "/home/a2rl/miniconda3/envs/rlgpu/bin/python",
+        "/home/a2rl/reviewer_art_mappo_ablation_20260724/on-policy-main/onpolicy/scripts/train_art_mappo_ablation_3d.py",
+        "--variant",
+        "no_gru",
+        "--case_3d",
+        "case2",
+        "--seed",
+        "702",
+        "--save_dir",
+        "/home/a2rl/reviewer_art_mappo_ablation_20260724/formal_paper_ablation_5seed",
+        "--compare_steps",
+        "1800000",
+        "--episode_length",
+        "1500",
+        "--n_rollout_threads",
+        "4",
+        "--resume"
+      ],
+      "finished_at": 1784992664.0187714,
+      "heartbeat": 1784992664.0182278,
+      "index": 27,
+      "started_at": 1784983535.3152397,
+      "status": "complete"
+    },
+    "no_gru/case2/seed703": {
+      "attempt": 0,
+      "command": [
+        "/home/a2rl/miniconda3/envs/rlgpu/bin/python",
+        "/home/a2rl/reviewer_art_mappo_ablation_20260724/on-policy-main/onpolicy/scripts/train_art_mappo_ablation_3d.py",
+        "--variant",
+        "no_gru",
+        "--case_3d",
+        "case2",
+        "--seed",
+        "703",
+        "--save_dir",
+        "/home/a2rl/reviewer_art_mappo_ablation_20260724/formal_paper_ablation_5seed",
+        "--compare_steps",
+        "1800000",
+        "--episode_length",
+        "1500",
+        "--n_rollout_threads",
+        "4",
+        "--resume"
+      ],
+      "finished_at": 1785002933.7675345,
+      "heartbeat": 1785002933.766888,
+      "index": 31,
+      "started_at": 1784993775.0939732,
+      "status": "complete"
+    },
+    "no_gru/case2/seed704": {
+      "attempt": 0,
+      "command": [
+        "/home/a2rl/miniconda3/envs/rlgpu/bin/python",
+        "/home/a2rl/reviewer_art_mappo_ablation_20260724/on-policy-main/onpolicy/scripts/train_art_mappo_ablation_3d.py",
+        "--variant",
+        "no_gru",
+        "--case_3d",
+        "case2",
+        "--seed",
+        "704",
+        "--save_dir",
+        "/home/a2rl/reviewer_art_mappo_ablation_20260724/formal_paper_ablation_5seed",
+        "--compare_steps",
+        "1800000",
+        "--episode_length",
+        "1500",
+        "--n_rollout_threads",
+        "4",
+        "--resume"
+      ],
+      "finished_at": 1785013263.705873,
+      "heartbeat": 1785013263.7052093,
+      "index": 35,
+      "started_at": 1785003834.54428,
+      "status": "complete"
+    },
+    "no_gru/case2/seed705": {
+      "attempt": 0,
+      "command": [
+        "/home/a2rl/miniconda3/envs/rlgpu/bin/python",
+        "/home/a2rl/reviewer_art_mappo_ablation_20260724/on-policy-main/onpolicy/scripts/train_art_mappo_ablation_3d.py",
+        "--variant",
+        "no_gru",
+        "--case_3d",
+        "case2",
+        "--seed",
+        "705",
+        "--save_dir",
+        "/home/a2rl/reviewer_art_mappo_ablation_20260724/formal_paper_ablation_5seed",
+        "--compare_steps",
+        "1800000",
+        "--episode_length",
+        "1500",
+        "--n_rollout_threads",
+        "4",
+        "--resume"
+      ],
+      "finished_at": 1785027376.9402645,
+      "heartbeat": 1785027376.939003,
+      "index": 39,
+      "started_at": 1785020050.252436,
+      "status": "complete"
+    },
+    "no_trust/case1/seed701": {
+      "skipped": true,
+      "status": "complete"
+    },
+    "no_trust/case1/seed702": {
+      "skipped": true,
+      "status": "complete"
+    },
+    "no_trust/case1/seed703": {
+      "skipped": true,
+      "status": "complete"
+    },
+    "no_trust/case1/seed704": {
+      "skipped": true,
+      "status": "complete"
+    },
+    "no_trust/case1/seed705": {
+      "skipped": true,
+      "status": "complete"
+    },
+    "no_trust/case2/seed701": {
+      "attempt": 0,
+      "command": [
+        "/home/a2rl/miniconda3/envs/rlgpu/bin/python",
+        "/home/a2rl/reviewer_art_mappo_ablation_20260724/on-policy-main/onpolicy/scripts/train_art_mappo_ablation_3d.py",
+        "--variant",
+        "no_trust",
+        "--case_3d",
+        "case2",
+        "--seed",
+        "701",
+        "--save_dir",
+        "/home/a2rl/reviewer_art_mappo_ablation_20260724/formal_paper_ablation_5seed",
+        "--compare_steps",
+        "1800000",
+        "--episode_length",
+        "1500",
+        "--n_rollout_threads",
+        "4",
+        "--resume"
+      ],
+      "finished_at": 1784975608.1384325,
+      "heartbeat": 1784975608.1379209,
+      "index": 22,
+      "started_at": 1784968130.7701528,
+      "status": "complete"
+    },
+    "no_trust/case2/seed702": {
+      "attempt": 0,
+      "command": [
+        "/home/a2rl/miniconda3/envs/rlgpu/bin/python",
+        "/home/a2rl/reviewer_art_mappo_ablation_20260724/on-policy-main/onpolicy/scripts/train_art_mappo_ablation_3d.py",
+        "--variant",
+        "no_trust",
+        "--case_3d",
+        "case2",
+        "--seed",
+        "702",
+        "--save_dir",
+        "/home/a2rl/reviewer_art_mappo_ablation_20260724/formal_paper_ablation_5seed",
+        "--compare_steps",
+        "1800000",
+        "--episode_length",
+        "1500",
+        "--n_rollout_threads",
+        "4",
+        "--resume"
+      ],
+      "finished_at": 1784985006.9870846,
+      "heartbeat": 1784985006.9865484,
+      "index": 26,
+      "started_at": 1784976478.890148,
+      "status": "complete"
+    },
+    "no_trust/case2/seed703": {
+      "attempt": 0,
+      "command": [
+        "/home/a2rl/miniconda3/envs/rlgpu/bin/python",
+        "/home/a2rl/reviewer_art_mappo_ablation_20260724/on-policy-main/onpolicy/scripts/train_art_mappo_ablation_3d.py",
+        "--variant",
+        "no_trust",
+        "--case_3d",
+        "case2",
+        "--seed",
+        "703",
+        "--save_dir",
+        "/home/a2rl/reviewer_art_mappo_ablation_20260724/formal_paper_ablation_5seed",
+        "--compare_steps",
+        "1800000",
+        "--episode_length",
+        "1500",
+        "--n_rollout_threads",
+        "4",
+        "--resume"
+      ],
+      "finished_at": 1785001191.985156,
+      "heartbeat": 1785001191.9845192,
+      "index": 30,
+      "started_at": 1784992664.0192256,
+      "status": "complete"
+    },
+    "no_trust/case2/seed704": {
+      "attempt": 0,
+      "command": [
+        "/home/a2rl/miniconda3/envs/rlgpu/bin/python",
+        "/home/a2rl/reviewer_art_mappo_ablation_20260724/on-policy-main/onpolicy/scripts/train_art_mappo_ablation_3d.py",
+        "--variant",
+        "no_trust",
+        "--case_3d",
+        "case2",
+        "--seed",
+        "704",
+        "--save_dir",
+        "/home/a2rl/reviewer_art_mappo_ablation_20260724/formal_paper_ablation_5seed",
+        "--compare_steps",
+        "1800000",
+        "--episode_length",
+        "1500",
+        "--n_rollout_threads",
+        "4",
+        "--resume"
+      ],
+      "finished_at": 1785011672.1626086,
+      "heartbeat": 1785011672.1619072,
+      "index": 34,
+      "started_at": 1785002933.7680624,
+      "status": "complete"
+    },
+    "no_trust/case2/seed705": {
+      "attempt": 0,
+      "command": [
+        "/home/a2rl/miniconda3/envs/rlgpu/bin/python",
+        "/home/a2rl/reviewer_art_mappo_ablation_20260724/on-policy-main/onpolicy/scripts/train_art_mappo_ablation_3d.py",
+        "--variant",
+        "no_trust",
+        "--case_3d",
+        "case2",
+        "--seed",
+        "705",
+        "--save_dir",
+        "/home/a2rl/reviewer_art_mappo_ablation_20260724/formal_paper_ablation_5seed",
+        "--compare_steps",
+        "1800000",
+        "--episode_length",
+        "1500",
+        "--n_rollout_threads",
+        "4",
+        "--resume"
+      ],
+      "finished_at": 1785021851.9553428,
+      "heartbeat": 1785021851.9545875,
+      "index": 38,
+      "started_at": 1785013263.7063963,
+      "status": "complete"
+    }
+  },
+  "jobs_total": 40,
+  "max_parallel": 3,
+  "started_at": 1784968130.727433,
+  "status": "complete",
+  "steps": 600000
+}

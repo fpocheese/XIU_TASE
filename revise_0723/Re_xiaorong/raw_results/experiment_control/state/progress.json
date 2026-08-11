@@ -1,0 +1,32 @@
+{
+  "iteration": 14,
+  "total_findings": 19,
+  "status": "formal_running",
+  "stale_count": 0,
+  "last_seen": "2026-07-26T01:00:11+08:00",
+  "pilot_progress": {
+    "full": 100,
+    "no_trust": 100,
+    "no_gru": 100,
+    "no_attention_residual": 100
+  },
+  "budget_validation": "The earlier negative pilot used obsolete v63 guidance. Paper-audited profiles restored; Case 1 120k pilot completed and Case 2 uses the established 1.8M sufficient budget.",
+  "formal_protocol": {
+    "seeds": [701, 702, 703, 704, 705],
+    "cases": ["case1", "case2"],
+    "variants": 4,
+    "case1_steps": 600000,
+    "case2_steps": 1800000,
+    "max_parallel": 3,
+    "evaluation_episodes_per_seed_case": 20
+  },
+  "formal_progress": {
+    "training_jobs_complete": 29,
+    "training_jobs_running": 3,
+    "training_jobs_total": 40,
+    "failed_or_retrying": 0
+  },
+  "recovery_status": "Remote reboot, ValueNorm registration, RNG restore, and PPO numerical guards were audited and recovered without changing the formal protocol. The resumed full policy passed the original failure point with zero numerical-guard triggers.",
+  "evaluation_protocol_audit": "The revised paper explicitly disables trust-mixture exploration at deployment (beta_i=0). The shared case-specific base-guidance plus learned residual plant interface remains active and identical across variants.",
+  "automatic_fetch": "Persistent watcher session started; it will retry through network outages, mirror nonredundant formal artifacts, run strict local validation, and create SHA256SUMS.txt."
+}

@@ -1,0 +1,9 @@
+{"ts":"2026-07-24T00:00:05+08:00","source":"heartbeat","level":"info","event":"last_seen","detail":"Initial audit active."}
+{"ts":"2026-07-25T20:59:59+08:00","source":"heartbeat","level":"info","event":"last_seen","detail":"Remote formal suite alive: 24/40 jobs complete, 3 running, GPU healthy; persistent monitor session active."}
+{"ts":"2026-07-25T21:15:26+08:00","source":"heartbeat","level":"info","event":"last_seen","detail":"Remote formal suite alive at 25/40 complete; status monitor and retrying post-analysis fetch watcher are both active."}
+{"ts":"2026-07-25T21:59:21+08:00","source":"heartbeat","level":"info","event":"last_seen","detail":"Remote formal suite alive at 26/40 complete; three active metrics continue to advance and both monitor layers remain active."}
+{"ts":"2026-07-25T23:00:08+08:00","source":"heartbeat","level":"info","event":"last_seen","detail":"Remote formal suite remains healthy at 26/40 complete; active Case 2 runs reached updates 194, 225, and 264 with no guard triggers."}
+{"ts":"2026-07-25T23:19:00+08:00","source":"heartbeat","level":"info","event":"last_seen","detail":"Formal suite reached 27/40 complete; no-GRU seed702 finished and no-trust seed703 entered update 2 without error."}
+{"ts":"2026-07-25T23:37:10+08:00","source":"heartbeat","level":"info","event":"last_seen","detail":"Formal suite reached 28/40 complete; no-attention-residual seed702 finished and no-GRU seed703 began without error."}
+{"ts":"2026-07-25T23:58:25+08:00","source":"heartbeat","level":"info","event":"last_seen","detail":"Formal suite reached 29/40 complete; full seed703 finished and no-attention-residual seed703 began without error."}
+{"ts":"2026-07-26T01:00:11+08:00","source":"heartbeat","level":"info","event":"last_seen","detail":"Formal suite remains healthy at 29/40 complete; active Case 2 runs reached updates 129, 163, and 216 with no guard triggers."}

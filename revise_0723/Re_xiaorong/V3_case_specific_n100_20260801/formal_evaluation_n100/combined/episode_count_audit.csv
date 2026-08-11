@@ -1,0 +1,9 @@
+variant,case,episode_count
+full,case1,100
+full,case2,100
+no_attention_residual,case1,100
+no_attention_residual,case2,100
+no_gru,case1,100
+no_gru,case2,100
+no_trust,case1,100
+no_trust,case2,100

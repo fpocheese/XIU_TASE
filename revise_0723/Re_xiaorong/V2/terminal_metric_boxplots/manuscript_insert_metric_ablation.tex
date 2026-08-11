@@ -1,0 +1,42 @@
+% Standalone proposed text. The original manuscript has not been modified.
+% Case 2 is explicitly diagnostic because no strict all-eight-group success
+% exists in the current 100-episode-per-variant data.
+\paragraph{Terminal-metric ablation analysis.}
+We additionally evaluate the trained variants using
+$E_{\mathrm{co\text{-}time}}$, $E_n$, $E_{\mathrm{miss}}$, and $E_t$ on the
+same held-out episodes.  In Case~1, the boxplots are conditioned on strict
+completion of all eight assigned interceptor groups; the resulting sample
+counts for ART--MAPPO, w/o Trust, w/o GRU, and w/o Attention--Residual are
+90, 90, 92, and 81, respectively.  The complete model yields median values of
+$E_{\mathrm{co\text{-}time}}=0.0130$~s,
+$E_{\mathrm{miss}}=1.7380$~m, and $E_t=35.2781$~s.  Removing the
+attention--residual backbone lowers the strict completion rate from 90\% to
+81\%, while increasing the terminal-load median from 0.3002~g to 0.3150~g and
+the engagement-duration median from 35.2781~s to 35.4563~s.
+
+No variant completes all eight groups in Case~2.  We therefore report its
+boxplots only as a complete-group-conditioned diagnostic and provide the
+unconditional group-completion rates alongside them.  ART--MAPPO completes
+37.13\% of the assigned groups, versus 30.25\%, 33.50\%, and 29.00\% for w/o
+Trust, w/o GRU, and w/o Attention--Residual, respectively.  This joint
+reporting avoids survivor bias: smaller conditional errors for an ablated
+variant do not imply better task performance when substantially fewer groups
+complete.  In particular, removing attention--residual processing reduces
+coverage and increases the conditional terminal load and miss distance.  The
+GRU ablation reveals a tradeoff: the completed groups have smaller arrival-time
+dispersion, but group coverage decreases and conditional miss distance and
+engagement duration increase.  Together with the training-curve evidence,
+these results support the distinct roles of trust-aware training stabilization,
+temporal encoding, and attention--residual interaction modeling.
+
+\begin{figure*}[!t]
+  \centering
+  \includegraphics[width=\textwidth]{ablation_terminal_metrics_boxplot_compare.pdf}
+  \caption{Ablation boxplots of the four terminal criteria. Case~1 uses strict
+  all-eight-group-complete episodes. Case~2 is a complete-group-conditioned
+  diagnostic because no variant achieves a strict all-eight-group-complete
+  episode; unconditional completion rates are reported in the text. Diamonds
+  denote means. The reported $E_n$ is the terminal-sample resultant load
+  available in the stored event logs.}
+  \label{fig:ablation_terminal_metrics}
+\end{figure*}

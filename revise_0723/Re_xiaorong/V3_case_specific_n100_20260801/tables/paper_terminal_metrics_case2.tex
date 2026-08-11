@@ -1,0 +1,18 @@
+\begin{table*}[!t]
+\centering
+\small
+\caption{Terminal metrics for successful finite trials in Case 2.}
+\label{tab:ablation_terminal_case2}
+\renewcommand{\arraystretch}{1.12}
+\begin{tabular}{lcccc}
+\toprule
+Variant & $E_{co\text{-}time}$ (s) & $E_n$ (g) & $E_{miss}$ (m) & $E_t$ (s) \\
+\midrule
+Full ART-MAPPO & 0.042 [0.037, 0.047] ($n$=100) & 0.505 [0.460, 0.571] ($n$=100) & 1.643 [1.548, 1.831] ($n$=100) & 27.763 [27.398, 28.164] ($n$=100) \\
+No trust & 0.043 [0.037, 0.046] ($n$=100) & 0.505 [0.460, 0.573] ($n$=100) & 1.671 [1.560, 1.817] ($n$=100) & 27.766 [27.398, 28.163] ($n$=100) \\
+No GRU & 0.041 [0.037, 0.045] ($n$=100) & 0.505 [0.462, 0.570] ($n$=100) & 1.685 [1.551, 1.791] ($n$=100) & 27.794 [27.411, 28.186] ($n$=100) \\
+No attention--residual & 0.042 [0.037, 0.046] ($n$=100) & 0.506 [0.463, 0.566] ($n$=100) & 1.662 [1.565, 1.821] ($n$=100) & 27.769 [27.397, 28.155] ($n$=100) \\
+\bottomrule
+\end{tabular}
+\vspace{1mm}\parbox{0.98\linewidth}{\footnotesize Entries are median [Q1, Q3] with the eligible sample count. No failed or missing terminal event is imputed.}
+\end{table*}

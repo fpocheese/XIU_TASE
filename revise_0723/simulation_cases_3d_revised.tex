@@ -1,0 +1,328 @@
+\subsection{Cooperative Interception against Maneuvering Targets}
+\label{subsec:cases}
+
+Based on the optimal assignment topology, we evaluate three-dimensional cooperative guidance
+in two maneuvering scenarios. ART-MAPPO and the capacity-matched PN reference use the same
+initial states, target assignment, hit radius, speed limits, load-factor envelope, and other
+scenario settings described in Section~\ref{subsec:setup}. For each
+method and case, we report the three-dimensional trajectory, its horizontal projection, all
+three load commands and their associated attitude/speed responses, time-to-go histories, and
+terminal arrival-time differences.
+
+\subsubsection{Case~1: Interception against Evasive Maneuvering Targets}
+
+In Case~1, the attacking UAVs initially execute a constant-load evasive maneuver and transition
+to PN guidance after 15\,s. This creates simultaneous horizontal and vertical closing demands
+while the defenders must preserve the assignment groups and coordinate their terminal arrival
+times.
+
+\emph{1) ART-MAPPO:} Fig.~\ref{fig:case1_mappo_traj_3d} shows the complete spatial
+engagement. Starting below the attackers, the defenders climb from the defended region and
+close on the eight elevated target trajectories. The horizontal projection in
+Fig.~\ref{fig:case1_mappo_traj_xy} preserves the original plan-view interpretation and shows
+that all 20 defenders converge on the targets specified by the assignment topology.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.15in]{../new_sim_fig/figures_v10/mappo/mappo_nopn_trajectory_3d.png}
+\caption{Three-dimensional engagement trajectories of the defending swarm using ART-MAPPO in
+Case~1.}
+\label{fig:case1_mappo_traj_3d}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.15in]{../new_sim_fig/figures_v10/mappo/mappo_nopn_trajectory.png}
+\caption{Horizontal projection of the ART-MAPPO engagement trajectories in Case~1.}
+\label{fig:case1_mappo_traj_xy}
+\end{figure}
+
+The corresponding command and state histories are separated into three physically related
+pairs in Figs.~\ref{fig:case1_mappo_yaw}--\ref{fig:case1_mappo_axial}. The horizontal normal
+command $n_y$ and heading $\gamma_D$ form the yaw-plane response, while $n_z$ and pitch
+$\theta_D$ show the vertical response that is absent from a planar model. ART-MAPPO keeps
+$n_y$ inside the $\pm1$ envelope and uses a substantially smaller vertical command for most
+of the engagement. The smooth pitch histories confirm gradual altitude capture. Meanwhile,
+$n_x$ and $V_D$ show how the policy regulates closing speed without decoupling temporal
+coordination from the two normal-load channels.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.1in]{../new_sim_fig/figures_v10/mappo/standalone_duav_legend.png}\\[-2pt]
+\subfloat[Normal load $n_y$]{\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/mappo/mappo_nopn_ny.png}}\\[-2pt]
+\subfloat[Heading $\gamma_D$]{\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/mappo/mappo_nopn_heading.png}}
+\caption{Yaw-plane command and response of ART-MAPPO in Case~1.}
+\label{fig:case1_mappo_yaw}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.1in]{../new_sim_fig/figures_v10/mappo/standalone_duav_legend.png}\\[-2pt]
+\subfloat[Vertical load $n_z$]{\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/mappo/mappo_nopn_nz.png}}\\[-2pt]
+\subfloat[Pitch $\theta_D$]{\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/mappo/mappo_nopn_pitch.png}}
+\caption{Pitch-plane command and response of ART-MAPPO in Case~1.}
+\label{fig:case1_mappo_pitch}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.1in]{../new_sim_fig/figures_v10/mappo/standalone_duav_legend.png}\\[-2pt]
+\subfloat[Axial load $n_x$]{\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/mappo/mappo_nopn_nx.png}}\\[-2pt]
+\subfloat[Velocity $V_D$]{\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/mappo/mappo_nopn_velocity.png}}
+\caption{Axial command and speed response of ART-MAPPO in Case~1.}
+\label{fig:case1_mappo_axial}
+\end{figure}
+
+The $t_{go}$ histories in Fig.~\ref{fig:case1_mappo_tgo} converge within the eight target
+groups despite the three-dimensional engagement geometry. The terminal
+summary in Fig.~\ref{fig:case1_mappo_sync} reports a maximum within-group arrival spread of
+0.25\,s, below the 0.5-s synchronization criterion.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/mappo/mappo_nopn_tgo.png}
+\caption{Time-to-go ($t_{go}$) profiles of the defending swarm using ART-MAPPO in Case~1.}
+\label{fig:case1_mappo_tgo}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.0in]{../new_sim_fig/figures_v10/mappo/mappo_nopn_time_sync.png}
+\caption{Terminal arrival time differences $\Delta t$ within each ART-MAPPO interceptor group
+in Case~1.}
+\label{fig:case1_mappo_sync}
+\end{figure}
+
+\emph{2) PN baseline:} The capacity-matched PN reference is shown in
+Figs.~\ref{fig:case1_pn_traj_3d} and~\ref{fig:case1_pn_traj_xy}. PN also completes the selected
+engagement, but its purely reactive commands produce visibly different spatial curvature and
+control transients. The same command limits are imposed on both methods, so the comparison does
+not attribute physically unavailable load authority to the baseline.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.15in]{../new_sim_fig/figures_v10/pn/pn_nopn_trajectory_3d.png}
+\caption{Three-dimensional engagement trajectories of the defending swarm using the PN
+baseline in Case~1.}
+\label{fig:case1_pn_traj_3d}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.15in]{../new_sim_fig/figures_v10/pn/pn_nopn_trajectory.png}
+\caption{Horizontal projection of the PN engagement trajectories in Case~1.}
+\label{fig:case1_pn_traj_xy}
+\end{figure}
+
+Figures~\ref{fig:case1_pn_yaw}--\ref{fig:case1_pn_axial} give the corresponding yaw-plane,
+pitch-plane, and axial responses. The PN commands are clipped to $n_x\in[-0.1,1]$ and
+$n_y,n_z\in[-1,1]$, and the command histories show more direct use of the available bounds.
+The pitch response remains finite and the speed histories remain within the common vehicle
+envelope, providing a physically matched three-dimensional reference.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.1in]{../new_sim_fig/figures_v10/pn/standalone_duav_legend.png}\\[-2pt]
+\subfloat[Normal load $n_y$]{\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/pn/pn_nopn_ny.png}}\\[-2pt]
+\subfloat[Heading $\gamma_D$]{\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/pn/pn_nopn_heading.png}}
+\caption{Yaw-plane command and response of the capacity-matched PN baseline in Case~1.}
+\label{fig:case1_pn_yaw}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.1in]{../new_sim_fig/figures_v10/pn/standalone_duav_legend.png}\\[-2pt]
+\subfloat[Vertical load $n_z$]{\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/pn/pn_nopn_nz.png}}\\[-2pt]
+\subfloat[Pitch $\theta_D$]{\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/pn/pn_nopn_pitch.png}}
+\caption{Pitch-plane command and response of the capacity-matched PN baseline in Case~1.}
+\label{fig:case1_pn_pitch}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.1in]{../new_sim_fig/figures_v10/pn/standalone_duav_legend.png}\\[-2pt]
+\subfloat[Axial load $n_x$]{\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/pn/pn_nopn_nx.png}}\\[-2pt]
+\subfloat[Velocity $V_D$]{\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/pn/pn_nopn_velocity.png}}
+\caption{Axial command and speed response of the capacity-matched PN baseline in Case~1.}
+\label{fig:case1_pn_axial}
+\end{figure}
+
+The PN $t_{go}$ histories also converge in this selected run, as shown in
+Fig.~\ref{fig:case1_pn_tgo}. Its maximum terminal group spread is 0.40\,s
+(Fig.~\ref{fig:case1_pn_sync}), compared with 0.25\,s for ART-MAPPO. Both satisfy the 0.5-s
+criterion, while the learned policy gives the tighter representative Case~1 synchronization.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/pn/pn_nopn_tgo.png}
+\caption{Time-to-go ($t_{go}$) profiles of the defending swarm using the PN baseline in
+Case~1.}
+\label{fig:case1_pn_tgo}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.0in]{../new_sim_fig/figures_v10/pn/pn_nopn_time_sync.png}
+\caption{Terminal arrival time differences $\Delta t$ within each PN interceptor group in
+Case~1.}
+\label{fig:case1_pn_sync}
+\end{figure}
+\FloatBarrier
+
+\subsubsection{Case~2: Interception against Continuous Weaving Targets}
+
+Case~2 uses a sinusoidal penetration maneuver~\cite{Zarchan1995969}. Its continuous horizontal
+and vertical LOS variation provides a more persistent disturbance than the Case~1 transition
+and tests whether group timing can be maintained while all three command channels respond.
+
+\emph{1) ART-MAPPO:} The three-dimensional paths in
+Fig.~\ref{fig:case2_mappo_traj_3d} show that all eight groups maintain spatial closure against
+the weaving targets. The horizontal projection in Fig.~\ref{fig:case2_mappo_traj_xy} exposes
+the lateral curvature without hiding the altitude evolution shown in the 3-D view.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.15in]{../new_sim_fig/figures_v10/mappo/mappo_sin_trajectory_3d.png}
+\caption{Three-dimensional ART-MAPPO engagement trajectories against continuous weaving
+targets in Case~2.}
+\label{fig:case2_mappo_traj_3d}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.15in]{../new_sim_fig/figures_v10/mappo/mappo_sin_trajectory.png}
+\caption{Horizontal projection of the ART-MAPPO engagement trajectories in Case~2.}
+\label{fig:case2_mappo_traj_xy}
+\end{figure}
+
+As shown in Figs.~\ref{fig:case2_mappo_yaw}--\ref{fig:case2_mappo_axial}, ART-MAPPO adapts
+$n_y$ to the continuous lateral disturbance while using $n_z$ to regulate vertical closure.
+The heading and pitch histories
+remain smooth relative to the command variations, and all load channels remain inside the
+prescribed envelope. The axial command raises or preserves closing speed without eliminating
+the control authority required in the yaw and pitch planes.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.1in]{../new_sim_fig/figures_v10/mappo/standalone_duav_legend.png}\\[-2pt]
+\subfloat[Normal load $n_y$]{\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/mappo/mappo_sin_ny.png}}\\[-2pt]
+\subfloat[Heading $\gamma_D$]{\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/mappo/mappo_sin_heading.png}}
+\caption{Yaw-plane command and response of ART-MAPPO in Case~2.}
+\label{fig:case2_mappo_yaw}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.1in]{../new_sim_fig/figures_v10/mappo/standalone_duav_legend.png}\\[-2pt]
+\subfloat[Vertical load $n_z$]{\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/mappo/mappo_sin_nz.png}}\\[-2pt]
+\subfloat[Pitch $\theta_D$]{\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/mappo/mappo_sin_pitch.png}}
+\caption{Pitch-plane command and response of ART-MAPPO in Case~2.}
+\label{fig:case2_mappo_pitch}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.1in]{../new_sim_fig/figures_v10/mappo/standalone_duav_legend.png}\\[-2pt]
+\subfloat[Axial load $n_x$]{\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/mappo/mappo_sin_nx.png}}\\[-2pt]
+\subfloat[Velocity $V_D$]{\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/mappo/mappo_sin_velocity.png}}
+\caption{Axial command and speed response of ART-MAPPO in Case~2.}
+\label{fig:case2_mappo_axial}
+\end{figure}
+
+Despite the continuous LOS disturbance, the ART-MAPPO $t_{go}$ curves converge within their
+assigned groups (Fig.~\ref{fig:case2_mappo_tgo}). The largest terminal arrival-time difference
+is 0.30\,s in Fig.~\ref{fig:case2_mappo_sync}, demonstrating that the timing objective remains
+active in the three-dimensional engagement.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/mappo/mappo_sin_tgo.png}
+\caption{Time-to-go ($t_{go}$) profiles of the defending swarm using ART-MAPPO in Case~2.}
+\label{fig:case2_mappo_tgo}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.0in]{../new_sim_fig/figures_v10/mappo/mappo_sin_time_sync.png}
+\caption{Terminal arrival time differences $\Delta t$ within each ART-MAPPO interceptor group
+in Case~2.}
+\label{fig:case2_mappo_sync}
+\end{figure}
+
+\emph{2) PN baseline:} Figures~\ref{fig:case2_pn_traj_3d}
+and~\ref{fig:case2_pn_traj_xy} show that the constrained PN baseline also reaches all assigned
+targets in the selected Case~2 engagement. The spatial paths exhibit the reactive response to
+the continuously varying LOS, while the plan view and 3-D view together distinguish lateral
+curvature from vertical closure.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.15in]{../new_sim_fig/figures_v10/pn/pn_sin_trajectory_3d.png}
+\caption{Three-dimensional engagement trajectories of the defending swarm using the PN
+baseline in Case~2.}
+\label{fig:case2_pn_traj_3d}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.15in]{../new_sim_fig/figures_v10/pn/pn_sin_trajectory.png}
+\caption{Horizontal projection of the PN engagement trajectories in Case~2.}
+\label{fig:case2_pn_traj_xy}
+\end{figure}
+
+The PN profiles in Figs.~\ref{fig:case2_pn_yaw}--\ref{fig:case2_pn_axial} show sustained
+reactive changes in the horizontal channel together with the vertical and axial responses.
+Since all commands are
+clipped to the same envelope as ART-MAPPO, excursions that reach the plotted $\pm1$ lines
+represent saturation of available authority rather than an unrealizable command.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.1in]{../new_sim_fig/figures_v10/pn/standalone_duav_legend.png}\\[-2pt]
+\subfloat[Normal load $n_y$]{\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/pn/pn_sin_ny.png}}\\[-2pt]
+\subfloat[Heading $\gamma_D$]{\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/pn/pn_sin_heading.png}}
+\caption{Yaw-plane command and response of the capacity-matched PN baseline in Case~2.}
+\label{fig:case2_pn_yaw}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.1in]{../new_sim_fig/figures_v10/pn/standalone_duav_legend.png}\\[-2pt]
+\subfloat[Vertical load $n_z$]{\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/pn/pn_sin_nz.png}}\\[-2pt]
+\subfloat[Pitch $\theta_D$]{\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/pn/pn_sin_pitch.png}}
+\caption{Pitch-plane command and response of the capacity-matched PN baseline in Case~2.}
+\label{fig:case2_pn_pitch}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.1in]{../new_sim_fig/figures_v10/pn/standalone_duav_legend.png}\\[-2pt]
+\subfloat[Axial load $n_x$]{\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/pn/pn_sin_nx.png}}\\[-2pt]
+\subfloat[Velocity $V_D$]{\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/pn/pn_sin_velocity.png}}
+\caption{Axial command and speed response of the capacity-matched PN baseline in Case~2.}
+\label{fig:case2_pn_axial}
+\end{figure}
+
+Figure~\ref{fig:case2_pn_tgo} shows that the selected PN engagement also achieves groupwise
+time-to-go convergence. Its maximum arrival spread is 0.35\,s
+(Fig.~\ref{fig:case2_pn_sync}), whereas ART-MAPPO gives 0.30\,s. These representative runs
+therefore show successful three-dimensional interception for both methods and slightly tighter
+terminal timing for ART-MAPPO; the Monte Carlo analysis below remains the basis for broader
+reliability comparisons.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.2in]{../new_sim_fig/figures_v10/pn/pn_sin_tgo.png}
+\caption{Time-to-go ($t_{go}$) profiles of the defending swarm using the PN baseline in
+Case~2.}
+\label{fig:case2_pn_tgo}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=3.0in]{../new_sim_fig/figures_v10/pn/pn_sin_time_sync.png}
+\caption{Terminal arrival time differences $\Delta t$ within each PN interceptor group in
+Case~2.}
+\label{fig:case2_pn_sync}
+\end{figure}
+\FloatBarrier

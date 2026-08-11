@@ -1,0 +1,541 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage[most]{tcolorbox}
+\usepackage{float}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+
+% Figures are pulled from the per-comment response folders.
+\graphicspath{{../Re2_3/}{../Re3_1/}{../Re3_2/}}
+
+% Colour for text added to the manuscript (matches the blue highlight).
+\definecolor{addblue}{RGB}{0,0,205}
+\newcommand{\hladd}[1]{{\color{addblue}#1}}
+
+% Verbatim reviewer comment.
+\newtcolorbox{reviewercomment}[1]{enhanced,breakable,colback=gray!7,
+  colframe=gray!55,boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt,
+  fonttitle=\bfseries,title={#1},coltitle=black,colbacktitle=gray!18,
+  fontupper=\itshape}
+
+% Exact text added to the manuscript.
+\newtcolorbox{manuscripttext}{enhanced,breakable,colback=blue!4,
+  colframe=addblue!55,boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt}
+
+\newcommand{\rsp}{\medskip\noindent\textbf{Response.}\quad}
+\newcommand{\loc}{\medskip\noindent\textbf{Location of the revision.}\quad}
+\newcommand{\evi}{\medskip\noindent\textbf{Supporting evidence (this letter).}\quad}
+
+\title{\vspace{-1.5em}Response to the Reviewers}
+\date{}
+
+\begin{document}
+\maketitle
+\vspace{-3em}
+\begin{center}\small
+Manuscript: ``Trust-Aware Multi-Agent Reinforcement Learning-Based Cooperative
+Interception Strategy for Maneuvering Swarms with Target Assignment''
+\end{center}
+\bigskip
+
+\noindent We thank the reviewer for the careful reading and the constructive
+comments. Below, each comment is reproduced verbatim (grey box), followed by our
+point-by-point response, the exact location and wording of the corresponding
+revision in the manuscript (blue box, matching the blue highlight in the revised
+PDF), and the supporting figures prepared for this letter. Equation and section
+numbers refer to the revised manuscript.
+
+\bigskip
+\hrule
+\bigskip
+
+\section*{Reviewer~1}
+
+% =====================================================================
+%  Re1_3
+% =====================================================================
+\subsection*{Comment 1.3 --- Pseudocode / algorithm boxes for IDBO and ART-MAPPO}
+
+\begin{reviewercomment}{Reviewer comment 1.3}
+Include pseudocode or algorithm boxes for IDBO and ART-MAPPO to improve
+reproducibility.
+\end{reviewercomment}
+
+\rsp We thank the reviewer for this helpful suggestion. We have added two formal
+algorithm boxes to the manuscript: \textbf{Algorithm~1} (Distributed
+Consensus-Based IDBO) at the end of Section~III-B, and \textbf{Algorithm~2}
+(ART-MAPPO training under CTDE) at the end of Section~IV-D. Because the comment
+explicitly targets reproducibility, these boxes are added to the \emph{main paper}
+(highlighted in blue in the revised manuscript). Crucially, \emph{every line of
+both algorithms is cross-referenced to the equation that defines it}, so each step
+can be reproduced directly from the corresponding formula. Both boxes use the
+\texttt{algorithm}/\texttt{algorithmic} environments already provided by the
+IEEEtran template; no equations were modified, the manuscript still compiles
+cleanly, and all equation cross-references inside the boxes resolve correctly.
+
+\loc Section~III-B, immediately after Eq.~(26) (Algorithm~1); Section~IV-D,
+immediately after the ART-MAPPO workflow figure (Algorithm~2). For the reviewer's
+convenience the two boxes as they now appear in the manuscript are reproduced below.
+
+\begin{algorithm}[H]
+\caption{Distributed Consensus-Based IDBO for Cooperative Target Assignment (per interceptor $u_i$)}
+\begin{algorithmic}[1]
+\REQUIRE Interceptor set $\mathcal{U}$, target set $\mathcal{T}$, probability matrix $\mathbf{P}$~(8), neighbors $\mathcal{N}_i$, capacity $L_{\max}$, IDBO iterations $T$, population size $N_{\mathrm{pop}}$, threshold $\epsilon$
+\ENSURE Converged assignment $\mathbf{X}^\ast$
+\STATE Initialize preference population $\{\mathbf{x}_i\}$, winner lists $\mathcal{Z}_j\!\leftarrow\!\emptyset$, timestamps $\mathbf{y}_i$, iteration $k\!\leftarrow\!0$
+\REPEAT
+  \STATE {\itshape // Phase 1: local metaheuristic optimization}
+  \FOR{$t=1$ to $T$}
+    \STATE Set decaying coefficients $c_t=c_0(1-t/T)$ for $\{\alpha,\beta,\gamma,\delta,\delta',\eta,\sigma_d\}$
+    \STATE Evaluate fitness $\mathcal{F}_i$~(13) and advantage $\mathbf{A}_i$~(15)
+    \STATE Update $\mathbf{x}_i$ by Rolling/Dancing/Breeding/Stealing~(16)--(19)
+  \ENDFOR
+  \STATE Binarize preferences by advantage-adaptive thresholding~(20)
+  \STATE {\itshape // Phase 2: auction-based distributed consensus}
+  \STATE Compute bids $c_{ij}$~(21)
+  \STATE Exchange winner lists with $\mathcal{N}_i$; update top-$L_{\max}$ set $\mathcal{Z}_j$~(22)
+  \STATE {\itshape // Phase 3: adversarial-information update}
+  \STATE Refresh advantages $\mathbf{A}_i^{(k+1)}$ from the consensus assignment
+  \STATE Compute swarm disagreement $\Gamma^{(k)}$~(26);\; $k\!\leftarrow\!k+1$
+\UNTIL{$\Gamma^{(k)}<\epsilon$}
+\STATE \textbf{return} consensus assignment $\mathbf{X}^\ast$
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption{ART-MAPPO Training for Cooperative Swarm Interception (CTDE)}
+\begin{algorithmic}[1]
+\REQUIRE Actor/critic params $\theta,\phi$; clip $\epsilon$, dual-clip floor $c$; target KL $\delta_{\mathrm{targ}}$; rates $\alpha_T,\rho,\tau_T$; epochs $K$
+\ENSURE Trained decentralized policy $\pi_{\theta}$
+\STATE Initialize $\theta,\phi$, trust $\mathcal{T}_i\!\leftarrow\!0.5$, KL weight $\beta_{\mathrm{KL}}$, running stats $\mu_R,\sigma_R^2$
+\FOR{episode $k=1$ to $K$}
+  \STATE {\itshape // Decentralized rollout collection}
+  \FOR{each step $t$ and interceptor $i$}
+    \STATE Encode $\mathbf{o}_i^{(t)}$; attention--residual features~(28)--(31), temporal state $\mathbf{c}_t$~(36)
+    \STATE Form policy $\pi_{\theta_i}$~(37); sample action via trust-blended policy~(43), (44) with $\beta(\mathcal{T}_i)=1-\mathcal{T}_i$
+    \STATE Clip $a_i$ to envelope $\mathcal{A}$; step environment; store transition
+  \ENDFOR
+  \STATE {\itshape // Trust update from episode returns}
+  \STATE Update $\mu_R,\sigma_R^2$~(39), (40); normalize $\tilde{R}_i^{(k)}$~(41)
+  \STATE Smooth trust $\mathcal{T}_i^{(k+1)}$~(42)
+  \STATE {\itshape // Centralized optimization (shared critic on global state~(38))}
+  \STATE Compute advantages $\hat{A}_t$ and value targets via GAE~(46), (47)
+  \FOR{each mini-batch epoch}
+    \STATE Evaluate dual-clip surrogate $J^{\mathrm{DC}}(\theta)$~(48), (49)
+    \STATE Estimate $\hat{D}_{\mathrm{KL}}$~(51); value loss $L_V(\phi)$~(53)
+    \STATE Minimize total loss $\mathcal{L}(\theta,\phi)$~(54) with AdamW (cosine LR)
+  \ENDFOR
+  \STATE Adapt KL weight $\beta_{\mathrm{KL}}^{(k+1)}$~(52)
+\ENDFOR
+\STATE \textbf{return} decentralized policy $\pi_{\theta}$
+\end{algorithmic}
+\end{algorithm}
+
+\clearpage
+
+\section*{Reviewer~2}
+
+% =====================================================================
+%  Re2_3
+% =====================================================================
+\subsection*{Comment 2.3 --- Text vs.\ Eq.~(42): incremental process or convergent smoothing?}
+
+\begin{reviewercomment}{Reviewer comment 2.3}
+Section IV.B contains a logical paradox: the text describes a monotonic incremental
+process, while Equation~(42) implements a convergent smoothing process. This
+divergence between the mathematical definition and physical intuition renders the
+mechanism logically inconsistent in maintaining high-trust stability.
+\end{reviewercomment}
+
+\rsp We thank the reviewer for this precise observation, and we agree. The
+mathematics in Eq.~(42) is correct and is the definition we intend to keep; the
+inconsistency was purely in the surrounding prose, which described the update as a
+monotonic ratchet (``driving $\mathcal{T}_i$ upward'' / ``lowers $\mathcal{T}_i$'').
+We have therefore \emph{kept Eq.~(42) unchanged and rewritten the text} so that the
+physical description matches the mathematics.
+
+\medskip
+\noindent\emph{Why Eq.~(42) is a convergent smoother, not a monotonic increment.}\quad
+The trust update is
+\[
+  \mathcal{T}_i^{(k+1)} = (1-\alpha_T)\,\mathcal{T}_i^{(k)}
+        + \alpha_T\,\sigma\!\bigl(\tau_T \tilde{R}_i^{(k)}\bigr),
+        \qquad \alpha_T\in(0,1).
+\]
+This is first-order exponential smoothing: at each episode $\mathcal{T}_i^{(k)}$ is
+relaxed toward the \emph{bounded, moving} target
+$\mathcal{T}_i^{\star}=\sigma(\tau_T\tilde{R}_i^{(k)})\in(0,1)$. Subtracting the
+target gives
+$\mathcal{T}_i^{(k+1)}-\mathcal{T}_i^{\star}
+ =(1-\alpha_T)\bigl(\mathcal{T}_i^{(k)}-\mathcal{T}_i^{\star}\bigr)$,
+so the map is a \emph{contraction of modulus $(1-\alpha_T)<1$}. Consequences: (i)
+$\mathcal{T}_i^{(k)}$ stays in $(0,1)$ for all $k$; (ii) it converges to the
+equilibrium set by current relative performance rather than growing without bound;
+and (iii) sustained above-average performance holds the target above $0.5$, so trust
+\emph{settles at and maintains} a high value---this is what produces stable
+high trust, whereas a genuinely monotonic process would simply saturate at the
+ceiling and lose all sensitivity. The paradox the reviewer identified was thus a
+wording error, now removed.
+
+\loc Section~IV-B (\emph{Trust-Modulated Tactical Exploration}), in the sentence
+immediately following Eq.~(42). The monotonic-increment sentence is struck out and
+replaced (deletion shown in red, addition in blue in the revised manuscript). The
+new text reads:
+
+\begin{manuscripttext}
+Equation~(42) is a first-order exponential-smoothing (contraction) update, not a
+monotonic accumulator: at each episode it relaxes $\mathcal{T}_i^{(k)}$ toward the
+instantaneous target $\sigma(\tau_T\tilde{R}_i^{(k)})\in(0,1)$ at rate $\alpha_T$.
+Because $\alpha_T\in(0,1)$ and this target is bounded in $(0,1)$, the recursion is a
+contraction of modulus $(1-\alpha_T)$; hence $\mathcal{T}_i^{(k)}$ never leaves
+$(0,1)$ and converges toward the moving equilibrium
+$\mathcal{T}_i^{\star}=\sigma(\tau_T\tilde{R}_i^{(k)})$ set by the current relative
+performance. Consistently above-average performance ($R_i^{(k)}>\mu_R$) holds this
+target above $0.5$, so trust settles at and \emph{maintains} a high equilibrium---
+suppressing exploration---rather than growing without bound, while persistently
+below-average performance pulls the equilibrium below $0.5$ and amplifies
+exploration. This convergent-smoothing behavior, not a monotonic increment, is
+precisely what sustains the stable high-trust regime.
+\end{manuscripttext}
+
+\evi To make the corrected description concrete we simulate Eq.~(42) directly
+(Fig.~R1). Panel~(a) shows that under sustained above-average return the update
+converges to and \emph{holds} a stable high-trust equilibrium below the ceiling
+($\mathcal{T}\!\approx\!0.83$), whereas the monotonic-increment reading the text
+formerly implied ratchets up and pins at $1.0$. Panel~(b) shows that under
+time-varying performance the trust smoothly tracks the moving target
+$\sigma(\tau_T\tilde{R}_i^{(k)})$ both \emph{upward and downward}---behavior a
+monotonic process cannot produce. Panel~(c) shows that from any initialization
+$\mathcal{T}_i^{(0)}$ the trajectory converges to the same equilibrium, with the
+deviation decaying geometrically as $(1-\alpha_T)^{k}$, confirming the contraction.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{trust_convergent_smoothing.pdf}
+\captionsetup{font=small}
+\caption*{\small\textbf{Fig.~R1.} The trust update of Eq.~(42) is a convergent
+smoother (contraction toward a bounded, moving equilibrium), not a monotonic
+increment. (a) Sustained above-average return: Eq.~(42) converges to and maintains a
+stable high-trust value ($\mathcal{T}^\star=\sigma(\tau_T\tilde{R})$, dashed),
+whereas a monotonic-increment reading ratchets to and pins at the ceiling. (b)
+Time-varying return: trust smoothly tracks the moving target both up and down. (c)
+Contraction: trajectories from any initial $\mathcal{T}_i^{(0)}$ converge to a unique
+equilibrium, and the deviation decays geometrically along the $(1-\alpha_T)^k$
+envelope (dotted). This is exactly the mechanism by which the update maintains stable
+high trust.}
+\end{figure}
+
+\clearpage
+
+\section*{Reviewer~3}
+
+% =====================================================================
+%  Re3_1
+% =====================================================================
+\subsection*{Comment 3.1 --- Convergence stability of the adaptive coefficients}
+
+\begin{reviewercomment}{Reviewer comment 3.1}
+The author is encouraged to further justify the distributed consensus-based IDBO
+formulation by clarifying how adaptive rolling, dancing, breeding and stealing
+coefficients influence convergence stability in interception scenarios.
+\end{reviewercomment}
+
+\rsp We thank the reviewer for this constructive comment. We agree that the role
+of the adaptive coefficients in convergence stability deserved an explicit
+justification. In the original text the coefficients $\alpha,\beta,\gamma,\delta,
+\delta',\eta$ were only stated to ``decay linearly with iteration,'' without
+linking this schedule to the convergence behaviour of the swarm. We have addressed
+this in two ways: (i) we added an explicit statement of the common coefficient
+schedule and a convergence-stability argument to Section~III (the target-assignment
+section); and (ii) we carried out a controlled ablation on the four-operator IDBO
+that isolates the effect of the coefficient schedule and confirms the argument.
+
+\medskip
+\noindent\emph{The mechanism.}\quad The four operators share a common linear-decay
+schedule
+\[
+  c_t = c_0\,\bigl(1 - t/T\bigr),\qquad
+  c \in \{\alpha,\beta,\gamma,\delta,\delta',\eta\},
+\]
+together with the dancing-noise scale $\sigma_d$, while the elite-recombination
+weights stay bounded. The \emph{stochastic} contributions---the rolling probe
+$\beta\,\mathbf{r}_i\exp(-t/T)$ in Eq.~(16) and the dancing perturbation
+$\mathbf{n}_i\sim\mathcal{N}(0,\sigma_d^2\mathbf{I})$ in Eq.~(17)---scale with
+$c_t$ and therefore vanish as $c_t\!\to\!0$. The update then degenerates into a
+deterministic, advantage-weighted local refinement followed by the
+advantage-adaptive binarization. A step sequence whose stochastic amplitude
+decays to zero while retaining an ascent direction satisfies a
+\emph{Robbins--Monro-type sufficient condition} for settling at a stable fixed
+point rather than orbiting it. This is exactly the quantity tracked by the
+swarm-disagreement metric $\Gamma^{(k)}$ (Eq.~(26)): the schedule is what drives
+$\Gamma^{(k)}$ below the consensus tolerance instead of leaving a residual
+oscillation.
+
+\loc Section~III-B (\emph{Distributed Consensus-Based IDBO Framework}),
+immediately after the four-operator update block (Eqs.~(16)--(19), the
+rolling/dancing/breeding/stealing operators), in the sentence that introduces the
+adaptive coefficients. The added text is highlighted in blue in the revised
+manuscript and reads:
+
+\begin{manuscripttext}
+The coefficients $\alpha,\beta,\gamma,\delta,\delta',\eta$ together with the
+dancing noise scale $\sigma_d$ follow a common linear schedule $c_t=c_0\,(1-t/T)$,
+where $T$ is the IDBO iteration count, while the elite-recombination weights remain
+bounded. This schedule is what governs convergence stability. The stochastic parts
+of the operators---the rolling probe $\beta\,\mathbf{r}_i\exp(-t/T)$ and the dancing
+perturbation $\mathbf{n}_i\sim\mathcal{N}(0,\sigma_d^2\mathbf{I})$---scale with
+$c_t$ and vanish as $c_t\!\to\!0$, so the update degenerates into a deterministic,
+advantage-weighted local refinement followed by the advantage-adaptive
+binarization step. A step sequence whose stochastic amplitude decays to zero while
+retaining an ascent direction satisfies a Robbins--Monro-type sufficient condition
+for settling at a stable fixed point rather than orbiting it, which is precisely
+the behavior measured by the swarm-disagreement metric $\Gamma^{(k)}$ in
+Eq.~(26). A controlled ablation that freezes the coefficients confirms this
+mechanism: non-decaying coefficients keep injecting perturbations and leave a
+persistent late-stage oscillation in the working assignment, whereas the linear
+schedule contracts the swarm onto a stable, low-cost equilibrium.
+\end{manuscripttext}
+
+\evi To substantiate the argument we ran a controlled ablation on the
+four-operator IDBO for the paper's engagement scenario (20 interceptors vs.\ 8
+targets, $L_{\max}=3$), varying \emph{only} the coefficient schedule and holding
+everything else fixed: the paper's linear decay $c_t=c_0(1-t/T)$, a constant
+schedule $c_t=0.5\,c_0$, and a no-decay schedule $c_t=c_0$. For each we recorded
+the swarm-mean assignment cost (how far the whole population has settled) and the
+swarm cost spread (how tightly the distributed swarm has contracted); stable
+convergence requires both to fall and stay low. Averaged over 40 independent
+trials across 5 engagement snapshots:
+
+\begin{table}[h]
+\centering
+\captionsetup{font=small}
+\caption*{\small Effect of the coefficient schedule on convergence stability
+(four-operator IDBO; 20 vs.\ 8, $L_{\max}=3$; 40 trials).}
+\begin{tabular}{lccc}
+\toprule
+Schedule & Swarm-mean final cost & Late-stage swarm spread & Best-ever cost \\
+\midrule
+\textbf{Linear decay (paper)} & \textbf{0.58} & \textbf{0.66} & $0.34\pm0.22$ \\
+Constant ($0.5\,c_0$)         & 1.74          & 1.51          & $0.30\pm0.19$ \\
+No decay ($c_0$)              & 2.28          & 1.67          & $0.30\pm0.19$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent The linear-decay schedule settles the swarm-mean cost about
+$3\text{--}4\times$ lower and the population spread about $2.3\text{--}2.5\times$
+tighter than the frozen schedules. All schedules can occasionally locate a
+comparably low \emph{best-ever} candidate through continued random search, but only
+the linear schedule \emph{stabilizes} the whole swarm on it---which is what matters
+for a deployable assignment. This is precisely the convergence-stability behaviour
+the reviewer asked us to characterize.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.92\textwidth]{idbo_coeff_ablation.pdf}
+\captionsetup{font=small}
+\caption*{\small\textbf{Fig.~R2.} Effect of the IDBO coefficient schedule on
+convergence stability. (a) Swarm-mean assignment cost vs.\ iteration (mean; shaded
+band $\pm1$ std): the linear-decay schedule drives the whole swarm to a low, stable
+cost, while constant and non-decaying coefficients leave it at a higher, unsettled
+cost. (b) Late-stage swarm cost spread across trials: the linear schedule yields
+the tightest distribution, confirming that the adaptive coefficients contract the
+swarm onto a stable equilibrium.}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.92\textwidth]{idbo_coeff_schedule.pdf}
+\captionsetup{font=small}
+\caption*{\small\textbf{Fig.~R3.} Why the adaptive coefficients stabilize
+convergence. (a) Coefficient multiplier $s(k)$ applied to
+$\{\alpha,\beta,\gamma,\delta,\delta',\eta\}$ and $\sigma_d$ for the three
+policies. (b) Resulting stochastic-perturbation magnitude of the rolling/dancing
+operators: under the linear schedule it decays into the deterministic-refinement
+regime (shaded)---a Robbins--Monro-type sufficient condition for a stable fixed
+point---whereas the frozen schedules retain a non-vanishing perturbation and cannot
+settle.}
+\end{figure}
+
+\clearpage
+
+% =====================================================================
+%  Re3_2
+% =====================================================================
+\subsection*{Comment 3.2 --- Complexity, scalability, and communication delay}
+
+\begin{reviewercomment}{Reviewer comment 3.2}
+Also, a more rigorous complexity and scalability analysis is needed for the
+Improved Dung Beetle Optimization algorithm under cooperative deflection
+environments where communication delays influence distributed consensus
+efficiency.
+\end{reviewercomment}
+
+\rsp We thank the reviewer for this valuable comment. The original manuscript gave
+the per-UAV complexity decomposition (Eq.~(27)) but did not (i) make explicit how
+the cost scales with the \emph{swarm size}, nor (ii) analyze how
+\emph{communication delay} affects the efficiency of the distributed consensus. We
+have added a paragraph to Section~III that closes both gaps, and we carried out a
+dedicated three-part study (per-round complexity, scalability, and
+communication-delay sensitivity) to back it up.
+
+\medskip
+\noindent\emph{The argument.}\quad Per UAV, per IDBO iteration, the three cost
+terms in Eq.~(27) are the local preference search
+$\mathcal{O}(N_{\mathrm{pop}}N_A)$, the consensus communication
+$\mathcal{O}(N_A\lvert\mathcal{N}_i\rvert)$, and the advantage update
+$\mathcal{O}(N_A)$. The target count $N_A$ and the neighborhood size
+$\lvert\mathcal{N}_i\rvert$ are fixed by the engagement and the communication
+topology, \emph{not} by the total swarm size $M$; hence the per-UAV cost is
+independent of $M$ and the total per-round cost grows only \emph{linearly} in $M$.
+Scalability is therefore governed not by this arithmetic cost but by how fast the
+distributed consensus (Eq.~(26)) settles. On a connected graph with per-hop latency
+$T_{\mathrm{comm}}$, a target's winning bids propagate in at most $D$ hops ($D$: graph
+diameter), so the time to consensus scales as
+$\mathcal{O}(N\!\cdot\!D\!\cdot\!T_{\mathrm{comm}})$. A bounded communication delay
+thus \emph{slows but does not prevent} convergence.
+
+\loc Section~III-B (\emph{Distributed Consensus-Based IDBO Framework}),
+immediately after the complexity equation (Eq.~(27)). The added text is highlighted
+in blue in the revised manuscript and reads:
+
+\begin{manuscripttext}
+Because the target set faced by each interceptor and its neighborhood size
+$\lvert\mathcal{N}_i\rvert$ are fixed by the engagement and the communication
+topology rather than by the swarm size $M$, the per-UAV per-iteration cost above is
+independent of $M$; the total per-round cost of the swarm therefore grows only
+linearly with $M$. Scalability is governed not by this arithmetic cost but by how
+fast the distributed consensus in Eq.~(26) settles. Under a connected graph with a
+per-hop communication latency $T_{\mathrm{comm}}$, each target's winning bids
+propagate across the network in at most $D$ hops ($D$: graph diameter), so the
+wall-clock time to reach consensus scales as
+$\mathcal{O}(N\!\cdot\!D\!\cdot\!T_{\mathrm{comm}})$. Empirically this time stays
+nearly constant as $M$ grows at fixed diameter, and increases only linearly with
+the communication delay and with $D$; a bounded delay thus slows, but does not
+prevent, convergence of the distributed consensus. Detailed complexity,
+scalability, and communication-delay measurements are reported in the supplementary
+response material.
+\end{manuscripttext}
+
+\evi All experiments use the manuscript's engagement model and the four-operator
+IDBO with the top-$L_{\max}$ winner-set consensus. Latency is expressed in time via
+a nominal $20$~Hz data-link period $T_{\mathrm{comm}}=50$~ms.
+
+\medskip
+\noindent\textbf{(A) Per-round complexity.}\quad Fixing the target set ($N_A=8$)
+and a bounded 4-regular communication graph, we vary only the swarm size $N_D$ and
+time the per-round update:
+
+\begin{table}[h]
+\centering
+\captionsetup{font=small}
+\caption*{\small Per-round cost vs.\ swarm size (fixed $N_A=8$, 4-regular graph).}
+\begin{tabular}{lcccccc}
+\toprule
+$N_D$ & 10 & 20 & 40 & 80 & 160 & 240 \\
+\midrule
+Total per-round (ms) & 2.12 & 3.31 & 6.81 & 13.62 & 28.63 & 42.22 \\
+Per-defender ($\mu$s) & 212 & 165 & 170 & 170 & 179 & 176 \\
+Messages/round & 40 & 80 & 160 & 320 & 640 & 960 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent The per-defender cost is essentially constant ($\approx170~\mu$s), the
+total per-round cost grows linearly with $N_D$ (fitted log--log exponent $0.97$),
+and communication is exactly linear in $N_D$ at fixed degree---empirically
+confirming the $\mathcal{O}(N_{\mathrm{pop}}N_A+N_A\lvert\mathcal{N}_i\rvert)$
+per-UAV model and the linear total scaling.
+
+\medskip
+\noindent\textbf{(B) Scalability.}\quad Scaling the whole problem from $10\times4$
+to $160\times64$ (defenders$\times$targets) on random geometric graphs at
+$\tau=100$~ms, the time to consensus stays flat ($\sim$1.2--1.5~s) across a
+$16\times$ increase in swarm size---it is set by the graph diameter and the delay,
+not by the number of agents (Fig.~R5).
+
+\medskip
+\noindent\textbf{(C) Communication delay (core question).}\quad On a fixed
+40-defender/12-target instance we sweep the delay $\tau$ and, separately, the graph
+diameter $D$, measuring the swarm disagreement $\Gamma$ and the time to reach and
+hold $\Gamma=0$:
+
+\begin{table}[h]
+\centering
+\captionsetup{font=small}
+\caption*{\small Time to consensus (s) vs.\ communication delay and graph diameter.}
+\begin{tabular}{lcccccc}
+\toprule
+Delay $\tau$ (ms) & 0 & 50 & 100 & 200 & 400 & 800 \\
+\midrule
+Time to consensus (s) & 0.57 & 0.90 & 1.23 & 1.88 & 3.08 & 5.54 \\
+\bottomrule
+\end{tabular}\\[4pt]
+\begin{tabular}{lccccccc}
+\toprule
+Diameter $D$ (hops) & 1 & 3 & 4 & 5 & 6 & 10 & 20 \\
+\midrule
+Time to consensus (s) & 0.50 & 0.86 & 1.07 & 1.29 & 1.48 & 2.45 & 4.49 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent Every configuration still reaches full consensus ($\Gamma\!\to\!0$); the
+delay changes neither the fixed point nor the correctness, only the speed. The time
+to consensus grows linearly with the delay ($\approx6$~ms per ms of link delay) and
+linearly with the diameter ($\approx0.21$~s per hop)---directly supporting the
+manuscript's $\mathcal{O}(N\!\cdot\!D)$ consensus argument.
+
+\medskip
+\noindent\textbf{Answer to the reviewer.}\quad Under cooperative-deflection
+conditions with communication delay, the distributed consensus remains correct and
+its efficiency degrades gracefully and predictably: the consensus time scales
+linearly with both the message delay and the network diameter, and is independent
+of the swarm size. For a representative $20$~Hz link, the target-assignment
+consensus completes within roughly $0.5$--$1.5$~s even for large swarms and moderate
+delays.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.9\textwidth]{idbo_complexity.pdf}
+\captionsetup{font=small}
+\caption*{\small\textbf{Fig.~R4.} Per-round computational and communication cost vs.\
+swarm size $N_D$ (fixed $N_A=8$, bounded 4-regular graph). (a) Total per-round
+wall-clock grows linearly with $N_D$ (log--log slope $0.97$) while the per-defender
+cost stays constant. (b) Communication volume per round is exactly linear in
+$N_D$.}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.9\textwidth]{idbo_scalability.pdf}
+\captionsetup{font=small}
+\caption*{\small\textbf{Fig.~R5.} Scalability (random geometric graph,
+$\tau=100$~ms). (a) Time to consensus stays flat ($\sim$1.2--1.5~s) from $10\times4$
+to $160\times64$; coordination latency is independent of swarm size. (b) Total
+communication volume grows gracefully with problem size.}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.98\textwidth]{idbo_comm_delay.pdf}
+\captionsetup{font=small}
+\caption*{\small\textbf{Fig.~R6.} Communication delay and distributed-consensus
+efficiency (40 defenders, 12 targets; $T_{\mathrm{comm}}=50$~ms). (a) Swarm
+disagreement $\Gamma$ vs.\ consensus time for several delays $\tau$: larger delay
+slows the decay, but $\Gamma$ still reaches $0$. (b) Time to consensus grows
+linearly with $\tau$. (c) Time to consensus grows linearly with the graph diameter
+$D$, supporting the $\mathcal{O}(N\!\cdot\!D)$ argument.}
+\end{figure}
+
+\end{document}

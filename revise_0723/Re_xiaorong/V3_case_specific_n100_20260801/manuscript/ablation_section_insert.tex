@@ -1,0 +1,34 @@
+\subsection{\hladd{Component Ablation Study}}
+\label{subsec:ablation}
+
+\hladd{To identify the independent contribution of the three architectural components, we
+construct three one-component-at-a-time controls in addition to complete ART-MAPPO:
+``w/o trust-aware mechanism'' disables trust-modulated fusion of the analytical guidance
+prior and learned action; ``w/o GRU temporal encoder'' replaces recurrent temporal encoding
+with a feedforward representation of the current observation; and ``w/o
+attention--residual backbone'' replaces that backbone with a parameter-count-matched
+feedforward network while retaining the trust and GRU modules.  All variants use the same
+reward, dynamics, optimizer, training seed, and 585-update (599,040-step) training budget.
+The selected policies are frozen before testing; each table row contains 1000 Case~1 Monte
+Carlo firing tests with no backpropagation or optimizer update.}
+
+\hladd{As summarized in Table~\ref{tab:compact_ablation_v3}, the four training AUCs lie in
+the narrow range $535.04$--$535.67\times10^3$, while the final-return standard deviations
+span $106.01$--$108.91\times10^3$.  Thus, all variants reach essentially the same nominal
+return plateau, and the small single-seed differences in these two aggregate training
+statistics should not be interpreted as a universal ranking.  The mechanism-specific logs
+nevertheless reveal the intended independent effects: removing trust produces a much larger
+entropy contraction (78.5\% versus 52.4\%) and, in the 1000-trial test, increases $E_t$ from
+26.830 to 27.248~s, showing that trust regulates exploration and improves closure efficiency
+rather than merely increasing AUC.  Removing the GRU raises final Critic loss by $5.31\times$
+and increases $E_n$ by 0.00262~g and $E_t$ by 0.107~s, supporting the role of temporal memory
+in value estimation and terminal control.  The capacity-matched removal of the
+attention--residual backbone increases $E_n$ by 0.00227~g and $E_t$ by 0.032~s, indicating a
+smaller but measurable representation and control margin.  All four variants intercept all
+targets in 1000/1000 trials; consequently, ISR exhibits a nominal ceiling and the continuous
+metrics are required to distinguish the modules.  Complete ART-MAPPO attains the shortest
+engagement time, whereas its modest $E_{co\text{-}time}=0.0768$~s remains far below the 0.5-s
+cooperation threshold.  These results demonstrate a multi-objective tradeoff rather than an
+unsupported claim that the complete model must minimize every individual terminal metric.}
+
+\input{../Re_xiaorong/V3_case_specific_n100_20260801/tables/paper_compact_ablation_n1000.tex}

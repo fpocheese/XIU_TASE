@@ -1,0 +1,2 @@
+case,model,episodes,attack_success_rate,target_success_rate,all_hit_rate,sync_success_rate,all_sync_rate,mean_target_time,max_sync_spread,mean_sync_spread,mean_agent_return,team_return
+case1,/home/a2rl/reviewer_art_mappo_ablation_20260724/formal_paper_ablation_5seed/no_gru/case1/seed704/models,20,1.0,1.0,1.0,0.9875,0.9,35.28000030517578,0.09999847412109375,0.026472810283303262,416.10115845075813,8322.023169015161

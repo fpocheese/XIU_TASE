@@ -1,0 +1,13 @@
+case,ablation,metric,metric_type,paired_n,full_mean,ablation_mean,full_minus_ablation,difference_ci95_low,difference_ci95_high,full_only_success_count,ablation_only_success_count,mcnemar_exact_p,bootstrap_samples,full_median,ablation_median
+case1,no_trust,target_coverage_success,binary,100,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1.0,20000,,
+case1,no_trust,cooperative_success,binary,100,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1.0,20000,,
+case1,no_gru,target_coverage_success,binary,100,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1.0,20000,,
+case1,no_gru,cooperative_success,binary,100,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1.0,20000,,
+case1,no_attention_residual,target_coverage_success,binary,100,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1.0,20000,,
+case1,no_attention_residual,cooperative_success,binary,100,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1.0,20000,,
+case2,no_trust,target_coverage_success,binary,100,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1.0,20000,,
+case2,no_trust,cooperative_success,binary,100,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1.0,20000,,
+case2,no_gru,target_coverage_success,binary,100,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1.0,20000,,
+case2,no_gru,cooperative_success,binary,100,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1.0,20000,,
+case2,no_attention_residual,target_coverage_success,binary,100,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1.0,20000,,
+case2,no_attention_residual,cooperative_success,binary,100,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1.0,20000,,

@@ -1,0 +1,61 @@
+{
+  "backpropagation_performed": false,
+  "case": "case1",
+  "optimizer_steps": 0,
+  "selected": {
+    "backpropagation_performed": false,
+    "checkpoint": "/home/a2rl/reviewer_xiu_ablation_domainrand_v3_20260801/training/full/case1/seed8303/models/checkpoint_update_0060.pt",
+    "checkpoint_tag": "update_0060",
+    "environment_steps": 61440,
+    "mean_agent_return": 441666.0555237822,
+    "mean_closest_approach_m": 0.7663725738206459,
+    "mean_complete_groups": 8.0,
+    "mean_coordinated_groups": 8.0,
+    "mean_targets_covered": 8.0,
+    "mission_success_rate": 1.0,
+    "next_update": 60,
+    "optimizer_steps": 0,
+    "target_coverage_success_rate": 1.0,
+    "training_performed": false,
+    "validation_episodes": 20,
+    "validation_seed_first": 96001,
+    "validation_seed_last": 96020,
+    "worst_closest_approach_m": 2.6392586110366074
+  },
+  "selection_rule": [
+    {
+      "direction": "maximize",
+      "metric": "mission_success_rate"
+    },
+    {
+      "direction": "maximize",
+      "metric": "target_coverage_success_rate"
+    },
+    {
+      "direction": "maximize",
+      "metric": "mean_coordinated_groups"
+    },
+    {
+      "direction": "maximize",
+      "metric": "mean_complete_groups"
+    },
+    {
+      "direction": "maximize",
+      "metric": "mean_targets_covered"
+    },
+    {
+      "direction": "minimize",
+      "metric": "mean_closest_approach_m"
+    },
+    {
+      "direction": "maximize",
+      "metric": "mean_agent_return"
+    }
+  ],
+  "test_seeds_used_for_selection": false,
+  "training_performed": false,
+  "validation_episodes": 20,
+  "validation_seed_first": 96001,
+  "validation_seed_last": 96020,
+  "variant": "full"
+}

@@ -1,0 +1,36 @@
+\subsection{Evaluation Criteria}
+\label{subsec:eval}
+
+The evaluation metrics are defined from quantities measured at interception, rather than from
+time-to-go values that vanish at the terminal instant. For target $t_j$, let
+$\mathcal G_j=\{i:X_{ij}=1\}$ be its cooperative defender group,
+$m_j=|\mathcal G_j|$, $t_i^{\mathrm{arr}}$ the first time defender $i$ reaches the lethal
+radius, and $\mathcal W_i=[t_i^{\mathrm{arr}}-\Delta T_{\mathrm{term}},
+t_i^{\mathrm{arr}}]$ the terminal measurement window. The four group-level metrics are
+collected in one equation:
+\begin{equation}
+\label{eq:evaluation_metrics}
+\begin{aligned}
+\bar t_j^{\mathrm{arr}}
+ &=\frac{1}{m_j}\sum_{i\in\mathcal G_j}t_i^{\mathrm{arr}},\\
+E_{\mathrm{co\text{-}time}}^{(j)}
+ &=\frac{1}{m_j}\sum_{i\in\mathcal G_j}
+ \left|t_i^{\mathrm{arr}}-\bar t_j^{\mathrm{arr}}\right|,\\
+\bar n_{i,\mathrm{term}}
+ &=\frac{1}{|\mathcal W_i|}\sum_{t\in\mathcal W_i}
+ \sqrt{(n_{y_i}^{(t)})^2+(n_{z_i}^{(t)})^2},\\
+E_n^{(j)}
+ &=\frac{1}{m_j}\sum_{i\in\mathcal G_j}
+ \bar n_{i,\mathrm{term}},\\
+E_{\mathrm{miss}}^{(j)}
+ &=\frac{1}{m_j}\sum_{i\in\mathcal G_j}d_i(t_i^{\mathrm{arr}}),\\
+E_t^{(j)}&=\max_{i\in\mathcal G_j}t_i^{\mathrm{arr}}-t_0.
+\end{aligned}
+\end{equation}
+Here, $E_{\mathrm{co\text{-}time}}$ measures arrival-time dispersion,
+$E_n$ is the mean terminal-window resultant normal load factor, $E_{\mathrm{miss}}$ is the terminal miss
+distance, and $E_t$ is the time from engagement start $t_0$ until the last member of the group
+arrives. This separates synchronization quality from total engagement duration. A trial-level
+value is the mean of the corresponding group values over the eight targets. Monte Carlo
+boxplots use successful trials only; interception success rate is reported separately so that
+failed trials are not hidden by the conditional metric distributions.

@@ -1,0 +1,184 @@
+{
+  "analysis_definition": "paper-consistent five-component reward; fixed trajectories",
+  "paper_reward_formula": {
+    "distance": "w_dist * exp(-alpha_dist * d)",
+    "angle": "-w_angle * alpha_angle * e_angle",
+    "hit": "w_hit * R_hit * I_hit (one terminal event)",
+    "coordination": "-w_coord * alpha_coord * abs(tgo_i - group_mean_tgo)",
+    "energy": "-w_energy * alpha_energy * (nx^2 + ny^2 + nz^2)"
+  },
+  "nominal_source": "/home/a2rl/xiu_onpolicy_3d_fix/run_sync_tune_v63.sh",
+  "nominal_source_sha256": "59ee88ca5cb107f9a593fd130e9e2b409cad7f9e724cd49f2bd6126f62b283d3",
+  "nominal_parameters": {
+    "w_dist": 4.0,
+    "w_angle": 0.05,
+    "w_hit": 200.0,
+    "w_coord": 18.0,
+    "w_energy": 0.005,
+    "alpha_dist": 0.0002,
+    "alpha_angle": 0.002,
+    "alpha_coord": 0.16,
+    "alpha_energy": 0.01,
+    "hit_reward": 2200.0
+  },
+  "scaling_factors": [
+    0.5,
+    0.75,
+    1.0,
+    1.25,
+    1.5
+  ],
+  "epsilon": 1e-08,
+  "collection": {
+    "cases": [
+      {
+        "case": "case1",
+        "model_dir": "/home/a2rl/xiu_onpolicy_3d_fix/stable_V2/final_models/case1",
+        "actor_sha256": "884802798c6c4b27d046bae274a3d354702d6e8646a73875de940202713393a3",
+        "critic_sha256": "1960b9c9e88491bf2c5b33bba7586f0814a724603d7bb1684b7e08c7b929c8c3",
+        "device": "cpu",
+        "policy_mode": "stochastic evaluation",
+        "guidance": {
+          "base_gain": 2.0,
+          "tau": 0.55,
+          "lead": 1.45,
+          "residual_scale": 0.05,
+          "command_lag_tau": 0.55
+        }
+      },
+      {
+        "case": "case2",
+        "model_dir": "/home/a2rl/xiu_onpolicy_3d_fix/stable_V2/final_models/case2",
+        "actor_sha256": "8a644cfe9fea7f70fe0165c25d77193887e9c2b9e391ac83ca5efc85714fd0f2",
+        "critic_sha256": "5bf72446cd8d2617a758aedc073250ee99131b984237096b0c87a09e2cfac5f9",
+        "device": "cpu",
+        "policy_mode": "stochastic evaluation",
+        "guidance": {
+          "base_gain": 2.4,
+          "tau": 0.4,
+          "lead": 1.7,
+          "residual_scale": 0.05,
+          "command_lag_tau": 0.4
+        }
+      }
+    ],
+    "preset": "/home/a2rl/xiu_onpolicy_3d_fix/stable_V2/presets/paper_case_presets_original_assignment_verified.npz",
+    "preset_sha256": "07488f1c45c2c72609c18a524bc40ddb922c7283828a0c210c74ec0b3fd9520c",
+    "stochastic_policy_sampling": true,
+    "training_performed": false,
+    "optimizer_step_performed": false,
+    "backpropagation_performed": false,
+    "reused_from": "/home/a2rl/xiu_onpolicy_3d_fix/figures/reward_sensitivity/fixed_trajectory_components.npz"
+  },
+  "validation": {
+    "all_checks_passed": true,
+    "no_nan_or_inf": true,
+    "component_inputs_nonnegative": true,
+    "nominal_scaling_variation_is_zero": true,
+    "nominal_scaling_max_abs_mean": 0.0,
+    "distance_curve_monotonic": true,
+    "coordination_weight_linear_scaling": true,
+    "energy_weight_linear_scaling": true,
+    "hit_reward_sparse_and_linear": true,
+    "episode_count": 100,
+    "case_counts": {
+      "case1": 50,
+      "case2": 50
+    },
+    "all_target_hit_rate": 1.0,
+    "mean_hit_count": 20.0,
+    "distance_range_m": [
+      0.13078097371107222,
+      2100.4943767342547
+    ],
+    "distance_p99_m": 2063.4158687832587,
+    "tgo_mismatch_p99_s": 6.1247575563481105,
+    "control_effort_p99": 1.832116859202937,
+    "nominal_reward_statistics": {
+      "nominal_cumulative_reward": {
+        "mean": 8824813.157945648,
+        "std": 921.4667685172062,
+        "min": 8823888.386512052,
+        "max": 8825739.788349407
+      },
+      "nominal_component_cumulative_mean": {
+        "distance": 36449.29207064528,
+        "angle": -0.2800426892915878,
+        "hit": 8800000.0,
+        "coordination": -11635.73522936074,
+        "energy": -0.11885294916915137
+      },
+      "nominal_component_cumulative_std": {
+        "distance": 694.907569748398,
+        "angle": 0.10019765227268079,
+        "hit": 0.0,
+        "coordination": 226.70440905156127,
+        "energy": 0.02431579461845426
+      }
+    }
+  },
+  "sensitivity_index": {
+    "w_hit": 0.9959128828411882,
+    "w_coord": 0.0013168396375746003,
+    "w_energy": 1.3450692040706208e-08,
+    "alpha_dist": 0.000823296854783666
+  },
+  "sensitivity_ranking": [
+    "w_hit",
+    "w_coord",
+    "alpha_dist",
+    "w_energy"
+  ],
+  "summary_rows": [
+    {
+      "Parameter": "Hit weight",
+      "Symbol": "$w_{\\rm hit}$",
+      "Nominal value": 200.0,
+      "Perturbation range": "0.5-1.5x",
+      "Sensitivity index": 0.9959128828411882,
+      "Main effect": "Linear scaling of the sparse terminal-hit reward",
+      "Episodes": 100
+    },
+    {
+      "Parameter": "Coordination weight",
+      "Symbol": "$w_{\\rm coord}$",
+      "Nominal value": 18.0,
+      "Perturbation range": "0.5-1.5x",
+      "Sensitivity index": 0.0013168396375746003,
+      "Main effect": "Linear scaling of the time-to-go mismatch penalty",
+      "Episodes": 100
+    },
+    {
+      "Parameter": "Energy weight",
+      "Symbol": "$w_{\\rm energy}$",
+      "Nominal value": 0.005,
+      "Perturbation range": "0.5-1.5x",
+      "Sensitivity index": 1.3450692040706208e-08,
+      "Main effect": "Linear scaling of the three-axis control-effort penalty",
+      "Episodes": 100
+    },
+    {
+      "Parameter": "Distance-shaping parameter",
+      "Symbol": "$\\alpha_d$",
+      "Nominal value": 0.0002,
+      "Perturbation range": "0.5-1.5x",
+      "Sensitivity index": 0.000823296854783666,
+      "Main effect": "Nonlinear change in the distance-reward decay range",
+      "Episodes": 100
+    }
+  ],
+  "legacy_code_difference": {
+    "paper_is_authoritative": true,
+    "excluded_legacy_terms": [
+      "distance progress substitution",
+      "angle and coordination powers",
+      "dense hit shaping",
+      "coordination tolerance bonus",
+      "explicit group-spread reward",
+      "terminal synchronization bonus/asynchronous penalty",
+      "smoothness/reference-control/tail-chase auxiliary rewards"
+    ],
+    "energy_input": "applied 3-axis load, not raw action.u",
+    "reward_normalization_or_clipping": "none in offline recomputation"
+  }
+}

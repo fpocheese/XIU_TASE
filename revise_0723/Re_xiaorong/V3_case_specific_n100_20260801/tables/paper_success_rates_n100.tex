@@ -1,0 +1,22 @@
+\begin{table*}[!t]
+\centering
+\small
+\caption{Frozen-policy results over 100 paired Monte Carlo trials per variant and case.}
+\label{tab:ablation_success_n100}
+\renewcommand{\arraystretch}{1.12}
+\begin{tabular}{llcccc}
+\toprule
+Case & Variant & Target coverage & All defenders & Cooperative & Strict mission \\
+\midrule
+Case 1 & Full ART-MAPPO & 100/100 (100.0\%) & 100/100 (100.0\%) & 100/100 (100.0\%) & 100/100 (100.0\%) \\
+Case 1 & No trust & 100/100 (100.0\%) & 100/100 (100.0\%) & 100/100 (100.0\%) & 100/100 (100.0\%) \\
+Case 1 & No GRU & 100/100 (100.0\%) & 100/100 (100.0\%) & 100/100 (100.0\%) & 100/100 (100.0\%) \\
+Case 1 & No attention--residual & 100/100 (100.0\%) & 100/100 (100.0\%) & 100/100 (100.0\%) & 100/100 (100.0\%) \\
+Case 2 & Full ART-MAPPO & 100/100 (100.0\%) & 100/100 (100.0\%) & 100/100 (100.0\%) & 100/100 (100.0\%) \\
+Case 2 & No trust & 100/100 (100.0\%) & 100/100 (100.0\%) & 100/100 (100.0\%) & 100/100 (100.0\%) \\
+Case 2 & No GRU & 100/100 (100.0\%) & 100/100 (100.0\%) & 100/100 (100.0\%) & 100/100 (100.0\%) \\
+Case 2 & No attention--residual & 100/100 (100.0\%) & 100/100 (100.0\%) & 100/100 (100.0\%) & 100/100 (100.0\%) \\
+\bottomrule
+\end{tabular}
+\vspace{1mm}\parbox{0.98\linewidth}{\footnotesize Entries are count/100 (percentage). Wilson 95\% confidence intervals are provided in the accompanying CSV.}
+\end{table*}

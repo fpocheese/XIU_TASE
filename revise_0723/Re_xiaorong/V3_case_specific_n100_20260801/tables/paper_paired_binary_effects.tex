@@ -1,0 +1,26 @@
+\begin{table*}[!t]
+\centering
+\small
+\caption{Paired episode-level effect of removing each component.}
+\label{tab:ablation_paired_effects}
+\renewcommand{\arraystretch}{1.12}
+\begin{tabular}{lllrrr}
+\toprule
+Case & Ablation & Metric & Full--ablation (pp) & Paired 95\% CI (pp) & McNemar $p$ \\
+\midrule
+Case 1 & No trust & Coverage & 0.0 & [0.0, 0.0] & 1 \\
+Case 1 & No trust & Cooperative & 0.0 & [0.0, 0.0] & 1 \\
+Case 1 & No GRU & Coverage & 0.0 & [0.0, 0.0] & 1 \\
+Case 1 & No GRU & Cooperative & 0.0 & [0.0, 0.0] & 1 \\
+Case 1 & No attention--residual & Coverage & 0.0 & [0.0, 0.0] & 1 \\
+Case 1 & No attention--residual & Cooperative & 0.0 & [0.0, 0.0] & 1 \\
+Case 2 & No trust & Coverage & 0.0 & [0.0, 0.0] & 1 \\
+Case 2 & No trust & Cooperative & 0.0 & [0.0, 0.0] & 1 \\
+Case 2 & No GRU & Coverage & 0.0 & [0.0, 0.0] & 1 \\
+Case 2 & No GRU & Cooperative & 0.0 & [0.0, 0.0] & 1 \\
+Case 2 & No attention--residual & Coverage & 0.0 & [0.0, 0.0] & 1 \\
+Case 2 & No attention--residual & Cooperative & 0.0 & [0.0, 0.0] & 1 \\
+\bottomrule
+\end{tabular}
+\vspace{1mm}\parbox{0.98\linewidth}{\footnotesize Positive differences favor full ART-MAPPO. The confidence interval is a 20,000-resample paired bootstrap; $p$ is the two-sided exact McNemar value.}
+\end{table*}

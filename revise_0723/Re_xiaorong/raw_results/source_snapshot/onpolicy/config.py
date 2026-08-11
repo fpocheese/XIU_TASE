@@ -1,0 +1,462 @@
+import argparse
+
+
+def get_config():
+    """
+    The configuration parser for common hyperparameters of all environment. 
+    Please reach each `scripts/train/<env>_runner.py` file to find private hyperparameters
+    only used in <env>.
+
+    Prepare parameters:
+        --algorithm_name <algorithm_name>
+            specifiy the algorithm, including `["rmappo", "mappo", "rmappg", "mappg", "trpo"]`
+        --experiment_name <str>
+            an identifier to distinguish different experiment.
+        --seed <int>
+            set seed for numpy and torch 
+        --cuda
+            by default True, will use GPU to train; or else will use CPU; 
+        --cuda_deterministic
+            by default, make sure random seed effective. if set, bypass such function.
+        --n_training_threads <int>
+            number of training threads working in parallel. by default 1
+        --n_rollout_threads <int>
+            number of parallel envs for training rollout. by default 32
+        --n_eval_rollout_threads <int>
+            number of parallel envs for evaluating rollout. by default 1
+        --n_render_rollout_threads <int>
+            number of parallel envs for rendering, could only be set as 1 for some environments.
+        --num_env_steps <int>
+            number of env steps to train (default: 10e6)
+        --user_name <str>
+            [for wandb usage], to specify user's name for simply collecting training data.
+        --use_wandb
+            [for wandb usage], by default True, will log date to wandb server. or else will use tensorboard to log data.
+    
+    Env parameters:
+        --env_name <str>
+            specify the name of environment
+        --use_obs_instead_of_state
+            [only for some env] by default False, will use global state; or else will use concatenated local obs.
+    
+    Replay Buffer parameters:
+        --episode_length <int>
+            the max length of episode in the buffer. 
+    
+    Network parameters:
+        --share_policy
+            by default True, all agents will share the same network; set to make training agents use different policies. 
+        --use_centralized_V
+            by default True, use centralized training mode; or else will decentralized training mode.
+        --stacked_frames <int>
+            Number of input frames which should be stack together.
+        --hidden_size <int>
+            Dimension of hidden layers for actor/critic networks
+        --layer_N <int>
+            Number of layers for actor/critic networks
+        --use_ReLU
+            by default True, will use ReLU. or else will use Tanh.
+        --use_popart
+            by default True, use PopArt to normalize rewards. 
+        --use_valuenorm
+            by default True, use running mean and std to normalize rewards. 
+        --use_feature_normalization
+            by default True, apply layernorm to normalize inputs. 
+        --use_orthogonal
+            by default True, use Orthogonal initialization for weights and 0 initialization for biases. or else, will use xavier uniform inilialization.
+        --gain
+            by default 0.01, use the gain # of last action layer
+        --use_naive_recurrent_policy
+            by default False, use the whole trajectory to calculate hidden states.
+        --use_recurrent_policy
+            by default, use Recurrent Policy. If set, do not use.
+        --recurrent_N <int>
+            The number of recurrent layers ( default 1).
+        --data_chunk_length <int>
+            Time length of chunks used to train a recurrent_policy, default 10.
+    
+    Optimizer parameters:
+        --lr <float>
+            learning rate parameter,  (default: 5e-4, fixed).
+        --critic_lr <float>
+            learning rate of critic  (default: 5e-4, fixed)
+        --opti_eps <float>
+            RMSprop optimizer epsilon (default: 1e-5)
+        --weight_decay <float>
+            coefficience of weight decay (default: 0)
+    
+    PPO parameters:
+        --ppo_epoch <int>
+            number of ppo epochs (default: 15)
+        --use_clipped_value_loss 
+            by default, clip loss value. If set, do not clip loss value.
+        --clip_param <float>
+            ppo clip parameter (default: 0.2)
+        --num_mini_batch <int>
+            number of batches for ppo (default: 1)
+        --entropy_coef <float>
+            entropy term coefficient (default: 0.01)
+        --use_max_grad_norm 
+            by default, use max norm of gradients. If set, do not use.
+        --max_grad_norm <float>
+            max norm of gradients (default: 0.5)
+        --use_gae
+            by default, use generalized advantage estimation. If set, do not use gae.
+        --gamma <float>
+            discount factor for rewards (default: 0.99)
+        --gae_lambda <float>
+            gae lambda parameter (default: 0.95)
+        --use_proper_time_limits
+            by default, the return value does consider limits of time. If set, compute returns with considering time limits factor.
+        --use_huber_loss
+            by default, use huber loss. If set, do not use huber loss.
+        --use_value_active_masks
+            by default True, whether to mask useless data in value loss.  
+        --huber_delta <float>
+            coefficient of huber loss.  
+    
+    PPG parameters:
+        --aux_epoch <int>
+            number of auxiliary epochs. (default: 4)
+        --clone_coef <float>
+            clone term coefficient (default: 0.01)
+    
+    Run parameters：
+        --use_linear_lr_decay
+            by default, do not apply linear decay to learning rate. If set, use a linear schedule on the learning rate
+    
+    Save & Log parameters:
+        --save_interval <int>
+            time duration between contiunous twice models saving.
+        --log_interval <int>
+            time duration between contiunous twice log printing.
+    
+    Eval parameters:
+        --use_eval
+            by default, do not start evaluation. If set`, start evaluation alongside with training.
+        --eval_interval <int>
+            time duration between contiunous twice evaluation progress.
+        --eval_episodes <int>
+            number of episodes of a single evaluation.
+    
+    Render parameters:
+        --save_gifs
+            by default, do not save render video. If set, save video.
+        --use_render
+            by default, do not render the env during training. If set, start render. Note: something, the environment has internal render process which is not controlled by this hyperparam.
+        --render_episodes <int>
+            the number of episodes to render a given env
+        --ifi <float>
+            the play interval of each rendered image in saved video.
+    
+    Pretrained parameters:
+        --model_dir <str>
+            by default None. set the path to pretrained model.
+    """
+    parser = argparse.ArgumentParser(
+        description='onpolicy', formatter_class=argparse.RawDescriptionHelpFormatter)
+
+    # prepare parameters
+    parser.add_argument("--algorithm_name", type=str,
+                        default='rmappo', choices=["rmappo", "mappo"])  ###moren shi mappo
+
+    parser.add_argument("--experiment_name", type=str, default="check", help="an identifier to distinguish different experiment.")
+    parser.add_argument("--seed", type=int, default=0, help="Random seed for numpy/torch")
+    parser.add_argument("--cuda", action='store_false', default=True, help="by default True, will use GPU to train; or else will use CPU;")
+    parser.add_argument("--cuda_deterministic",
+                        action='store_false', default=True, help="by default, make sure random seed effective. if set, bypass such function.")
+    parser.add_argument("--n_training_threads", type=int,
+                        default=1, help="Number of torch threads for training")  ##moren is 1
+    parser.add_argument("--n_rollout_threads", type=int, default=1,
+                        help="Number of parallel envs for training rollouts")   ##benlaishi 64
+    parser.add_argument("--n_eval_rollout_threads", type=int, default=1,
+                        help="Number of parallel envs for evaluating rollouts")
+    parser.add_argument("--n_render_rollout_threads", type=int, default=1,
+                        help="Number of parallel envs for rendering rollouts")
+    parser.add_argument("--num_env_steps", type=int, default=10e7,
+                        help='Number of environment steps to train (default: 10e6)')
+    parser.add_argument("--user_name", type=str, default='marl',help="[for wandb usage], to specify user's name for simply collecting training data.")
+    parser.add_argument("--use_wandb", action='store_false', default=False, help="[for wandb usage], by default True, will log date to wandb server. or else will use tensorboard to log data.")
+
+    # env parameters
+    parser.add_argument("--env_name", type=str, default='MPE', help="specify the name of environment")
+    parser.add_argument("--use_obs_instead_of_state", action='store_true',
+                        default=False, help="Whether to use global state or concatenated obs")  ###moren shi false
+
+    # replay buffer parameters
+    parser.add_argument("--episode_length", type=int,
+                        default=1500, help="Max length for any episode")
+
+    # network parameters
+    parser.add_argument("--share_policy", action='store_false',
+                        default=True, help='Whether agent share the same policy')
+    parser.add_argument("--use_centralized_V", action='store_false',
+                        default=True, help="Whether to use centralized V function")###benlaishi True  jianglihanshu buyiyang yong false
+    parser.add_argument("--stacked_frames", type=int, default=4,
+                        help="Dimension of hidden layers for actor/critic networks")
+    parser.add_argument("--use_stacked_frames", action='store_true',
+                        default=False, help="Whether to use stacked_frames")
+    parser.add_argument("--hidden_size", type=int, default=1024,
+                        help="Dimension of hidden layers for actor/critic networks")   ##moren 64
+    parser.add_argument("--layer_N", type=int, default=2,
+                        help="Number of layers for actor/critic networks")##默认是 1
+    parser.add_argument("--use_ReLU", action='store_false',
+                        default=True, help="Whether to use ReLU")
+    parser.add_argument("--use_popart", action='store_true', default=False, help="by default False, use PopArt to normalize rewards.")
+    parser.add_argument("--use_valuenorm", action='store_false', default=True, help="by default True, use running mean and std to normalize rewards.")
+    parser.add_argument("--use_feature_normalization", action='store_false',
+                        default=True, help="Whether to apply layernorm to the inputs")
+    parser.add_argument("--use_orthogonal", action='store_false', default=True,
+                        help="Whether to use Orthogonal initialization for weights and 0 initialization for biases")
+    parser.add_argument("--gain", type=float, default=0.001,
+                        help="The gain # of last action layer")
+
+    # recurrent parameters
+    parser.add_argument("--use_naive_recurrent_policy", action='store_true',
+                        default=False, help='Whether to use a naive recurrent policy')
+    parser.add_argument("--use_recurrent_policy", action='store_false',
+                        default=True, help='use a recurrent policy')
+    parser.add_argument("--recurrent_N", type=int, default=1, help="The number of recurrent layers.")##moren 1
+    parser.add_argument("--data_chunk_length", type=int, default=10,
+                        help="Time length of chunks used to train a recurrent_policy")
+
+    # optimizer parameters
+    parser.add_argument("--lr", type=float, default=5e-4,
+                        help='learning rate (default: 5e-4)')
+    parser.add_argument("--critic_lr", type=float, default=5e-4,
+                        help='critic learning rate (default: 5e-4)')
+    parser.add_argument("--opti_eps", type=float, default=1e-5,
+                        help='RMSprop optimizer epsilon (default: 1e-5)')
+    parser.add_argument("--weight_decay", type=float, default=0)
+
+    # ppo parameters
+    parser.add_argument("--ppo_epoch", type=int, default=10,
+                        help='number of ppo epochs (default: 15)')
+    parser.add_argument("--use_clipped_value_loss",
+                        action='store_false', default=True, help="by default, clip loss value. If set, do not clip loss value.")
+    parser.add_argument("--clip_param", type=float, default=0.1,
+                        help='ppo clip parameter (default: 0.2)')
+    parser.add_argument("--num_mini_batch", type=int, default=1,
+                        help='number of batches for ppo (default: 1)')
+    parser.add_argument("--entropy_coef", type=float, default=0.01,
+                        help='entropy term coefficient (default: 0.01)')
+    parser.add_argument("--value_loss_coef", type=float,
+                        default=0.3, help='value loss coefficient (default: 0.5)')
+    parser.add_argument("--use_max_grad_norm",
+                        action='store_false', default=True, help="by default, use max norm of gradients. If set, do not use.")
+    parser.add_argument("--max_grad_norm", type=float, default=0.3,
+                        help='max norm of gradients (default: 0.5)')
+    parser.add_argument("--use_gae", action='store_false',
+                        default=True, help='use generalized advantage estimation')
+    parser.add_argument("--gamma", type=float, default=0.99,
+                        help='discount factor for rewards (default: 0.99)')
+    parser.add_argument("--gae_lambda", type=float, default=0.95,
+                        help='gae lambda parameter (default: 0.95)')
+    parser.add_argument("--use_proper_time_limits", action='store_true',
+                        default=False, help='compute returns taking into account time limits')
+    parser.add_argument("--use_huber_loss", action='store_false', default=True, help="by default, use huber loss. If set, do not use huber loss.")
+    parser.add_argument("--use_value_active_masks",
+                        action='store_false', default=True, help="by default True, whether to mask useless data in value loss.")
+    parser.add_argument("--use_policy_active_masks",
+                        action='store_false', default=True, help="by default True, whether to mask useless data in policy loss.")
+    parser.add_argument("--huber_delta", type=float, default=15.0, help=" coefficience of huber loss.")
+
+    # reward shaping parameters for the UAV interception scenario
+    parser.add_argument("--reward_w_dist", type=float, default=0.10,
+                        help="Weight of distance/proximity reward in simple_world_comm.")
+    parser.add_argument("--reward_w_angle", type=float, default=1.00,
+                        help="Weight of LOS heading-alignment reward in simple_world_comm.")
+    parser.add_argument("--reward_w_hit", type=float, default=1.00,
+                        help="Weight of terminal interception reward in simple_world_comm.")
+    parser.add_argument("--reward_w_coord", type=float, default=1.00,
+                        help="Weight of time-to-go coordination reward in simple_world_comm.")
+    parser.add_argument("--reward_w_energy", type=float, default=1.00,
+                        help="Weight of overload/energy penalty in simple_world_comm.")
+    parser.add_argument("--reward_w_sync", type=float, default=1.00,
+                        help="Weight of explicit synchronization shaping in simple_world_comm_3d.")
+    parser.add_argument("--reward_sync_hits", type=int, default=0,
+                        help="Number of per-target defenders used in sync bonus calculation.")
+    parser.add_argument("--reward_alpha_sync", type=float, default=2e-2,
+                        help="Synchronization spread penalty coefficient in simple_world_comm_3d.")
+    parser.add_argument("--reward_sync_bonus", type=float, default=0.5,
+                        help="Bonus when spread is within sync tolerance in simple_world_comm_3d.")
+    parser.add_argument("--reward_async_hit_penalty", type=float, default=0.0,
+                        help="Penalty for a terminal hit that arrives before its assigned target group is synchronized.")
+    parser.add_argument("--reward_sync_tol", type=float, default=0.5,
+                        help="Tolerance for synchronization bonus in simple_world_comm_3d.")
+    parser.add_argument("--reward_sync_power", type=float, default=0.5,
+                        help="Power used for synchronization spread penalty in simple_world_comm_3d.")
+    parser.add_argument("--reward_alpha_dist", type=float, default=1e-3,
+                        help="Distance shaping coefficient for exp(-alpha_dist * distance).")
+    parser.add_argument("--reward_alpha_angle", type=float, default=1e-2,
+                        help="Heading-alignment penalty coefficient.")
+    parser.add_argument("--reward_alpha_coord", type=float, default=5e-3,
+                        help="Time-to-go coordination penalty coefficient.")
+    parser.add_argument("--reward_alpha_energy", type=float, default=5e-2,
+                        help="Energy/control-effort penalty coefficient.")
+    parser.add_argument("--reward_hit_bonus", type=float, default=3.0,
+                        help="Terminal hit reward before applying reward_w_hit.")
+    parser.add_argument("--reward_hit_shaping", type=float, default=0.0,
+                        help="Dense near-target shaping coefficient for simple_world_comm_3d.")
+    parser.add_argument("--reward_hit_band_ratio", type=float, default=20.0,
+                        help="Near-target shaping length scale in hit-radius units.")
+    parser.add_argument("--reward_coord_bonus", type=float, default=0.1,
+                        help="Small bonus for sufficiently synchronized time-to-go.")
+    parser.add_argument("--reward_coord_tol", type=float, default=0.1,
+                        help="Tolerance for the synchronization bonus.")
+    parser.add_argument("--reward_angle_power", type=float, default=0.3,
+                        help="Power used by the legacy heading penalty.")
+    parser.add_argument("--reward_coord_power", type=float, default=0.3,
+                        help="Power used by the time-to-go coordination penalty.")
+    parser.add_argument("--reward_use_progress", action="store_true", default=False,
+                        help="Use progress shaping instead of exponential distance shaping.")
+    parser.add_argument("--target_assignment_mode", type=str, default="fixed", choices=["fixed", "dynamic"],
+                        help="Target assignment mode for the 3D cooperative interception scenario.")
+    parser.add_argument("--target_assignment_spread_weight", type=float, default=6.0,
+                        help="Penalty weight for per-target initial TGO spread in dynamic assignment.")
+    parser.add_argument("--attack_maneuver_gain", type=float, default=1.20,
+                        help="Overall gain for scripted attacker sinusoidal maneuver in simple_world_comm_3d.")
+    parser.add_argument("--attack_maneuver_offset_gain", type=float, default=1.25,
+                        help="Small offset gain for scripted attacker maneuver in simple_world_comm_3d.")
+    parser.add_argument("--attack_maneuver_freq", type=float, default=0.17,
+                        help="Main sinusoidal maneuver frequency for scripted attackers in simple_world_comm_3d.")
+    parser.add_argument("--attack_maneuver_fade_range", type=float, default=450.0,
+                        help="Range over which attacker sinusoidal maneuver fades near the protected asset.")
+    parser.add_argument("--case1_lateral_base", type=float, default=0.95,
+                        help="Case1 early lateral maneuver amplitude for scripted attackers.")
+    parser.add_argument("--case1_lateral_tail", type=float, default=0.40,
+                        help="Case1 late lateral sinusoidal maneuver amplitude for scripted attackers.")
+    parser.add_argument("--case1_vertical_amp", type=float, default=0.35,
+                        help="Case1 vertical sinusoidal maneuver amplitude for scripted attackers.")
+    parser.add_argument("--case2_lateral_amp", type=float, default=1.00,
+                        help="Case2 lateral sinusoidal maneuver amplitude for scripted attackers.")
+    parser.add_argument("--case2_maneuver_freq", type=float, default=0.12566370614359174,
+                        help="Case2 sinusoidal maneuver angular frequency.")
+    parser.add_argument("--case2_vertical_amp", type=float, default=0.25,
+                        help="Case2 vertical sinusoidal maneuver amplitude for scripted attackers.")
+    parser.add_argument("--case2_vertical_freq_scale", type=float, default=0.50,
+                        help="Case2 vertical sine frequency multiplier relative to attack_maneuver_freq.")
+    parser.add_argument("--defender_guidance_base_gain", type=float, default=0.0,
+                        help="Gain for deterministic base guidance added to defender residual RL actions in 3D.")
+    parser.add_argument("--defender_guidance_tau", type=float, default=1.2,
+                        help="Time constant used by the 3D defender base guidance law.")
+    parser.add_argument("--defender_guidance_lead", type=float, default=1.0,
+                        help="Lead-time scale used by the 3D defender base guidance law.")
+    parser.add_argument("--defender_residual_scale", type=float, default=1.0,
+                        help="Scale applied to policy residual load commands in 3D.")
+    parser.add_argument("--defender_load_limit", type=float, default=1.0,
+                        help="Load limit for 3D defender yaw/pitch commands.")
+    parser.add_argument("--defender_axial_min", type=float, default=-0.1,
+                        help="Minimum axial load for 3D defenders.")
+    parser.add_argument("--defender_axial_max", type=float, default=1.0,
+                        help="Maximum axial load for 3D defenders.")
+    parser.add_argument("--defender_sync_speed_gain", type=float, default=0.0,
+                        help="Base axial speed-control gain for per-target time-to-go synchronization.")
+    parser.add_argument("--defender_sync_tgo_ref", type=str, default="mean", choices=["mean", "max", "min"],
+                        help="Reference time-to-go used by the base axial synchronization controller.")
+    parser.add_argument("--defender_speed_target", type=float, default=0.0,
+                        help="Optional target speed for deterministic defender axial acceleration; disabled when <= 0.")
+    parser.add_argument("--defender_speed_gain", type=float, default=0.0,
+                        help="Gain for deterministic defender target-speed control.")
+    parser.add_argument("--defender_min_accel_load", type=float, default=0.0,
+                        help="Minimum positive axial load while defenders are below defender_speed_target.")
+    parser.add_argument("--defender_speed_min", type=float, default=12.0,
+                        help="Hard lower speed limit for 3D defenders.")
+    parser.add_argument("--defender_speed_max", type=float, default=40.0,
+                        help="Hard upper speed limit for 3D defenders.")
+    parser.add_argument("--defender_sensor_delay_steps", type=int, default=0,
+                        help="Integer sensor delay, in simulation steps, applied to defender observations and base guidance target state.")
+    parser.add_argument("--defender_sensor_delay_compensate", action="store_true",
+                        help="Predict delayed defender target observations forward by delay_steps * dt using delayed measured velocity.")
+    parser.add_argument("--defender_obs_pos_noise_std", type=float, default=0.0,
+                        help="Gaussian position noise std in meters applied to defender target observations.")
+    parser.add_argument("--defender_obs_vel_noise_std", type=float, default=0.0,
+                        help="Gaussian velocity noise std in m/s applied to defender target observations.")
+    parser.add_argument("--defender_obs_filter_alpha", type=float, default=1.0,
+                        help="First-order filter coefficient for noisy defender observations; 1 disables filtering.")
+    parser.add_argument("--defender_command_lag_tau", type=float, default=0.0,
+                        help="First-order lag time constant for executed defender load commands; disabled when <= 0.")
+    parser.add_argument("--reward_w_smooth", type=float, default=0.0,
+                        help="Penalty weight for defender command increments during training.")
+    parser.add_argument("--reference_control_root", type=str, default="",
+                        help="Root/folder containing original 2D v9 agentsall.txt used as defender load reference.")
+    parser.add_argument("--reward_w_ref_control", type=float, default=0.0,
+                        help="Penalty weight for matching original-paper defender load commands.")
+    parser.add_argument("--reward_w_ref_rate", type=float, default=0.0,
+                        help="Penalty weight for matching original-paper defender load command increments.")
+    parser.add_argument("--defender_reference_blend", type=float, default=0.0,
+                        help="Optional blend toward original-paper load commands before defender command limits.")
+
+    parser.add_argument("--paper_preset_path", type=str, default="",
+                        help="NPZ preset recovered from the original paper 2D data.")
+    parser.add_argument("--paper_attacker_replay", type=int, default=0,
+                        help="Use the parameterized attacker law identified from the recovered paper data.")
+    parser.add_argument("--paper_altitude", type=float, default=750.0,
+                        help="Base attacker altitude for recovered paper 3D cases.")
+    parser.add_argument("--paper_altitude_step", type=float, default=28.5714285714,
+                        help="Attacker altitude spacing for recovered paper 3D cases.")
+    parser.add_argument("--paper_defender_climb_to_target", type=int, default=0,
+                        help="Preserve paper 2D defender velocity and add z climb toward target altitude.")
+    parser.add_argument("--no_tailchase_gate", type=float, default=0.0,
+                        help="Distance gate for first-pass/no-tail-chase miss detection; disabled when <= 0.")
+    parser.add_argument("--no_tailchase_rebound", type=float, default=5.0,
+                        help="Distance rebound after first local minimum that marks a tail-chase miss.")
+    parser.add_argument("--no_tailchase_penalty", type=float, default=0.0,
+                        help="Penalty applied when a defender misses on first pass and starts tail-chasing.")
+    parser.add_argument("--no_tailchase_terminate", action="store_true",
+                        help="Terminate a defender immediately after first-pass miss is detected.")
+    parser.add_argument("--attacker_speed_min", type=float, default=12.0,
+                        help="Minimum scripted attacker speed in recovered paper 3D cases.")
+    parser.add_argument("--attacker_speed_max", type=float, default=65.0,
+                        help="Maximum scripted attacker speed in recovered paper 3D cases.")
+    parser.add_argument("--attacker_axial_min", type=float, default=-4.0,
+                        help="Minimum scripted attacker axial load.")
+    parser.add_argument("--attacker_axial_max", type=float, default=4.0,
+                        help="Maximum scripted attacker axial load.")
+    parser.add_argument("--attacker_load_limit", type=float, default=200.0,
+                        help="Scripted attacker yaw/pitch load limit.")
+    parser.add_argument("--attacker_yaw_scale", type=float, default=1.0,
+                        help="Scripted attacker yaw load scale.")
+    parser.add_argument("--attacker_pitch_scale", type=float, default=1.0,
+                        help="Scripted attacker pitch load scale.")
+
+    # advanced PPO stabilization parameters
+    parser.add_argument("--use_dual_clip", action="store_false", default=True,
+                        help="Use dual-clip PPO in the advanced trainer.")
+    parser.add_argument("--dual_clip_param", type=float, default=3.0,
+                        help="Dual-clip PPO bound.")
+    parser.add_argument("--use_adaptive_kl", action="store_false", default=True,
+                        help="Use adaptive KL penalty in the advanced trainer.")
+    parser.add_argument("--target_kl", type=float, default=0.02,
+                        help="Target KL for adaptive KL regularization.")
+    parser.add_argument("--kl_coef", type=float, default=0.0,
+                        help="Initial KL penalty coefficient.")
+
+    # run parameters
+    parser.add_argument("--use_linear_lr_decay", action='store_true',
+                        default=True, help='use a linear schedule on the learning rate')##morenshi false
+    # save parameters
+    parser.add_argument("--save_interval", type=int, default=1, help="time duration between contiunous twice models saving.")
+
+    # log parameters
+    parser.add_argument("--log_interval", type=int, default=1, help="time duration between contiunous twice log printing.")  ##morenshi 5
+
+    # eval parameters
+    parser.add_argument("--use_eval", action='store_true', default=False, help="by default, do not start evaluation. If set`, start evaluation alongside with training.")
+    parser.add_argument("--eval_interval", type=int, default=2, help="time duration between contiunous twice evaluation progress.")
+    parser.add_argument("--eval_episodes", type=int, default=32, help="number of episodes of a single evaluation.")
+
+    # render parameters
+    parser.add_argument("--save_gifs", action='store_true', default=False, help="by default, do not save render video. If set, save video.")
+    parser.add_argument("--use_render", action='store_true', default=True, help="by default, do not render the env during training. If set, start render. Note: something, the environment has internal render process which is not controlled by this hyperparam.")
+    # parser.add_argument("--use_render", action='store_true', default=False, help="by default, do not render the env during training. If set, start render. Note: something, the environment has internal render process which is not controlled by this hyperparam.")
+    parser.add_argument("--render_episodes", type=int, default=2000, help="the number of episodes to render a given env")##render de cishu
+    parser.add_argument("--ifi", type=float, default=0.1, help="the play interval of each rendered image in saved video.")#0.1
+
+    # pretrained parameters
+    # parser.add_argument("--model_dir", type=str, default=None , help="by default None. set the path to pretrained model.")
+    parser.add_argument("--model_dir", type=str, default="/home/uav/00gao_xueshu/togsy_2025/0620septimedone/on-policy-main/onpolicy/scripts/results/MPE/simple_world_comm/rmappo/check/models/simple_world_comm_2507_101758",
+                        help="by default None. set the path to pretrained model.")
+
+## "/home/uav/00gao_xueshu/togsy_2025/0620septimedone/on-policy-main/onpolicy/scripts/results/MPE/simple_world_comm/rmappo/check/models/simple_world_comm_2502_140338"
+    return parser

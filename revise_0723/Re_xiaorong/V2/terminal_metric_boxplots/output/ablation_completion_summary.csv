@@ -1,0 +1,9 @@
+case,variant,variant_label,N_episodes,interceptor_hit_rate,target_hit_rate,coordinated_target_rate,complete_group_rate,all_targets_hit_episode_rate,all_targets_coordinated_episode_rate,strict_all_8_groups_complete_episode_rate,complete_group_conditioned_episode_count,complete_group_count
+case1,full,ART-MAPPO,100,0.9945,1.0,0.98625,0.98625,1.0,0.9,0.9,100,789
+case1,no_trust,w/o Trust,100,0.995,1.0,0.9875,0.9875,1.0,0.9,0.9,100,790
+case1,no_gru,w/o GRU,100,0.996,1.0,0.99,0.99,1.0,0.92,0.92,100,792
+case1,no_attention_residual,w/o A-R,100,0.989,0.9975,0.975,0.975,0.98,0.81,0.81,100,780
+case2,full,ART-MAPPO,100,0.4715,0.44625,0.305,0.37125,0.0,0.0,0.0,100,297
+case2,no_trust,w/o Trust,100,0.3625,0.34,0.24,0.3025,0.0,0.0,0.0,82,242
+case2,no_gru,w/o GRU,100,0.4505,0.50125,0.3325,0.335,0.0,0.0,0.0,100,268
+case2,no_attention_residual,w/o A-R,100,0.3785,0.38625,0.23625,0.29,0.0,0.0,0.0,99,232
