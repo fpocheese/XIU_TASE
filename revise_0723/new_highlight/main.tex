@@ -432,7 +432,9 @@ The angular advantage component is:
 \label{eq:angular_prob}
 P_{\sigma}(i,j) = \exp\left[-\frac{1}{2}\left(\frac{S_{\sigma}(i,j)}{\overline{S_{\sigma}}}\right)^2\right]
 \end{equation}
-where $\overline{S_{\sigma}} = \frac{1}{MN}\sum_{i=1}^{M}\sum_{j=1}^{N} S_{\sigma}(i,j)$, with $S_{\sigma}(i,j) = \hladd{\sqrt{(\gamma_i - q_{ij}^{\gamma})^2 + (\theta_i - q_{ij}^{\theta})^2}}$ denoting the \hladd{three-dimensional} angular error. The objective minimizes the expected number of surviving targets. Under many-to-one assignment, the joint survival probability of target $t_j$ is the product of individual failure probabilities:
+where $\overline{S_{\sigma}} = \frac{1}{MN}\sum_{i=1}^{M}\sum_{j=1}^{N} S_{\sigma}(i,j)$, with $S_{\sigma}(i,j) = \hladd{\sqrt{(\gamma_i - q_{ij}^{\gamma})^2 + (\theta_i - q_{ij}^{\theta})^2}}$ denoting the \hladd{three-dimensional} angular error. 
+\hladd{The weight $w_{1,\mathrm{IDBO}}$ prioritizes ZEM-based reachability, whereas $w_{2,\mathrm{IDBO}}$ prioritizes three-dimensional angular alignment. A sensitivity analysis of these weights is presented in Section~\ref{subsec:parameter_sensitivity}.}
+The objective minimizes the expected number of surviving targets. Under many-to-one assignment, the joint survival probability of target $t_j$ is the product of individual failure probabilities:
 
 \begin{equation}
 \label{eq:optimization_formulation}
@@ -445,9 +447,6 @@ where $\overline{S_{\sigma}} = \frac{1}{MN}\sum_{i=1}^{M}\sum_{j=1}^{N} S_{\sigm
 \end{aligned}
 \end{equation}
 where $\prod_{i=1}^{M} (1 - P_{ij})^{X_{ij}}$ yields the survival probability of $t_j$, which decreases geometrically with the number of assigned interceptors.
-\hladd{The weight $w_{1,\mathrm{IDBO}}$ prioritizes ZEM-based reachability, whereas $w_{2,\mathrm{IDBO}}$ prioritizes three-dimensional angular alignment. A sensitivity analysis of these weights is presented in Section~\ref{subsec:parameter_sensitivity}.}
-% \hladd{The weighting pair $(w_1,w_2)$ sets the tactical priority of the assignment: a larger $w_1$ favors the ZEM reachability term $P_{\mathrm{ZEM}}$ and thus shorter selected miss distances, whereas a larger $w_2$ favors the three-dimensional angular term $P_{\sigma}$ and thus better terminal firing geometry. A quantitative sweep of this trade-off, together with the basis for the nominal setting, is deferred to the parameter-sensitivity study in Section~\ref{subsec:parameter_sensitivity}.}
-
 
 
 \subsection{Distributed Consensus-Based IDBO Framework}
