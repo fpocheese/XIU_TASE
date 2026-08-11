@@ -1,0 +1,6 @@
+case,target,defender_internal_id,defender_paper_label,hit,hit_time_s,distance_at_event_m,status
+case1,A6,5,D-UAV 6,False,,,right-censored at 75 s
+case1,A6,13,D-UAV 14,True,33.1,1.7663251928156942,hit
+case2,A2,1,D-UAV 2,False,,,right-censored at 75 s
+case2,A2,9,D-UAV 10,True,26.15,2.8604935075943336,hit
+case2,A2,17,D-UAV 18,True,26.1,2.878017717315603,hit

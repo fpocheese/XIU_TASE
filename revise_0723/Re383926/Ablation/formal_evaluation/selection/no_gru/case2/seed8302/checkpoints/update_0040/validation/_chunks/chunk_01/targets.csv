@@ -1,0 +1,17 @@
+condition,case,variant,episode,seed,target_index,group_size,hit_count,target_covered,group_complete,group_coordinated,arrival_spread_s,E_co_time_s,E_n_g,E_miss_m,E_t_s,closest_approach_m
+checkpoint_validation_update_0040,case2,no_gru,3,97103,0,3,3,1,1,0,1.6500000000000234,0.5666666666666735,0.3883610936871847,2.242947989184582,29.85000000000029,1.683509522867929
+checkpoint_validation_update_0040,case2,no_gru,3,97103,1,3,3,1,1,1,0.350000000000005,0.1444444444444469,0.28565506155489645,1.1325865167064704,28.250000000000266,1.1325865167064704
+checkpoint_validation_update_0040,case2,no_gru,3,97103,2,3,2,1,0,0,nan,nan,nan,nan,nan,2.611062219850733
+checkpoint_validation_update_0040,case2,no_gru,3,97103,3,3,3,1,1,0,23.74999999999904,10.466666666666237,0.48642986215944345,2.0694947830529347,50.24999999999928,2.0694947830529347
+checkpoint_validation_update_0040,case2,no_gru,3,97103,4,2,1,1,0,0,nan,nan,nan,nan,nan,2.863688029100987
+checkpoint_validation_update_0040,case2,no_gru,3,97103,5,2,2,1,1,0,1.900000000000027,0.9500000000000135,0.3985615954565333,1.6064865939148008,31.90000000000032,1.6064865939148008
+checkpoint_validation_update_0040,case2,no_gru,3,97103,6,2,1,1,0,0,nan,nan,nan,nan,nan,2.7325440304025093
+checkpoint_validation_update_0040,case2,no_gru,3,97103,7,2,1,1,0,0,nan,nan,nan,nan,nan,2.643720936127254
+checkpoint_validation_update_0040,case2,no_gru,4,97104,0,3,2,1,0,0,nan,nan,nan,nan,nan,3.0130618996047116
+checkpoint_validation_update_0040,case2,no_gru,4,97104,1,3,2,1,0,0,nan,nan,nan,nan,nan,2.954863294202194
+checkpoint_validation_update_0040,case2,no_gru,4,97104,2,3,2,1,0,0,nan,nan,nan,nan,nan,2.777358136875048
+checkpoint_validation_update_0040,case2,no_gru,4,97104,3,3,3,1,1,0,0.70000000000001,0.23333333333333783,0.23370510998773572,2.592364095983456,30.350000000000296,2.592364095983456
+checkpoint_validation_update_0040,case2,no_gru,4,97104,4,2,1,1,0,0,nan,nan,nan,nan,nan,2.071708670428641
+checkpoint_validation_update_0040,case2,no_gru,4,97104,5,2,1,1,0,0,nan,nan,nan,nan,nan,3.1611869921081563
+checkpoint_validation_update_0040,case2,no_gru,4,97104,6,2,2,1,1,0,1.4500000000000206,0.7250000000000103,0.24344163188229706,1.9496119358812125,30.400000000000297,1.9496119358812125
+checkpoint_validation_update_0040,case2,no_gru,4,97104,7,2,0,0,0,0,nan,nan,nan,nan,nan,3.8301813581523048

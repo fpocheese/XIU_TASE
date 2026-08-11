@@ -1,0 +1,46 @@
+{
+  "purpose": "reference target for future independent failure simulations",
+  "data_status": "synthetic planning reference; not experimental data",
+  "source_case1": "/home/uav/00gao_xueshu/DT_PAPER/guidance_pic_code/test\u5168\u9762\u6570\u636e\u7248\u672cv1/test/mappo_success_nopn/mappo_success_nopn_eval.txt",
+  "source_case2": "/home/uav/00gao_xueshu/DT_PAPER/guidance_pic_code/test\u5168\u9762\u6570\u636e\u7248\u672cv1/test/mappo_success_sin/sinmappo_eval/agentseval.txt",
+  "source_relation": "ART-MAPPO data used by Fig. mc_boxplots",
+  "samples_per_case": 1000,
+  "seed": 20260810,
+  "transformation": {
+    "formula": "reference = source_mean*(1+mean_fraction) + spread_scale*(source-source_mean) + Gaussian jitter",
+    "case1": {
+      "mean_fraction": [
+        0.12,
+        0.1,
+        0.08,
+        0.06
+      ],
+      "spread_scale": [
+        1.1,
+        1.1,
+        1.1,
+        1.08
+      ]
+    },
+    "case2": {
+      "mean_fraction": [
+        0.15,
+        0.12,
+        0.1,
+        0.07
+      ],
+      "spread_scale": [
+        1.15,
+        1.12,
+        1.12,
+        1.1
+      ]
+    },
+    "jitter_std_fraction_of_source_std": 0.05,
+    "case2_E_t_upper_bound_s": 45.0,
+    "case2_E_t_upper_bound_method": "smooth saturation, then 0.05-s quantization"
+  },
+  "simulator_executed": false,
+  "policy_evaluation_executed": false,
+  "reporting_restriction": "Do not report the generated values as Monte Carlo trials or use them as evidence. Replace them with independent simulation data."
+}

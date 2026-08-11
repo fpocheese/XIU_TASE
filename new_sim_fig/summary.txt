@@ -1,0 +1,31 @@
+Final simulation figure package
+Generated: 2026-07-18
+
+This folder consolidates the final MAPPO and PN comparison simulation results.
+
+MAPPO source:
+/home/uav/00gao_xueshu/DT_PAPER/XIU_code/hil_v9_results/final_case_specific_match_v1_t0
+
+MAPPO result summary:
+case1: all_hit_rate=1.0, all_sync_rate=1.0, max_sync_spread=0.25 s
+case2: all_hit_rate=1.0, all_sync_rate=1.0, max_sync_spread=0.30 s
+
+PN source:
+/home/uav/00gao_xueshu/DT_PAPER/XIU_code/hil_v9_results/pn_compare_real3d_tgoavg_N4_v1
+
+PN method:
+N=4 proportional navigation.
+Longitudinal time cooperation uses TGO = range / closing range-rate,
+group average TGO, and desired_speed = current_range / average_TGO.
+Acceleration limits: nx [-0.1g, 1g], ny/nz [-1g, 1g].
+Hit radius: 3 m.
+
+PN result summary:
+case1: all_hit_rate=1.0, all_sync_rate=1.0, max_sync_spread=0.40 s
+case2: all_hit_rate=1.0, all_sync_rate=1.0, max_sync_spread=0.35 s
+
+Directory layout:
+mappo/final_case_specific_match_v1_t0/    Full MAPPO result package
+pn/pn_compare_real3d_tgoavg_N4_v1/        Full PN result package
+figures/mappo/                            MAPPO v9 figures only
+figures/pn/                               PN v9 figures only

@@ -1,0 +1,5 @@
+Metric,Rate_percent,Wilson95_half_width_percent,Episodes
+Individual interception,100.000000,0.095852,100
+Target coverage,100.000000,0.238944,100
+All-target interception,100.000000,1.849675,100
+Cooperative mission,72.000000,8.674172,100

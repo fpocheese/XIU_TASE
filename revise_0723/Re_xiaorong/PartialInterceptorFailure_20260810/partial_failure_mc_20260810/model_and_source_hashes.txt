@@ -1,0 +1,30 @@
+SHA-256 verification performed after the two Monte Carlo evaluations.
+Stable and experiment-copy hashes are identical for every trained model.
+
+Case 1 actor
+884802798c6c4b27d046bae274a3d354702d6e8646a73875de940202713393a3
+  stable_V2/final_models/case1/actor.pt
+884802798c6c4b27d046bae274a3d354702d6e8646a73875de940202713393a3
+  partial_failure_mc_20260810/final_models/case1/actor.pt
+
+Case 2 actor
+8a644cfe9fea7f70fe0165c25d77193887e9c2b9e391ac83ca5efc85714fd0f2
+  stable_V2/final_models/case2/actor.pt
+8a644cfe9fea7f70fe0165c25d77193887e9c2b9e391ac83ca5efc85714fd0f2
+  partial_failure_mc_20260810/final_models/case2/actor.pt
+
+Case 1 critic (not used for action inference)
+1960b9c9e88491bf2c5b33bba7586f0814a724603d7bb1684b7e08c7b929c8c3
+  stable_V2/final_models/case1/critic.pt
+1960b9c9e88491bf2c5b33bba7586f0814a724603d7bb1684b7e08c7b929c8c3
+  partial_failure_mc_20260810/final_models/case1/critic.pt
+
+Case 2 critic (not used for action inference)
+5bf72446cd8d2617a758aedc073250ee99131b984237096b0c87a09e2cfac5f9
+  stable_V2/final_models/case2/critic.pt
+5bf72446cd8d2617a758aedc073250ee99131b984237096b0c87a09e2cfac5f9
+  partial_failure_mc_20260810/final_models/case2/critic.pt
+
+Paper case preset used by both evaluations
+07488f1c45c2c72609c18a524bc40ddb922c7283828a0c210c74ec0b3fd9520c
+  partial_failure_mc_20260810/presets/paper_case_presets_original_assignment_verified.npz

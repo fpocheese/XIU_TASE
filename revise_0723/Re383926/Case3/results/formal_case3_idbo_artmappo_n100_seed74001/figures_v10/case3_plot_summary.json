@@ -1,0 +1,11 @@
+{
+  "episodes": 100,
+  "successful_trials": 72,
+  "metrics_use_successful_trials_only": true,
+  "rates": {
+    "Individual\nhit": 1.0,
+    "Target\ncoverage": 1.0,
+    "All-target\nhit": 1.0,
+    "Coop.\nmission": 0.72
+  }
+}

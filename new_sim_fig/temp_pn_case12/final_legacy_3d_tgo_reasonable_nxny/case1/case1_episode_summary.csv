@@ -1,0 +1,2 @@
+case,model,episodes,attack_success_rate,target_success_rate,all_hit_rate,sync_success_rate,all_sync_rate,mean_target_time,max_sync_spread,mean_sync_spread
+case1,PN,1,1.0,1.0,1.0,1.0,1.0,33.52604166666686,0.4999999999999716,0.12499999999999378

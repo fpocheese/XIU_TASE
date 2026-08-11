@@ -1,0 +1,2 @@
+case,episode,seed,failed_count,failed_defender_ids,failed_target_indices,interception_success,all_active_defenders_hit,cooperative_success,targets_covered,active_defenders_hit,E_co_time_s,E_n_g,E_miss_m,E_t_s,simulated_time_s,sensor_delay_ms,position_noise_std_m,velocity_noise_std_mps,command_lag_ms
+case2,1,90077,2,11;13,3;5,1,0,0,8,17,0.02152777777777759,0.31879201227995446,2.385360301668032,42.14999999999974,75.0,50.0,3.0,0.3,400.0

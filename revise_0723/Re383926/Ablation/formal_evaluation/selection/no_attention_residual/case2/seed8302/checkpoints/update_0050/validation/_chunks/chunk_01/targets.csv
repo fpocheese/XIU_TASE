@@ -1,0 +1,17 @@
+condition,case,variant,episode,seed,target_index,group_size,hit_count,target_covered,group_complete,group_coordinated,arrival_spread_s,E_co_time_s,E_n_g,E_miss_m,E_t_s,closest_approach_m
+checkpoint_validation_update_0050,case2,no_attention_residual,3,97103,0,3,3,1,1,0,1.6000000000000227,0.555555555555563,0.40110888028808067,2.0906460838199137,29.80000000000029,1.8839207541858467
+checkpoint_validation_update_0050,case2,no_attention_residual,3,97103,1,3,3,1,1,1,0.350000000000005,0.1444444444444469,0.28772378889789524,0.9404604227645686,28.250000000000266,0.9404604227645686
+checkpoint_validation_update_0050,case2,no_attention_residual,3,97103,2,3,2,1,0,0,nan,nan,nan,nan,nan,2.4661021002621553
+checkpoint_validation_update_0050,case2,no_attention_residual,3,97103,3,3,3,1,1,1,0.4000000000000057,0.1777777777777795,0.3927894269834942,2.3547341750914583,26.850000000000247,2.3547341750914583
+checkpoint_validation_update_0050,case2,no_attention_residual,3,97103,4,2,2,1,1,0,1.0000000000000142,0.5000000000000071,0.3512463949408946,2.556422400740958,26.50000000000024,2.556422400740958
+checkpoint_validation_update_0050,case2,no_attention_residual,3,97103,5,2,2,1,1,0,1.900000000000027,0.9500000000000135,0.39886501715724487,1.6191705665840366,31.90000000000032,1.6191705665840366
+checkpoint_validation_update_0050,case2,no_attention_residual,3,97103,6,2,1,1,0,0,nan,nan,nan,nan,nan,2.7165268626285406
+checkpoint_validation_update_0050,case2,no_attention_residual,3,97103,7,2,2,1,1,0,1.1000000000000156,0.5500000000000078,0.3664313959397607,2.605298930698997,25.75000000000023,2.605298930698997
+checkpoint_validation_update_0050,case2,no_attention_residual,4,97104,0,3,2,1,0,0,nan,nan,nan,nan,nan,2.951575501379484
+checkpoint_validation_update_0050,case2,no_attention_residual,4,97104,1,3,2,1,0,0,nan,nan,nan,nan,nan,2.919860101536639
+checkpoint_validation_update_0050,case2,no_attention_residual,4,97104,2,3,2,1,0,0,nan,nan,nan,nan,nan,2.7273016892624837
+checkpoint_validation_update_0050,case2,no_attention_residual,4,97104,3,3,3,1,1,0,0.70000000000001,0.23333333333333783,0.2391910058613316,2.6459915984588407,30.350000000000296,2.6459915984588407
+checkpoint_validation_update_0050,case2,no_attention_residual,4,97104,4,2,1,1,0,0,nan,nan,nan,nan,nan,2.281653233450171
+checkpoint_validation_update_0050,case2,no_attention_residual,4,97104,5,2,1,1,0,0,nan,nan,nan,nan,nan,3.149609051668186
+checkpoint_validation_update_0050,case2,no_attention_residual,4,97104,6,2,2,1,1,0,1.6500000000000234,0.8250000000000117,0.2648320963693186,1.758161469643791,30.400000000000297,1.6833191344015723
+checkpoint_validation_update_0050,case2,no_attention_residual,4,97104,7,2,0,0,0,0,nan,nan,nan,nan,nan,3.74459414389886

@@ -1,0 +1,13 @@
+condition,case,variant,episode,seed,mean_sync_spread,max_sync_spread,targets_covered,complete_groups,coordinated_groups
+final_case4_case2geom_fixed_bangbang_n100_clean,case4,full,77,99477,0.1125000000000016,0.15000000000000213,8,8,8
+final_case4_case2geom_fixed_bangbang_n100_clean,case4,full,78,99478,0.11875000000000169,0.15000000000000213,8,8,8
+final_case4_case2geom_fixed_bangbang_n100_clean,case4,full,79,99479,0.11875000000000169,0.15000000000000213,8,8,8
+final_case4_case2geom_fixed_bangbang_n100_clean,case4,full,80,99480,0.11875000000000169,0.20000000000000284,8,8,8
+final_case4_case2geom_fixed_bangbang_n100_clean,case4,full,81,99481,0.12500000000000178,0.20000000000000284,8,8,8
+final_case4_case2geom_fixed_bangbang_n100_clean,case4,full,82,99482,0.12500000000000178,0.15000000000000213,8,8,8
+final_case4_case2geom_fixed_bangbang_n100_clean,case4,full,83,99483,0.13750000000000195,0.20000000000000284,8,8,8
+final_case4_case2geom_fixed_bangbang_n100_clean,case4,full,84,99484,0.08750000000000124,0.20000000000000284,8,8,8
+final_case4_case2geom_fixed_bangbang_n100_clean,case4,full,85,99485,0.1125000000000016,0.15000000000000213,8,8,8
+final_case4_case2geom_fixed_bangbang_n100_clean,case4,full,86,99486,0.10625000000000151,0.15000000000000213,8,8,8
+final_case4_case2geom_fixed_bangbang_n100_clean,case4,full,87,99487,0.08750000000000124,0.10000000000000142,8,8,8
+final_case4_case2geom_fixed_bangbang_n100_clean,case4,full,88,99488,0.08750000000000124,0.15000000000000213,8,8,8

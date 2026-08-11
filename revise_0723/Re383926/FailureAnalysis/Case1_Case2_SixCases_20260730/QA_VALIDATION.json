@@ -1,0 +1,32 @@
+{
+  "qa_passed": true,
+  "screen_episode_count": 200,
+  "selected_episode_count": 6,
+  "case1_selected_count": 3,
+  "case2_selected_count": 3,
+  "native_npz_file_count": 6,
+  "episode_metric_row_count": 6,
+  "defender_metric_row_count": 120,
+  "target_group_metric_row_count": 48,
+  "all_required_arrays_are_finite": true,
+  "all_selected_cases_have_19_of_20_interceptor_hits": true,
+  "all_selected_cases_have_8_of_8_target_coverage": true,
+  "all_selected_cases_have_7_of_8_complete_assignment_groups": true,
+  "all_missed_closest_approaches_exceed_3_m": true,
+  "v10_plot_triplet_count": 9,
+  "v10_png_count": 9,
+  "v10_pdf_count": 9,
+  "v10_svg_count": 9,
+  "png_minimum_width_px": 3821,
+  "png_minimum_height_px": 1369,
+  "png_maximum_width_px": 4682,
+  "png_maximum_height_px": 2850,
+  "visual_inspection": {
+    "legend_overlap": false,
+    "title_overlap": false,
+    "axis_clipping": false,
+    "empty_panel": false,
+    "units_checked": true,
+    "closest_approach_and_hit_radius_visible": true
+  }
+}

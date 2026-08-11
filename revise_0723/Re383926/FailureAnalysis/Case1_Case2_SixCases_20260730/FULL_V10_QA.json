@@ -1,0 +1,28 @@
+{
+  "qa_passed": true,
+  "selected_runs": {
+    "case1": 76014,
+    "case2": 77008
+  },
+  "selection": "earliest qualifying seed per case",
+  "plot_types_per_case": 13,
+  "figure_triplet_count": 27,
+  "png_count": 27,
+  "pdf_count": 27,
+  "svg_count": 27,
+  "png_resolution": "600 dpi",
+  "v10_export_text_file_count": 10,
+  "all_export_arrays_finite": true,
+  "response_pdf_pages": 5,
+  "latex_compile_success": true,
+  "latex_warning_count": 0,
+  "visual_checks": {
+    "legend_overlap": false,
+    "axis_clipping": false,
+    "empty_panel": false,
+    "trajectory_failure_marker_visible": true,
+    "censored_delay_label_visible": true,
+    "case1_censored_delay_lower_bound_s": 46.65,
+    "case2_censored_delay_lower_bound_s": 48.85
+  }
+}

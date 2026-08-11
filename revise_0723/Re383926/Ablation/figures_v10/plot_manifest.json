@@ -1,0 +1,21 @@
+{
+  "style": "IEEE TASE V10",
+  "style_reference": "new_sim_fig/fig_and_data figures_v10; ieee_plot_v10_tase.py -> ieee_plot_v9_tase.py rcParams",
+  "single_column_width_in": 3.5,
+  "double_column_width_in": 7.16,
+  "png_dpi": 600,
+  "generated_stems": [
+    "ablation_training_case1_v10",
+    "ablation_training_reward_case1_v10",
+    "ablation_training_critic_loss_case1_v10",
+    "ablation_training_policy_entropy_case1_v10",
+    "ablation_training_case2_v10",
+    "ablation_training_reward_case2_v10",
+    "ablation_training_critic_loss_case2_v10",
+    "ablation_training_policy_entropy_case2_v10",
+    "ablation_monte_carlo_case1_v10",
+    "ablation_terminal_metrics_case1_v10",
+    "ablation_monte_carlo_case2_v10",
+    "ablation_terminal_metrics_case2_v10"
+  ]
+}

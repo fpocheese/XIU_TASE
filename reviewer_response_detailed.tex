@@ -1,0 +1,54 @@
+\documentclass[9pt]{extarticle}
+\usepackage[letterpaper,landscape,margin=0.45in]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs,longtable,array}
+\usepackage[table]{xcolor}
+\usepackage[hidelinks]{hyperref}
+\usepackage{microtype}
+\usepackage[pipeTables,tableCaptions,smartEllipses]{markdown}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+\renewcommand{\arraystretch}{1.18}
+\pagestyle{plain}
+\makeatletter
+\def\responseRenderTableRow#1{%
+  \markdownLaTeXColumnCounter=0%
+  \ifnum\markdownLaTeXRowCounter=0\relax
+    \markdownLaTeXTable=\expandafter\expandafter\expandafter{%
+      \expandafter\the\expandafter\markdownLaTeXTable\expandafter{%
+        >{\raggedright\arraybackslash}p{0.065\linewidth}%
+        >{\raggedright\arraybackslash}p{0.205\linewidth}%
+        >{\raggedright\arraybackslash}p{0.315\linewidth}%
+        >{\raggedright\arraybackslash}p{0.335\linewidth}}}%
+    \addto@hook\markdownLaTeXTable{\toprule}%
+  \else
+    \markdownLaTeXRenderTableCell#1%
+  \fi
+  \ifnum\markdownLaTeXRowCounter=1\relax
+    \addto@hook\markdownLaTeXTable\midrule
+  \fi
+  \advance\markdownLaTeXRowCounter by 1\relax
+  \ifnum\markdownLaTeXRowCounter>\markdownLaTeXRowTotal\relax
+    \the\markdownLaTeXTable
+    \the\markdownLaTeXTableEnd
+    \expandafter\@gobble
+  \fi\responseRenderTableRow}
+\markdownSetup{rendererPrototypes={
+  table={%
+    \markdownLaTeXTable={\begin{longtable}}%
+    \markdownLaTeXTableEnd={\bottomrule\end{longtable}}%
+    \markdownLaTeXRowCounter=0%
+    \markdownLaTeXRowTotal=#2%
+    \markdownLaTeXColumnTotal=#3%
+    \responseRenderTableRow},
+  image={%
+    \begin{center}%
+    \includegraphics[width=0.94\linewidth,height=0.76\textheight,keepaspectratio]{#3}\\[-2pt]
+    \small\textit{#1}%
+    \end{center}}
+}}
+\makeatother
+\begin{document}
+\small
+\markdownInput{reviewer_response_print.md}
+\end{document}

@@ -1,0 +1,9 @@
+condition,case,variant,episode,seed,target_index,group_size,hit_count,target_covered,group_complete,group_coordinated,arrival_spread_s,E_co_time_s,E_n_g,E_miss_m,E_t_s,closest_approach_m
+parallel_eval_smoke,case2,full,1,99601,0,3,0,0,0,0,nan,nan,nan,nan,nan,1471.177205129862
+parallel_eval_smoke,case2,full,1,99601,1,3,0,0,0,0,nan,nan,nan,nan,nan,1388.6655091008572
+parallel_eval_smoke,case2,full,1,99601,2,3,0,0,0,0,nan,nan,nan,nan,nan,1431.7703941084485
+parallel_eval_smoke,case2,full,1,99601,3,3,0,0,0,0,nan,nan,nan,nan,nan,1529.9403543149383
+parallel_eval_smoke,case2,full,1,99601,4,2,0,0,0,0,nan,nan,nan,nan,nan,1389.043356298586
+parallel_eval_smoke,case2,full,1,99601,5,2,0,0,0,0,nan,nan,nan,nan,nan,1508.3026834467923
+parallel_eval_smoke,case2,full,1,99601,6,2,0,0,0,0,nan,nan,nan,nan,nan,1432.7344427245553
+parallel_eval_smoke,case2,full,1,99601,7,2,0,0,0,0,nan,nan,nan,nan,nan,1391.6361234038136

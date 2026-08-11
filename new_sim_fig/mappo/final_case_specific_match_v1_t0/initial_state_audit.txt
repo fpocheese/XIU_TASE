@@ -1,0 +1,35 @@
+Initial state audit for final_case_specific_match_v1_t0
+
+Source original data:
+  case1: /home/uav/00gao_xueshu/DT_PAPER/guidance_pic_code/test全面数据版本v1/test/mappo_success_nopn
+  case2: /home/uav/00gao_xueshu/DT_PAPER/guidance_pic_code/test全面数据版本v1/test/mappo_success_sin
+
+agentsvel convention: 1-based odd columns are speed, 1-based even columns are heading.
+Remote environment reset was checked directly from state.p_pos, state.p_vel, and state.v_vel=[speed,pitch,yaw].
+
+Assignment 0-based for both cases:
+  [0,1,2,3,4,5,6,7,0,1,2,3,4,5,6,7,0,1,2,3]
+Assignment 1-based for both cases:
+  D1-D8 -> A1-A8; D9-D16 -> A1-A8; D17-D20 -> A1-A4
+
+Direct reset comparison against original first row:
+case1:
+  defender position max abs diff: 0.0
+  attacker position max abs diff: 0.0
+  defender speed max abs diff: 3.552713678800501e-15
+  attacker speed max abs diff: 7.105427357601002e-15
+  defender heading max wrapped diff: 0.0
+  attacker heading max wrapped diff: 0.0
+  defender pitch max abs: 0.0
+  attacker pitch max abs: 0.0
+case2:
+  defender position max abs diff: 0.0
+  attacker position max abs diff: 0.0
+  defender speed max abs diff: 3.552713678800501e-15
+  attacker speed max abs diff: 7.105427357601002e-15
+  defender heading max wrapped diff: 0.0
+  attacker heading max wrapped diff: 0.0
+  defender pitch max abs: 0.0
+  attacker pitch max abs: 0.0
+
+Note: v9_export_latest/agentsvel.txt is derived from finite differences of exported positions, not from reset state.v_vel. Use the direct reset audit and verified preset for initial-state equality.

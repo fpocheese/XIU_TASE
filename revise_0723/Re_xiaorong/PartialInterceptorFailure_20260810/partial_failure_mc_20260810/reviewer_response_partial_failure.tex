@@ -1,0 +1,49 @@
+\noindent\textbf{Reviewer comment:}
+\emph{Besides, the paper must extend simulation verification by incorporating
+communication packet loss, sensor noise, and partial interceptor failures to
+validate robustness in the proposed cooperative swarm interception framework.}
+
+\medskip
+\noindent\textbf{Response:}
+Thank you for this important suggestion. We added a
+partial-interceptor-failure study using the frozen policies and the same
+three-dimensional evaluation environment. In each of 100 independent trials
+per case, two of the 20 interceptors were sampled uniformly without
+replacement and made unavailable after target assignment but before the first
+guidance command. No retraining, online reassignment, or post-selection of
+trials was performed. Mission success required all eight attackers to be
+intercepted by the remaining operational vehicles. The resulting interception
+success rates were 92.0\% in Case~1 and 44.0\% in Case~2. For successful
+trials, the mean
+$\{E_{co\text{-}time},E_n,E_{miss},E_t\}$ values were
+$\{0.0113~\mathrm{s},0.2616~g,1.6582~\mathrm{m},33.7859~\mathrm{s}\}$
+and
+$\{0.8520~\mathrm{s},0.2628~g,2.0530~\mathrm{m},61.6489~\mathrm{s}\}$,
+respectively.
+
+Failure decomposition further clarifies the limitation. In each case, only
+five failed trials were caused by both unavailable interceptors removing all
+vehicles assigned to one target. In Case~2, 51 of the 56 failed trials
+contained an uncovered target for which at least one operational interceptor
+remained. Thus, the fixed assignment provides useful failure redundancy in
+Case~1, whereas the more demanding maneuver pattern in Case~2 requires
+failure-aware online reassignment or replanning. We now state this practical
+limitation explicitly rather than claiming unconditional fault tolerance.
+
+\begin{figure*}[!t]
+  \centering
+  \includegraphics[width=\textwidth]
+  {figures/two_defender_failure_mc_boxplots.pdf}
+  \caption{Terminal-metric distributions under two randomly unavailable
+  interceptors: (a) temporal-coordination error, (b) terminal lateral
+  acceleration, (c) terminal miss distance, and (d) coordinated interception
+  duration. Continuous metrics are evaluated over successful interception
+  trials only.}
+  \label{fig:two_interceptor_failure_mc}
+\end{figure*}
+
+% Important internal note:
+% The audited stable branch does not contain an independent friend-to-friend
+% communication-delay or packet-loss/hold-last-message implementation.
+% Do not claim that the present experiment validates packet loss until that
+% mechanism is implemented and evaluated with the same frozen-policy protocol.

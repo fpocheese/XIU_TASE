@@ -1,0 +1,46 @@
+{
+  "purpose": "V11 figures truncated at the first attacker hit on the protected asset.",
+  "raw_trajectory_samples_edited": false,
+  "remote_simulation_replayed": false,
+  "asset_center_m": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "asset_hit_radius_m": 3.0,
+  "intercept_hit_radius_m": 3.0,
+  "selected_runs": {
+    "case1": 76048,
+    "case2": 77008
+  },
+  "summary": [
+    {
+      "case": "case1",
+      "seed": 76048,
+      "asset_hit_step": 1044,
+      "asset_hit_time_s": 52.2,
+      "asset_hit_attacker_id": 5,
+      "asset_hit_distance_m": 1.3409392843533514,
+      "interceptor_hits_before_asset_hit": 19,
+      "original_interceptor_hits": 19,
+      "asset_hit_radius_m": 3.0,
+      "intercept_hit_radius_m": 3.0,
+      "raw_npz": "/home/uav/00gao_xueshu/DT_PAPER/XIU_tase_paper_V1/revise_0723/Re383926/FailureAnalysis/Case1_Case2_SixCases_20260730/artifacts_remote/selected_six_failure_cases/case1/seed_76048/case1/case1_selected_episode.npz"
+    },
+    {
+      "case": "case2",
+      "seed": 77008,
+      "asset_hit_step": 943,
+      "asset_hit_time_s": 47.150000000000006,
+      "asset_hit_attacker_id": 1,
+      "asset_hit_distance_m": 1.8186877032950273,
+      "interceptor_hits_before_asset_hit": 16,
+      "original_interceptor_hits": 19,
+      "asset_hit_radius_m": 3.0,
+      "intercept_hit_radius_m": 3.0,
+      "raw_npz": "/home/uav/00gao_xueshu/DT_PAPER/XIU_tase_paper_V1/revise_0723/Re383926/FailureAnalysis/Case1_Case2_SixCases_20260730/artifacts_remote/selected_six_failure_cases/case2/seed_77008/case2/case2_selected_episode.npz"
+    }
+  ],
+  "output": "/home/uav/00gao_xueshu/DT_PAPER/XIU_tase_paper_V1/revise_0723/Re383926/FailureAnalysis/Case1_Case2_SixCases_20260730/artifacts_remote_v2/selected_representative_full_v10_v2_asset_truncated",
+  "reviewer_assets": "/home/uav/00gao_xueshu/DT_PAPER/XIU_tase_paper_V1/revise_0723/Re383926/FailureAnalysis/Case1_Case2_SixCases_20260730/reviewer_response_assets/full_v10_asset_truncated"
+}

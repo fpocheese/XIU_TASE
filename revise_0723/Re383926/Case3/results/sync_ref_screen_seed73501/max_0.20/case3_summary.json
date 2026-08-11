@@ -1,0 +1,23 @@
+{
+  "protocol": "unseen Case-3 geometry + IDBO assignment + frozen stable_V2 Case-2 policy",
+  "episodes": 3,
+  "seed_start": 73501,
+  "model_dir": "/home/a2rl/reviewer_xiu_case3_20260729/models/case2",
+  "policy_updated": false,
+  "idbo_population": 24,
+  "idbo_iterations": 80,
+  "hit_radius_m": 3.0,
+  "sync_tolerance_s": 0.5,
+  "terminal_window_s": 1.0,
+  "interceptor_hit_rate": 0.9166666666666666,
+  "target_coverage_rate": 0.9166666666666666,
+  "all_targets_hit_rate": 0.3333333333333333,
+  "cooperative_mission_success_rate": 0.3333333333333333,
+  "successful_trials": 1,
+  "successful_trial_metrics": {
+    "E_co_time_s": 0.030208333333334135,
+    "E_n_g": 0.8507007193987918,
+    "E_miss_m": 1.7356122365834588,
+    "E_t_s": 36.900000000000006
+  }
+}

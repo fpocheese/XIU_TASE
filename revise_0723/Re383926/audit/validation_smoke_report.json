@@ -1,0 +1,45 @@
+{
+  "checks": [
+    {
+      "file": "reviewer_ablation_artifacts/Re383926/audit/parallel_eval_smoke/episodes.csv",
+      "rows": 4
+    },
+    {
+      "file": "reviewer_ablation_artifacts/Re383926/audit/parallel_eval_smoke/summary.json",
+      "summary_checked": true
+    },
+    {
+      "file": "reviewer_ablation_artifacts/Re383926/audit/parallel_eval_smoke/episodes.csv",
+      "rows": 4
+    },
+    {
+      "file": "reviewer_ablation_artifacts/Re383926/audit/parallel_eval_smoke/summary.json",
+      "summary_checked": true
+    },
+    {
+      "dpi": [
+        599.9988,
+        599.9988
+      ],
+      "file": "reviewer_ablation_artifacts/Re383926/audit/v10_plot_smoke/ablation_monte_carlo_case2_v10.png",
+      "pixel_size": [
+        4281,
+        2625
+      ]
+    },
+    {
+      "dpi": [
+        599.9988,
+        599.9988
+      ],
+      "file": "reviewer_ablation_artifacts/Re383926/audit/v10_plot_smoke/ablation_terminal_metrics_case2_v10.png",
+      "pixel_size": [
+        4281,
+        2625
+      ]
+    }
+  ],
+  "expected_episodes_per_merged_file": 4,
+  "issues": [],
+  "status": "pass"
+}

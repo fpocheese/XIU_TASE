@@ -1,0 +1,3 @@
+﻿case,total_trials,strict_successes,unsuccessful_trials,ISR_percent,ISR_Wilson95_low_percent,ISR_Wilson95_high_percent,failed_trajectory_saved,member_level_cause_identifiable,reason
+Case 1,1000,987,13,98.7,97.78855576244203,99.23871796106489,False,False,Evaluator writes the five metrics only when break_flag is true
+Case 2,1000,971,29,97.1,95.86616416633058,97.97335518433013,False,False,Evaluator writes the five metrics only when break_flag is true

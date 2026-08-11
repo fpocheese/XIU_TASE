@@ -1,0 +1,28 @@
+{
+  "purpose": "planning target for future independent partial-failure simulations",
+  "data_status": "synthetic planning reference; not experimental data",
+  "derived_from": "V4 deterministic construction",
+  "source_case1": "/home/uav/00gao_xueshu/DT_PAPER/guidance_pic_code/test\u5168\u9762\u6570\u636e\u7248\u672cv1/test/mappo_success_nopn/mappo_success_nopn_eval.txt",
+  "source_case2": "/home/uav/00gao_xueshu/DT_PAPER/guidance_pic_code/test\u5168\u9762\u6570\u636e\u7248\u672cv1/test/mappo_success_sin/sinmappo_eval/agentseval.txt",
+  "samples_per_case": 1000,
+  "seed": 20260830,
+  "unchanged_from_v4": [
+    "E_co_time_s",
+    "E_t_s"
+  ],
+  "revised_metrics": [
+    "E_n_g",
+    "E_miss_m"
+  ],
+  "requested_shape": {
+    "E_n_g": "upper whisker below the tail with visible gray outliers",
+    "case2_E_n_upper_whisker": "approximately 0.35 g",
+    "case1_E_miss_median": "approximately 2.9 m",
+    "case2_E_miss_median": "approximately 3.2 m",
+    "E_miss_tail": "different non-clipped tails below 4.5 m"
+  },
+  "distribution_method": "rank-preserving quantile envelope plus seeded heterogeneous jitter and continuous tail compression",
+  "simulator_executed": false,
+  "policy_evaluation_executed": false,
+  "reporting_restriction": "Do not report these values as Monte Carlo trials. Replace them with independently simulated failure episodes."
+}

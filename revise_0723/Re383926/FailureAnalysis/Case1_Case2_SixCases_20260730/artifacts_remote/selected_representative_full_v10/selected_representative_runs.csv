@@ -1,0 +1,3 @@
+case,seed,selection,interceptor_hits,target_coverage,missed_defender_id,assigned_target_id,missed_min_distance_m,miss_margin_m,closest_approach_time_s,training_performed
+case1,76014,earliest qualifying seed,19,8,1,21,3.160684377699248,0.16068437769924815,28.35,False
+case2,77008,earliest qualifying seed,19,8,1,21,3.5743973919113023,0.5743973919113023,26.150000000000002,False

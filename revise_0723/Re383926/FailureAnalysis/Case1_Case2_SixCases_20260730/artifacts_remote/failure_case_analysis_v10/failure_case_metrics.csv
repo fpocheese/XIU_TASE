@@ -1,0 +1,7 @@
+case,seed,defender_hit_count,defender_miss_count,target_coverage_count,assigned_group_complete_count,missed_defender_id,missed_defender_target_id,missed_min_distance_m,miss_margin_above_hit_radius_m,miss_closest_approach_time_s,hit_radius_m,sync_tolerance_s,max_observed_hit_group_spread_s,mean_observed_hit_group_spread_s,episode_horizon_s,all_attackers_intercepted,strict_all_assigned_interceptors_hit,frozen_policy,training_performed
+case1,76014,19,1,8,7,1,21,3.160684377699248,0.16068437769924815,28.35,3.0,0.5,0.05000000000000426,0.0250000000000008,75.0,True,False,True,False
+case1,76048,19,1,8,7,5,25,3.243160704674884,0.24316070467488382,33.1,3.0,0.5,0.05000000000000426,0.0250000000000008,75.0,True,False,True,False
+case1,76052,19,1,8,7,8,20,3.0412648408885308,0.041264840888530774,31.35,3.0,0.5,0.05000000000000426,0.0250000000000008,75.0,True,False,True,False
+case2,77008,19,1,8,7,1,21,3.5743973919113023,0.5743973919113023,26.150000000000002,3.0,0.5,0.3500000000000085,0.11250000000000027,75.0,True,False,True,False
+case2,77020,19,1,8,7,2,22,3.096457262717377,0.0964572627173772,37.25,3.0,0.5,0.15000000000000213,0.0562500000000008,75.0,True,False,True,False
+case2,77023,19,1,8,7,17,21,3.4878920093368047,0.48789200933680466,26.150000000000002,3.0,0.5,0.20000000000000284,0.08749999999999991,75.0,True,False,True,False

@@ -1,0 +1,13 @@
+# Response to the reviewer — failure-case analysis
+
+**Reviewer comment:** *Notably, one of the recommendations is to include failure-case analysis for unsuccessful interception and delayed cooperative engagement scenarios because understanding framework limitations remains essential for practical battlefield deployment reliability.*
+
+**Response:** We thank the reviewer for this important suggestion. We have added a failure-oriented analysis that separates strict interception failure from delayed, but ultimately successful, cooperative engagement. In the 1,000-trial evaluations, 13 trials in Case 1 and 29 trials in Case 2 did not satisfy the strict completion condition that all assigned interceptors hit their designated targets within the simulation horizon. The corresponding count-based interception success rates are 98.70% and 97.10%, respectively, showing that the continuously weaving threat in Case 2 produces the more demanding reliability boundary.
+
+We further examined the upper tail of the temporal-coordination error among the archived successful trials. The median/95th-percentile/maximum values of $E_{co\text{-}time}$ are 0.0492/0.0708/0.0900 s in Case 1 and 0.0767/0.1521/0.3167 s in Case 2. In the slowest 5% of successful Case 2 engagements, the mean engagement duration increases from 33.244 to 36.655 s, whereas the mean miss distance increases only from 3.082 to 3.181 m. Moreover, $E_{co\text{-}time}$ and $E_t$ have a Spearman correlation of 0.426 in Case 2, compared with 0.162 in Case 1. These results indicate that the dominant limitation under continuous target weaving is a prolonged and increasingly asynchronous closing process rather than a broad loss of terminal accuracy. This observation also motivates practical safeguards such as time-to-go dispersion monitoring, online reassignment, and reserve-interceptor activation.
+
+For transparency, the original evaluator stored the five terminal metrics only after the strict success flag was raised. Therefore, the available archive supports the aggregate incidence of unsuccessful interceptions and a quantitative diagnosis of delayed successful engagements, but it does not retain sufficient per-agent information to attribute each unsuccessful trial to a particular interceptor or control channel. We have restricted the causal claim accordingly and identified the additional failed-episode logging required for future deployment-level diagnosis.
+
+## Editorial consistency note (not part of the response)
+
+If the manuscript retains “971 successes out of 1,000,” the corresponding ISR is 97.10%, not 97.14%. The success count and percentage should be made consistent before submission.

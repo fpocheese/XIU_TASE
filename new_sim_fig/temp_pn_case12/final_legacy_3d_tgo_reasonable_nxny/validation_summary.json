@@ -1,0 +1,565 @@
+{
+  "controller": {
+    "law": "independent 3D true proportional navigation",
+    "yaw": "ny = clip(N * V_D * lambda_dot_yaw * cos(theta_D) / g, -1, 1)",
+    "pitch": "nz = clip(N * V_D * lambda_dot_pitch / g, -1, 1)",
+    "navigation_constant": 5.0,
+    "pn_speed": "defender own speed",
+    "longitudinal_coordination": "3D corrected-TGO consensus reference, one-step speed tracking",
+    "longitudinal_geometry": "3d",
+    "longitudinal_by_case": {
+      "case1": {
+        "reference": "meanmax",
+        "blend": 0.65
+      },
+      "case2": {
+        "reference": "mean",
+        "blend": 0.9
+      }
+    },
+    "command_filter_or_lag": "none",
+    "case2_attacker_command_lag_tau_s": 0.0,
+    "terminal_ny_same_sign_peak_hold": {
+      "range_m": 60.0,
+      "activation_g": 0.3
+    },
+    "inactive_defender_policy": "self histories may continue after interception; completed members are excluded from the group TGO reference",
+    "load_limit_g": 1.0,
+    "speed_range_mps": [
+      17.0,
+      40.0
+    ]
+  },
+  "legacy_identification": {
+    "case1": {
+      "samples": 12851,
+      "median_N": 5.041113311206347,
+      "q10_N": 4.834271590534436,
+      "q90_N": 5.215282296349506
+    },
+    "case2": {
+      "samples": 13443,
+      "median_N": 4.998539085392468,
+      "q10_N": 4.812708204727245,
+      "q90_N": 5.175324741175633
+    }
+  },
+  "cases": {
+    "case1": {
+      "summary": {
+        "case": "case1",
+        "model": "PN",
+        "episodes": 1,
+        "attack_success_rate": 1.0,
+        "target_success_rate": 1.0,
+        "all_hit_rate": 1.0,
+        "sync_success_rate": 1.0,
+        "all_sync_rate": 1.0,
+        "mean_target_time": 33.52604166666686,
+        "max_sync_spread": 0.4999999999999716,
+        "mean_sync_spread": 0.12499999999999378
+      },
+      "terminal_metrics": {
+        "hit_radius_m": 5.0,
+        "hit_count_within_radius": 20,
+        "agents_reaching_abs_ny_1g": 4,
+        "agents_at_1g_in_final_sample": 13,
+        "agents_at_1g_in_last_100_samples": 13,
+        "final_sample_abs_ny_g": [
+          1.0,
+          1.0,
+          0.25367953078253336,
+          0.8743636427455074,
+          0.5864085772663807,
+          1.0,
+          1.0,
+          0.014769645060870829,
+          1.0,
+          1.0,
+          0.10410248163036408,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          0.5045864413693235,
+          1.0,
+          1.0,
+          0.2877199642360995,
+          1.0
+        ],
+        "large_command_sign_flips_total": 0,
+        "large_command_sign_flips_max_per_agent": 0,
+        "per_agent": [
+          {
+            "defender": 1,
+            "target": 1,
+            "min_distance_m": 0.9484090528560472,
+            "terminal_peak_abs_ny_g": 0.1648429249172609,
+            "terminal_saturation_fraction": 0.0,
+            "large_command_sign_flips": 0
+          },
+          {
+            "defender": 2,
+            "target": 2,
+            "min_distance_m": 4.639225637256556,
+            "terminal_peak_abs_ny_g": 1.0,
+            "terminal_saturation_fraction": 0.03,
+            "large_command_sign_flips": 0
+          },
+          {
+            "defender": 3,
+            "target": 3,
+            "min_distance_m": 4.506706661823623,
+            "terminal_peak_abs_ny_g": 0.25367953078253336,
+            "terminal_saturation_fraction": 0.0,
+            "large_command_sign_flips": 0
+          },
+          {
+            "defender": 4,
+            "target": 4,
+            "min_distance_m": 4.001675577434415,
+            "terminal_peak_abs_ny_g": 0.8743636427455074,
+            "terminal_saturation_fraction": 0.0,
+            "large_command_sign_flips": 0
+          },
+          {
+            "defender": 5,
+            "target": 5,
+            "min_distance_m": 2.752446814549302,
+            "terminal_peak_abs_ny_g": 0.08552993209135545,
+            "terminal_saturation_fraction": 0.0,
+            "large_command_sign_flips": 0
+          },
+          {
+            "defender": 6,
+            "target": 6,
+            "min_distance_m": 4.16914204749524,
+            "terminal_peak_abs_ny_g": 1.0,
+            "terminal_saturation_fraction": 0.18,
+            "large_command_sign_flips": 0
+          },
+          {
+            "defender": 7,
+            "target": 7,
+            "min_distance_m": 1.7300033933876229,
+            "terminal_peak_abs_ny_g": 0.901388296724492,
+            "terminal_saturation_fraction": 0.0,
+            "large_command_sign_flips": 0
+          },
+          {
+            "defender": 8,
+            "target": 8,
+            "min_distance_m": 3.295062982317672,
+            "terminal_peak_abs_ny_g": 0.016880967591933384,
+            "terminal_saturation_fraction": 0.0,
+            "large_command_sign_flips": 0
+          },
+          {
+            "defender": 9,
+            "target": 1,
+            "min_distance_m": 1.028293946275227,
+            "terminal_peak_abs_ny_g": 0.1307175087680547,
+            "terminal_saturation_fraction": 0.0,
+            "large_command_sign_flips": 0
+          },
+          {
+            "defender": 10,
+            "target": 2,
+            "min_distance_m": 1.082501440214661,
+            "terminal_peak_abs_ny_g": 0.2986961537865984,
+            "terminal_saturation_fraction": 0.0,
+            "large_command_sign_flips": 0
+          },
+          {
+            "defender": 11,
+            "target": 3,
+            "min_distance_m": 2.9326244549765215,
+            "terminal_peak_abs_ny_g": 0.10410248163036408,
+            "terminal_saturation_fraction": 0.0,
+            "large_command_sign_flips": 0
+          },
+          {
+            "defender": 12,
+            "target": 4,
+            "min_distance_m": 0.4154692011787173,
+            "terminal_peak_abs_ny_g": 0.10472692878878989,
+            "terminal_saturation_fraction": 0.0,
+            "large_command_sign_flips": 0
+          },
+          {
+            "defender": 13,
+            "target": 5,
+            "min_distance_m": 2.1613686967759285,
+            "terminal_peak_abs_ny_g": 0.18165252925175826,
+            "terminal_saturation_fraction": 0.0,
+            "large_command_sign_flips": 0
+          },
+          {
+            "defender": 14,
+            "target": 6,
+            "min_distance_m": 4.901931957547268,
+            "terminal_peak_abs_ny_g": 1.0,
+            "terminal_saturation_fraction": 0.25,
+            "large_command_sign_flips": 0
+          },
+          {
+            "defender": 15,
+            "target": 7,
+            "min_distance_m": 0.848780553074157,
+            "terminal_peak_abs_ny_g": 0.3493225609994269,
+            "terminal_saturation_fraction": 0.0,
+            "large_command_sign_flips": 0
+          },
+          {
+            "defender": 16,
+            "target": 8,
+            "min_distance_m": 3.522791526895768,
+            "terminal_peak_abs_ny_g": 0.3110448420877666,
+            "terminal_saturation_fraction": 0.0,
+            "large_command_sign_flips": 0
+          },
+          {
+            "defender": 17,
+            "target": 1,
+            "min_distance_m": 1.9918681099177258,
+            "terminal_peak_abs_ny_g": 1.0,
+            "terminal_saturation_fraction": 0.05,
+            "large_command_sign_flips": 0
+          },
+          {
+            "defender": 18,
+            "target": 2,
+            "min_distance_m": 1.1098662506545176,
+            "terminal_peak_abs_ny_g": 0.2158980021910844,
+            "terminal_saturation_fraction": 0.0,
+            "large_command_sign_flips": 0
+          },
+          {
+            "defender": 19,
+            "target": 3,
+            "min_distance_m": 3.389925685268655,
+            "terminal_peak_abs_ny_g": 0.2877199642360995,
+            "terminal_saturation_fraction": 0.0,
+            "large_command_sign_flips": 0
+          },
+          {
+            "defender": 20,
+            "target": 4,
+            "min_distance_m": 1.693743587069008,
+            "terminal_peak_abs_ny_g": 0.1040090907924187,
+            "terminal_saturation_fraction": 0.0,
+            "large_command_sign_flips": 0
+          }
+        ]
+      },
+      "longitudinal_metrics": {
+        "hit_speed_mps": [
+          24.32396761743472,
+          33.29436249078488,
+          28.286437510572966,
+          35.53775451835194,
+          26.28737933005221,
+          17.212350955493953,
+          27.042971085451253,
+          26.130364616679714,
+          24.99191059053392,
+          24.652696694886487,
+          24.915098504192187,
+          27.329015476666562,
+          26.56548943605308,
+          19.22217156097103,
+          20.671587251193568,
+          28.67693736783998,
+          38.34529111168742,
+          25.009214451973463,
+          27.960953992981953,
+          28.544475289496027
+        ],
+        "hit_speed_mean_mps": 26.750021492664864,
+        "hit_speed_min_mps": 17.212350955493953,
+        "hit_speed_max_mps": 38.34529111168742,
+        "agents_reaching_nx_1g_before_hit": 12,
+        "prehit_nx_peak_g": [
+          0.007912255667886451,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          0.003318449904534374,
+          1.0,
+          0.6217890564418311,
+          1.0,
+          0.010800322391208999,
+          0.4004607857903563,
+          0.013818811265781834,
+          1.0,
+          1.0,
+          0.005030184866211862,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          0.7077973560359668
+        ]
+      }
+    },
+    "case2": {
+      "summary": {
+        "case": "case2",
+        "model": "PN",
+        "episodes": 1,
+        "attack_success_rate": 1.0,
+        "target_success_rate": 1.0,
+        "all_hit_rate": 1.0,
+        "sync_success_rate": 1.0,
+        "all_sync_rate": 1.0,
+        "mean_target_time": 35.026041666666785,
+        "max_sync_spread": 0.350000000000005,
+        "mean_sync_spread": 0.11249999999999716
+      },
+      "terminal_metrics": {
+        "hit_radius_m": 5.0,
+        "hit_count_within_radius": 20,
+        "agents_reaching_abs_ny_1g": 19,
+        "agents_at_1g_in_final_sample": 20,
+        "agents_at_1g_in_last_100_samples": 20,
+        "final_sample_abs_ny_g": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "large_command_sign_flips_total": 0,
+        "large_command_sign_flips_max_per_agent": 0,
+        "per_agent": [
+          {
+            "defender": 1,
+            "target": 1,
+            "min_distance_m": 1.5544231858514428,
+            "terminal_peak_abs_ny_g": 1.0,
+            "terminal_saturation_fraction": 0.03,
+            "large_command_sign_flips": 0
+          },
+          {
+            "defender": 2,
+            "target": 2,
+            "min_distance_m": 4.24634356866759,
+            "terminal_peak_abs_ny_g": 1.0,
+            "terminal_saturation_fraction": 0.37,
+            "large_command_sign_flips": 0
+          },
+          {
+            "defender": 3,
+            "target": 3,
+            "min_distance_m": 2.7200099188886684,
+            "terminal_peak_abs_ny_g": 1.0,
+            "terminal_saturation_fraction": 0.23,
+            "large_command_sign_flips": 0
+          },
+          {
+            "defender": 4,
+            "target": 4,
+            "min_distance_m": 2.1098100550804704,
+            "terminal_peak_abs_ny_g": 1.0,
+            "terminal_saturation_fraction": 0.06,
+            "large_command_sign_flips": 0
+          },
+          {
+            "defender": 5,
+            "target": 5,
+            "min_distance_m": 4.302925734820147,
+            "terminal_peak_abs_ny_g": 1.0,
+            "terminal_saturation_fraction": 0.01,
+            "large_command_sign_flips": 0
+          },
+          {
+            "defender": 6,
+            "target": 6,
+            "min_distance_m": 3.0339370672767974,
+            "terminal_peak_abs_ny_g": 1.0,
+            "terminal_saturation_fraction": 0.05,
+            "large_command_sign_flips": 0
+          },
+          {
+            "defender": 7,
+            "target": 7,
+            "min_distance_m": 2.6295325240673635,
+            "terminal_peak_abs_ny_g": 0.8308411335345411,
+            "terminal_saturation_fraction": 0.0,
+            "large_command_sign_flips": 0
+          },
+          {
+            "defender": 8,
+            "target": 8,
+            "min_distance_m": 4.609005328338825,
+            "terminal_peak_abs_ny_g": 1.0,
+            "terminal_saturation_fraction": 0.13,
+            "large_command_sign_flips": 0
+          },
+          {
+            "defender": 9,
+            "target": 1,
+            "min_distance_m": 3.0162232731763936,
+            "terminal_peak_abs_ny_g": 1.0,
+            "terminal_saturation_fraction": 0.06,
+            "large_command_sign_flips": 0
+          },
+          {
+            "defender": 10,
+            "target": 2,
+            "min_distance_m": 4.181657278010576,
+            "terminal_peak_abs_ny_g": 1.0,
+            "terminal_saturation_fraction": 0.37,
+            "large_command_sign_flips": 0
+          },
+          {
+            "defender": 11,
+            "target": 3,
+            "min_distance_m": 2.9973961201803134,
+            "terminal_peak_abs_ny_g": 1.0,
+            "terminal_saturation_fraction": 0.28,
+            "large_command_sign_flips": 0
+          },
+          {
+            "defender": 12,
+            "target": 4,
+            "min_distance_m": 2.590596107991728,
+            "terminal_peak_abs_ny_g": 1.0,
+            "terminal_saturation_fraction": 0.05,
+            "large_command_sign_flips": 0
+          },
+          {
+            "defender": 13,
+            "target": 5,
+            "min_distance_m": 4.220798656299693,
+            "terminal_peak_abs_ny_g": 1.0,
+            "terminal_saturation_fraction": 0.01,
+            "large_command_sign_flips": 0
+          },
+          {
+            "defender": 14,
+            "target": 6,
+            "min_distance_m": 2.175575068650005,
+            "terminal_peak_abs_ny_g": 1.0,
+            "terminal_saturation_fraction": 0.04,
+            "large_command_sign_flips": 0
+          },
+          {
+            "defender": 15,
+            "target": 7,
+            "min_distance_m": 3.0618128714319233,
+            "terminal_peak_abs_ny_g": 1.0,
+            "terminal_saturation_fraction": 0.05,
+            "large_command_sign_flips": 0
+          },
+          {
+            "defender": 16,
+            "target": 8,
+            "min_distance_m": 2.288708505804243,
+            "terminal_peak_abs_ny_g": 1.0,
+            "terminal_saturation_fraction": 0.05,
+            "large_command_sign_flips": 0
+          },
+          {
+            "defender": 17,
+            "target": 1,
+            "min_distance_m": 1.7089184348199777,
+            "terminal_peak_abs_ny_g": 1.0,
+            "terminal_saturation_fraction": 0.05,
+            "large_command_sign_flips": 0
+          },
+          {
+            "defender": 18,
+            "target": 2,
+            "min_distance_m": 4.1678428494589195,
+            "terminal_peak_abs_ny_g": 1.0,
+            "terminal_saturation_fraction": 0.3,
+            "large_command_sign_flips": 0
+          },
+          {
+            "defender": 19,
+            "target": 3,
+            "min_distance_m": 2.418527644160354,
+            "terminal_peak_abs_ny_g": 1.0,
+            "terminal_saturation_fraction": 0.23,
+            "large_command_sign_flips": 0
+          },
+          {
+            "defender": 20,
+            "target": 4,
+            "min_distance_m": 1.9732589791822863,
+            "terminal_peak_abs_ny_g": 1.0,
+            "terminal_saturation_fraction": 0.05,
+            "large_command_sign_flips": 0
+          }
+        ]
+      },
+      "longitudinal_metrics": {
+        "hit_speed_mps": [
+          25.619768551769173,
+          36.243968342719874,
+          27.447069938169896,
+          38.77731672299151,
+          26.216654309243822,
+          19.84838120887497,
+          21.25120399775262,
+          32.95206454968635,
+          32.118047875988786,
+          28.730823338613142,
+          29.88022084566036,
+          37.51435496868827,
+          28.16122073173836,
+          18.08768161088686,
+          21.6642092851291,
+          23.634631716085092,
+          28.201375434193654,
+          25.5300128296459,
+          24.891707153531087,
+          37.39534641223231
+        ],
+        "hit_speed_mean_mps": 28.208302991180055,
+        "hit_speed_min_mps": 18.08768161088686,
+        "hit_speed_max_mps": 38.77731672299151,
+        "agents_reaching_nx_1g_before_hit": 15,
+        "prehit_nx_peak_g": [
+          0.08446651162794008,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          0.17371061075976965,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          0.30754404883884184,
+          1.0,
+          0.03831148316903328,
+          0.49895115518330807,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    }
+  }
+}

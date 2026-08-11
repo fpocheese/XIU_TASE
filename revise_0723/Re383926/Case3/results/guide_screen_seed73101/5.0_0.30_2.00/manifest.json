@@ -1,0 +1,28 @@
+{
+  "command": "onpolicy/scripts/run_case3_end_to_end.py --model-dir /home/a2rl/reviewer_xiu_case3_20260729/models/case2 --preset /home/a2rl/reviewer_xiu_case3_20260729/code/paper_case_presets_original_assignment_verified.npz --outdir /home/a2rl/reviewer_xiu_case3_20260729/results/guide_screen_seed73101/5.0_0.30_2.00 --episodes 2 --seed 73101 --guide-gain 5.0 --guide-tau 0.30 --guide-lead 2.00",
+  "generated_unix": 1785300301.3994293,
+  "files": {
+    "case3_assignment_and_arrivals.csv": "c88bc316d24fd92ca7e16d60ee0f7ab9d60af5fac84e9eba7e75a0a9e268bae4",
+    "case3_episode_metrics.csv": "73989dc118f24b5cf7960b6ecf22ffe31f1830a71a59ee16da732fcd5bf54584",
+    "case3_initial_geometry.csv": "311a0c3ba7321d384f09143157d9a34a966b5c018e6120c122b32d5258da67a2",
+    "case3_summary.json": "e69e41d7d27a41959da8be75d9e34caf43f2290439efc728ecb97cd7da5158b1",
+    "run.log": "1ee60d7309f762158a08569c72499c53e447f406c620f890964ecbc21dcfe2b9"
+  },
+  "configuration": {
+    "model_dir": "/home/a2rl/reviewer_xiu_case3_20260729/models/case2",
+    "preset": "/home/a2rl/reviewer_xiu_case3_20260729/code/paper_case_presets_original_assignment_verified.npz",
+    "outdir": "/home/a2rl/reviewer_xiu_case3_20260729/results/guide_screen_seed73101/5.0_0.30_2.00",
+    "episodes": 2,
+    "seed": 73101,
+    "max_steps": 1500,
+    "hit_radius": 3.0,
+    "sync_tol": 0.5,
+    "terminal_window_s": 1.0,
+    "idbo_population": 24,
+    "idbo_iterations": 80,
+    "guide_gain": 5.0,
+    "guide_tau": 0.3,
+    "guide_lead": 2.0,
+    "residual_scale": 1.0
+  }
+}

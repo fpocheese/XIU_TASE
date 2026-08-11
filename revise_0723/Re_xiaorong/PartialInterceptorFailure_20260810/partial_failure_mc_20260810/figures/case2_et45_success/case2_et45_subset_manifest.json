@@ -1,0 +1,14 @@
+{
+  "case1_input": "partial_failure_mc_20260810/figures/asset_safe_success/case1_asset_safe_success_subset.csv",
+  "case1_selection": "asset_safe_interception_success == 1",
+  "case1_selected_episodes": 92,
+  "case2_input": "partial_failure_mc_20260810/formal_case2_n100/episodes.csv",
+  "case2_selection": "asset_safe_interception_success == 1 and E_t_s <= 45.0",
+  "case2_selected_episodes": 7,
+  "case2_selected_strict_cooperative_success_count": 1,
+  "E_t_threshold_s": 45.0,
+  "threshold_inclusive": true,
+  "metric_values_modified": false,
+  "figure_labels": "Case 1 and Case 2 only, as requested",
+  "reporting_note": "This is a conditionally selected Case 2 subset and must not be reported as the unconditional 100-trial distribution or ISR."
+}

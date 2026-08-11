@@ -1,0 +1,19 @@
+% Derived from the original 2-D ART-MAPPO Monte Carlo archives.
+% The 0.10-s column is diagnostic only; it is not an interception-success criterion.
+\begin{table}[!t]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{1.2pt}
+\renewcommand{\arraystretch}{1.08}
+\caption{Failure incidence and upper-tail temporal-coordination statistics.}
+\label{tab:failure_delay_analysis}
+\begin{tabular}{@{}lrrrrrr@{}}
+\toprule
+Case & Failures & ISR (\%) & Median & 95th pct. & Maximum & $>0.10$ s \\
+ & (/1000) & & \multicolumn{3}{c}{$E_{co\text{-}time}$ (s)} &  \\
+\midrule
+Case 1 & 13 & 98.70 & 0.0492 & 0.0708 & 0.0900 & 0 \\
+Case 2 & 29 & 97.10 & 0.0767 & 0.1521 & 0.3167 & 264 \\
+\bottomrule
+\end{tabular}
+\end{table}

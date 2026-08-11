@@ -1,0 +1,7 @@
+case,seed,defender_hit_count,target_coverage_count,complete_coordinated_groups,all_targets_intercepted,strict_group_complete,max_observed_hit_group_spread_s,mean_observed_hit_group_spread_s,source_summary
+case1,76014,19,8,7,True,False,0.05000114440917969,0.02500009536743164,/home/a2rl/reviewer_failure_cases_20260730/results/selected_six_failure_cases/case1/seed_76014/case1/case1_episode_summary.csv
+case1,76048,19,8,7,True,False,0.05000114440917969,0.028571536764502525,/home/a2rl/reviewer_failure_cases_20260730/results/selected_six_failure_cases/case1/seed_76048/case1/case1_episode_summary.csv
+case1,76052,19,8,7,True,False,0.05000114440917969,0.02500009536743164,/home/a2rl/reviewer_failure_cases_20260730/results/selected_six_failure_cases/case1/seed_76052/case1/case1_episode_summary.csv
+case2,77008,19,8,7,True,False,0.34999847412109375,0.11249923706054688,/home/a2rl/reviewer_failure_cases_20260730/results/selected_six_failure_cases/case2/seed_77008/case2/case2_episode_summary.csv
+case2,77020,19,8,7,True,False,0.14999961853027344,0.05624961853027344,/home/a2rl/reviewer_failure_cases_20260730/results/selected_six_failure_cases/case2/seed_77020/case2/case2_episode_summary.csv
+case2,77023,19,8,7,True,False,0.20000457763671875,0.08750009536743164,/home/a2rl/reviewer_failure_cases_20260730/results/selected_six_failure_cases/case2/seed_77023/case2/case2_episode_summary.csv

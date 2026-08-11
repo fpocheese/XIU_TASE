@@ -1,0 +1,36 @@
+{
+  "data_status": "deterministic frozen-policy inference replays; not synthetic trajectories",
+  "training_performed": false,
+  "optimizer_steps": 0,
+  "backpropagation_performed": false,
+  "case1_seeds": [
+    89001,
+    89003,
+    89007,
+    89015,
+    89020
+  ],
+  "case2_seeds": [
+    90036,
+    90037,
+    90045,
+    90060,
+    90077
+  ],
+  "success_definition": "all eight attacking aircraft intercepted (targets_covered = 8)",
+  "case1_selection": "successful asset-safe episodes; selected runs are also strict cooperative successes",
+  "case2_selection": "successful asset-safe episodes with E_t <= 45 s; strict cooperative flag retained in validation CSV",
+  "trajectory_crop": "plotted through the recorded episode-level E_t",
+  "figure_count": {
+    "unique_figures": 20,
+    "png": 20,
+    "pdf": 20
+  },
+  "model_sha256": {
+    "case1_actor": "884802798c6c4b27d046bae274a3d354702d6e8646a73875de940202713393a3",
+    "case1_critic": "1960b9c9e88491bf2c5b33bba7586f0814a724603d7bb1684b7e08c7b929c8c3",
+    "case2_actor": "8a644cfe9fea7f70fe0165c25d77193887e9c2b9e391ac83ca5efc85714fd0f2",
+    "case2_critic": "5bf72446cd8d2617a758aedc073250ee99131b984237096b0c87a09e2cfac5f9"
+  },
+  "preset_sha256": "07488f1c45c2c72609c18a524bc40ddb922c7283828a0c210c74ec0b3fd9520c"
+}

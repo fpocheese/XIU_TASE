@@ -1,0 +1,47 @@
+{
+  "episode_count": 6,
+  "case_counts": {
+    "case1": 3,
+    "case2": 3
+  },
+  "all_have_19_of_20_interceptor_hits": true,
+  "all_have_8_of_8_target_coverage": true,
+  "all_have_one_incomplete_assignment_group": true,
+  "all_missed_interceptors_remain_outside_hit_radius": true,
+  "all_arrays_finite": true,
+  "hit_radius_m": 3.0,
+  "sync_tolerance_s": 0.5,
+  "fixed_assignment": [
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    20,
+    21,
+    22,
+    23
+  ],
+  "policy_training_performed": false,
+  "optimizer_steps": 0,
+  "selection_rule": "earliest three seeds per case satisfying 8/8 target coverage, exactly 19/20 interceptor hits, seven complete assignment groups, and observed hit-group spread no greater than 0.5 s",
+  "input_npz_files": [
+    "/home/a2rl/reviewer_failure_cases_20260730/results/selected_six_failure_cases/case1/seed_76014/case1/case1_selected_episode.npz",
+    "/home/a2rl/reviewer_failure_cases_20260730/results/selected_six_failure_cases/case1/seed_76048/case1/case1_selected_episode.npz",
+    "/home/a2rl/reviewer_failure_cases_20260730/results/selected_six_failure_cases/case1/seed_76052/case1/case1_selected_episode.npz",
+    "/home/a2rl/reviewer_failure_cases_20260730/results/selected_six_failure_cases/case2/seed_77008/case2/case2_selected_episode.npz",
+    "/home/a2rl/reviewer_failure_cases_20260730/results/selected_six_failure_cases/case2/seed_77020/case2/case2_selected_episode.npz",
+    "/home/a2rl/reviewer_failure_cases_20260730/results/selected_six_failure_cases/case2/seed_77023/case2/case2_selected_episode.npz"
+  ]
+}

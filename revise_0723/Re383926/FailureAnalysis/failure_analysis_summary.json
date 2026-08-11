@@ -1,0 +1,22 @@
+{
+  "case2_full": {
+    "episodes": 100,
+    "target_coverage_failures": 21,
+    "target_coverage_failure_rate": 0.21,
+    "mean_targets_covered_in_failed_episodes": 6.809523809523809,
+    "median_targets_covered_in_failed_episodes": 7.0,
+    "mean_worst_closest_approach_m_failed": 4.120203419720319,
+    "median_worst_closest_approach_m_failed": 4.153638448864548,
+    "uncovered_target_group_rows": 25
+  },
+  "case3": {
+    "episodes": 100,
+    "all_target_interception_successes": 100,
+    "strict_cooperative_successes": 72,
+    "delayed_cooperation_failures": 28,
+    "delayed_target_group_rows": 40,
+    "mean_worst_group_spread_s_delayed": 1.275000000000001,
+    "median_worst_group_spread_s_delayed": 1.2000000000000028,
+    "p95_worst_group_spread_s_delayed": 1.9500000000000028
+  }
+}

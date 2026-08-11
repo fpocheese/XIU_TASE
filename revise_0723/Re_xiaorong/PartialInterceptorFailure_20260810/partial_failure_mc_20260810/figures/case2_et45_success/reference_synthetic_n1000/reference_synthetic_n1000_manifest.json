@@ -1,0 +1,15 @@
+{
+  "purpose": "experiment-planning reference only",
+  "data_status": "synthetic; not independent simulation trials",
+  "method": "balanced empirical resampling of complete rows without jitter; cross-metric associations and observed support are retained",
+  "random_seed": 20260810,
+  "samples_per_case": 1000,
+  "case1_source": "partial_failure_mc_20260810/figures/case2_et45_success/case1_asset_safe_success_subset.csv",
+  "case1_source_rows": 92,
+  "case2_source": "partial_failure_mc_20260810/figures/case2_et45_success/case2_asset_safe_success_et_le_45s_subset.csv",
+  "case2_source_rows": 7,
+  "simulator_executed": false,
+  "policy_evaluation_executed": false,
+  "metric_jitter_added": false,
+  "reporting_restriction": "Do not report these rows as Monte Carlo trials or experimental evidence. Replace them with independently simulated episodes."
+}

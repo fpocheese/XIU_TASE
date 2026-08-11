@@ -1,0 +1,8 @@
+eval_seed,hit_count,complete_groups,missed_defender_ids,missed_paper_labels,incomplete_internal_target_ids,incomplete_group_labels,source_events,source_episode
+76014,19,7,1,D2,21,A2,/home/a2rl/reviewer_failure_cases_20260730/results/partial_failure_screen_nominal_n100/case1/chunk_00/case1/case1_hit_events.csv,14
+76043,18,6,5;15,D6;D16,25;27,A6;A8,/home/a2rl/reviewer_failure_cases_20260730/results/partial_failure_screen_nominal_n100/case1/chunk_02/case1/case1_hit_events.csv,3
+76048,19,7,5,D6,25,A6,/home/a2rl/reviewer_failure_cases_20260730/results/partial_failure_screen_nominal_n100/case1/chunk_02/case1/case1_hit_events.csv,8
+76052,19,7,8,D9,20,A1,/home/a2rl/reviewer_failure_cases_20260730/results/partial_failure_screen_nominal_n100/case1/chunk_02/case1/case1_hit_events.csv,12
+76054,19,7,4,D5,24,A5,/home/a2rl/reviewer_failure_cases_20260730/results/partial_failure_screen_nominal_n100/case1/chunk_02/case1/case1_hit_events.csv,14
+76057,19,7,1,D2,21,A2,/home/a2rl/reviewer_failure_cases_20260730/results/partial_failure_screen_nominal_n100/case1/chunk_02/case1/case1_hit_events.csv,17
+76076,19,7,14,D15,26,A7,/home/a2rl/reviewer_failure_cases_20260730/results/partial_failure_screen_nominal_n100/case1/chunk_03/case1/case1_hit_events.csv,16

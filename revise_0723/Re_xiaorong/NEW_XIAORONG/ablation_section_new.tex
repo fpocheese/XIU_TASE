@@ -1,0 +1,44 @@
+% =====================================================================
+%  E. Component Ablation Study  (Re2_6)
+%  Based on NEW_XIAORONG data: case1_ablation_core_metrics_only_analysis_zh.md
+% =====================================================================
+\subsection{\hladd{Component Ablation Study}}
+\label{subsec:ablation}
+
+\hladd{To isolate the independent contribution of each proposed component, we construct three
+one-at-a-time ablation controls alongside the complete ART-MAPPO model.
+\emph{``w/o trust-aware mechanism''} disables the trust-modulated fusion of the analytical
+guidance prior and the learned action; \emph{``w/o GRU temporal encoder''} replaces recurrent
+state encoding with a memoryless feedforward layer; \emph{``w/o attention--residual backbone''}
+substitutes a parameter-matched feedforward network while retaining the trust and GRU modules.
+All variants share the same reward, dynamics, optimiser, training seed, and budget, and are
+evaluated in 1000 frozen-policy Case~1 Monte Carlo trials.  Table~\ref{tab:ablation_case1}
+summarises the results.  Critically, the three controls exhibit \emph{module-specific} rather
+than uniformly ordered degradation, providing direct evidence that each component carries a
+distinct and non-redundant role.}
+
+\input{../Re_xiaorong/NEW_XIAORONG/ablation_table_new.tex}
+
+\hladd{\emph{(i) Trust-aware mechanism.}  Removing trust produces the largest training-AUC
+reduction among the three controls ($-17.9\%$, from $7.354\!\times\!10^4$ to
+$6.037\!\times\!10^4$), yet the final reward falls by only $3.1\%$ and ISR drops by
+$1.5$~pp.  The pronounced gap between cumulative-AUC loss and end-of-training reward confirms
+that the trust-aware mechanism primarily accelerates learning efficiency throughout training,
+not merely raises the asymptotic policy ceiling---consistent with its design role of
+dynamically regulating exploration--exploitation balance.}
+
+\hladd{\emph{(ii) GRU temporal encoder.}  The GRU removal yields the lowest final reward
+($-9.2\%$) and the largest ISR degradation ($-2.9$~pp) among all controls.  Most
+distinctively, $E_{co\text{-}time}$ increases by $45\%$ (from $0.0505$~s to $0.0732$~s),
+far exceeding the $6\%$ increase in $E_t$.  Without temporal history, the policy can no
+longer reliably track target manoeuvres or reconcile interceptor time-to-go estimates,
+leading to simultaneous degradation in both final policy quality and cooperative timing
+precision.}
+
+\hladd{\emph{(iii) Attention--residual backbone.}  Removing the attentive backbone yields the
+largest increases in $E_n$ ($+18\%$, from $0.0718$~g to $0.0847$~g) and $E_{miss}$
+($+17\%$, from $2.997$~m to $3.507$~m) across all three ablations, while $E_t$ changes by
+only $3.5\%$.  This non-uniform degradation demonstrates that the backbone contributes
+primarily to control-relevant feature extraction and terminal precision rather than
+engagement duration---matching its theoretical role of resolving the coupled LOS,
+relative-motion, and time-to-go state features needed for low-overload precision guidance.}

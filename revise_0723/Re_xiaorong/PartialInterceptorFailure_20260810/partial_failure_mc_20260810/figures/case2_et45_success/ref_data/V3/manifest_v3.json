@@ -1,0 +1,92 @@
+{
+  "purpose": "distribution-shape planning target for future independent failure simulations",
+  "data_status": "synthetic planning reference; not experimental data",
+  "source_case1": "/home/uav/00gao_xueshu/DT_PAPER/guidance_pic_code/test\u5168\u9762\u6570\u636e\u7248\u672cv1/test/mappo_success_nopn/mappo_success_nopn_eval.txt",
+  "source_case2": "/home/uav/00gao_xueshu/DT_PAPER/guidance_pic_code/test\u5168\u9762\u6570\u636e\u7248\u672cv1/test/mappo_success_sin/sinmappo_eval/agentseval.txt",
+  "samples_per_case": 1000,
+  "seed": 20260830,
+  "configuration": {
+    "case1": {
+      "probabilities": [
+        0.38,
+        0.38,
+        0.19,
+        0.05
+      ],
+      "severity_centers": [
+        0.12,
+        0.72,
+        1.55,
+        2.75
+      ],
+      "fraction_coefficients": [
+        0.2,
+        0.45,
+        0.13,
+        0.09
+      ],
+      "source_spread": [
+        1.25,
+        1.45,
+        1.35,
+        1.3
+      ]
+    },
+    "case2": {
+      "probabilities": [
+        0.23,
+        0.36,
+        0.29,
+        0.12
+      ],
+      "severity_centers": [
+        0.1,
+        0.78,
+        1.7,
+        3.0
+      ],
+      "fraction_coefficients": [
+        0.28,
+        0.4,
+        0.17,
+        0.12
+      ],
+      "source_spread": [
+        1.4,
+        1.55,
+        1.55,
+        1.3
+      ]
+    }
+  },
+  "realized_severity_counts": {
+    "case1": {
+      "low": 389,
+      "mild": 376,
+      "moderate": 189,
+      "severe": 46
+    },
+    "case2": {
+      "low": 224,
+      "mild": 364,
+      "moderate": 301,
+      "severe": 111
+    }
+  },
+  "mechanisms": [
+    "source-dependent continuous difficulty",
+    "four-level random failure severity",
+    "load-redistribution shock for E_n",
+    "cross-metric latent severity",
+    "severity-dependent heteroscedastic noise",
+    "centered right-skew perturbation"
+  ],
+  "plot_style_source": "fig:case4_metrics / Re3_9/plot_case3_box3.py",
+  "plot_style_changes_requested": [
+    "top and right spines retained",
+    "panel labels removed"
+  ],
+  "simulator_executed": false,
+  "policy_evaluation_executed": false,
+  "reporting_restriction": "Do not report these values as Monte Carlo trials. Replace them with independently simulated failure episodes."
+}

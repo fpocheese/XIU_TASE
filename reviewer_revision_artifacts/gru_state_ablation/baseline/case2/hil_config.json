@@ -1,0 +1,10 @@
+{
+  "mode": "baseline",
+  "hil_interceptors": "0,1,2,3,4",
+  "obs_delay_steps": 2,
+  "action_delay_steps": 1,
+  "obs_noise_std": 0.003,
+  "action_noise_std": 0.02,
+  "drop_prob": 0.01,
+  "reset_rnn_each_step": true
+}

@@ -1,0 +1,1 @@
+VALIDATION_OK episodes=100 assignments=2000 geometry=800 mission=72 all20=100 no_nan_inf=True idbo_feasible=True

@@ -1,0 +1,21 @@
+{
+  "arguments": {
+    "case": "case1",
+    "cpu": true,
+    "episodes": 1,
+    "failed_count": 2,
+    "hit_radius": 3.0,
+    "max_steps": 1500,
+    "model_dir": "/home/uav/00gao_xueshu/DT_PAPER/XIU_code/reviewer_failure_cases_20260730/artifacts_remote/models/case1",
+    "outdir": "/tmp/partial_failure_traj_case1/seed_89007",
+    "position_noise_std": 3.0,
+    "preset": "/home/uav/00gao_xueshu/DT_PAPER/XIU_code/reviewer_failure_cases_20260730/artifacts_remote/presets/paper_case_presets_original_assignment_verified.npz",
+    "seed": 89007,
+    "sensor_delay_steps": 1,
+    "sync_tol": 0.5,
+    "velocity_noise_std": 0.3
+  },
+  "script": "/home/uav/00gao_xueshu/DT_PAPER/XIU_code/partial_failure_mc_20260810/run_two_defender_failure_mc.py",
+  "stable_policy_sha256_note": "verified separately against stable_V2 before evaluation",
+  "training_performed": false
+}

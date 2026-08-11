@@ -1,0 +1,11 @@
+{
+  "case1_input_episodes": 100,
+  "case1_selected_episodes": 92,
+  "case1_selection": "interception_success == 1",
+  "case2_input_episodes": 100,
+  "case2_selected_episodes": 6,
+  "case2_selection": "interception_success == 1 and cooperative_success == 1",
+  "cooperative_success_definition": "all operational interceptors hit and every target-group arrival spread is no greater than 0.5 s",
+  "figure_labels": "Case 1 and Case 2 only, as requested",
+  "usage_note": "This is a conditionally selected visualization. It is not the unconditional 100-trial robustness distribution."
+}

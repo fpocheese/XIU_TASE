@@ -1,0 +1,23 @@
+{
+  "valid": true,
+  "cases": [
+    {
+      "case": "case1",
+      "valid": true,
+      "errors": [],
+      "episode_count": 100,
+      "unique_seed_count": 100,
+      "successful_metric_count": 92,
+      "nan_inf_check": "passed"
+    },
+    {
+      "case": "case2",
+      "valid": true,
+      "errors": [],
+      "episode_count": 100,
+      "unique_seed_count": 100,
+      "successful_metric_count": 44,
+      "nan_inf_check": "passed"
+    }
+  ]
+}

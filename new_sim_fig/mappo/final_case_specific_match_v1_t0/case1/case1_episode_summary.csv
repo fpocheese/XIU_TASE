@@ -1,0 +1,2 @@
+episode,case,target_num,hit_count,target_hit_count,target_sync_count,all_hit,all_sync,max_sync_spread,mean_sync_spread
+1,case1,8,20,8,8,True,True,0.25,0.1249997615814209

@@ -1,0 +1,187 @@
+{
+  "seed_count": 30,
+  "problem": {
+    "defenders": 20,
+    "targets": 8,
+    "max_load": 3,
+    "objective": "sum_of_target_survival_probabilities"
+  },
+  "coefficient_ablation": {
+    "adaptive": {
+      "mean": 0.006975365238688663,
+      "std": 0.00014056258075760588,
+      "median": 0.006921198466682179,
+      "min": 0.006921198466682179,
+      "max": 0.007335814323952293,
+      "iterations_to_1pct_median": 19.0
+    },
+    "fixed": {
+      "mean": 0.006941861558167727,
+      "std": 8.33016970199472e-05,
+      "median": 0.006921198466682179,
+      "min": 0.006921198466682179,
+      "max": 0.007335814323952293,
+      "iterations_to_1pct_median": 21.5
+    }
+  },
+  "weight_sensitivity": [
+    {
+      "w_zem": 0.3,
+      "w_angle": 0.7,
+      "mean": 0.004611098498121375,
+      "std": 0.00021115488925608602,
+      "median": 0.0045545207814192724,
+      "min": 0.0045545207814192724,
+      "max": 0.0054408140142018285
+    },
+    {
+      "w_zem": 0.5,
+      "w_angle": 0.5,
+      "mean": 0.006985540083612338,
+      "std": 0.0001482422359885007,
+      "median": 0.006921198466682179,
+      "min": 0.006921198466682179,
+      "max": 0.007335814323952293
+    },
+    {
+      "w_zem": 0.7,
+      "w_angle": 0.30000000000000004,
+      "mean": 0.00995555791763118,
+      "std": 0.00020790418268965162,
+      "median": 0.009801968553656039,
+      "min": 0.009801968553656039,
+      "max": 0.01027851609156867
+    }
+  ],
+  "scalability": [
+    {
+      "defenders": 20,
+      "targets": 8,
+      "normalized_cost_mean": 0.001803599649061015,
+      "runtime_seconds_mean": 0.4166776051977649,
+      "runtime_seconds_std": 0.010505245477810966
+    },
+    {
+      "defenders": 40,
+      "targets": 16,
+      "normalized_cost_mean": 0.0004485945344494352,
+      "runtime_seconds_mean": 0.7315737479948439,
+      "runtime_seconds_std": 0.07343795954538308
+    },
+    {
+      "defenders": 80,
+      "targets": 32,
+      "normalized_cost_mean": 0.0004674822283283274,
+      "runtime_seconds_mean": 1.8458517144987128,
+      "runtime_seconds_std": 0.05811374567392035
+    }
+  ],
+  "source_propagation_delay": [
+    {
+      "max_delay_rounds": 0,
+      "dropout_probability": 0.0,
+      "success_rate": 1.0,
+      "rounds_mean": 4.0,
+      "rounds_std": 0.0,
+      "rounds_max": 4
+    },
+    {
+      "max_delay_rounds": 0,
+      "dropout_probability": 0.01,
+      "success_rate": 1.0,
+      "rounds_mean": 4.0,
+      "rounds_std": 0.0,
+      "rounds_max": 4
+    },
+    {
+      "max_delay_rounds": 1,
+      "dropout_probability": 0.0,
+      "success_rate": 1.0,
+      "rounds_mean": 5.633333333333334,
+      "rounds_std": 0.490132517853561,
+      "rounds_max": 6
+    },
+    {
+      "max_delay_rounds": 1,
+      "dropout_probability": 0.01,
+      "success_rate": 1.0,
+      "rounds_mean": 5.8,
+      "rounds_std": 0.40683810217248617,
+      "rounds_max": 6
+    },
+    {
+      "max_delay_rounds": 2,
+      "dropout_probability": 0.0,
+      "success_rate": 1.0,
+      "rounds_mean": 7.033333333333333,
+      "rounds_std": 0.4138409933973337,
+      "rounds_max": 8
+    },
+    {
+      "max_delay_rounds": 2,
+      "dropout_probability": 0.01,
+      "success_rate": 1.0,
+      "rounds_mean": 7.066666666666666,
+      "rounds_std": 0.5208304597621878,
+      "rounds_max": 9
+    },
+    {
+      "max_delay_rounds": 4,
+      "dropout_probability": 0.0,
+      "success_rate": 1.0,
+      "rounds_mean": 8.966666666666667,
+      "rounds_std": 0.5560534167675355,
+      "rounds_max": 10
+    },
+    {
+      "max_delay_rounds": 4,
+      "dropout_probability": 0.01,
+      "success_rate": 1.0,
+      "rounds_mean": 9.166666666666666,
+      "rounds_std": 0.5920934999167597,
+      "rounds_max": 10
+    }
+  ],
+  "source_node_removal": {
+    "condition": "one_of_20_source_nodes_removed",
+    "active_nodes": 19,
+    "max_delay_rounds": 2,
+    "dropout_probability": 0.01,
+    "success_rate": 1.0,
+    "rounds_mean": 7.166666666666667,
+    "rounds_std": 0.461133037377414,
+    "rounds_max": 8
+  },
+  "representative_assignment_1_based": [
+    6,
+    4,
+    2,
+    2,
+    7,
+    8,
+    6,
+    3,
+    7,
+    8,
+    4,
+    1,
+    3,
+    5,
+    4,
+    6,
+    5,
+    1,
+    1,
+    8
+  ],
+  "representative_target_loads": [
+    3,
+    2,
+    2,
+    3,
+    2,
+    3,
+    2,
+    3
+  ]
+}

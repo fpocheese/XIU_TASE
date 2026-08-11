@@ -1,0 +1,71 @@
+% Standalone insertion draft. The original manuscript has not been modified.
+% Quantitative placeholders are filled only after the audited formal run.
+
+\subsection{Ablation Analysis of the ART-MAPPO Components}
+\label{subsec:art_mappo_ablation}
+
+To isolate the contribution of the three architectural mechanisms requested
+by the reviewer, we compare the complete ART-MAPPO against three
+single-component ablations: without trust-modulated exploration, without the
+GRU temporal encoder, and without the attention--residual backbone. The
+environment, reward, action limits, target assignment, optimizer, rollout
+budget, and random seeds are identical. In the last ablation, attention and
+residual processing are replaced by a parameter-matched multilayer
+perceptron, so that the comparison is not explained by a smaller network.
+Three independent training seeds are used. After training, guided exploration
+is disabled and the selected checkpoints are tested on the same 100 paired
+Monte Carlo episodes in each engagement case.
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=\columnwidth]{ABLATED_TRAINING_CASE1_FIGURE}
+\caption{Component ablation in Case~1 at the training level: episode return,
+critic loss, and policy entropy. Solid lines denote the three-seed mean and
+shaded regions denote one standard deviation.}
+\label{fig:ablation_training_case1}
+\end{figure}
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=\columnwidth]{ABLATED_TRAINING_CASE2_FIGURE}
+\caption{Component ablation in Case~2 at the training level: episode return,
+critic loss, and policy entropy. Solid lines denote the three-seed mean and
+shaded regions denote one standard deviation.}
+\label{fig:ablation_training_case2}
+\end{figure}
+
+The trust-aware mechanism is interpreted first from its role in the proposed
+method: it is a training-time memory that changes the probability of using
+tactical guidance, probe, and random actions according to standardized
+episodic returns. It is disabled at deployment and is therefore expected to
+affect the learned policy indirectly through exploration coverage and the
+entropy trajectory, rather than to act as an additional test-time controller.
+The no-trust comparison consequently focuses on reward acquisition,
+inter-seed stability, and policy-entropy decay; the frozen-policy Monte Carlo
+result is reported as the downstream consequence of that changed training
+distribution.
+
+The GRU and attention--residual backbone have roles during both optimization
+and deployment. The GRU preserves engagement history and can infer temporal
+trends from delayed and noisy line-of-sight observations. Its independent
+effect is therefore evaluated through both training stability and the
+frozen-policy interception/coordination rates. The attention mechanism
+learns interactions among physically meaningful observation channels, while
+the residual identity paths preserve primitive kinematic information and
+improve optimization conditioning. The capacity-matched backbone ablation
+tests whether these structured operations improve critic fitting and final
+guidance quality beyond what can be obtained from a plain network of nearly
+the same size.
+
+\begin{figure}[!t]
+\centering
+\subfloat[Case~1]{\includegraphics[width=\columnwidth]{ABLATED_TEST_CASE1_FIGURE}}\\
+\subfloat[Case~2]{\includegraphics[width=\columnwidth]{ABLATED_TEST_CASE2_FIGURE}}
+\caption{Frozen-policy component ablation over 100 paired Monte Carlo
+episodes per method and case. The bars report interception and cooperative
+success with 95\% Wilson confidence intervals; the boxplots use the
+unmodified successful-episode samples.}
+\label{fig:ablation_monte_carlo}
+\end{figure}
+
+% RESULT_PARAGRAPHS_TO_BE_FILLED_FROM_CSV

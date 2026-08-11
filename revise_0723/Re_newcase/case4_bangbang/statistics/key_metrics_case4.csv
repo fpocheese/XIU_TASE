@@ -1,0 +1,22 @@
+metric,value,unit_or_note
+case,case4,
+attack_pattern,bangbang,
+assignment_mode,fixed,
+source_policy_case,case2,
+episodes,100,
+mission_success_count,100,
+mission_success_rate,1.000,
+target_coverage_success_count,100,
+target_coverage_success_rate,1.000,
+all_defenders_hit_count,100,
+all_defenders_hit_rate,1.000,
+cooperative_success_count,100,
+cooperative_success_rate,1.000,
+E_co_time_s_mean,0.050927,s
+E_n_g_mean,0.163672,g
+E_miss_m_mean,1.443553,m
+E_t_s_mean,26.993625,s
+mean_closest_approach_m_mean,0.826585,m
+worst_closest_approach_m_mean,2.622197,m
+attacker_maneuver,finite-dwell bounded bang-bang lateral/vertical evasion,
+geometry,paper case2 geometry with bang-bang attacker maneuver,

@@ -1,0 +1,62 @@
+[
+  {
+    "iteration": 1,
+    "direction": "audit_existing_assets_and_remote_state",
+    "status": "completed",
+    "result": "Formal ablation used a 0.05 residual over deterministic guidance and a legacy reward with extra shaping terms; mature stable_V2 checkpoint lacks the paper attention-residual backbone."
+  },
+  {
+    "iteration": 2,
+    "direction": "paper_aligned_direct_action_pilot",
+    "status": "completed",
+    "result": "The initial trust setting and its CPU ablation pilots were stopped after the paper-aligned tuned Full policy completed 120000 steps but failed all 10 deterministic frozen-policy episodes; the failed development result is retained."
+  },
+  {
+    "iteration": 3,
+    "direction": "trust_guided_policy_absorption_tuning",
+    "status": "completed",
+    "result": "Rejected. At 240000 steps the deterministic frozen policy achieved 0/10 strict coverage in both cases; mean closest approach was 243.240 m in Case1 and 686.753 m in Case2. Guided-rollout success was not counted as deployment success."
+  },
+  {
+    "iteration": 4,
+    "direction": "long_budget_policy_absorption",
+    "status": "completed",
+    "result": "Rejected after multiple long-budget variants remained zero-hit under frozen deterministic deployment."
+  },
+  {
+    "iteration": 5,
+    "direction": "physical_episode_continuity_and_probability_consistency",
+    "status": "completed",
+    "result": "Separated the 1500-step physical horizon from the 4096-transition PPO buffer, fixed persistent alive masks, and tested both probability-consistent guide masking and the manuscript-literal mixture update; neither alone produced frozen-policy hits."
+  },
+  {
+    "iteration": 6,
+    "direction": "temporal_source_coherence_and_high_quality_guide",
+    "status": "completed",
+    "result": "Tested source holds, PPO epoch 1, high-PN N=10, and guide weights 0.92/0.07/0.01. The guide itself became highly successful, but the frozen actor showed only transient closest-approach improvements and no reliable hits."
+  },
+  {
+    "iteration": 7,
+    "direction": "trust_exposure_gradient_and_kl_stability",
+    "status": "completed",
+    "result": "Swept initial trust, faster trust adaptation, max-gradient 0.1, and positive adaptive-KL initialization. Closest approach briefly reached about 63--77 m, then regressed without any held-out individual hits."
+  },
+  {
+    "iteration": 8,
+    "direction": "sensor_consistent_nonprivileged_trust_guide",
+    "status": "in_progress",
+    "result": "Corrected the training guide to use the same delayed/noisy target packet as the actor instead of privileged true target state. Guide-only screening selected N=10, hold1 and a 0.95/0.04/0.01 PN/probe/uniform mixture. Both short-window v20 and long-window v21 probability-masked controls failed through update20. Manuscript-literal long-window v22 improved early closest approach but remains zero-hit and is still running."
+  },
+  {
+    "iteration": 9,
+    "direction": "independent_case3_idbo_art_mappo_pipeline",
+    "status": "completed",
+    "result": "The isolated Case-3 pipeline completed 100 preregistered episodes: all targets were intercepted in 100/100, and every target group met the 0.5-s coordination threshold in 72/100. All raw data, code, audit records, and V10 figures were returned under Re383926/Case3."
+  },
+  {
+    "iteration": 10,
+    "direction": "stable_v2_residual_chain_paper_component_ablation",
+    "status": "in_progress",
+    "result": "Created an untouched-source clone of stable_V2, restored the verified Case-1/Case-2 residual-guidance chain, added paper-aligned trust, GRU, and capacity-matched attention-residual switches, and passed all 8 short smoke combinations. Three fixed seeds at 81920 steps per variant/case are running remotely; all 24 runs will feed frozen validation, paired 100-episode Monte Carlo tests, training diagnostics, and V10 figures."
+  }
+]

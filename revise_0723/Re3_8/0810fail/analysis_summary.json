@@ -1,0 +1,101 @@
+{
+  "analysis_date": "2026-08-11",
+  "metric_columns": [
+    "E_co_time_s",
+    "E_n_g",
+    "E_miss_m",
+    "control_energy",
+    "E_t_s"
+  ],
+  "primary_delay_definition": "case-specific upper 5% of E_co_time among strict successful records",
+  "secondary_diagnostic_level_s": 0.1,
+  "important_limit": "No per-episode failed trajectories are present in the supplied eval archives.",
+  "source_audit": [
+    {
+      "case": "Case 1",
+      "source_file": "/home/uav/00gao_xueshu/DT_PAPER/guidance_pic_code/test全面数据版本v1/test/mappo_success_nopn/mappo_success_nopn_eval.txt",
+      "sha256": "48297711776a418030ce4119f745287ec6da1962f1604e38ad8fffbe8ba4b23c",
+      "rows_in_archive": 1961,
+      "columns": 5,
+      "nan_count": 0,
+      "inf_count": 0,
+      "paper_trials": 1000,
+      "paper_successes": 987,
+      "paper_failures": 13,
+      "paper_matched_rows_used": 987,
+      "selection_note": "First N successful rows; archival file lacks episode IDs and contains more than one batch"
+    },
+    {
+      "case": "Case 2",
+      "source_file": "/home/uav/00gao_xueshu/DT_PAPER/guidance_pic_code/test全面数据版本v1/test/mappo_success_sin/sinmappo_eval/agentseval.txt",
+      "sha256": "db210a8d02ab392639af7e02a6dbc0191f428f34c72a1997ae9c715d13173bf8",
+      "rows_in_archive": 1920,
+      "columns": 5,
+      "nan_count": 0,
+      "inf_count": 0,
+      "paper_trials": 1000,
+      "paper_successes": 971,
+      "paper_failures": 29,
+      "paper_matched_rows_used": 971,
+      "selection_note": "First N successful rows; archival file lacks episode IDs and contains more than one batch"
+    }
+  ],
+  "failure_inventory": [
+    {
+      "case": "Case 1",
+      "total_trials": 1000,
+      "strict_successes": 987,
+      "unsuccessful_trials": 13,
+      "ISR_percent": 98.7,
+      "ISR_Wilson95_low_percent": 97.78855576244203,
+      "ISR_Wilson95_high_percent": 99.23871796106489,
+      "failed_trajectory_saved": false,
+      "member_level_cause_identifiable": false,
+      "reason": "Evaluator writes the five metrics only when break_flag is true"
+    },
+    {
+      "case": "Case 2",
+      "total_trials": 1000,
+      "strict_successes": 971,
+      "unsuccessful_trials": 29,
+      "ISR_percent": 97.1,
+      "ISR_Wilson95_low_percent": 95.86616416633058,
+      "ISR_Wilson95_high_percent": 97.97335518433013,
+      "failed_trajectory_saved": false,
+      "member_level_cause_identifiable": false,
+      "reason": "Evaluator writes the five metrics only when break_flag is true"
+    }
+  ],
+  "delay_summary": [
+    {
+      "case": "Case 1",
+      "successful_records_analyzed": 987,
+      "E_co_time_mean_s": 0.05052938196507039,
+      "E_co_time_median_s": 0.0491666666666774,
+      "E_co_time_q90_s": 0.0666666666667038,
+      "E_co_time_q95_s": 0.07083333333334765,
+      "E_co_time_q99_s": 0.08011666666550077,
+      "E_co_time_max_s": 0.0899999999986903,
+      "top5pct_count_including_ties": 50,
+      "count_above_0p10s": 0,
+      "percent_above_0p10s": 0.0,
+      "count_above_0p15s": 0,
+      "count_above_0p20s": 0
+    },
+    {
+      "case": "Case 2",
+      "successful_records_analyzed": 971,
+      "E_co_time_mean_s": 0.08477171301004707,
+      "E_co_time_median_s": 0.0766666666651872,
+      "E_co_time_q90_s": 0.132499999998254,
+      "E_co_time_q95_s": 0.1520833333312115,
+      "E_co_time_q99_s": 0.20024999999690427,
+      "E_co_time_max_s": 0.316666666662059,
+      "top5pct_count_including_ties": 49,
+      "count_above_0p10s": 264,
+      "percent_above_0p10s": 27.188465499485066,
+      "count_above_0p15s": 54,
+      "count_above_0p20s": 10
+    }
+  ]
+}

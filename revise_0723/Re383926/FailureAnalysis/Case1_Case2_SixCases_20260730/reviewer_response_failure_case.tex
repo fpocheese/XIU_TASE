@@ -1,0 +1,159 @@
+\documentclass[10pt]{article}
+
+\usepackage[a4paper,margin=22mm]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{amsmath}
+\usepackage{xcolor}
+\usepackage{microtype}
+\usepackage{newtxtext,newtxmath}
+\usepackage{caption}
+\usepackage{hyperref}
+
+\definecolor{reviewerblue}{RGB}{0,72,130}
+\definecolor{responseblue}{RGB}{0,86,125}
+\hypersetup{colorlinks=true,linkcolor=responseblue,urlcolor=responseblue}
+
+\captionsetup{
+  font=small,
+  labelfont=bf,
+  justification=justified,
+  singlelinecheck=false
+}
+
+\newcommand{\reviewercomment}[1]{%
+  \noindent\textbf{\textcolor{reviewerblue}{Reviewer comment:}}%
+  \ \textit{#1}\par
+}
+\newcommand{\authorresponse}{%
+  \noindent\textbf{\textcolor{responseblue}{Response:}}\ %
+}
+
+\begin{document}
+
+\section*{Response to the Reviewer: Failure-Case Analysis}
+
+\reviewercomment{Notably, one of the recommendations is to include
+failure-case analysis for unsuccessful interception and delayed cooperative
+engagement scenarios because understanding framework limitations remains
+essential for practical battlefield deployment reliability.}
+
+\authorresponse
+Thank you for this important recommendation. In the revised manuscript, we
+have added a dedicated failure-case analysis for both Case~1 and Case~2. The
+purpose of this supplementary experiment is to expose a practically relevant
+boundary between \emph{mission-level target coverage} and \emph{strict
+completion by every assigned interceptor}. Accordingly, the reported cases are
+not catastrophic failures in which attackers penetrate the defense. Instead,
+all eight attacking vehicles are neutralized, while one of the twenty assigned
+interceptors fails to complete its individual engagement.
+
+\paragraph{Experimental protocol.}
+The trained policies, target assignment, attacker trajectories, and the
+three-dimensional hit radius \(d_{\mathrm{hit}}=3~\mathrm{m}\) were kept
+fixed. No network retraining, backpropagation, optimizer step, or policy-weight
+update was performed. To emulate imperfect battlefield information, the
+frozen-policy evaluation included a one-sample observation delay
+(\(0.05~\mathrm{s}\)), zero-mean position measurement noise with a
+\(3~\mathrm{m}\) standard deviation, and zero-mean velocity measurement noise
+with a \(0.3~\mathrm{m/s}\) standard deviation. The maximum evaluation horizon
+was \(75~\mathrm{s}\), and the cooperative-time tolerance remained
+\(0.5~\mathrm{s}\).
+
+We screened 100 reproducible evaluation episodes for each case. To avoid
+subjective, appearance-based selection, we used the following fixed rule: the
+reported examples are the earliest three seeds in each case for which
+(i) all \(8/8\) attacking vehicles were intercepted,
+(ii) exactly \(19/20\) assigned interceptors hit,
+(iii) seven of the eight target-assignment groups were complete, and
+(iv) the arrival-time spread among the observed hits did not exceed the
+prescribed \(0.5~\mathrm{s}\) tolerance. No simulated state or trajectory
+sample was manually changed.
+
+\begin{figure*}[!htbp]
+  \centering
+  \includegraphics[width=\textwidth]{%
+    reviewer_response_assets/failure_cases_case1_case2_v10.pdf}
+  \caption{Representative boundary failures under frozen-policy evaluation
+  for Case~1 (a)--(c) and Case~2 (d)--(f). Solid curves denote attacker
+  trajectories, dotted curves successful interceptors, and the thick dashed
+  curve the missed assigned interceptor. Green circles mark successful hit
+  events, while the cross marks the missed interceptor's closest-approach
+  point. In every episode, \(19/20\) assigned interceptors hit, but assignment
+  redundancy still ensures that all \(8/8\) attacking vehicles are
+  intercepted.}
+  \label{fig:failure_case_response}
+\end{figure*}
+
+\begin{table*}[!htbp]
+  \centering
+  \caption{Quantitative diagnostics of the six representative boundary
+  failures. The miss margin is
+  \(d_{\min}^{\mathrm{miss}}-d_{\mathrm{hit}}\).}
+  \label{tab:failure_case_response}
+  \small
+  \setlength{\tabcolsep}{3.2pt}
+  \renewcommand{\arraystretch}{1.12}
+  \begin{tabular}{ccccccccc}
+    \toprule
+    Case & Seed & Interceptor hits & Target coverage &
+    Missed ID & Target ID &
+    \(d_{\min}^{\mathrm{miss}}\) (m) &
+    Miss margin (m) & Max.\ spread (s) \\
+    \midrule
+    1 & 76014 & 19/20 & 8/8 & 1  & 21 & 3.161 & 0.161 & 0.050 \\
+    1 & 76048 & 19/20 & 8/8 & 5  & 25 & 3.243 & 0.243 & 0.050 \\
+    1 & 76052 & 19/20 & 8/8 & 8  & 20 & 3.041 & 0.041 & 0.050 \\
+    2 & 77008 & 19/20 & 8/8 & 1  & 21 & 3.574 & 0.574 & 0.350 \\
+    2 & 77020 & 19/20 & 8/8 & 2  & 22 & 3.096 & 0.096 & 0.150 \\
+    2 & 77023 & 19/20 & 8/8 & 17 & 21 & 3.488 & 0.488 & 0.200 \\
+    \bottomrule
+  \end{tabular}
+\end{table*}
+
+\paragraph{Observed failure mechanism.}
+As shown in Fig.~\ref{fig:failure_case_response} and
+Table~\ref{tab:failure_case_response}, assignment redundancy preserved complete
+target coverage in all six episodes, although one assigned interceptor did not
+enter the lethal region. In Case~1, the missed closest-approach distances were
+\(3.041\)--\(3.243~\mathrm{m}\), corresponding to margins of only
+\(0.041\)--\(0.243~\mathrm{m}\) above the hit threshold. In Case~2, the
+corresponding distances were \(3.096\)--\(3.574~\mathrm{m}\), with margins of
+\(0.096\)--\(0.574~\mathrm{m}\). These are therefore near-threshold misses
+rather than grossly divergent trajectories.
+
+The seven completed assignment groups remained well coordinated. Their
+maximum observed hit-time spread was \(0.05~\mathrm{s}\) in Case~1 and
+\(0.15\)--\(0.35~\mathrm{s}\) in Case~2, all below the prescribed
+\(0.5~\mathrm{s}\) tolerance. However, after the missed interceptor passed its
+closest-approach point, its distance to the assigned target increased and no
+hit occurred before the \(75~\mathrm{s}\) horizon. Therefore, the incomplete
+group's all-member completion time is right-censored beyond the evaluation
+horizon. The same episode consequently represents both an unsuccessful
+individual interception and, from the strict group-completion viewpoint, a
+delayed cooperative engagement.
+
+\paragraph{Implications for practical reliability.}
+This analysis reveals both a strength and a limitation of the proposed
+framework. Its redundant assignment structure isolates a single
+near-threshold interceptor miss and still neutralizes every attacker, thereby
+preventing an individual failure from becoming a mission-level penetration.
+Nevertheless, the current framework does not contain an explicit online
+recovery mechanism after an interceptor passes its closest-approach point
+under delayed and noisy observations. Strict all-member completion therefore
+cannot be guaranteed in this boundary regime, even if another member has
+already neutralized the assigned target.
+
+We have explicitly added this limitation to the revised manuscript and
+identified several practical extensions: (i) online miss detection using
+distance rebound and closing-rate reversal, (ii) event-triggered target
+reassignment, (iii) activation of a reserve interceptor, and
+(iv) uncertainty-aware safety constraints or robust policy training. We also
+clarify that the six reported episodes are diagnostic boundary cases intended
+to explain the failure mechanism; they are not presented as an estimate of the
+overall failure probability. The aggregate reliability of the framework
+continues to be evaluated using the Monte Carlo results reported in the main
+simulation section.
+
+\end{document}

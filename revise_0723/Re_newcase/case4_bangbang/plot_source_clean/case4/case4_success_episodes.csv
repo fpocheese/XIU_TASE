@@ -1,0 +1,6 @@
+condition,case,variant,episode,seed,mean_sync_spread,max_sync_spread,targets_covered,complete_groups,coordinated_groups
+final_case4_plot_source_clean,case4,full,1,98101,0.11875000000000169,0.20000000000000284,8,8,8
+final_case4_plot_source_clean,case4,full,2,98102,0.09375000000000133,0.10000000000000142,8,8,8
+final_case4_plot_source_clean,case4,full,3,98103,0.15625000000000222,0.20000000000000284,8,8,8
+final_case4_plot_source_clean,case4,full,4,98104,0.12500000000000178,0.25000000000000355,8,8,8
+final_case4_plot_source_clean,case4,full,5,98105,0.10625000000000151,0.15000000000000213,8,8,8

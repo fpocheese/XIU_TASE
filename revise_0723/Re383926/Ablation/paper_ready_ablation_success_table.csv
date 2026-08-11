@@ -1,0 +1,9 @@
+Case,Method,Target-coverage success (%),All-defender interception (%),Cooperative success (%),Cooperative-success Wilson 95% CI (%)
+Case 1,Full ART-MAPPO,100,100,53,43.29--62.49
+Case 1,No trust,100,100,29,21.01--38.54
+Case 1,No GRU,100,100,99,94.55--99.82
+Case 1,No attention-residual,100,100,2,0.55--7.00
+Case 2,Full ART-MAPPO,79,6,0,0.00--3.70
+Case 2,No trust,79,5,0,0.00--3.70
+Case 2,No GRU,80,5,0,0.00--3.70
+Case 2,No attention-residual,80,8,0,0.00--3.70

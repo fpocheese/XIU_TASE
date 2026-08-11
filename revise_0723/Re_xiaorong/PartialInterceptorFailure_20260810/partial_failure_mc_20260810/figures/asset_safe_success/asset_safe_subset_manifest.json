@@ -1,0 +1,32 @@
+{
+  "purpose": "Offline reclassification of locally saved MC event data under the rule that a non-intercepted attacker entering the 3-m protected-asset radius terminates the episode as a failure.",
+  "asset_center_m": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "asset_hit_radius_m": 3.0,
+  "attacker_deadline_method": "Exact local replay of the stable scripted-attacker dynamics and paper preset without defenders; evaluated separately for each attacker/target.",
+  "case1_figure_selection": "asset_safe_interception_success == 1",
+  "case2_figure_selection": "asset_safe_cooperative_success == 1",
+  "case2_extra_condition_reason": "Retains the user's preceding request to show only the strongly synchronized Case 2 trials.",
+  "metric_values": "The four stored episode metrics are unchanged; only the episode population is reclassified.",
+  "figure_labels": "Case 1 and Case 2 only, as requested",
+  "case_counts": {
+    "case1": {
+      "input_episodes": 100,
+      "original_interception_success_count": 92,
+      "asset_safe_interception_success_count": 92,
+      "original_cooperative_success_count": 82,
+      "asset_safe_cooperative_success_count": 82
+    },
+    "case2": {
+      "input_episodes": 100,
+      "original_interception_success_count": 44,
+      "asset_safe_interception_success_count": 41,
+      "original_cooperative_success_count": 6,
+      "asset_safe_cooperative_success_count": 5
+    }
+  },
+  "limitations": "This is an event-table reclassification, not a rerun with an in-loop asset-breach terminal condition. Full per-step histories were saved only for one representative episode per case."
+}

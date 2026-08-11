@@ -1,0 +1,24 @@
+{
+  "seeds": [
+    74001,
+    74002,
+    74003,
+    74005,
+    74009
+  ],
+  "model_dir": "/home/a2rl/reviewer_xiu_case3_20260729/models/case2",
+  "policy_updated": false,
+  "selection": "first five strict successes by ascending seed in formal 100-episode CSV",
+  "ranking_rule": "max_group_spread_s, E_co_time_s, E_miss_m, E_n_g; all ascending",
+  "recommended_seed": 74001,
+  "configuration": {
+    "guide_gain": 2.4,
+    "guide_tau": 0.25,
+    "guide_lead": 1.4,
+    "residual_scale": 0.2,
+    "sync_speed_gain": 0.01,
+    "sync_tgo_ref": "mean",
+    "hit_radius_m": 3.0,
+    "sync_tolerance_s": 0.5
+  }
+}

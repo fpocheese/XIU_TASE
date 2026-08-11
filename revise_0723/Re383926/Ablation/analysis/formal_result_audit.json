@@ -1,0 +1,11 @@
+{
+  "training_run_count": 24,
+  "test_episode_row_count": 800,
+  "expected_test_episode_row_count": 800,
+  "training_nan_inf": false,
+  "rates_bounded_0_1": true,
+  "continuous_nan_allowed_only_when_group_incomplete": true,
+  "training_performed_during_evaluation": false,
+  "optimizer_steps_during_evaluation": 0,
+  "backpropagation_during_evaluation": false
+}

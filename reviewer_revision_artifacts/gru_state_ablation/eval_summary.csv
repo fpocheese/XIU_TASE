@@ -1,0 +1,3 @@
+case,mode,model,episodes,attack_success_rate,target_success_rate,all_hit_rate,sync_success_rate,all_sync_rate,mean_target_time,max_sync_spread,mean_sync_spread
+case1,baseline,/home/uav/00gao_xueshu/DT_PAPER/XIU_code/remote_xiu_onpolicy_3d_fix_clean/warmstarts/v63_case1_success,10,1.0,1.0,1.0,1.0,1.0,48.743750381469724,0.5999984741210938,0.0700000286102295
+case2,baseline,/home/uav/00gao_xueshu/DT_PAPER/XIU_code/remote_xiu_onpolicy_3d_fix_clean/runs/sync_v59_20260628_134644/sync_focus_v59_strict_sync_warmstart_v50_all_sync/case2/train/MAPPO/seed60250/models/MAPPO_2606_281517,10,1.0,1.0,1.0,0.9875,0.9,35.30374984741211,39.54999923706055,0.5593749284744263

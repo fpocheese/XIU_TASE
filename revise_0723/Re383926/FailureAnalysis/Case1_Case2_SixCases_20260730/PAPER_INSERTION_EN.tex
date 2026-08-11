@@ -1,0 +1,77 @@
+% Suggested insertion only. The original manuscript was not modified.
+\subsection{Failure-Case Analysis and Practical Limitations}
+\label{subsec:failure_case_analysis}
+
+In addition to the aggregate Monte Carlo statistics, we examine a practically
+relevant boundary failure in which mission-level target coverage is retained
+but strict completion by every assigned interceptor is not. The trained
+policies, target assignments, attacker trajectories, and the hit radius
+$d_{\rm hit}=3~\mathrm{m}$ are kept fixed, and no policy update or retraining is
+performed. To emulate imperfect battlefield information, the frozen-policy
+evaluation introduces a one-sample ($0.05~\mathrm{s}$) observation delay and
+zero-mean measurement noise with standard deviations of $3~\mathrm{m}$ and
+$0.3~\mathrm{m/s}$ for position and velocity, respectively. We screen 100
+reproducible episodes for each case. The reported examples are the earliest
+three seeds per case satisfying the following fixed criterion: all eight
+attackers are intercepted, exactly 19 of the 20 assigned interceptors hit,
+seven of the eight assignment groups are complete, and the observed hit-time
+spread does not exceed the $0.5~\mathrm{s}$ synchronization tolerance.
+
+Fig.~\ref{fig:failure_cases} shows the resulting six boundary cases. In every
+episode, assignment redundancy preserves complete target coverage
+($8/8$), although one assigned interceptor fails to enter the lethal region
+within the $75~\mathrm{s}$ evaluation horizon. As summarized in
+Table~\ref{tab:failure_cases}, the missed closest-approach distances are only
+$3.04$--$3.24~\mathrm{m}$ in Case~1 and $3.10$--$3.57~\mathrm{m}$ in Case~2.
+Their margins above the hit threshold are therefore $0.04$--$0.24~\mathrm{m}$
+and $0.10$--$0.57~\mathrm{m}$, respectively. These are near-threshold misses,
+rather than grossly divergent engagements. The seven completed groups remain
+well coordinated: their maximum observed hit-time spreads are
+$0.05~\mathrm{s}$ in Case~1 and $0.15$--$0.35~\mathrm{s}$ in Case~2, all below
+the prescribed tolerance.
+
+The result distinguishes mission-level success from strict assignment-level
+success. Redundant allocation localizes a single interceptor failure and still
+neutralizes all attackers. However, the incomplete group's completion time is
+right-censored beyond the evaluation horizon; hence the same episode represents
+an unsuccessful individual interception and a delayed cooperative completion.
+This exposes a limitation of the current framework: after an interceptor passes
+its closest-approach point under delayed/noisy observations, the controller has
+no explicit online miss-recovery or reassignment mechanism. Practical
+extensions therefore include closing-rate-based miss detection,
+event-triggered reassignment, reserve-interceptor activation, and
+uncertainty-aware safety constraints. These examples are diagnostic boundary
+cases and should not be interpreted as an estimate of the overall failure
+probability.
+
+\begin{figure*}[!t]
+  \centering
+  \includegraphics[width=\textwidth]{figures/failure_cases_case1_case2_v10.pdf}
+  \caption{Representative boundary failures under frozen-policy evaluation.
+  Solid curves denote attacker trajectories, dotted curves successful
+  interceptors, and the thick dashed curve the missed assigned interceptor.
+  Green circles mark successful hit events and the cross marks the missed
+  interceptor's closest-approach point. In all six episodes, 19/20 assigned
+  interceptors hit and all 8/8 attackers are nevertheless intercepted.}
+  \label{fig:failure_cases}
+\end{figure*}
+
+\begin{table*}[!t]
+\centering
+\caption{Quantitative failure-case diagnostics.}
+\label{tab:failure_cases}
+\begin{tabular}{cccccccc}
+\hline
+Case & Seed & Hits & Targets & Missed ID & Assigned target &
+$d_{\min}^{\rm miss}$ (m) & Max. observed spread (s) \\
+\hline
+1 & 76014 & 19/20 & 8/8 & 1  & 21 & 3.161 & 0.050 \\
+1 & 76048 & 19/20 & 8/8 & 5  & 25 & 3.243 & 0.050 \\
+1 & 76052 & 19/20 & 8/8 & 8  & 20 & 3.041 & 0.050 \\
+2 & 77008 & 19/20 & 8/8 & 1  & 21 & 3.574 & 0.350 \\
+2 & 77020 & 19/20 & 8/8 & 2  & 22 & 3.096 & 0.150 \\
+2 & 77023 & 19/20 & 8/8 & 17 & 21 & 3.488 & 0.200 \\
+\hline
+\end{tabular}
+\end{table*}
+

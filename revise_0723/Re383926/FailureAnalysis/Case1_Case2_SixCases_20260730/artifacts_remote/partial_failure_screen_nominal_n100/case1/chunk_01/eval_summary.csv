@@ -1,0 +1,2 @@
+case,model,episodes,attack_success_rate,target_success_rate,all_hit_rate,sync_success_rate,all_sync_rate,mean_target_time,max_sync_spread,mean_sync_spread
+case1,/home/a2rl/reviewer_failure_cases_20260730/models/case1,20,1.0,1.0,1.0,1.0,1.0,30.05031261444092,0.0500030517578125,0.027500104904174805

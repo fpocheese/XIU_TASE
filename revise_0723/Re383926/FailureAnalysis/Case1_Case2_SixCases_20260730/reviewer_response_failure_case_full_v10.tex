@@ -1,0 +1,355 @@
+\documentclass[10pt]{article}
+
+\usepackage[a4paper,margin=20mm]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{amsmath}
+\usepackage{xcolor}
+\usepackage{microtype}
+\usepackage{newtxtext,newtxmath}
+\usepackage{caption}
+\usepackage{hyperref}
+\usepackage{float}
+
+\definecolor{reviewerblue}{RGB}{0,72,130}
+\definecolor{responseblue}{RGB}{0,86,125}
+\hypersetup{colorlinks=true,linkcolor=responseblue,urlcolor=responseblue}
+\captionsetup{
+  font=small,
+  labelfont=bf,
+  justification=justified,
+  singlelinecheck=false
+}
+\setlength{\textfloatsep}{6pt}
+\setlength{\floatsep}{6pt}
+\setlength{\intextsep}{6pt}
+
+\newcommand{\assetroot}{reviewer_response_assets/full_v10}
+\newcommand{\mechanismroot}{reviewer_response_assets/mechanism}
+\newcommand{\reviewercomment}[1]{%
+  \noindent\textbf{\textcolor{reviewerblue}{Reviewer comment:}}%
+  \ \textit{#1}\par
+}
+\newcommand{\authorresponse}{%
+  \noindent\textbf{\textcolor{responseblue}{Response:}}\ %
+}
+\newcommand{\pairedplots}[4]{%
+  \begin{minipage}[t]{0.485\textwidth}
+    \centering
+    \textbf{#1}\par\vspace{1mm}
+    \includegraphics[width=\linewidth]{\assetroot/#2}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.485\textwidth}
+    \centering
+    \textbf{#3}\par\vspace{1mm}
+    \includegraphics[width=\linewidth]{\assetroot/#4}
+  \end{minipage}\par\vspace{2mm}
+}
+
+\begin{document}
+
+\section*{Response to the Reviewer: Failure-Case Analysis}
+
+\reviewercomment{Notably, one of the recommendations is to include
+failure-case analysis for unsuccessful interception and delayed cooperative
+engagement scenarios because understanding framework limitations remains
+essential for practical battlefield deployment reliability.}
+
+\authorresponse
+Thank you for this important recommendation. We have added a dedicated
+failure-case analysis that identifies the terminal miss mechanism, quantifies
+the resulting cooperative-engagement delay, and examines the roles of sensing
+and actuation imperfections. The analysis uses one reproducible boundary case
+from each engagement scenario. These cases are intentionally non-catastrophic:
+all eight attacking vehicles are neutralized through assignment redundancy,
+but one assigned interceptor fails to enter the \(3~\mathrm{m}\) hit region.
+They therefore expose a practically relevant limitation that can be hidden by
+target-level success statistics alone.
+
+\paragraph{Boundary-failure outcomes.}
+The two examples were obtained with the trained policy fixed under a
+one-sample (\(0.05~\mathrm{s}\)) observation delay, position and velocity
+measurement-noise standard deviations of \(3~\mathrm{m}\) and
+\(0.3~\mathrm{m/s}\), respectively, and the nominal command dynamics. The
+evaluation horizon was \(75~\mathrm{s}\), and the cooperative tolerance was
+\(0.5~\mathrm{s}\). The reported runs satisfy \(8/8\) target coverage,
+\(19/20\) individual interceptor hits, and \(7/8\) complete assignment groups.
+
+\begin{table}[H]
+  \centering
+  \caption{Observed boundary failures. The miss margin is
+  \(d_{\min}-d_{\mathrm{hit}}\), where
+  \(d_{\mathrm{hit}}=3~\mathrm{m}\).}
+  \label{tab:failure_outcomes}
+  \small
+  \setlength{\tabcolsep}{4.3pt}
+  \renewcommand{\arraystretch}{1.12}
+  \begin{tabular}{ccccccccc}
+    \toprule
+    Case & Seed & Hits & Coverage & Incomplete group &
+    \(t_{\mathrm{CPA}}\) (s) & \(d_{\min}\) (m) &
+    Margin (m) & Delay lower bound (s) \\
+    \midrule
+    1 & 76048 & 19/20 & 8/8 & \(A_6\) & 33.10 & 3.243 & 0.243 & \(>41.90\) \\
+    2 & 77008 & 19/20 & 8/8 & \(A_2\) & 26.15 & 3.574 & 0.574 & \(>48.90\) \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\paragraph{Direct failure mechanism.}
+The incomplete groups arise from different interceptor--target pairs:
+\(D_6\!\rightarrow A_6\) in Case~1 and \(D_2\!\rightarrow A_2\) in Case~2.
+Both interceptors reach the terminal neighborhood but pass outside the hit
+sphere. In Case~1, the \(D_6\)--\(A_6\) range decreases at
+\(77.15~\mathrm{m/s}\) one second before closest approach, reaches
+\(3.243~\mathrm{m}\) at \(33.10~\mathrm{s}\), and then begins increasing; the
+range-rate sign change is observed one integration sample later. In Case~2,
+the corresponding values for \(D_2\)--\(A_2\) are
+\(79.22~\mathrm{m/s}\), \(3.574~\mathrm{m}\), and \(26.15~\mathrm{s}\).
+Thus, the immediate cause is a closest-approach point outside the terminal hit
+region, followed by separation, rather than failure to approach the assigned
+target.
+
+The terminal geometry is demanding. At closest approach, the line-of-sight
+(LOS) angular rates are \(23.89~\mathrm{rad/s}\) and
+\(19.31~\mathrm{rad/s}\), and the velocity-to-LOS errors are
+\(97.3^\circ\) and \(77.9^\circ\) for Cases~1 and 2, respectively. However,
+neither lateral command component saturates during the final two seconds; the
+maximum command-vector magnitudes are \(0.648\,g\) and \(0.789\,g\).
+Consequently, these failures are better characterized as terminal
+phase/geometry errors induced by imperfect state information and command
+dynamics, not as insufficient control authority. Case~2 is additionally
+exposed to a target acceleration of up to \(6.80~\mathrm{m/s^2}\) during
+the final two seconds, whereas the Case~1 target is nearly non-maneuvering in
+the same terminal window. This explains the larger miss margin and heading
+error in Case~2.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]
+    {\mechanismroot/failure_mechanism_diagnostics_v10.pdf}
+  \caption{Terminal-window diagnosis for the missed
+  \(D_6\)--\(A_6\) (Case~1) and \(D_2\)--\(A_2\) (Case~2) engagements. The
+  distance minimum remains above the \(3~\mathrm{m}\) hit radius in both
+  cases. The subsequent change from negative to positive \(\dot d\) confirms
+  passage through closest approach and transition to separation. The LOS-rate
+  spike reveals the severe terminal geometry, while \(|n_y|\) and \(|n_z|\)
+  remain below their component limits.}
+  \label{fig:failure_mechanism}
+\end{figure}
+
+\paragraph{Why the cooperative engagement is delayed.}
+In Case~1, \(D_6\) and \(D_{14}\) are assigned to \(A_6\). \(D_{14}\)
+intercepts \(A_6\) at \(33.10~\mathrm{s}\), exactly when \(D_6\) reaches its
+\(3.243~\mathrm{m}\) closest point. In Case~2, the redundant
+\(D_2,D_{10},D_{18}\) group is assigned to \(A_2\). \(D_{18}\) and
+\(D_{10}\) intercept \(A_2\) at \(26.10~\mathrm{s}\) and
+\(26.15~\mathrm{s}\), while \(D_2\) passes \(0.574~\mathrm{m}\) outside the
+hit boundary at \(26.15~\mathrm{s}\). All other complete groups satisfy the
+\(0.5~\mathrm{s}\) tolerance; their maximum hit-time spreads are
+\(0.05~\mathrm{s}\) in Case~1 and \(0.35~\mathrm{s}\) in Case~2.
+
+Because the respective missed member never generates a hit event, strict
+all-member group completion is right-censored at the \(75~\mathrm{s}\)
+horizon. Measured from the first peer hit, the cooperative-completion delay is
+therefore greater than \(41.90~\mathrm{s}\) in Case~1 and
+\(48.90~\mathrm{s}\) in Case~2.
+This distinction is important: the mission-level threat is removed on time,
+but the stricter assigned-group objective fails because one member does not
+recover after closest-approach passage.
+
+Case~2 also contains a different type of delay in the otherwise complete
+\(A_3\) group. Its three members hit at \(64.55\), \(64.80\), and
+\(64.90~\mathrm{s}\). Hence \(A_3\) is intercepted much later in absolute
+time than the other complete groups, but its within-group spread is only
+\(0.35~\mathrm{s}<0.5~\mathrm{s}\). It is therefore a \emph{delayed but
+synchronized} cooperative engagement, not a synchronization failure.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]
+    {\mechanismroot/group_absolute_timing_v10.pdf}
+  \caption{Absolute group interception times. The dashed orange segments mark
+  right-censored incomplete groups (\(A_6\) in Case~1 and \(A_2\) in
+  Case~2). The Case~2 \(A_3\) group completes near \(64.9~\mathrm{s}\), much
+  later than the other complete groups, although its first-to-last hit spread
+  remains within the synchronization tolerance.}
+  \label{fig:absolute_group_timing}
+\end{figure}
+
+\paragraph{Attribution of sensing and actuation effects.}
+To avoid assigning the miss to delay by assumption, we repeated each
+representative evaluation with the same frozen policy, seed, assignment, and
+target motion while removing one imperfection at a time. Table
+\ref{tab:counterfactual} reports individual hits \(H\), complete cooperative
+groups \(G\), and the originally missed pair's minimum distance.
+
+\begin{table}[H]
+  \centering
+  \caption{Frozen-policy counterfactual diagnosis. All conditions retain
+  \(8/8\) target coverage. Values are \(H/20\), \(G/8\), and
+  \(d_{\min}\) for the originally missed interceptor (m).}
+  \label{tab:counterfactual}
+  \small
+  \setlength{\tabcolsep}{5.0pt}
+  \renewcommand{\arraystretch}{1.13}
+  \begin{tabular}{lcccccc}
+    \toprule
+    & \multicolumn{3}{c}{Case 1} & \multicolumn{3}{c}{Case 2} \\
+    \cmidrule(lr){2-4}\cmidrule(lr){5-7}
+    Condition & \(H\) & \(G\) & \(d_{\min}\) &
+                \(H\) & \(G\) & \(d_{\min}\) \\
+    \midrule
+    Observed boundary condition     & 19 & 7 & 3.243 & 19 & 7 & 3.574 \\
+    Remove observation delay only  & 19 & 7 & 3.602 & 17 & 6 & 4.233 \\
+    Remove measurement noise only  & 20 & 8 & 1.023 & 20 & 8 & 1.078 \\
+    Ideal observation              & 20 & 8 & 1.714 & 20 & 8 & 1.648 \\
+    Remove command lag only        & 19 & 7 & 3.432 & 20 & 7 & 2.782 \\
+    Ideal observation and no lag   & 20 & 8 & 0.725 & 20 & 8 & 1.599 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+The counterfactual results show two different sensitivity patterns. Case~1 is
+a noise-dominated narrow-margin failure. Removing measurement noise moves
+\(D_6\) from \(3.243\) to \(1.023~\mathrm{m}\) and restores all eight groups,
+whereas removing delay or command lag alone does not recover the hit. Its
+\(0.243~\mathrm{m}\) miss margin is much smaller than the \(3~\mathrm{m}\)
+position-noise standard deviation, and the ideal-observation conditions also
+restore \(20/20\) hits. The slight increase of \(d_{\min}\) when only delay or
+lag is removed further confirms that isolated phase changes need not improve
+a nonlinear terminal encounter.
+
+Case~2 exhibits a nonlinear interaction. Removing measurement noise restores
+\(20/20\) hits and \(8/8\) complete groups, and removing command lag restores
+the \(D_2\) hit; however, removing delay alone while retaining noisy
+measurements changes the closed-loop phase and produces \(17/20\) hits and
+\(6/8\) complete groups. The latter result rules out the simplistic
+interpretation that a \(0.05~\mathrm{s}\) observation delay is the sole
+failure cause or that performance varies monotonically with delay. Instead,
+the data support a coupled mechanism: delayed/noisy terminal state estimates,
+command dynamics, high closing speed, and, in Case~2, continuing target
+maneuver jointly shift the closest-approach geometry. Since this is a
+nonlinear closed loop, the one-factor removals are diagnostic rather than an
+additive causal decomposition.
+
+\paragraph{State, control, and cooperative histories.}
+Figs.~\ref{fig:failure_trajectory}--\ref{fig:failure_cooperation} provide the
+trajectory, acceleration-command, kinematic, attitude, time-to-go,
+range-to-go, and group-synchronization histories for the same two runs.
+
+\begin{figure}[p]
+  \centering
+  \pairedplots{(a) Case 1: planar trajectory}
+    {artmappo_case1_seed76048_trajectory.pdf}
+    {(b) Case 2: planar trajectory}
+    {artmappo_case2_seed77008_trajectory.pdf}
+  \pairedplots{(c) Case 1: 3-D trajectory}
+    {artmappo_case1_seed76048_trajectory_3d.pdf}
+    {(d) Case 2: 3-D trajectory}
+    {artmappo_case2_seed77008_trajectory_3d.pdf}
+  \caption{Trajectories for the two boundary failures. The emphasized dashed
+  curve identifies the missed assigned interceptor; circles denote hit events,
+  and the cross denotes its closest-approach point. Redundant assignment
+  preserves \(8/8\) target coverage despite the individual miss.}
+  \label{fig:failure_trajectory}
+\end{figure}
+
+\begin{figure}[p]
+  \centering
+  \includegraphics[width=0.52\textwidth]
+    {\assetroot/artmappo_duav_legend.pdf}\par\vspace{1mm}
+  \pairedplots{(a) Case 1: \(n_x\)}
+    {artmappo_case1_seed76048_nx.pdf}
+    {(b) Case 2: \(n_x\)}
+    {artmappo_case2_seed77008_nx.pdf}
+  \pairedplots{(c) Case 1: \(n_y\)}
+    {artmappo_case1_seed76048_ny.pdf}
+    {(d) Case 2: \(n_y\)}
+    {artmappo_case2_seed77008_ny.pdf}
+  \pairedplots{(e) Case 1: \(n_z\)}
+    {artmappo_case1_seed76048_nz.pdf}
+    {(f) Case 2: \(n_z\)}
+    {artmappo_case2_seed77008_nz.pdf}
+  \caption{Acceleration-command histories. The missed member receives bounded
+  commands throughout the terminal encounter; its failure is associated with
+  the phase and geometry documented in Fig.~\ref{fig:failure_mechanism}, not
+  command divergence.}
+  \label{fig:failure_controls}
+\end{figure}
+
+\begin{figure}[p]
+  \centering
+  \includegraphics[width=0.52\textwidth]
+    {\assetroot/artmappo_duav_legend.pdf}\par\vspace{1mm}
+  \pairedplots{(a) Case 1: speed}
+    {artmappo_case1_seed76048_velocity.pdf}
+    {(b) Case 2: speed}
+    {artmappo_case2_seed77008_velocity.pdf}
+  \pairedplots{(c) Case 1: heading}
+    {artmappo_case1_seed76048_heading.pdf}
+    {(d) Case 2: heading}
+    {artmappo_case2_seed77008_heading.pdf}
+  \pairedplots{(e) Case 1: yaw}
+    {artmappo_case1_seed76048_yaw.pdf}
+    {(f) Case 2: yaw}
+    {artmappo_case2_seed77008_yaw.pdf}
+  \pairedplots{(g) Case 1: pitch}
+    {artmappo_case1_seed76048_pitch.pdf}
+    {(h) Case 2: pitch}
+    {artmappo_case2_seed77008_pitch.pdf}
+  \caption{Kinematic and attitude histories. Successful interceptors terminate
+  near their hit instants, whereas the missed member remains active after
+  closest-approach passage.}
+  \label{fig:failure_kinematics}
+\end{figure}
+
+\begin{figure}[p]
+  \centering
+  \includegraphics[width=0.52\textwidth]
+    {\assetroot/artmappo_duav_legend.pdf}\par\vspace{1mm}
+  \pairedplots{(a) Case 1: \(t_{go}\)}
+    {artmappo_case1_seed76048_tgo.pdf}
+    {(b) Case 2: \(t_{go}\)}
+    {artmappo_case2_seed77008_tgo.pdf}
+  \pairedplots{(c) Case 1: \(t_{go}\) error}
+    {artmappo_case1_seed76048_tgo_error.pdf}
+    {(d) Case 2: \(t_{go}\) error}
+    {artmappo_case2_seed77008_tgo_error.pdf}
+  \pairedplots{(e) Case 1: range-to-go}
+    {artmappo_case1_seed76048_distance.pdf}
+    {(f) Case 2: range-to-go}
+    {artmappo_case2_seed77008_distance.pdf}
+  \pairedplots{(g) Case 1: group synchronization}
+    {artmappo_case1_seed76048_time_sync.pdf}
+    {(h) Case 2: group synchronization}
+    {artmappo_case2_seed77008_time_sync.pdf}
+  \caption{Cooperative-engagement diagnostics. Successful members terminate
+  at interception, whereas the missed member passes its closest point and its
+  range subsequently increases. The hatched \(A_6\) (Case~1) and \(A_2\)
+  (Case~2) bars report the right-censored lower bounds on strict
+  group-completion delay.}
+  \label{fig:failure_cooperation}
+\end{figure}
+
+\paragraph{Reliability implication and limitation.}
+The results establish a two-level conclusion. At the mission level, redundant
+assignment prevents a single near-threshold miss from becoming a target
+penetration: all eight attackers are intercepted in both examples. At the
+strict group level, the current framework does not explicitly detect
+closest-approach passage and does not invoke reassignment or a recovery mode
+after the assigned target has been hit by peer interceptors. It therefore
+cannot guarantee all-member completion under the coupled terminal
+uncertainties identified above.
+
+This limitation motivates three concrete extensions: (i) online miss
+detection using predicted closest-approach distance together with
+\(\dot d\geq 0\), (ii) event-triggered target reassignment or reserve
+interceptor activation, and (iii) uncertainty-aware state estimation and
+robust training that explicitly cover sensing/actuation phase variations.
+The added analysis thus characterizes not only where the present framework
+fails, but also which observable signatures can trigger a practical recovery
+mechanism.
+
+\end{document}

@@ -1,0 +1,36 @@
+{
+  "convergence": {
+    "eps": 0.2,
+    "dual_clip_floor_c": 3.0,
+    "advantage": -1.0,
+    "standard_clip_min_objective": -4.0,
+    "dual_clip_min_objective": -3.0,
+    "note": "standard clip reaches -4.00 at r=4 and diverges; dual-clip floored at -3.00"
+  },
+  "exploration": {
+    "beta_star_at_poor_performer_Rt-2": 0.8807970779778824,
+    "beta_star_at_good_performer_Rt+2": 0.11920292202211769,
+    "trust_contraction_modulus": 0.9,
+    "trust_equilibrium_at_Rt1.2": 0.7685247834990175,
+    "episodes_to_1pct_of_equilibrium": 44
+  },
+  "robustness": {
+    "delta_targ": 0.02,
+    "fixed_small_beta": 0.1,
+    "fixed_large_beta": 6.0,
+    "fixed_small_max_Dkl": 0.22314209375813093,
+    "fixed_large_max_Dkl": 0.03506518616199519,
+    "adaptive_kl_max_Dkl": 0.1397067723062731,
+    "fixed_small_frac_in_band": 0.755,
+    "fixed_large_frac_in_band": 0.09,
+    "adaptive_kl_frac_in_band": 0.7,
+    "note": "no single fixed beta wins: small beta spikes out of the trust region on exploration bursts, large beta over-regularizes in calm periods; the adaptive controller Eq.(52) stays closest to delta_targ across regimes."
+  },
+  "empirical_corroboration_from_manuscript": {
+    "cross_seed_std_ART_MAPPO": 0.64,
+    "cross_seed_std_MAPPO": 1.34,
+    "reward_gain_over_MAPPO_pct": 12.3,
+    "episodes_to_90pct_ART_MAPPO": 5591,
+    "episodes_to_90pct_MAPPO": 7654
+  }
+}

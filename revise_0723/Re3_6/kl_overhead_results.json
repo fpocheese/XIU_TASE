@@ -1,0 +1,36 @@
+{
+  "256": {
+    "inference_single_ms_mean": 0.30335196264786646,
+    "inference_single_ms_p99": 0.41832843795418734,
+    "inference_swarm20_ms_mean": 3.9770834043156356,
+    "deploy_kl_dualclip_ms": 0.0,
+    "train_plain_ms_mean": 0.15511815929826117,
+    "train_full_ms_mean": 0.15513000026880763,
+    "train_dualclip_kl_extra_ms": 0.012928969226777554,
+    "train_overhead_pct": 0.0076335166688600905,
+    "embed_single_ms_lo": 3.0335196264786646,
+    "embed_single_ms_hi": 6.067039252957329
+  },
+  "1024": {
+    "inference_single_ms_mean": 9.207590972073376,
+    "inference_single_ms_p99": 13.586468517314643,
+    "inference_swarm20_ms_mean": 72.05884813641508,
+    "deploy_kl_dualclip_ms": 0.0,
+    "train_plain_ms_mean": 2.211453392491792,
+    "train_full_ms_mean": 2.2114639420898747,
+    "train_dualclip_kl_extra_ms": 0.012150034308433533,
+    "train_overhead_pct": 0.0004770436545704622,
+    "embed_single_ms_lo": 92.07590972073376,
+    "embed_single_ms_hi": 184.15181944146752
+  },
+  "_meta": {
+    "deployed_hidden_size": 256,
+    "control_cycle_ms": 50.0,
+    "strict_cycle_ms": 10.0,
+    "embed_band": [
+      10.0,
+      20.0
+    ],
+    "note": "dual-clip + adaptive KL are training-loss terms; they are absent from the deployed actor forward pass, so their real-time deployment overhead is exactly zero."
+  }
+}

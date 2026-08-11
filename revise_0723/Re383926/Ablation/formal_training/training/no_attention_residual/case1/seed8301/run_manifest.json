@@ -1,0 +1,79 @@
+{
+  "action_envelope": {
+    "clipped_before_environment_and_replay_buffer": true,
+    "high": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "low": [
+      -0.1,
+      -1.0,
+      -1.0
+    ]
+  },
+  "actor_initialization": null,
+  "case": "case1",
+  "components": {
+    "attention_residual": false,
+    "gru": true,
+    "trust_aware": true
+  },
+  "optimization": {
+    "bptt_chunk_length": 32,
+    "dual_clip": 3.0,
+    "engagements_continue_across_rollout_updates": true,
+    "environment_resets_only_after_all_defenders_terminal": true,
+    "episode_length": 1024,
+    "gae_lambda": 0.97,
+    "learning_rate": 0.0003,
+    "log_ratio_clip": 20.0,
+    "min_learning_rate": 1e-06,
+    "mini_batches": 4,
+    "naive_recurrent_minibatches": false,
+    "num_env_steps": 81920,
+    "physical_episode_horizon_steps": 1500,
+    "ppo_clip": 0.2,
+    "ppo_epochs": 5,
+    "recurrent_sequence_minibatches": true,
+    "rollout_buffer_is_not_episode_horizon": true,
+    "rollout_buffer_transitions": 1024,
+    "rollout_threads": 1,
+    "stored_action_is_executed_clipped_action": true,
+    "target_kl": 0.02,
+    "trust_updates_use_completed_episode_returns_only": true
+  },
+  "paper_guidance_profile": {
+    "base_gain": 2.0,
+    "command_lag_tau": 0.25,
+    "lead": 1.6,
+    "residual_scale": 0.2,
+    "tau": 0.25
+  },
+  "parameter_count": {
+    "actor": 733200,
+    "critic": 749932
+  },
+  "seed": 8301,
+  "training_diagnostic_definition": {
+    "affects_reward_or_optimization": false,
+    "all_sync_tolerance_s": 0.5
+  },
+  "trust_hyperparameters": {
+    "action_source_hold_steps": 5,
+    "alpha": 0.1,
+    "guide_command_refreshed_each_step": true,
+    "guide_weights": [
+      0.7,
+      0.2,
+      0.1
+    ],
+    "guided_transitions_masked_from_gaussian_actor_loss": true,
+    "guided_transitions_retained_for_critic_learning": true,
+    "initial": 0.8,
+    "pn_navigation_constant": 3.0,
+    "rho": 0.05,
+    "tau": 1.0
+  },
+  "variant": "no_attention_residual"
+}

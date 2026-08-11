@@ -1,0 +1,32 @@
+\begin{table*}[!t]
+\centering
+\color{blue}
+\scriptsize
+\caption{Component ablation of ART-MAPPO: 1000-trial Case~1 Monte Carlo evaluation.}
+\label{tab:ablation_case1}
+\renewcommand{\arraystretch}{1.12}
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{lccccccc}
+\toprule
+Variant
+  & Training AUC ($10^4$) $\uparrow$
+  & Final reward $\uparrow$
+  & ISR (\%) $\uparrow$
+  & $E_{co\text{-}time}$ (s) $\downarrow$
+  & $E_n$ (g) $\downarrow$
+  & $E_t$ (s) $\downarrow$
+  & $E_{miss}$ (m) $\downarrow$ \\
+\midrule
+Full ART-MAPPO                   & 7.354 & 8.958 & \textbf{98.7} & 0.0505 & 0.0718 & 28.843 & 2.997 \\
+w/o trust-aware mechanism        & 6.037 & 8.683 & 97.2          & 0.0545 & 0.0739 & 29.132 & 3.087 \\
+w/o GRU temporal encoder         & 6.388 & 8.134 & 95.8          & 0.0732 & 0.0782 & 30.574 & 3.297 \\
+w/o attention--residual backbone & 6.651 & 8.353 & 96.1          & 0.0606 & 0.0847 & 29.853 & 3.507 \\
+\bottomrule
+\end{tabular}
+\vspace{1mm}\parbox{0.99\linewidth}{\footnotesize\color{blue}
+Terminal metrics ($E_{co\text{-}time}$, $E_n$, $E_t$, $E_{miss}$) are sample means over
+successful interception trials only, consistent with Section~\ref{subsec:montecarlo}.
+Training AUC is the horizon-normalised area under the episodic-return curve; Final reward
+is the mean per-step episode return at policy selection.  All variants share the same
+reward, dynamics, optimiser, training seed, and training budget.}
+\end{table*}

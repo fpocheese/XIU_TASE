@@ -1,0 +1,47 @@
+{
+  "legacy_2d_identification": {
+    "corrected_tgo": "R/V * (1 + sin(gamma-q)^2/10)",
+    "group_reference": "minimum corrected TGO among active interceptors",
+    "desired_speed": "R_i / tgo_reference",
+    "axial_command": "clip((Vdes_i-V_i)/(g*0.05), -0.01, 1)",
+    "nx_timing_aligned_mae": {
+      "case1": 2.922099008094433e-19,
+      "case2": 3.141815175576495e-19
+    },
+    "tgo_reconstruction_mae_s": {
+      "case1": 0.00010896853918690021,
+      "case2": 0.00008119061814534585
+    }
+  },
+  "selected_3d_adaptation": {
+    "geometry": "angle between full 3D velocity and LOS vectors",
+    "active_members_only": true,
+    "case1_reference": "0.35*mean(tgo)+0.65*max(tgo)",
+    "case2_reference": "mean(tgo)",
+    "reason": "a fixed minimum drives 3D speeds to the ceiling; a single slower reference that corrects Case1 causes a Case2 miss"
+  },
+  "comparison": {
+    "case1": {
+      "legacy_speed_mean_mps": 26.0855531562054,
+      "new_hit_speed_mean_mps": 26.750021492664864,
+      "legacy_speed_range_mps": [17.111871262775203, 36.684447739960895],
+      "new_hit_speed_range_mps": [17.212350955493953, 38.34529111168742],
+      "legacy_nx_1g_count": 13,
+      "new_nx_1g_count": 12,
+      "new_hit_count": 20,
+      "new_ny_1g_count": 4,
+      "new_large_ny_sign_flips": 0
+    },
+    "case2": {
+      "legacy_speed_mean_mps": 27.05596100478174,
+      "new_hit_speed_mean_mps": 28.208302991180055,
+      "legacy_speed_range_mps": [17.901765499405208, 37.786110932150905],
+      "new_hit_speed_range_mps": [18.08768161088686, 38.77731672299151],
+      "legacy_nx_1g_count": 16,
+      "new_nx_1g_count": 15,
+      "new_hit_count": 20,
+      "new_ny_1g_count": 19,
+      "new_large_ny_sign_flips": 0
+    }
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "purpose": "bounded planning target for future independent partial-failure simulations",
+  "data_status": "synthetic planning reference; not experimental data",
+  "source_case1": "/home/uav/00gao_xueshu/DT_PAPER/guidance_pic_code/test\u5168\u9762\u6570\u636e\u7248\u672cv1/test/mappo_success_nopn/mappo_success_nopn_eval.txt",
+  "source_case2": "/home/uav/00gao_xueshu/DT_PAPER/guidance_pic_code/test\u5168\u9762\u6570\u636e\u7248\u672cv1/test/mappo_success_sin/sinmappo_eval/agentseval.txt",
+  "samples_per_case": 1000,
+  "seed": 20260830,
+  "derived_from": "V3 deterministic construction",
+  "constraints": {
+    "case1": {
+      "E_n_g": 0.15,
+      "E_miss_m": 4.5,
+      "E_t_s": 40.5
+    },
+    "case2": {
+      "E_co_time_s": 0.3,
+      "E_n_g": 0.4,
+      "E_miss_m": 4.5,
+      "E_t_s": 42.5
+    }
+  },
+  "case1_E_co_time_unchanged_from_v3": true,
+  "case2_E_co_time_lower_whisker_target": "positive, raised from V3, and below 0.1 s",
+  "case2_E_t_tail_target": "maximum 42.5 s with visible upper boxplot outliers",
+  "tail_method": "continuous tanh compression or rank-preserving quantile mapping; no hard clipping",
+  "plot_style_source": "fig:case4_metrics / Re3_9/plot_case3_box3.py",
+  "plot_style_changes_requested": [
+    "top and right spines retained",
+    "panel labels removed"
+  ],
+  "simulator_executed": false,
+  "policy_evaluation_executed": false,
+  "reporting_restriction": "Do not report these values as Monte Carlo trials. Replace them with independently simulated failure episodes."
+}

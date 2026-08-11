@@ -1,0 +1,8 @@
+{
+  "style": "IEEE TASE V10",
+  "style_reference": "new_sim_fig/fig_and_data figures_v10; ieee_plot_v10_tase.py -> ieee_plot_v9_tase.py rcParams",
+  "single_column_width_in": 3.5,
+  "double_column_width_in": 7.16,
+  "png_dpi": 600,
+  "generated_stems": []
+}

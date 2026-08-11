@@ -1,0 +1,28 @@
+% Candidate insertion only. This file has NOT been inserted into main.tex.
+% Confirm that the first 987/971 archived records correspond to the paper's
+% reported Monte Carlo batch before using the exact percentile values.
+
+\emph{Failure modes and delayed cooperative engagements.}
+To expose the operating limits of the framework, strict interception failures
+are distinguished from delayed but ultimately successful cooperative
+engagements. Among the 1,000 trials, 13 trials in Case~1 and 29 trials in
+Case~2 do not satisfy the strict completion condition that all assigned
+interceptors hit their designated targets within the simulation horizon. For
+the successful trials, the median, 95th-percentile, and maximum values of
+$E_{co\text{-}time}$ are $0.0492$, $0.0708$, and $0.0900$~s in Case~1,
+compared with $0.0767$, $0.1521$, and $0.3167$~s in Case~2. In the upper 5\%
+timing-error tail of Case~2, the mean engagement duration increases from
+$33.244$ to $36.655$~s, whereas the mean miss distance increases only from
+$3.082$ to $3.181$~m. The Spearman correlation between
+$E_{co\text{-}time}$ and $E_t$ is $0.426$ in Case~2 but only $0.162$ in
+Case~1. Thus, continuous target weaving mainly expands the tail of the
+closing-time distribution and reduces the simultaneous-impact margin, rather
+than causing a broad loss of terminal accuracy. This limitation motivates
+time-to-go dispersion monitoring, online reassignment, and reserve-interceptor
+activation in practical deployments.
+
+% Suggested figure caption if failure_delay_analysis.pdf is inserted:
+% \caption{Upper-tail analysis of delayed cooperative engagement: (a) empirical
+% exceedance probability of the temporal-coordination error and (b) its
+% relationship with engagement duration. The 0.10-s line is used only as a
+% diagnostic reference and not as an interception-success threshold.}

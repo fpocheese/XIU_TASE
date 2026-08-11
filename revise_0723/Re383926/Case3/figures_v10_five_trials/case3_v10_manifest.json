@@ -1,0 +1,91 @@
+{
+  "v10_source": "/home/uav/00gao_xueshu/DT_PAPER/XIU_code/xiu_onpolicy_3d_fix/on-policy-main/onpolicy/scripts/ieee_plot_v10_tase.py",
+  "v10_source_unchanged": true,
+  "method": "MAPPO",
+  "seeds": [
+    74001,
+    74002,
+    74003,
+    74005,
+    74009
+  ],
+  "figures_per_seed": 14,
+  "data_support": {
+    "direct": [
+      "horizontal/3-D trajectory",
+      "n_x/n_y/n_z overload",
+      "range-to-go",
+      "target assignment",
+      "terminal arrival spread"
+    ],
+    "deterministic_from_recorded_state": [
+      "speed",
+      "yaw/heading",
+      "pitch",
+      "time-to-go",
+      "within-group time-to-go error"
+    ]
+  },
+  "trials": [
+    {
+      "seed": 74001,
+      "samples": 781,
+      "dt_s": 0.05,
+      "duration_s": 39.0,
+      "max_distance_consistency_error_m": 0.00048828125,
+      "tgo_definition": "distance_to_assigned_target / max(total_speed, 1 m/s)",
+      "tgo_min_s": 0.0027471170760691166,
+      "tgo_max_s": 108.08624267578125,
+      "all_values_finite": true,
+      "figure_count": 14
+    },
+    {
+      "seed": 74002,
+      "samples": 799,
+      "dt_s": 0.05,
+      "duration_s": 39.900000000000006,
+      "max_distance_consistency_error_m": 0.00048828125,
+      "tgo_definition": "distance_to_assigned_target / max(total_speed, 1 m/s)",
+      "tgo_min_s": 0.0005744161317124963,
+      "tgo_max_s": 105.93020629882812,
+      "all_values_finite": true,
+      "figure_count": 14
+    },
+    {
+      "seed": 74003,
+      "samples": 776,
+      "dt_s": 0.05,
+      "duration_s": 38.75,
+      "max_distance_consistency_error_m": 0.000244140625,
+      "tgo_definition": "distance_to_assigned_target / max(total_speed, 1 m/s)",
+      "tgo_min_s": 0.004407833330333233,
+      "tgo_max_s": 106.60484313964844,
+      "all_values_finite": true,
+      "figure_count": 14
+    },
+    {
+      "seed": 74005,
+      "samples": 771,
+      "dt_s": 0.05,
+      "duration_s": 38.5,
+      "max_distance_consistency_error_m": 0.000244140625,
+      "tgo_definition": "distance_to_assigned_target / max(total_speed, 1 m/s)",
+      "tgo_min_s": 0.00464229891076684,
+      "tgo_max_s": 112.87090301513672,
+      "all_values_finite": true,
+      "figure_count": 14
+    },
+    {
+      "seed": 74009,
+      "samples": 780,
+      "dt_s": 0.05,
+      "duration_s": 38.95,
+      "max_distance_consistency_error_m": 0.000244140625,
+      "tgo_definition": "distance_to_assigned_target / max(total_speed, 1 m/s)",
+      "tgo_min_s": 0.006122752092778683,
+      "tgo_max_s": 113.79304504394531,
+      "all_values_finite": true,
+      "figure_count": 14
+    }
+  ]
+}

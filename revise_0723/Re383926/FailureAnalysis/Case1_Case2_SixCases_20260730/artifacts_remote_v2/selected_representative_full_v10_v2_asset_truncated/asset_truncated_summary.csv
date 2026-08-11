@@ -1,0 +1,3 @@
+case,seed,asset_hit_step,asset_hit_time_s,asset_hit_attacker_id,asset_hit_distance_m,interceptor_hits_before_asset_hit,original_interceptor_hits,asset_hit_radius_m,intercept_hit_radius_m,raw_npz
+case1,76048,1044,52.2,5,1.3409392843533514,19,19,3.0,3.0,/home/uav/00gao_xueshu/DT_PAPER/XIU_tase_paper_V1/revise_0723/Re383926/FailureAnalysis/Case1_Case2_SixCases_20260730/artifacts_remote/selected_six_failure_cases/case1/seed_76048/case1/case1_selected_episode.npz
+case2,77008,943,47.150000000000006,1,1.8186877032950273,16,19,3.0,3.0,/home/uav/00gao_xueshu/DT_PAPER/XIU_tase_paper_V1/revise_0723/Re383926/FailureAnalysis/Case1_Case2_SixCases_20260730/artifacts_remote/selected_six_failure_cases/case2/seed_77008/case2/case2_selected_episode.npz

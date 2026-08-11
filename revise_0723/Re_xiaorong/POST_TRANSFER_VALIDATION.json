@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "root": "/home/uav/00gao_xueshu/DT_PAPER/XIU_tase_paper_V1/revise_0723/Re_xiaorong/raw_results",
+  "training_metric_files": 40,
+  "training_metric_rows": 8000,
+  "evaluation_episode_files": 40,
+  "evaluation_episodes": 800,
+  "errors": []
+}
