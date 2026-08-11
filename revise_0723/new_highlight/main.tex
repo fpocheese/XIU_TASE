@@ -236,20 +236,23 @@ and integrates trust-modulated exploration with a dual-clip PPO update and adapt
 regularization. This design yields faster convergence and improved training efficiency in
 highly maneuverable swarm-adversarial environments.
 
-% \item \hldel{A cooperative interception method augmented with a reinforcement learning-based reward
-% function is introduced, enabling precise temporal coordination.} \hladd{While reward shaping and
-% clipped policy updates are standard reinforcement-learning mechanisms, the contribution here lies
-% in instantiating them specifically for the maneuvering-swarm engagement: the time-to-go consensus
-% reward is formulated as a learned impact-time (salvo) constraint that defeats sequential, piecemeal
-% interception, and the dual-clip update is cast as a load-factor saturation guard bounding the
-% commanded terminal-overload increment under aggressive exploration.} This strategy enhances
-% interception success rates against large-scale maneuvering swarm targets\hldel{ by addressing dynamic
-% coordination challenges}\hladd{ while preserving terminal-load safety}.
+% \item A cooperative interception method augmented with a reinforcement learning-based reward
+% function is introduced, enabling precise temporal coordination. This strategy enhances
+% interception success rates against large-scale maneuvering swarm targets by addressing dynamic
+% coordination challenges.
 
-\item A cooperative interception method augmented with a reinforcement learning-based reward
-function is introduced, enabling precise temporal coordination. This strategy enhances
-interception success rates against large-scale maneuvering swarm targets by addressing dynamic
-coordination challenges.
+\item
+\hldel{A cooperative interception method augmented with a reinforcement
+learning-based reward function is introduced, enabling precise temporal
+coordination. This strategy enhances interception success rates against
+large-scale maneuvering swarm targets by addressing dynamic coordination
+challenges.}
+\hladd{The time-coordination requirement in cooperative interception is
+incorporated into ART-MAPPO through a groupwise time-to-go penalty. This
+task-specific formulation converts terminal timing constraints into
+stepwise learning feedback, enabling coordinated interceptor arrival under
+target maneuvers.}
+
 
 \end{enumerate}
 
@@ -568,7 +571,7 @@ Here, $\mathcal{H}$ updates adversarial advantages given the consensus assignmen
 \label{eq:convergence}
 \Gamma^{(k)} = \frac{1}{M} \sum_{i=1}^{M} \left\| \mathbf{z}_i^{(k)} - \frac{1}{|\mathcal{N}_i|} \sum_{j \in \mathcal{N}_i} \mathbf{z}_j^{(k)} \right\|_0 < \epsilon_{\mathrm{IDBO}}
 \end{equation}
-where $\|\cdot\|_0$ counts disagreeing entries and $\epsilon_{\mathrm{IDBO}}$ is a convergence threshold. \hldel{The algorithm guarantees monotonic fitness improvement: $\Phi^{(k+1)} \geq \Phi^{(k)}$ a.s., where $\Phi^{(k)} = \sum_{i=1}^{M} \mathcal{F}_i(\mathbf{x}_i^{(k)})$. Under a connected communication graph with finite message delays, consensus is reached in at most $N \cdot D$ iterations ($D$: graph diameter). The converged assignment $\mathbf{X}^*$ constitutes an $\epsilon$-approximate Nash equilibrium: $\mathcal{F}_i(\mathbf{x}_i^*) \geq \mathcal{F}_i(\mathbf{x}_i') - \epsilon$, $\forall \mathbf{x}_i' \in \mathcal{X}_i$, $\forall i$.} \hladd{Three properties characterize this iteration under a connected communication graph with bounded message delay and elitist retention of best-so-far solutions. First, the \emph{incumbent} (best-so-far) swarm fitness $\Phi_{\mathrm{best}}^{(k)}=\max_{k'\le k}\sum_{i=1}^{M}\mathcal{F}_i(\mathbf{x}_i^{(k')})$ is non-decreasing by construction, and because the decaying schedule $c_t=c_0(1-t/T)$ drives the operators' stochastic amplitude to zero while retaining an ascent direction, the working assignment settles at a fixed point rather than orbiting it---the standard Robbins--Monro condition for stochastic-approximation convergence~\cite{robbins1951stochastic}. Second, the auction-based consensus phase~\eqref{eq:bid_formulation}--\eqref{eq:cbba_update} inherits the guarantees of the consensus-based bundle algorithm~\cite{choi2009consensus}: with a diminishing-marginal-gain (submodular) score it reaches a conflict-free assignment in at most $N\!\cdot\!D$ communication rounds ($D$: graph diameter). Third, the resulting fixed point $\mathbf{X}^\ast$ is $\epsilon_{\mathrm{IDBO}}$-\emph{stable}---no interceptor can raise its own fitness by more than $\epsilon_{\mathrm{IDBO}}$ through a unilateral reassignment, $\mathcal{F}_i(\mathbf{x}_i^\ast)\ge\mathcal{F}_i(\mathbf{x}_i')-\epsilon_{\mathrm{IDBO}}$ for all $\mathbf{x}_i'\in\mathcal{X}_i$ and all $i$, which follows directly from the auction best-response at the converged bid prices~\cite{choi2009consensus}. The empirical convergence of the swarm-disagreement metric $\Gamma^{(k)}$ and the near-linear growth of consensus rounds with $D$ are reported in the supplementary response material. The complete per-interceptor procedure is summarized in Algorithm~\ref{alg:idbo}, where each step is cross-referenced to the corresponding equation for reproducibility.}
+where $\|\cdot\|_0$ counts disagreeing entries and $\epsilon_{\mathrm{IDBO}}$ is a convergence threshold. \hldel{The algorithm guarantees monotonic fitness improvement: $\Phi^{(k+1)} \geq \Phi^{(k)}$ a.s., where $\Phi^{(k)} = \sum_{i=1}^{M} \mathcal{F}_i(\mathbf{x}_i^{(k)})$. Under a connected communication graph with finite message delays, consensus is reached in at most $N \cdot D$ iterations ($D$: graph diameter). The converged assignment $\mathbf{X}^*$ constitutes an $\epsilon$-approximate Nash equilibrium: $\mathcal{F}_i(\mathbf{x}_i^*) \geq \mathcal{F}_i(\mathbf{x}_i') - \epsilon$, $\forall \mathbf{x}_i' \in \mathcal{X}_i$, $\forall i$.} \hladd{Three properties characterize this iteration under a connected communication graph with bounded message delay and elitist retention of best-so-far solutions. First, the \emph{incumbent} (best-so-far) swarm fitness $\Phi_{\mathrm{best}}^{(k)}=\max_{k'\le k}\sum_{i=1}^{M}\mathcal{F}_i(\mathbf{x}_i^{(k')})$ is non-decreasing by construction, and because the decaying schedule $c_t=c_0(1-t/T)$ drives the operators' stochastic amplitude to zero while retaining an ascent direction, the working assignment settles at a fixed point rather than orbiting it---the standard Robbins--Monro condition for stochastic-approximation convergence~\cite{robbins1951stochastic}. Second, the auction-based consensus phase~\eqref{eq:bid_formulation}--\eqref{eq:cbba_update} inherits the guarantees of the consensus-based bundle algorithm~\cite{choi2009consensus}: with a diminishing-marginal-gain (submodular) score it reaches a conflict-free assignment in at most $N\!\cdot\!D$ communication rounds ($D$: graph diameter). Third, the resulting fixed point $\mathbf{X}^\ast$ is $\epsilon_{\mathrm{IDBO}}$-\emph{stable}---no interceptor can raise its own fitness by more than $\epsilon_{\mathrm{IDBO}}$ through a unilateral reassignment, $\mathcal{F}_i(\mathbf{x}_i^\ast)\ge\mathcal{F}_i(\mathbf{x}_i')-\epsilon_{\mathrm{IDBO}}$ for all $\mathbf{x}_i'\in\mathcal{X}_i$ and all $i$, which follows directly from the auction best-response at the converged bid prices~\cite{choi2009consensus}. The empirical convergence of the swarm-disagreement metric $\Gamma^{(k)}$ and the near-linear growth of consensus rounds with $D$ are reported in the supplementary response material. The complete per-interceptor procedure is summarized in Algorithm~\ref{alg:idbo}.}
 
 \begin{algorithm}[!t]
 \caption{\hladd{IDBO Target Assignment}}
@@ -617,7 +620,20 @@ where $T$ is the IDBO iteration count, $P = O(N)$ the population size, and $|\ma
 \section{ART-MAPPO: Attention-Residual and Trust-Aware MAPPO for Cooperative Swarm Interception}
 \label{sec:cooperative_algorithm}
 
-Building on the distributed consensus-based IDBO target assignment, we propose the Attention-Residual and Trust-aware MAPPO (ART-MAPPO) algorithm for the cooperative guidance of defending UAV swarms under the Centralized Training with Decentralized Execution (CTDE) paradigm. ART-MAPPO augments the standard MAPPO framework with three synergistic modules: a kinematics-aware attention-residual network for extracting cross-coupled engagement features, a trust-modulated exploration mechanism for discovering cooperative tactics within the safe flight envelope, and a dual-clip PPO with adaptive KL penalty for constraining guidance command variations against actuator saturation.
+% Building on the distributed consensus-based IDBO target assignment, we propose the Attention-Residual and Trust-aware MAPPO (ART-MAPPO) algorithm for the cooperative guidance of defending UAV swarms under the Centralized Training with Decentralized Execution (CTDE) paradigm. ART-MAPPO augments the standard MAPPO framework with three synergistic modules: a kinematics-aware attention-residual network for extracting cross-coupled engagement features, a trust-modulated exploration mechanism for discovering cooperative tactics within the safe flight envelope, and a dual-clip PPO with adaptive KL penalty for constraining guidance command variations against actuator saturation.
+
+Building on the distributed consensus-based IDBO target assignment, we propose
+the Attention-Residual and Trust-aware MAPPO (ART-MAPPO) algorithm for the
+cooperative guidance of defending UAV swarms under the Centralized Training
+with Decentralized Execution (CTDE) paradigm. ART-MAPPO augments the standard
+MAPPO framework with \hldel{three synergistic modules:}\hladd{two
+task-oriented modules:} a kinematics-aware attention-residual network for
+extracting cross-coupled engagement features\hldel{,}\hladd{ and} a
+trust-modulated exploration mechanism for discovering cooperative tactics
+within the safe flight envelope\hldel{, and a dual-clip PPO with adaptive KL
+penalty for constraining guidance command variations against actuator
+saturation}\hladd{. Dual-Clip PPO and adaptive KL regularization are used to
+stabilize policy updates during training}.
 
 \subsection{Enhanced Situational Awareness via Attention-Residual Network}
 \label{subsec:attention_residual}
@@ -650,7 +666,13 @@ where $M_{u,v} = -\infty$ isolates unobservable kinematic channels (e.g., LOS ra
 &\left[\mathrm{head}_1 \| \cdots \| \mathrm{head}_H\right]\bigr) \mathbf{W}^{O}\Bigr)
 \end{split}
 \end{equation}
-where $\mathbf{W}^{O} \in \mathbb{R}^{d \times d}$ is the output projection and $\operatorname{Flatten}(\cdot)$ reshapes the token sequence back to $\mathbb{R}^d$. The residual connection ensures that primitive flight-state components propagate losslessly to downstream layers.
+where $\mathbf{W}^{O} \in \mathbb{R}^{(n_o d) \times d}$  is the output projection and $\operatorname{Flatten}(\cdot)$ reshapes the concatenated token sequence into $\mathbb{R}^{n_o d}$.
+\hladd{Each row of $\mathbf{A}_j$ specifies how the observable
+kinematic features contribute to the update of one feature token. After the
+head outputs are concatenated and flattened, $\mathbf{W}^{O}$ maps the
+attended information from all feature tokens back to the $d$-dimensional
+latent space for residual fusion with $\mathbf{h}^{(0)}$.}
+The residual connection ensures that primitive flight-state components propagate losslessly to downstream layers.
 
 \emph{2) Residual Block with Layer Normalization:} To deepen the nonlinear representational capacity without gradient vanishing---a critical issue when \hladd{extreme acceleration commands} produce large-magnitude gradients---a stack of $L$ residual blocks follows the attention module. For the $\ell$-th block ($\ell \in \{1, \dots, L\}$) with input $\mathbf{h}^{(\ell)}$ (where $\mathbf{h}^{(1)} = \mathbf{h}_{\mathrm{attn}}$), the forward pass is:
 \begin{align}
@@ -658,7 +680,12 @@ where $\mathbf{W}^{O} \in \mathbb{R}^{d \times d}$ is the output projection and 
 \mathbf{z}_2^{(\ell)} &= \operatorname{LN}_2^{(\ell)} \left( \mathbf{z}_1^{(\ell)}\mathbf{W}_2^{(\ell)} + \mathbf{b}_2^{(\ell)} \right) \label{eq:res_block_inner2} \\
 \mathbf{h}^{(\ell+1)} &= \operatorname{ReLU} \left( \mathbf{z}_2^{(\ell)} + \mathbf{h}^{(\ell)} \right) \label{eq:res_block_out}
 \end{align}
-where $\mathbf{W}_1^{(\ell)}, \mathbf{W}_2^{(\ell)} \in \mathbb{R}^{d \times d}$ are orthogonally initialized. The identity shortcut yields the Jacobian:
+where $\mathbf{W}_1^{(\ell)}, \mathbf{W}_2^{(\ell)} \in \mathbb{R}^{d \times d}$ are orthogonally initialized. 
+\hladd{The nonlinear branch refines the attended representation, while
+the shortcut carries the incoming engagement features directly to the next
+block. This structure reduces the need to reconstruct unchanged kinematic
+information at every layer.}
+The identity shortcut yields the Jacobian:
 \begin{equation}
 \label{eq:jacobian}
 \begin{split}
@@ -681,7 +708,11 @@ where $\mathbf{W}_{\mathrm{GRU}}$ denotes the GRU parameters and $\mathbf{c}_{t-
 \mathbf{a}_i &= [n_{x_i},\,n_{y_i},\,n_{z_i}]^\top \in \mathcal{A}\subset\mathbb{R}^3
 \end{split}
 \end{equation}
-where $\boldsymbol{\mu}_{\boldsymbol{\vartheta}_i}, \boldsymbol{\sigma}_{\boldsymbol{\vartheta}_i}^2: \mathbb{R}^{d_{\mathrm{rnn}}} \to \mathbb{R}^3$ are linear output heads. The \hladd{three-dimensional acceleration action} is clipped to the feasible envelope $\mathcal{A}$ after sampling. Concurrently, the centralized critic shares the same attention-residual backbone but receives the concatenated global state:
+where $\boldsymbol{\mu}_{\boldsymbol{\vartheta}_i}, \boldsymbol{\sigma}_{\boldsymbol{\vartheta}_i}^2: \mathbb{R}^{d_{\mathrm{rnn}}} \to \mathbb{R}^3$ are linear output heads. 
+\hladd{The policy mean specifies the nominal three-axis acceleration
+command, while the diagonal variance controls the spread of the sampled
+commands.}
+The three-dimensional acceleration action is clipped to the feasible envelope $\mathcal{A}$ after sampling. Concurrently, the centralized critic shares the same attention-residual backbone but receives the concatenated global state:
 \begin{equation}
 \label{eq:critic_input}
 s_t = \left[\mathbf{o}_1^{(t)} \| \mathbf{o}_2^{(t)} \| \cdots \| \mathbf{o}_M^{(t)}\right] \in \mathbb{R}^{M \cdot n_o}
@@ -753,7 +784,19 @@ where $\bar{\mathbf{a}}_{\mathcal{A}} = \frac{1}{2}[n_x^{\min}+n_x^{\max},\;n_y^
 \subsection{Robust Optimization via Dual-Clip and Adaptive KL}
 \label{subsec:dual_clip_kl}
 
-Aggressive exploration inherently induces substantial variations in the importance-sampling ratio $r_t(\boldsymbol{\vartheta}) = \pi_{\boldsymbol{\vartheta}}(\mathbf{a}_t \mid o_t) / \pi_{\boldsymbol{\vartheta}_{\mathrm{old}}}(\mathbf{a}_t \mid o_t)$, leading to oscillatory terminal lateral-acceleration commands $n_{y_i}$ that can severely compromise flight stability. We stabilize policy gradient optimization using a dual-clip surrogate objective combined with an adaptive KL divergence penalty.
+% Aggressive exploration inherently induces substantial variations in the importance-sampling ratio $r_t(\boldsymbol{\vartheta}) = \pi_{\boldsymbol{\vartheta}}(\mathbf{a}_t \mid o_t) / \pi_{\boldsymbol{\vartheta}_{\mathrm{old}}}(\mathbf{a}_t \mid o_t)$, leading to oscillatory terminal lateral-acceleration commands $n_{y_i}$ that can severely compromise flight stability. We stabilize policy gradient optimization using a dual-clip surrogate objective combined with an adaptive KL divergence penalty.
+Aggressive exploration
+\hldel{inherently induces}\hladd{can induce}
+substantial variations in the importance-sampling ratio
+$r_t(\boldsymbol{\vartheta}) =
+\pi_{\boldsymbol{\vartheta}}(\mathbf{a}_t \mid o_t) /
+\pi_{\boldsymbol{\vartheta}_{\mathrm{old}}}(\mathbf{a}_t \mid o_t)$,
+\hldel{leading to oscillatory terminal lateral-acceleration commands
+$n_{y_i}$ that can severely compromise flight stability}
+\hladd{increasing the variance of policy updates}.
+We stabilize policy gradient optimization using a dual-clip surrogate
+objective combined with an adaptive KL divergence penalty.
+
 
 \emph{1) Generalized Advantage Estimation:} The advantage $\hat{A}_t$ is computed via GAE with discount $\gamma_{\mathrm{RL}}$ and trace-decay $\lambda_{\mathrm{GAE}} \in [0,1]$:
 \begin{align}
@@ -770,7 +813,16 @@ L^{\mathrm{CLIP}}(\boldsymbol{\vartheta}) = \min \Bigl( &r_t(\boldsymbol{\varthe
 &\operatorname{clip}\!\left(r_t(\boldsymbol{\vartheta}), 1-\epsilon, 1+\epsilon\right)\hat{A}_t \Bigr)
 \end{split}
 \end{equation}
-where $\epsilon \in (0,1)$ is the clipping threshold. When $\hat{A}_t < 0$, the standard clip permits $r_t(\boldsymbol{\vartheta}) \to \infty$, causing catastrophic over-correction of acceleration commands. The Dual-Clip objective addresses this by introducing a floor $c > 1+\epsilon$ applied only when $\hat{A}_t < 0$:
+% where $\epsilon \in (0,1)$ is the clipping threshold. When $\hat{A}_t < 0$, the standard clip permits $r_t(\boldsymbol{\vartheta}) \to \infty$, causing catastrophic over-correction of acceleration commands. The Dual-Clip objective addresses this by introducing a floor $c > 1+\epsilon$ applied only when $\hat{A}_t < 0$:
+where $\epsilon \in (0,1)$ is the clipping threshold. When
+$\hat{A}_t < 0$, the standard clip permits
+$r_t(\boldsymbol{\vartheta}) \to \infty$,
+\hldel{causing catastrophic over-correction of acceleration commands}
+\hladd{allowing large-ratio negative-advantage samples to exert
+disproportionate influence on a mini-batch update}. The Dual-Clip
+objective addresses this by introducing a floor $c > 1+\epsilon$
+applied only when $\hat{A}_t < 0$:
+
 \begin{equation}
 \label{eq:dual_clip_final}
 J^{\mathrm{DC}}(\boldsymbol{\vartheta}) = \mathbb{E}_{t} \left[
@@ -780,6 +832,10 @@ L^{\mathrm{CLIP}}(\boldsymbol{\vartheta}) & \hat{A}_t \geq 0
 \end{cases}
 \right]
 \end{equation}
+\hladd{For a negative-advantage sample, an exceptionally large
+probability ratio can otherwise dominate the mini-batch update. The
+additional maximum limits this negative surrogate contribution, while
+positive-advantage samples retain the standard clipped objective.}
 When $\hat{A}_t < 0$, the $\max$ with $c\,\hat{A}_t$ bounds $r_t(\boldsymbol{\vartheta}) \leq c$, preventing the policy from over-penalizing actions that only marginally degrade performance. When $\hat{A}_t \geq 0$, the standard pessimistic clip suffices. The effective constraint on $r_t(\boldsymbol{\vartheta})$ under the dual-clip is therefore:
 \begin{equation}
 \label{eq:rt_bound}
@@ -805,7 +861,19 @@ The penalty coefficient $\beta_{\mathrm{KL}}$ is updated after each training epo
 \beta_{\mathrm{KL}}^{(k)}, & \text{otherwise}
 \end{cases}
 \end{equation}
-where $\delta_{\mathrm{targ}}$ is the target KL constraint, and $\beta_{\max}=10$, $\beta_{\min}=10^{-4}$ prevent the regularization from dominating or vanishing. When $\hat{D}_{\mathrm{KL}} > 2\delta_{\mathrm{targ}}$, the \hladd{acceleration commands} have shifted too aggressively between updates, risking \hladd{acceleration-limit exceedance}; the $1.5\times$ increase dampens subsequent updates. When $\hat{D}_{\mathrm{KL}} < 0.5\delta_{\mathrm{targ}}$, the $0.9\times$ decay permits finer trajectory refinement.
+% where $\delta_{\mathrm{targ}}$ is the target KL constraint, and $\beta_{\max}=10$, $\beta_{\min}=10^{-4}$ prevent the regularization from dominating or vanishing. 
+% When $\hat{D}_{\mathrm{KL}} > 2\delta_{\mathrm{targ}}$, the \hladd{acceleration commands} have shifted too aggressively between updates, risking \hladd{acceleration-limit exceedance}; the $1.5\times$ increase dampens subsequent updates. When $\hat{D}_{\mathrm{KL}} < 0.5\delta_{\mathrm{targ}}$, the $0.9\times$ decay permits finer trajectory refinement.
+where $\delta_{\mathrm{targ}}$ is the target KL constraint, and
+$\beta_{\max}=10$, $\beta_{\min}=10^{-4}$ prevent the regularization from
+dominating or vanishing. When
+$\hat{D}_{\mathrm{KL}}>2\delta_{\mathrm{targ}}$, the
+\hldel{acceleration commands have shifted too aggressively between updates,
+risking acceleration-limit exceedance}\hladd{policy distribution has shifted
+excessively between updates}; the $1.5\times$ increase
+\hldel{dampens subsequent updates}\hladd{strengthens regularization in
+subsequent updates}. When
+$\hat{D}_{\mathrm{KL}}<0.5\delta_{\mathrm{targ}}$, the $0.9\times$ decay
+permits \hldel{finer trajectory refinement}\hladd{further policy refinement}.
 
 \emph{4) Overall Loss Formulation:} The critic value loss over a mini-batch of size $B$ is:
 \begin{equation}
@@ -817,7 +885,11 @@ Combining the dual-clip surrogate, adaptive KL penalty, value loss, and policy e
 \label{eq:total_loss}
 \mathcal{L}(\boldsymbol{\vartheta},\phi) = - J^{\mathrm{DC}}(\boldsymbol{\vartheta}) + \beta_{\mathrm{KL}}\,\hat{D}_{\mathrm{KL}} + c_v\,L_V(\phi) - c_e\,S[\pi_{\boldsymbol{\vartheta}}]
 \end{equation}
-where $c_v > 0$ and $c_e > 0$ are the value and entropy weighting coefficients. The learning rate follows a cosine annealing schedule $\eta(k) = \eta_{\min} + \frac{1}{2}(\eta_0 - \eta_{\min})(1 + \cos(\pi k / K))$, facilitating coarse trajectory optimization early in training and fine-grained terminal-guidance refinement in later epochs.
+where $c_v > 0$ and $c_e > 0$ are the value and entropy weighting coefficients. 
+\hladd{Minimizing this loss updates the actor through the Dual-Clip
+objective, while the KL and entropy terms regulate policy change and
+exploration. The value-loss term trains the centralized critic.}
+The learning rate follows a cosine annealing schedule $\eta(k) = \eta_{\min} + \frac{1}{2}(\eta_0 - \eta_{\min})(1 + \cos(\pi k / K))$, facilitating coarse trajectory optimization early in training and fine-grained terminal-guidance refinement in later epochs.
 
 \hladd{It is worth clarifying the computational cost of the dual-clip surrogate and the adaptive-KL
 penalty for latency-constrained deployment. Both mechanisms act only on the training loss
@@ -834,7 +906,7 @@ dominated by the network forward/backward passes). Consequently they introduce n
 on the onboard processor, and their cost during training is negligible relative to the network
 forward/backward passes.}
 
-The complete ART-MAPPO workflow, integrating all three modules described above, is illustrated in Fig.~\ref{fig:algorithm_flow}. \hladd{The corresponding training procedure under the CTDE paradigm is detailed in Algorithm~\ref{alg:artmappo}, with each line cross-referenced to the defining equation to support reproducibility.}
+The complete ART-MAPPO workflow, integrating all three modules described above, is illustrated in Fig.~\ref{fig:algorithm_flow}. \hladd{The corresponding training procedure under the CTDE paradigm is detailed in Algorithm~\ref{alg:artmappo}.}
 
 \begin{figure*}[!t]
 \centering
@@ -846,7 +918,7 @@ The complete ART-MAPPO workflow, integrating all three modules described above, 
 
 \begin{algorithm}[!t]
 \color{blue}
-\caption{ART-MAPPO Training for Cooperative Swarm Interception under CTDE}
+\caption{ART-MAPPO for Cooperative Swarm Interception}
 \label{alg:artmappo}
 \begin{algorithmic}[1]
 
@@ -1084,7 +1156,7 @@ With deep neural-network function approximation and stochastic multi-agent
 training, neither conventional MAPPO nor ART-MAPPO provides a formal guarantee
 of monotonic policy improvement or convergence to a global optimum. Conventional
 MAPPO regulates policy updates using a fixed clipped surrogate, whereas
-ART-MAPPO introduces the piecewise Dual-Clip objective in
+ART-MAPPO employs the piecewise Dual-Clip objective in
 \eqref{eq:dual_clip_final}--\eqref{eq:rt_bound} and the adaptive KL penalty in
 \eqref{eq:kl_adapt}. Dual-Clip limits the influence of large-ratio
 negative-advantage samples, while adaptive KL regularization discourages
@@ -1206,7 +1278,9 @@ r_i^{\text{hit}} &= R_{\text{hit}} \cdot \mathbb{I}\!\left(\left\|\mathbf{p}_i^{
 r_i^{\text{coord}} &= -\alpha_c \left| t_{go_i}^{(t)} - \bar{t}_{go}^{(t)} \right|, \quad \bar{t}_{go}^{(t)} = \frac{1}{|\mathcal{G}_i|}\sum_{j \in \mathcal{G}_i} t_{go_j}^{(t)} \label{eq:r_coord}\\
 r_i^{\text{energy}} &= \hladd{-\alpha_e\left(n_{x_i}^2+n_{y_i}^2+n_{z_i}^2\right)} \label{eq:r_energy}
 \end{align}
-where $\mathbf{p}_i^{(t)}=[x_i,y_i,z_i]^\top$ and $\mathbf{p}_{\mathrm{tgt}}=[x_{\mathrm{tgt}},y_{\mathrm{tgt}},z_{\mathrm{tgt}}]^\top$ are the interceptor and target positions, $d_{\text{kill}}$ is the lethal radius, $R_{\text{hit}} > 0$ is the terminal success reward, and $w_k$, $\alpha_k$ are weighting coefficients. The distance reward $r_i^{\text{dist}} \in (0,1]$ provides dense, bounded feedback for target approach. The coordination reward $r_i^{\text{coord}}$ penalizes deviation from the group mean time-to-go $\bar{t}_{go}^{(t)}$, encouraging simultaneous impact; this term is computed by the centralized critic during training and obtained via inter-agent communication during execution. The energy term $r_i^{\text{energy}}$ regularizes control effort to prevent actuator saturation.
+where $\mathbf{p}_i^{(t)}=[x_i,y_i,z_i]^\top$ and $\mathbf{p}_{\mathrm{tgt}}=[x_{\mathrm{tgt}},y_{\mathrm{tgt}},z_{\mathrm{tgt}}]^\top$ are the interceptor and target positions, $d_{\text{kill}}$ is the lethal radius, $R_{\text{hit}} > 0$ is the terminal success reward, and $w_k$, $\alpha_k$ are weighting coefficients. The distance reward $r_i^{\text{dist}} \in (0,1]$ provides dense, bounded feedback for target approach. 
+The coordination reward $r_i^{\text{coord}}$ penalizes deviation from the group mean time-to-go $\bar{t}_{go}^{(t)}$, encouraging simultaneous interception.
+The energy term $r_i^{\text{energy}}$ regularizes control effort to prevent actuator saturation.
 
 \hladd{Each weight $w_k$ emphasizes one tactical dimension: $w_1$ shapes the dense approach signal, $w_2$ aligns the three-dimensional terminal geometry, $w_3$ rewards the terminal hit, $w_4$ promotes impact-time coordination, and $w_5$ penalizes control effort. The sensitivity of $w_1$--$w_5$ is analyzed in Section~\ref{subsec:parameter_sensitivity}.}
 
@@ -1470,9 +1544,8 @@ $\sigma_p=1$~m, and
 $\sigma_v=0.3$~m/s.
 All derived observation variables, including the LOS geometry, closing speed,
 and time-to-go, are recomputed from the delayed noisy Cartesian states.
-The command channel includes a $50$~ms first-order response and a
-$1\%$ packet-loss rate, with the latest valid command retained following a
-packet loss.}
+The communication process is subject to a $1\%$ packet-loss rate, with the
+latest valid state packet retained when a packet is lost.}
 
 \hladd{\emph{2) Hardware-in-the-Loop Semi-Physical Validation:}
 The three-dimensional interception experiment is further implemented on a
@@ -2342,12 +2415,12 @@ stability and training efficiency in large-scale adversarial settings.
 Extensive \hladd{three-dimensional} simulations\hladd{, together with a hardware-in-the-loop
 semi-physical study incorporating communication delay, sensing noise, and packet loss,}
 demonstrate accelerated target assignment, enhanced interception efficiency, improved
-interception success rates, and effective alleviation of \hladd{terminal acceleration saturation}.
+interception success rates, and effective alleviation of terminal acceleration saturation.
 
 For future work, promising directions include cooperative interception under incomplete
 information, dynamic target reassignment in unknown environments, time-constrained assignment
 with explicit completion deadlines, and integration with realistic constraints such as
-\hldel{communication delays,} limited bandwidth, \hladd{aerodynamic coupling,} and heterogeneous UAV capabilities.
+\hldel{communication delays,} limited bandwidth and heterogeneous UAV capabilities.
 
 
 % ---- Bibliography ----
@@ -2358,61 +2431,155 @@ with explicit completion deadlines, and integration with realistic constraints s
 
 
 
-
 \appendices
-\section{\hladd{Summary of Key Notation}}
+\section{\hladd{Summary of Key Variables and Symbols}}
 \label{app:notation}
 
-\hladd{Table~\ref{tab:notation} consolidates the principal variables and symbols used throughout the paper, organized by the engagement model, the IDBO-based target assignment, the ART-MAPPO cooperative guidance, and the simulation metrics. Symbols reused across contexts are disambiguated by their subscripts (e.g., the heading angle $\gamma$ versus the reinforcement-learning discount $\gamma_{\mathrm{RL}}$).}
+\hladd{Table~\ref{tab:notation} consolidates the principal variables and symbols used throughout the paper.}
 
-\begin{table}[!tp]
+\begin{table}[!t]
 \centering
-\caption{\hladd{Summary of Key Notation Used Throughout the Paper}}
+\caption{\hladd{Key Variables and Symbols in Sections II--IV}}
 \label{tab:notation}
 {\color{blue}
-\footnotesize
-\setlength{\tabcolsep}{3pt}
-\renewcommand{\arraystretch}{1.2}
-\begin{tabular}{@{}l p{1.0in} l p{1.0in}@{}}
+\scriptsize
+\setlength{\tabcolsep}{1.8pt}
+\renewcommand{\arraystretch}{1.10}
+\begin{tabular}{@{}
+>{\centering\arraybackslash}p{0.70in}
+>{\raggedright\arraybackslash}p{0.92in}
+>{\centering\arraybackslash}p{0.70in}
+>{\raggedright\arraybackslash}p{0.92in}@{}}
 \toprule
-\textbf{Symbol} & \textbf{Description} & \textbf{Symbol} & \textbf{Description}\\
+\textbf{Symbol} & \textbf{Description}
+& \textbf{Symbol} & \textbf{Description} \\
 \midrule
-\multicolumn{4}{@{}l}{\textit{Engagement geometry and kinematics}}\\[1pt]
-$(x,y,z)$ & Position coordinates of a UAV & $V$ & Speed (velocity magnitude)\\
-$\gamma$ & \hladd{Heading angle} & $\theta$ & \hladd{Flight-path angle}\\
-$\mathbf{p}_A,\mathbf{p}_D$ & Attacker / defender position & $\mathbf{v}_A,\mathbf{v}_D$ & Attacker / defender velocity\\
-$r$ & Relative range between UAVs & $\dot r$ & Range rate\\
-\hladd{$q^{\gamma},q^{\theta}$} & \hladd{LOS azimuth / elevation angle} & \hladd{$\dot q^{\gamma},\dot q^{\theta}$} & \hladd{LOS azimuth / elevation rate}\\
-\hladd{$n_x,n_y,n_z$} & \hladd{Axial / lateral / normal acceleration} & $t_{go}$ & Time-to-go\\
-$\mathrm{ZEM}$ & Zero-effort miss & $g$ & Gravitational acceleration\\[2pt]
-\multicolumn{4}{@{}l}{\textit{Target assignment (IDBO)}}\\[1pt]
-$\mathcal{U},\mathcal{T}$ & Interceptor / target set & $M,N$ & No.\ of interceptors / targets\\
-$X_{ij}$ & Binary assignment ($u_i\!\to\!t_j$) & $P_{ij}$ & Interception probability\\
-\shortstack{$w_{1,\mathrm{IDBO}}$\\$w_{2,\mathrm{IDBO}}$} & IDBO assignment weights & $J$ & Expected No.\ of surviving targets\\
-$\mathbf{X}$ & Assignment matrix & $L_{\max}$ & Per-target interceptor capacity\\
-$\mathcal{F}_i$ & IDBO fitness of $u_i$ & $A_{ij}$ & Adversarial advantage\\
-$\mathcal{N}_i$ & Comm.\ neighbor set of $u_i$ & \shortstack{$\alpha,\beta,\delta$\\$\gamma_{\mathrm{IDBO}},\eta_{\mathrm{IDBO}}$} & Adaptive IDBO operator coeff.\\
-$\Gamma^{(k)}$ & Swarm disagreement metric & $D$ & Communication-graph diameter\\[2pt]
-\multicolumn{4}{@{}l}{\textit{Cooperative guidance (ART-MAPPO)}}\\[1pt]
-$\mathbf{o}_i$ & Observation of interceptor $i$ & $s_t$ & Concatenated global state\\
-$\pi_{\boldsymbol{\vartheta}}$ & Actor policy (params $\boldsymbol{\vartheta}$) & $V_{\phi}$ & Centralized critic (params $\phi$)\\
-\hladd{$\mathbf{a}_i$} & \hladd{Acceleration command} & $r_i$ & Per-step reward of $i$\\
-$w_1,\dots,w_5$ & Reward-component weights & $\gamma_{\mathrm{RL}}$ & Discount factor\\
-$\hat{A}_t$ & GAE advantage & $\lambda_{\mathrm{GAE}}$ & GAE trace-decay\\
-$r_t(\boldsymbol{\vartheta})$ & Importance-sampling ratio & $\epsilon$ & PPO clip threshold\\
-$c$ & Dual-clip floor ($c\!>\!1{+}\epsilon$) & $\hat{D}_{\mathrm{KL}}$ & Approximate KL divergence\\
-$\delta_{\mathrm{targ}}$ & Target KL constraint & $\beta_{\mathrm{KL}}$ & Adaptive KL coefficient\\
-$\mathcal{T}_i$ & Trust level of interceptor $i$ & $\beta(\mathcal{T}_i)$ & Trust-modulated exploration\\
-$H,L$ & No.\ of attention heads / residual blocks & $c_e$ & Entropy coefficient\\[2pt]
-\multicolumn{4}{@{}l}{\textit{Simulation and evaluation metrics}}\\[1pt]
-$E_{co\text{-}time}$ & Temporal-coordination error & $E_n$ & \hladd{Mean terminal lateral acceleration}\\
-$E_{miss}$ & Mean terminal miss distance & $E_t$ & Coordinated interception duration\\
-$\mathrm{ISR}$ & Interception success rate & $d_{\mathrm{kill}}$ & Lethal (hit) radius\\
-$\tau_s$ & Sensing / transport delay & $\sigma_p,\sigma_v$ & Position / velocity noise std.\\
+
+\multicolumn{4}{@{}l}{\textit{Engagement model}}\\[1pt]
+
+$(x,y,z)$
+& UAV position coordinates
+& $V,\gamma,\theta$
+& Speed, heading, and flight-path angle \\
+
+\shortstack{$\mathbf{p}_A,\mathbf{p}_D$\\
+$\mathbf{v}_A,\mathbf{v}_D$}
+& Attacker/defender positions and velocities
+& $\mathbf{r}_{AD},\boldsymbol{\ell}_{AD}$
+& Relative-position vector and LOS unit vector \\
+
+$r,\dot r$
+& Relative range and range rate
+& $q^\gamma,q^\theta$
+& LOS azimuth and elevation \\
+
+$n_x,n_y,n_z$
+& Axial, lateral, and normal accelerations
+& $t_{go}$
+& Estimated time-to-go \\
+
+$\operatorname{ZEM}$
+& Zero-effort-miss distance
+& 
+&  \\[2pt]
+
+\multicolumn{4}{@{}l}{\textit{IDBO target assignment}}\\[1pt]
+
+$\mathcal{U},\mathcal{T}$
+& Interceptor and target sets
+& $M,N$
+& Numbers of interceptors and targets \\
+
+$X_{ij}$
+& Binary assignment of $u_i$ to $t_j$
+& $P_{ij}$
+& Composite interception probability \\
+
+\shortstack{$w_{1,\mathrm{IDBO}}$\\
+$w_{2,\mathrm{IDBO}}$}
+& Reachability and geometry weights
+& $L_{\max}$
+& Per-target interceptor capacity \\
+
+$\mathbf{x}_i$
+& Target-preference vector of $u_i$
+& $\mathcal{F}_i$
+& Local IDBO fitness \\
+
+$A_{ij}$
+& Adversarial advantage for pair $(i,j)$
+& $\Psi_{ij}$
+& Assignment-saturation penalty \\
+
+$\mathcal{N}_i$
+& Communication-neighbor set of $u_i$
+& \shortstack{$c_{ij}$\\$\mathcal{Z}_j$}
+& Bid and winner list for target $t_j$ \\
+
+$c_t$
+& Common IDBO decay schedule
+& \shortstack{$\Gamma^{(k)}$\\$\epsilon_{\mathrm{IDBO}}$}
+& Swarm disagreement and convergence tolerance \\[2pt]
+
+\multicolumn{4}{@{}l}{\textit{ART-MAPPO cooperative guidance}}\\[1pt]
+
+$\mathbf{o}_i^{(t)}$
+& Local observation of interceptor $i$
+& $s_t$
+& Centralized global state \\
+
+$\mathbf{A}_j$
+& Attention matrix of head $j$
+& $\mathbf{c}_t$
+& GRU hidden state \\
+
+$\pi_{\boldsymbol{\vartheta}_i}$
+& Decentralized actor policy
+& $V_\phi(s_t)$
+& Centralized critic value \\
+
+$\mathbf{a}_i$
+& Three-axis acceleration command
+& $\mathcal{T}_i^{(k)}$
+& Smoothed trust level \\
+
+$\tilde{R}_i^{(k)}$
+& Normalized relative return
+& \shortstack{$\beta(\mathcal{T}_i)$\\
+$\pi_{\mathrm{guided}}^i$}
+& Guided-policy weight and distribution \\
+
+$\hat{A}_t$
+& GAE advantage estimate
+& \shortstack{$r_t(\boldsymbol{\vartheta})$\\$\epsilon$}
+& Probability ratio and PPO clip threshold \\
+
+$J^{\mathrm{DC}},c$
+& Dual-Clip objective and floor
+& \shortstack{$\hat{D}_{\mathrm{KL}}$\\
+$\beta_{\mathrm{KL}},\delta_{\mathrm{targ}}$}
+& KL estimate, penalty coefficient, and target \\
+
+$r_i^{(t)}$
+& Per-step composite reward
+& $w_1,\ldots,w_5$
+& Reward-component weights \\
+
+$\mathcal{G}_i$
+& Same-target interceptor group
+& $\bar{t}_{go}^{(t)}$
+& Group mean time-to-go \\
+
+$L_V(\phi)$
+& Centralized critic value loss
+& $\mathcal{L}(\boldsymbol{\vartheta},\phi)$
+& Overall training loss \\
+
 \bottomrule
 \end{tabular}
 }
 \end{table}
+
 
 
 

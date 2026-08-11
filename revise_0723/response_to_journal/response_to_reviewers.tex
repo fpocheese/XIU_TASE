@@ -64,12 +64,12 @@ Interception Strategy for Maneuvering Swarms with Target Assignment''
 \end{center}
 \bigskip
 
-\noindent We thank the reviewer for the careful reading and the constructive
-comments. Below, each comment is reproduced verbatim (grey box), followed by our
-point-by-point response, the exact location and wording of the corresponding
-revision in the manuscript (blue box, matching the blue highlight in the revised
-PDF), and the supporting figures prepared for this letter. Equation and section
-numbers refer to the revised manuscript.
+% \noindent We thank the reviewer for the careful reading and the constructive
+% comments. Below, each comment is reproduced verbatim (grey box), followed by our
+% point-by-point response, the exact location and wording of the corresponding
+% revision in the manuscript (blue box, matching the blue highlight in the revised
+% PDF), and the supporting figures prepared for this letter. Equation and section
+% numbers refer to the revised manuscript.
 
 \bigskip
 \hrule
@@ -81,6 +81,7 @@ numbers refer to the revised manuscript.
 % =====================================================================
 %  Re1_1
 % =====================================================================
+
 \subsection*{Comment 1.1}
 
 \begin{reviewercomment}{Reviewer comment 1.1}
@@ -88,171 +89,578 @@ Provide a concise notation table summarizing key variables and symbols used
 throughout the paper.
 \end{reviewercomment}
 
-\rsp We thank the reviewer for this constructive suggestion. We have added a
-dedicated notation appendix (\textbf{Appendix~A}, ``Summary of Key Notation'') to
-the revised manuscript. It consolidates the principal variables and symbols into a
-single table, organized by the four themes of the paper: the engagement geometry
-and kinematics, the IDBO-based target assignment, the ART-MAPPO cooperative
-guidance, and the simulation/evaluation metrics. Symbols that recur across
-contexts are disambiguated by their subscripts (for example, the heading angle
-$\gamma$ versus the reinforcement-learning discount $\gamma_{\mathrm{RL}}$, and the
-assignment weights $w_1,w_2$ versus the reward-component weights $w_1,\dots,w_5$).
-% For the reviewer's convenience, the same table is reproduced below as
-% Table~R1.
+\rsp We sincerely thank the reviewer for this helpful suggestion. We agree
+that the principal symbols were previously defined across several equations,
+making it inconvenient for readers to locate their meanings. We have therefore
+added a dedicated appendix entitled ``Summary of Key Variables and Symbols.''
 
-% \begin{table}[h]
-% \centering
-% \caption*{\small\textbf{Table~R1.} Summary of key notation used throughout the paper (identical to Appendix~A of the revised manuscript).}
-% \footnotesize
-% \setlength{\tabcolsep}{5pt}
-% \renewcommand{\arraystretch}{1.2}
-% \begin{tabular}{@{}l p{0.30\textwidth} l p{0.30\textwidth}@{}}
-% \toprule
-% \textbf{Symbol} & \textbf{Description} & \textbf{Symbol} & \textbf{Description}\\
-% \midrule
-% \multicolumn{4}{@{}l}{\textit{Engagement geometry and kinematics}}\\[1pt]
-% $(x,y,z)$ & Position coordinates of a UAV & $V$ & Speed (velocity magnitude)\\
-% $\gamma$ & Heading (azimuth) angle & $\theta$ & Flight-path (pitch) angle\\
-% $\mathbf{p}_A,\mathbf{p}_D$ & Attacker / defender position & $\mathbf{v}_A,\mathbf{v}_D$ & Attacker / defender velocity\\
-% $r$ & Relative range between UAVs & $\dot r$ & Range rate\\
-% $q$ & Line-of-sight (LOS) angle & $\dot q$ & LOS angular rate\\
-% $n_x,n_y,n_z$ & Axial / horizontal / vertical overload & $t_{go}$ & Time-to-go\\
-% $\mathrm{ZEM}$ & Zero-effort miss & $g$ & Gravitational acceleration\\[2pt]
-% \multicolumn{4}{@{}l}{\textit{Target assignment (IDBO)}}\\[1pt]
-% $\mathcal{U},\mathcal{T}$ & Interceptor / target set & $M,N$ & No.\ of interceptors / targets\\
-% $X_{ij}$ & Binary assignment ($u_i\!\to\!t_j$) & $P_{ij}$ & Interception probability\\
-% $w_1,w_2$ & Assignment weights ($w_1{+}w_2{=}1$) & $J$ & Expected No.\ of surviving targets\\
-% $\mathbf{X}$ & Assignment matrix & $L_{\max}$ & Per-target interceptor capacity\\
-% $\mathcal{F}_i$ & IDBO fitness of $u_i$ & $A_{ij}$ & Adversarial advantage\\
-% $\mathcal{N}_i$ & Comm.\ neighbor set of $u_i$ & $\alpha,\beta,\delta,\eta$ & Adaptive IDBO operator coeff.\\
-% $\Gamma^{(k)}$ & Swarm disagreement metric & $D$ & Communication-graph diameter\\[2pt]
-% \multicolumn{4}{@{}l}{\textit{Cooperative guidance (ART-MAPPO)}}\\[1pt]
-% $\mathbf{o}_i$ & Observation of interceptor $i$ & $s_t$ & Concatenated global state\\
-% $\pi_{\theta}$ & Actor policy (params $\theta$) & $V_{\phi}$ & Centralized critic (params $\phi$)\\
-% $a_i$ & Action (overload command) & $r_i$ & Per-step reward of $i$\\
-% $w_1,\dots,w_5$ & Reward-component weights & $\gamma_{\mathrm{RL}}$ & Discount factor\\
-% $\hat{A}_t$ & GAE advantage & $\lambda_{\mathrm{GAE}}$ & GAE trace-decay\\
-% $r_t(\theta)$ & Importance-sampling ratio & $\epsilon$ & PPO clip threshold\\
-% $c$ & Dual-clip floor ($c\!>\!1{+}\epsilon$) & $\hat{D}_{\mathrm{KL}}$ & Approximate KL divergence\\
-% $\delta_{\mathrm{targ}}$ & Target KL constraint & $\beta_{\mathrm{KL}}$ & Adaptive KL coefficient\\
-% $\mathcal{T}_i$ & Trust level of interceptor $i$ & $\beta(\mathcal{T}_i)$ & Trust-modulated exploration\\
-% $H,L$ & No.\ of attention heads / residual blocks & $c_e$ & Entropy coefficient\\[2pt]
-% \multicolumn{4}{@{}l}{\textit{Simulation and evaluation metrics}}\\[1pt]
-% $E_{co\text{-}time}$ & Temporal-coordination error & $E_n$ & Mean terminal overload\\
-% $E_{miss}$ & Mean terminal miss distance & $E_t$ & Coordinated interception duration\\
-% $\mathrm{ISR}$ & Interception success rate & $d_{\mathrm{kill}}$ & Lethal (hit) radius\\
-% $\tau_s$ & Sensing / transport delay & $\sigma_p,\sigma_v$ & Position / velocity noise std.\\
-% \bottomrule
-% \end{tabular}
-% \end{table}
+The symbols are organized into three groups corresponding to
+the engagement model, IDBO target assignment, and ART-MAPPO cooperative
+guidance. The complete addition is reproduced below.
+
+\loc Appendix~A (\emph{Summary of Key Variables and Symbols}), immediately
+following the reference list.
+
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+{\color{addblue}
+
+\noindent\textbf{Appendix A: Summary of Key Variables and Symbols}
+
+\medskip
+\noindent Table~A summarizes the principal variables and symbols used
+throughout the paper.
+
+\medskip
+\begin{center}
+\textbf{Key Variables and Symbols in Sections II--IV}
+
+\scriptsize
+\setlength{\tabcolsep}{2.5pt}
+\renewcommand{\arraystretch}{1.10}
+\begin{tabular}{@{}p{0.92in}p{1.55in}p{0.92in}p{1.55in}@{}}
+\toprule
+\textbf{Symbol} & \textbf{Description}
+& \textbf{Symbol} & \textbf{Description} \\
+\midrule
+
+\multicolumn{4}{@{}l}{\textit{Engagement model}}\\[1pt]
+
+$(x,y,z)$
+& UAV position coordinates
+& $V,\gamma,\theta$
+& Speed, heading, and flight-path angle \\
+
+\shortstack{$\mathbf{p}_A,\mathbf{p}_D$\\
+$\mathbf{v}_A,\mathbf{v}_D$}
+& Attacker/defender positions and velocities
+& $\mathbf{r}_{AD},\boldsymbol{\ell}_{AD}$
+& Relative-position vector and LOS unit vector \\
+
+$r,\dot r$
+& Relative range and range rate
+& $q^\gamma,q^\theta$
+& LOS azimuth and elevation \\
+
+$n_x,n_y,n_z$
+& Axial, lateral, and normal accelerations
+& $t_{go}$
+& Estimated time-to-go \\
+
+$\operatorname{ZEM}$
+& Zero-effort-miss distance
+&
+& \\[2pt]
+
+\multicolumn{4}{@{}l}{\textit{IDBO target assignment}}\\[1pt]
+
+$\mathcal{U},\mathcal{T}$
+& Interceptor and target sets
+& $M,N$
+& Numbers of interceptors and targets \\
+
+$X_{ij}$
+& Binary assignment of $u_i$ to $t_j$
+& $P_{ij}$
+& Composite interception probability \\
+
+\shortstack{$w_{1,\mathrm{IDBO}}$\\
+$w_{2,\mathrm{IDBO}}$}
+& Reachability and geometry weights
+& $L_{\max}$
+& Per-target interceptor capacity \\
+
+$\mathbf{x}_i$
+& Target-preference vector of $u_i$
+& $\mathcal{F}_i$
+& Local IDBO fitness \\
+
+$A_{ij}$
+& Adversarial advantage for pair $(i,j)$
+& $\Psi_{ij}$
+& Assignment-saturation penalty \\
+
+$\mathcal{N}_i$
+& Communication-neighbor set of $u_i$
+& \shortstack{$c_{ij}$\\$\mathcal{Z}_j$}
+& Bid and winner list for target $t_j$ \\
+
+$c_t$
+& Common IDBO decay schedule
+& \shortstack{$\Gamma^{(k)}$\\$\epsilon_{\mathrm{IDBO}}$}
+& Swarm disagreement and convergence tolerance \\[2pt]
+
+\multicolumn{4}{@{}l}{\textit{ART-MAPPO cooperative guidance}}\\[1pt]
+
+$\mathbf{o}_i^{(t)}$
+& Local observation of interceptor $i$
+& $s_t$
+& Centralized global state \\
+
+$\mathbf{A}_j$
+& Attention matrix of head $j$
+& $\mathbf{c}_t$
+& GRU hidden state \\
+
+$\pi_{\boldsymbol{\vartheta}_i}$
+& Decentralized actor policy
+& $V_\phi(s_t)$
+& Centralized critic value \\
+
+$\mathbf{a}_i$
+& Three-axis acceleration command
+& $\mathcal{T}_i^{(k)}$
+& Smoothed trust level \\
+
+$\tilde{R}_i^{(k)}$
+& Normalized relative return
+& \shortstack{$\beta(\mathcal{T}_i)$\\
+$\pi_{\mathrm{guided}}^i$}
+& Guided-policy weight and distribution \\
+
+$\hat{A}_t$
+& GAE advantage estimate
+& \shortstack{$r_t(\boldsymbol{\vartheta})$\\$\epsilon$}
+& Probability ratio and PPO clip threshold \\
+
+$J^{\mathrm{DC}},c$
+& Dual-Clip objective and floor
+& \shortstack{$\hat{D}_{\mathrm{KL}}$\\
+$\beta_{\mathrm{KL}},\delta_{\mathrm{targ}}$}
+& KL estimate, penalty coefficient, and target \\
+
+$r_i^{(t)}$
+& Per-step composite reward
+& $w_1,\ldots,w_5$
+& Reward-component weights \\
+
+$\mathcal{G}_i$
+& Same-target interceptor group
+& $\bar{t}_{go}^{(t)}$
+& Group mean time-to-go \\
+
+$L_V(\phi)$
+& Centralized critic value loss
+& $\mathcal{L}(\boldsymbol{\vartheta},\phi)$
+& Overall training loss \\
+
+\bottomrule
+\end{tabular}
+\end{center}
+}
+\end{tcolorbox}
+
+
 
 % =====================================================================
 %  Re1_2
 % =====================================================================
-\subsection*{Comment 1.2 }
+
+
+\subsection*{Comment 1.2}
 
 \begin{reviewercomment}{Reviewer comment 1.2}
 Include pseudocode or algorithm boxes for IDBO and ART-MAPPO to improve
 reproducibility.
 \end{reviewercomment}
 
-\rsp We thank the reviewer for this helpful suggestion. We have added two formal
-algorithm boxes to the manuscript: \textbf{Algorithm~1} (Distributed
-Consensus-Based IDBO) at the end of Section~III-B, and \textbf{Algorithm~2}
-(ART-MAPPO training under CTDE) at the end of Section~IV-D. Because the comment
-explicitly targets reproducibility, these boxes are added to the \emph{main paper}
-(highlighted in blue in the revised manuscript). Crucially, \emph{every line of
-both algorithms is cross-referenced to the equation that defines it}, so each step
-can be reproduced directly from the corresponding formula. Both boxes use the
-\texttt{algorithm}/\texttt{algorithmic} environments already provided by the
-IEEEtran template; no equations were modified, the manuscript still compiles
-cleanly, and all equation cross-references inside the boxes resolve correctly.
+\rsp We sincerely thank the reviewer for this valuable suggestion. We agree
+that the equations in the original manuscript defined the individual
+components of IDBO and ART-MAPPO, but did not provide sufficiently compact
+procedural descriptions for reproducing the complete algorithms. We have
+therefore added two pseudocode boxes to the revised manuscript.
 
-\loc Section~III-B, immediately after Eq.~(30) (Algorithm~1); Section~IV-D,
-immediately after the ART-MAPPO workflow figure (Algorithm~2). For the reviewer's
-convenience the two boxes as they now appear in the manuscript are reproduced below.
+Algorithm~1 summarizes the complete distributed IDBO assignment procedure,
+including local candidate generation, fitness evaluation, preference
+thresholding, bid exchange, conflict resolution, and the consensus stopping
+criterion. Algorithm~2 presents the ART-MAPPO training procedure under the
+CTDE paradigm, covering decentralized rollout collection, trust updating,
+advantage estimation, centralized actor--critic optimization, and adaptive
+KL regulation. The steps in both algorithms are cross-referenced to their
+governing equations in the revised manuscript. The two added algorithms are
+reproduced below for the reviewer's convenience.
 
-\begin{algorithm}[H]
-\caption{Distributed Consensus-Based IDBO for Cooperative Target Assignment (per interceptor $u_i$)}
+\medskip
+\noindent\textbf{(1) IDBO target-assignment pseudocode.}
+
+\loc Section~III-B (\emph{Distributed Consensus-Based IDBO Framework}),
+immediately after the convergence criterion in Eq.~(26) and before the
+per-UAV complexity analysis in Eq.~(27).
+
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+{\color{addblue}
+\noindent\textbf{Algorithm 1: IDBO Target Assignment}
+
+\medskip
 \begin{algorithmic}[1]
-\REQUIRE Interceptor set $\mathcal{U}$, target set $\mathcal{T}$, probability matrix $\mathbf{P}$~(12), neighbors $\mathcal{N}_i$, capacity $L_{\max}$, IDBO iterations $T$, population size $N_{\mathrm{pop}}$, threshold $\epsilon$
-\ENSURE Converged assignment $\mathbf{X}^\ast$
-\STATE Initialize preference population $\{\mathbf{x}_i\}$, winner lists $\mathcal{Z}_j\!\leftarrow\!\emptyset$, timestamps $\mathbf{y}_i$, iteration $k\!\leftarrow\!0$
+\REQUIRE Interceptor and target sets $\mathcal{U},\mathcal{T}$;
+engagement states; communication graph; capacity $L_{\max}$;
+local population size $N_{\mathrm{pop}}$; local search horizon $T$;
+tolerance $\epsilon_{\mathrm{IDBO}}$
+
+\ENSURE Feasible consensus assignment $\mathbf{X}^{\ast}$
+
+\STATE Each interceptor $u_i$ initializes a local preference population,
+assignment replica, bid/winner records, and timestamps;
+set $k\!\leftarrow\!0$
+
 \REPEAT
-  \STATE {\itshape // Phase 1: local metaheuristic optimization}
+
+  \STATE Evaluate $\mathbf{P}$ using Eq.~(8) and the adversarial
+  advantages using Eq.~(15)
+
   \FOR{$t=1$ to $T$}
-    \STATE Set decaying coefficients $c_t=c_0(1-t/T)$ for $\{\alpha,\beta,\gamma,\delta,\delta',\eta,\sigma_d\}$
-    \STATE Evaluate fitness $\mathcal{F}_i$~(17) and advantage $\mathbf{A}_i$~(19)
-    \STATE Update $\mathbf{x}_i$ by Rolling/Dancing/Breeding/Stealing~(20)--(23)
-  \ENDFOR
-  \STATE Binarize preferences by advantage-adaptive thresholding~(24)
-  \STATE {\itshape // Phase 2: auction-based distributed consensus}
-  \STATE Compute bids $c_{ij}$~(25)
-  \STATE Exchange winner lists with $\mathcal{N}_i$; update top-$L_{\max}$ set $\mathcal{Z}_j$~(26)
-  \STATE {\itshape // Phase 3: adversarial-information update}
-  \STATE Refresh advantages $\mathbf{A}_i^{(k+1)}$ from the consensus assignment
-  \STATE Compute swarm disagreement $\Gamma^{(k)}$~(30);\; $k\!\leftarrow\!k+1$
-\UNTIL{$\Gamma^{(k)}<\epsilon$}
-\STATE \textbf{return} consensus assignment $\mathbf{X}^\ast$
-\end{algorithmic}
-\end{algorithm}
 
-\begin{algorithm}[H]
-\caption{ART-MAPPO Training for Cooperative Swarm Interception (CTDE)}
+    \STATE Set the linearly decaying coefficients
+    $c_t=c_0(1-t/T)$ for the four IDBO operators
+
+    \STATE Evaluate all local candidates with
+    $\mathcal{F}_i$ in Eq.~(13)
+
+    \STATE Generate candidates using the rolling, dancing, breeding,
+    and stealing operators according to Eqs.~(16)--(19)
+
+  \ENDFOR
+
+  \STATE Select and binarize the best local preference using Eq.~(20);
+  compute the target bids using Eq.~(21)
+
+  \STATE Exchange local records with $\mathcal{N}_i$, update the
+  top-$L_{\max}$ winner lists using Eq.~(22), and resolve assignment
+  conflicts subject to the constraints in Eq.~(11)
+
+  \STATE Update the local feasible assignment replica and adversarial
+  information; evaluate consensus disagreement;
+  $k\!\leftarrow\!k+1$
+
+\UNTIL{the disagreement falls below $\epsilon_{\mathrm{IDBO}}$}
+
+\STATE Set $\mathbf{X}^{\ast}$ to the common feasible assignment replica
+
+\STATE \textbf{return} $\mathbf{X}^{\ast}$
+
+\end{algorithmic}
+}
+\end{tcolorbox}
+
+\medskip
+\noindent\textbf{(2) ART-MAPPO training pseudocode.}
+
+\loc Section~IV-C (\emph{Robust Optimization via Dual-Clip and Adaptive
+KL}), immediately after the ART-MAPPO workflow in Fig.~5 and before
+Section~IV-D (\emph{Mechanistic Comparison with Conventional MAPPO}).
+
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+{\color{addblue}
+\noindent\textbf{Algorithm 2: ART-MAPPO for Cooperative Swarm Interception}
+
+\medskip
 \begin{algorithmic}[1]
-\REQUIRE Actor/critic params $\theta,\phi$; clip $\epsilon$, dual-clip floor $c$; target KL $\delta_{\mathrm{targ}}$; rates $\alpha_T,\rho,\tau_T$; epochs $K$
-\ENSURE Trained decentralized policy $\pi_{\theta}$
-\STATE Initialize $\theta,\phi$, trust $\mathcal{T}_i\!\leftarrow\!0.5$, KL weight $\beta_{\mathrm{KL}}$, running stats $\mu_R,\sigma_R^2$
-\FOR{episode $k=1$ to $K$}
-  \STATE {\itshape // Decentralized rollout collection}
-  \FOR{each step $t$ and interceptor $i$}
-    \STATE Encode $\mathbf{o}_i^{(t)}$; attention--residual features~(32)--(35), temporal state $\mathbf{c}_t$~(40)
-    \STATE Form policy $\pi_{\theta_i}$~(41); sample action via trust-blended policy~(47), (48) with $\beta(\mathcal{T}_i)=1-\mathcal{T}_i$
-    \STATE Clip $a_i$ to envelope $\mathcal{A}$; step environment; store transition
-  \ENDFOR
-  \STATE {\itshape // Trust update from episode returns}
-  \STATE Update $\mu_R,\sigma_R^2$~(43), (44); normalize $\tilde{R}_i^{(k)}$~(45)
-  \STATE Smooth trust $\mathcal{T}_i^{(k+1)}$~(46)
-  \STATE {\itshape // Centralized optimization (shared critic on global state~(42))}
-  \STATE Compute advantages $\hat{A}_t$ and value targets via GAE~(50), (51)
-  \FOR{each mini-batch epoch}
-    \STATE Evaluate dual-clip surrogate $J^{\mathrm{DC}}(\theta)$~(52), (53)
-    \STATE Estimate $\hat{D}_{\mathrm{KL}}$~(55); value loss $L_V(\phi)$~(57)
-    \STATE Minimize total loss $\mathcal{L}(\theta,\phi)$~(58) with AdamW (cosine LR)
-  \ENDFOR
-  \STATE Adapt KL weight $\beta_{\mathrm{KL}}^{(k+1)}$~(56)
-\ENDFOR
-\STATE \textbf{return} decentralized policy $\pi_{\theta}$
-\end{algorithmic}
-\end{algorithm}
 
-% \clearpage
+\REQUIRE Actor parameters
+$\{\boldsymbol{\vartheta}_i\}_{i=1}^{M}$;
+centralized critic parameters $\phi$; episode horizon $T$;
+training episodes $K$; PPO clip parameter $\epsilon$;
+dual-clip floor $c$; target KL divergence $\delta_{\mathrm{targ}}$;
+trust parameters $\alpha_T$, $\rho$, and $\tau_T$;
+optimizer parameters
+
+\ENSURE Trained decentralized policies
+$\{\pi_{\boldsymbol{\vartheta}_i}\}_{i=1}^{M}$
+
+\STATE Initialize $\{\boldsymbol{\vartheta}_i\}_{i=1}^{M}$ and $\phi$;
+set $\mathcal{T}_i\leftarrow0.5$ for each interceptor;
+initialize $\beta_{\mathrm{KL}}$ and the running return statistics
+$\mu_R$ and $\sigma_R^2$
+
+\FOR{episode $k=1$ to $K$}
+
+  \STATE Reset the environment, clear the rollout buffer,
+  and reset $\mathbf{c}_{i,0}$ for each interceptor
+
+  \STATE Set
+  $\boldsymbol{\vartheta}_{i,\mathrm{old}}
+  \leftarrow\boldsymbol{\vartheta}_i$
+  for all $i=1,\ldots,M$
+
+  \STATE {\itshape // Decentralized rollout collection}
+
+  \FOR{$t=0$ to $T-1$}
+
+    \FOR{all interceptors $i=1,\ldots,M$ in parallel}
+
+      \STATE Encode $\mathbf{o}_i^{(t)}$ using the attention--residual
+      network according to Eqs.~(28)--(34), and update the temporal state
+      $\mathbf{c}_{i,t}$ using the GRU in Eq.~(36)
+
+      \STATE Form the policy
+      $\pi_{\boldsymbol{\vartheta}_i}
+      (\cdot\mid\mathbf{o}_i^{(t)})$
+      according to Eq.~(37), and sample $\mathbf{a}_{i,t}$
+      according to Eqs.~(43)--(44), with
+      $\beta(\mathcal{T}_i)=1-\mathcal{T}_i$
+
+      \STATE Clip $\mathbf{a}_{i,t}$ to the three-dimensional feasible
+      action envelope $\mathcal{A}$
+
+    \ENDFOR
+
+    \STATE Step the environment once using the joint action
+    $\mathbf{a}_t=(\mathbf{a}_{1,t},\ldots,\mathbf{a}_{M,t})$
+    and store the joint transition in the rollout buffer
+
+  \ENDFOR
+
+  \STATE {\itshape // Trust update based on episode returns}
+
+  \STATE Update $\mu_R$ and $\sigma_R^2$ using Eqs.~(39)--(40),
+  and compute the normalized return $\widetilde{R}_i^{(k)}$
+  using Eq.~(41)
+
+  \STATE Update the trust level
+  $\mathcal{T}_i^{(k+1)}$ using Eq.~(42)
+
+  \STATE {\itshape // Centralized optimization using the global state
+  defined in Eq.~(38)}
+
+  \STATE Compute the GAE advantages $\hat{A}_t$ and value targets
+  using Eqs.~(46)--(47)
+
+  \FOR{each mini-batch update}
+
+    \STATE Evaluate the dual-clip surrogate objective
+    $J^{\mathrm{DC}}(\boldsymbol{\vartheta})$
+    using Eqs.~(48)--(49)
+
+    \STATE Estimate $\widehat{D}_{\mathrm{KL}}$ using Eq.~(51),
+    and compute the value loss $L_V(\phi)$ using Eq.~(53)
+
+    \STATE Update $\{\boldsymbol{\vartheta}_i\}_{i=1}^{M}$ and $\phi$
+    by minimizing the total loss
+    $\mathcal{L}(\boldsymbol{\vartheta},\phi)$ in Eq.~(54)
+    using AdamW with cosine learning-rate scheduling
+
+  \ENDFOR
+
+  \STATE Adapt the KL weight
+  $\beta_{\mathrm{KL}}^{(k+1)}$ using Eq.~(52)
+
+\ENDFOR
+
+\STATE \textbf{return}
+$\{\pi_{\boldsymbol{\vartheta}_i}\}_{i=1}^{M}$
+
+\end{algorithmic}
+}
+\end{tcolorbox}
+
 
 
 % =====================================================================
 %  Re1_3
 % =====================================================================
-\subsection*{Comment 1.3 }
+\subsection*{Comment 1.3}
 
 \begin{reviewercomment}{Reviewer comment 1.3}
-Add intuitive explanations before or alongside major equations, especially in Sections III and IV
-
+Add intuitive explanations before or alongside major equations, especially
+in Sections III and IV.
 \end{reviewercomment}
 
-\rsp We appreciate the reviewers’ suggestions. We have supplemented the discussions on convergence statements and equilibrium properties from two aspects: target assignment algorithm and reinforcement learning training.
-First, a new subsection “Discussion on Convergence and Equilibrium Properties” has been added in Chapter 3, which provides a more rigorous explanation of the convergence conditions and equilibrium properties of the IDBO distributed target assignment process. We clearly state that this convergence discussion addresses the distributed assignment procedure under fixed engagement snapshots, rather than an unconditional proof of global optimality for the nonconvex mixed-integer optimization problem. Under the conditions of a connected communication graph, bounded communication delays, a finite feasible assignment space, and local elite-preserving updates, the local accepted fitness sequence is non-decreasing and eventually reaches a fixed point or a finite plateau. Meanwhile, the top-\(L_{\max}\) bidding consensus mechanism ensures that each interceptor obtains a consistent winner list. Based on this, we further clarify that the final assignment can be interpreted as a locally meaningful \(\epsilon\)-approximate Nash equilibrium, meaning that no interceptor can improve its payoff by more than \(\epsilon\) through unilaterally changing its target assignment.
-In addition, we have supplemented the interpretation of convergence for ART-MAPPO in the subsection “RL Model Training and Convergence Analysis” of the simulation chapter. Since neural network policy optimization in multi-agent deep reinforcement learning is a nonconvex problem, the convergence of ART-MAPPO should not be understood as a theoretical guarantee of global optimality, but rather as empirical training convergence. We further explain that the stable training process is supported by the average reward curves across five random seeds, small inter-seed variance, non-divergent critic loss, and gradually decreasing policy entropy. The dual-clip PPO and adaptive KL mechanisms are mainly used to constrain the magnitude of policy updates, reduce policy oscillations, and thus improve training stability.
-With these revisions, the equilibrium properties of IDBO and the empirical convergence of ART-MAPPO are both defined more clearly and rigorously in the paper.
+\rsp We sincerely thank the reviewer for this careful and constructive
+suggestion. We agree that, although the major equations in Sections~III and
+IV were mathematically defined, the original manuscript left some of their
+algorithmic and physical meanings implicit. This could make it difficult for
+readers to connect the mathematical operations with the corresponding target
+assignment and policy-learning processes. We have therefore added concise
+explanations immediately alongside eight groups of major equations. These
+revisions clarify the roles of the principal terms, the flow of information
+between successive operations, and their effects on the proposed framework.
+The equation numbers below refer to the revised manuscript. The corresponding
+additions are reproduced in blue in the white boxes.
 
-In the same spirit of aligning each equation with the now three-dimensional engagement, we also updated the angular-advantage term of the target-assignment probability so that its intuitive meaning matches the 3D geometry: the aspect error $S_{\sigma}(i,j)$ was generalized from a planar heading difference to the Euclidean norm of the azimuth and pitch-plane angular errors, using the same $(\gamma,\theta,q)$ notation introduced in the Section~II 3D kinematics. The modified text now reads:
+\medskip
+\noindent\textbf{(1) IDBO fitness function and saturation penalty.}
 
-\begin{manuscripttext}
-$S_{\sigma}(i,j) = \sqrt{(\gamma_{ij} - q_{ij})^2 + (\theta_{ij} - q^{\theta}_{ij})^2}$ denoting the three-dimensional angular error.
-\end{manuscripttext}
+\loc Section~III-B (\emph{Distributed Consensus-Based IDBO Framework}),
+immediately after Eqs.~(14)--(15). We added an intuitive interpretation of
+how the fitness function combines target preference with the saturation
+penalty.
 
-\loc Section~III-A (\emph{Problem Formulation}), in the definition of $S_{\sigma}(i,j)$ immediately below the angular-advantage equation; the added pitch-plane term is highlighted in blue.
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+\hladd{In intuitive terms, each interceptor increases its preference
+for targets that combine high interception likelihood with a strong
+tactical advantage, while the saturation penalty redirects the local search
+when neighboring preferences indicate that a target has reached its
+allocation capacity.}
+\end{tcolorbox}
 
+\medskip
+\noindent\textbf{(2) Three-dimensional geometric term in the adversarial
+advantage.}
 
+\loc Section~III-B, in Eq.~(15) and the paragraph immediately following it.
+The geometric factor is expressed through the normalized inner product
+between the interceptor velocity and the target LOS, and its physical
+meaning in the three-dimensional engagement is stated explicitly.
+
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+\begin{equation*}
+\begin{split}
+A_{ij} =&
+\exp\left(-\frac{\Delta t_{ij}}{T_{\max}}\right)
+\left(1-\frac{\|\mathbf{v}_i-\mathbf{v}_j\|_2}{v_{\max}}\right) \\
+&\cdot
+\hladd{\max\left(0,
+\frac{\mathbf{v}_i^{\top}(\mathbf{p}_j-\mathbf{p}_i)}
+{\|\mathbf{v}_i\|_2\,\|\mathbf{p}_j-\mathbf{p}_i\|_2}\right)} \\
+&-\sum_{k\neq i}\frac{P_{kj}}{P_{ij}+P_{kj}}
+\cdot\sigma(\hat{x}_{kj}).
+\end{split}
+\end{equation*}
+
+\hladd{$\mathbf{p}_i=[x_i,y_i,z_i]^\top$ and
+$\mathbf{v}_i=[\dot{x}_i,\dot{y}_i,\dot{z}_i]^\top$ denote the
+three-dimensional position and velocity vectors of interceptor $u_i$, while
+$\mathbf{p}_j=[x_j,y_j,z_j]^\top$ and
+$\mathbf{v}_j=[\dot{x}_j,\dot{y}_j,\dot{z}_j]^\top$ denote those of target
+$t_j$.}
+
+\medskip
+\hladd{The normalized inner product is the cosine of the three-dimensional
+angle between the interceptor velocity and the LOS to target $t_j$; the
+maximum operator assigns zero geometric advantage when the target lies
+outside the interceptor's forward hemisphere.}
+\end{tcolorbox}
+
+\medskip
+\noindent\textbf{(3) Decay mechanism of the four IDBO update operators.}
+
+\loc Section~III-B, immediately after the rolling, dancing, breeding, and
+stealing operators in Eqs.~(16)--(19), and before the thresholding equation.
+We explained how the decaying coefficients progressively suppress the
+stochastic components of the four update operators.
+
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+\hladd{The coefficients
+$\alpha,\beta,\gamma_{\mathrm{IDBO}},\delta,\delta',
+\eta_{\mathrm{IDBO}}$ together with the dancing noise scale $\sigma_d$
+follow a common linear schedule $c_t=c_0\,(1-t/T)$, where $T$ is the IDBO
+iteration count, while the elite-recombination weights remain bounded. This
+schedule is what governs convergence stability. The stochastic parts of the
+operators---the rolling probe
+$\beta\,\boldsymbol{\xi}_i\mathrm{e}^{-t/T}$ and the dancing perturbation
+$\mathbf{n}_i\sim\mathcal{N}(0,\sigma_d^2\mathbf{I})$---scale with $c_t$ and
+vanish as $c_t\!\to\!0$, so the update degenerates into a deterministic,
+advantage-weighted local refinement followed by the advantage-adaptive
+binarization step. A step sequence whose stochastic amplitude decays to zero
+while retaining an ascent direction satisfies a Robbins--Monro-type
+sufficient condition for settling at a stable fixed point rather than
+orbiting it, which is precisely the behavior measured by the
+swarm-disagreement metric $\Gamma^{(k)}$ in Eq.~(30). A controlled ablation
+that freezes the coefficients confirms this mechanism: non-decaying
+coefficients keep injecting perturbations and leave a persistent late-stage
+oscillation in the working assignment, whereas the linear schedule contracts
+the swarm onto a stable, low-cost equilibrium.}
+\end{tcolorbox}
+
+\medskip
+\noindent\textbf{(4) Thresholding, bidding, and neighborhood-consensus
+updates.}
+
+\loc Section~III-B, immediately after the neighborhood-consensus update in
+Eq.~(22). We added a concise explanation connecting the thresholding,
+bidding, and winner-list updates in Eqs.~(20)--(22).
+
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+\hladd{Equations~(20)--(22) convert the continuous preferences into local
+assignment candidates. Their bids are exchanged among neighboring
+interceptors so that at most the $L_{\max}$ strongest candidates are retained
+for each target, and repeated exchanges bring the local winner lists into
+agreement.}
+\end{tcolorbox}
+
+\medskip
+\noindent\textbf{(5) Attention matrix and output projection.}
+
+\loc Section~IV-A (\emph{Enhanced Situational Awareness via
+Attention-Residual Network}), immediately after the multi-head attention
+output in Eq.~(31). We clarified the interpretation of the attention matrix
+in Eq.~(30) and the role of the output projection in Eq.~(31).
+
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+\hladd{Each row of $\mathbf{A}_j$ specifies how the observable
+kinematic features contribute to the update of one feature token. After the
+head outputs are concatenated and flattened, $\mathbf{W}^{O}$ maps the
+attended information from all feature tokens back to the $d$-dimensional
+latent space for residual fusion with $\mathbf{h}^{(0)}$.}
+\end{tcolorbox}
+
+\medskip
+\noindent\textbf{(6) Two information paths in the residual block.}
+
+\loc Section~IV-A, immediately after the residual-block updates in
+Eqs.~(32)--(34), and before the Jacobian analysis in Eq.~(35). We explained
+the distinct functions of the nonlinear branch and the identity shortcut.
+
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+\hladd{The nonlinear branch refines the attended representation, while
+the shortcut carries the incoming engagement features directly to the next
+block. This structure reduces the need to reconstruct unchanged kinematic
+information at every layer.}
+\end{tcolorbox}
+
+\medskip
+\noindent\textbf{(7) Smoothing process of the trust update.}
+
+\loc Section~IV-B (\emph{Trust-Modulated Tactical Exploration}),
+immediately after the trust update in Eq.~(42). We added an intuitive
+explanation of the bounded performance reference, the smoothing operation,
+and the resulting adjustment of exploration.
+
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+\hladd{The sigmoid term maps the normalized relative return
+$\tilde{R}_i^{(k)}$ to a bounded performance reference in $(0,1)$.
+Equation~(42) combines the previous trust level and the current performance
+reference with the weights $1-\alpha_T$ and $\alpha_T$, respectively,
+yielding a smoothed trust estimate. The smoothing process tracks changes in
+relative performance while attenuating episode-to-episode return
+fluctuations. Sustained above-average returns keep the performance reference
+above $0.5$ and bias the smoothed trust estimate toward a correspondingly
+higher level, thereby reducing the probability assigned to the guided
+exploratory policy; sustained below-average returns produce the opposite
+allocation.}
+\end{tcolorbox}
+
+\medskip
+\noindent\textbf{(8) Overall ART-MAPPO loss function.}
+
+\loc Section~IV-C (\emph{Robust Optimization via Dual-Clip and Adaptive
+KL}), immediately after the overall loss in Eq.~(54). We clarified which
+loss terms update the actor and critic and how the remaining terms regulate
+policy change and exploration.
+
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+\hladd{Minimizing this loss updates the actor through the Dual-Clip
+objective, while the KL and entropy terms regulate policy change and
+exploration. The value-loss term trains the centralized critic.}
+\end{tcolorbox}
+
+% \medskip
+% \noindent Collectively, these additions place the requested intuition
+% directly alongside the corresponding mathematical definitions in
+% Sections~III and IV, allowing the assignment and policy-learning procedures
+% to be followed without relying on explanations provided later in the
+% manuscript.
 
 
 % =====================================================================
@@ -515,7 +923,6 @@ the bibliography.
 %  Re2_1
 % =====================================================================
 \subsection*{Comment 2.1}
-% \subsection*{Comment 2.1 --- Are reward shaping and dual-clip/adaptive-KL generic RL techniques, or a genuine contribution?}
 
 \begin{reviewercomment}{Reviewer comment 2.1}
 The author lists ``introducing a reinforcement learning-based reward function to
@@ -527,140 +934,202 @@ used in RL training to prevent gradient explosion, yet the author packages it as
 innovation for solving ``aircraft overload saturation''.
 \end{reviewercomment}
 
-\rsp We fully agree with the reviewer, and we thank them for pushing us to state the
-contribution more precisely. The reviewer is correct on both technical points:
-(i) adding a consensus penalty to a reward is a standard reward-shaping device, and
-(ii) dual-clip together with adaptive-KL is a standard, well-established policy-gradient
-stabilizer---neither mechanism is invented here, and we do not claim to have invented
-either. We had over-stated the third contribution by phrasing it as if the
-\emph{mechanisms} were novel; that wording was misleading and we have corrected it.
+\rsp We sincerely thank the reviewer for this important and insightful comment. We
+fully agree that consensus-based reward shaping, Dual-Clip PPO, and adaptive KL
+regularization are established reinforcement-learning techniques. The original
+manuscript did not distinguish sufficiently between the novelty of a general learning
+mechanism and its task-specific use in cooperative interception. In particular, the
+third contribution overstated the novelty of the reward formulation, while several
+descriptions incorrectly associated Dual-Clip and adaptive KL regularization directly
+with aircraft acceleration saturation. We acknowledge that these statements were
+imprecise and could misrepresent the technical contribution of the work.
 
-\medskip\noindent Our actual claim is narrower and, we believe, defensible: the
-contribution is not the two generic mechanisms but their \emph{problem-specific
-instantiation} for cooperative interception of a maneuvering swarm---the particular
-\emph{form} each takes, \emph{why} that form is the right match for this engagement, and
-the \emph{measured} benefit it produces here. We make this case below on both fronts and
-have rewritten the contribution statement accordingly.
-\medskip\noindent\textbf{(1) The $t_{go}$-consensus reward is an impact-time (salvo)
-constraint, not generic ``agreement''.}\quad Generic consensus shaping drives agents
-toward \emph{any} shared value of some quantity. Here the shaped quantity is deliberately
-the time-to-go, and the target is not merely ``be consistent'' but ``strike within one
-lethal window,'' i.e.\ Eq.~(70) penalizes $|t_{go_i}-\bar t_{go}|$ so that a distributed
-salvo becomes simultaneous. This matters because the tactical failure mode of a
-maneuvering swarm is precisely \emph{sequential, piecemeal} interception: interceptors
-that arrive spread out in time are defeated one at a time and let the swarm's evasive
-maneuver regenerate the geometry between arrivals. Classical cooperative-interception
-work addresses this with analytic impact-time/salvo guidance laws
-(e.g.\ impact-time-control and consensus guidance); what is new here is that the
-\emph{same} tactical objective is carried by a learned reward term inside a MARL policy,
-so simultaneity is achieved jointly with evasive-target tracking and target assignment
-rather than by a hand-tuned guidance law that assumes a cooperative or non-maneuvering
-target. The reward is thus problem-shaped, not generic: its argument, its target value,
-and the failure mode it removes are all specific to the salvo-interception geometry.
+We have therefore revised the manuscript to make two points explicit. First, the
+contribution of the reward design lies in encoding the time-coordination requirement of
+cooperative interception through the groupwise time-to-go penalty, rather than in
+claiming consensus-based reward shaping itself as a new MARL technique. Second,
+Dual-Clip PPO and adaptive KL regularization are now consistently described as
+training-stage mechanisms for stabilizing policy updates, rather than as direct
+constraints on aircraft acceleration commands. The seven corresponding revisions are
+listed below. In each white box, deleted text is shown in red and added text is shown in
+blue, consistent with the revised manuscript.
 
-\medskip\noindent\textbf{(2) Dual-clip here is a load-factor saturation guard, not a
-generic gradient stabilizer.}\quad The reviewer is right that dual-clip/adaptive-KL is a
-standard cure for gradient explosion. The point we should have made is \emph{what the
-bounded object physically is} in this problem. In interception, the negative-advantage
-samples are exactly the aggressive terminal-overload commands---the actions that spike the
-commanded normal load factor $n_{y}$ as the interceptor closes on an evading target. Under
-the standard single clip, $\hat A_t<0$ leaves the ratio $r_t$ unbounded (Eq.~52), so a
-single off-policy negative-advantage mini-batch can drive an arbitrarily large commanded-
-overload increment; on an airframe that is a hard actuator/structural saturation, not just
-a noisy gradient. Confining $r_t\in[1/c,c]$ (Eqs.~53--54) therefore acts as a bound on the
-per-update commanded-overload increment $\Delta n_y$, i.e.\ a \emph{load-factor saturation
-guard}, and the adaptive-KL band (Eq.~56) keeps successive policies from jumping across
-the safe envelope between updates. The mechanism is generic; its role as a
-physical-saturation guard on the terminal-overload command is what makes it the right tool
-for \emph{this} engagement, where overload saturation is the documented reason baseline PN
-collapses in the high-maneuver case.
-\medskip\noindent\textbf{(3) The instantiation pays off measurably here.}\quad These are
-not just framing arguments; the two problem-specific choices produce the quantitative
-gains reported in the manuscript. The $t_{go}$-consensus term drives the temporal-
-coordination error to $E_{co\text{-}time}<0.10$~s, i.e.\ a near-simultaneous salvo. The
-dual-clip saturation guard is what lets the learned policy hold the terminal overload at
-$E_n\!\approx\!0.20$~g in the high-maneuver Case~2 while sustaining a $97.14\%$
-interception success rate, whereas baseline PN saturates at $E_n\!\to\!1.0$~g and its
-success rate collapses to $17.5\%$; the same guard halves the cross-seed reward standard
-deviation ($0.64$ vs.\ $1.34$) and reaches $90\%$ of optimal return $\sim\!2000$ episodes
-earlier. The positioning is summarized in Table~R-2.1, and Fig.~R12
-makes the two arguments concrete from the manuscript's own equations and reported metrics.
-We also note this comment is closely related to our responses to Comments~3.4 (a
-theoretical comparison of these mechanisms against conventional MAPPO variants), 3.5 (a
-reward-weight sensitivity study showing each term governs its intended tactical
-dimension), and 3.6 (the negligible real-time cost of dual-clip/adaptive-KL, which live
-only in the training loss); those responses supply the supporting theory and data behind
-the claims made here.
+\medskip
+\noindent\textbf{(1) Reframing the third contribution.}
 
-\begin{table}[h]
-\centering
-\captionsetup{font=small}
-\caption*{\small\textbf{Table R-2.1.} What is generic vs.\ what is the problem-specific
-contribution, for each of the two mechanisms the reviewer identifies.}
-\small
-\begin{tabular}{@{}p{0.20\textwidth}p{0.30\textwidth}p{0.42\textwidth}@{}}
-\toprule
-\textbf{Mechanism} & \textbf{Generic technique (conceded)} & \textbf{Problem-specific
-instantiation (our contribution)} \\
-\midrule
-$t_{go}$-consensus reward, Eqs.~(66),(70) &
-Consensus/penalty reward shaping toward a shared value. &
-Shaped quantity is time-to-go and target is a simultaneous \emph{salvo}; defeats
-sequential piecemeal interception of a maneuvering swarm; carried by a learned policy
-jointly with evasive tracking and assignment. Measured: $E_{co\text{-}time}<0.10$~s. \\
-\addlinespace
-Dual-clip $+$ adaptive KL, Eqs.~(52)--(56) &
-Two-sided ratio bound / KL penalty to prevent gradient explosion. &
-Bounds the commanded terminal-overload increment $\Delta n_y$ (negative-advantage samples
-\emph{are} the aggressive overload commands): a load-factor saturation guard. Measured:
-$E_n\!\approx\!0.20$~g at $97.14\%$ success in Case~2 (PN: $1.0$~g, $17.5\%$); $2\times$
-smaller cross-seed $\sigma$. \\
-\bottomrule
-\end{tabular}
-\end{table}
+\loc Section~I, in the third item of the contribution list. We removed the statement
+that presented the introduction of a reinforcement-learning reward function itself as
+a core contribution. The revised statement instead identifies the task-specific role
+of the groupwise time-to-go penalty.
 
-\loc Section~I (Contributions), third contribution. The overstated wording is struck out
-and replaced (deletion in red, addition in blue in the revised manuscript). The bodies of
-Section~IV-E (reward, Eq.~66/70) and Section~IV-D (dual-clip/KL, Eqs.~52--56) already
-describe both mechanisms in these interception-specific terms; only the contribution
-statement is revised. The new contribution text reads:
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+{\color{red}A cooperative interception method augmented with a reinforcement
+learning-based reward function is introduced, enabling precise temporal
+coordination. This strategy enhances interception success rates against
+large-scale maneuvering swarm targets by addressing dynamic coordination
+challenges.}
 
-\begin{manuscripttext}
-While reward shaping and clipped policy updates are standard reinforcement-learning
-mechanisms, the contribution here lies in instantiating them specifically for the
-maneuvering-swarm engagement: the time-to-go consensus reward is formulated as a learned
-impact-time (salvo) constraint that defeats sequential, piecemeal interception, and the
-dual-clip update is cast as a load-factor saturation guard bounding the commanded
-terminal-overload increment under aggressive exploration. This strategy enhances
-interception success rates against large-scale maneuvering swarm targets while preserving
-terminal-load safety.
-\end{manuscripttext}
+\medskip
+\hladd{The time-coordination requirement in cooperative interception is
+incorporated into ART-MAPPO through a groupwise time-to-go penalty. This
+task-specific formulation converts terminal timing constraints into
+stepwise learning feedback, enabling coordinated interceptor arrival under
+target maneuvers.}
+\end{tcolorbox}
 
-\evi Fig.~R12 makes the two arguments concrete, computed \emph{directly from the
-manuscript's own equations and reported metrics} (no new experimental data). Panel~(a)
-instantiates the $t_{go}$-consensus reward of Eq.~(70): six interceptors starting with a
-$3.49$~s spread in time-to-go contract to a common impact instant ($<0.10$~s dispersion),
-i.e.\ a salvo. Panel~(b) instantiates the dual-clip ratio bound of Eqs.~(53)--(54): for
-negative-advantage (aggressive-overload) samples the single clip leaves the commanded-
-overload increment unbounded, whereas the dual-clip floor caps it, acting as a load-factor
-saturation guard. Panel~(c) shows the measured payoff of the combined instantiation
-against the baseline (interception success rate, terminal $E_n$, and cross-seed reward
-$\sigma$).
+\medskip
+\noindent\textbf{(2) Revising the overall positioning of Dual-Clip and adaptive KL.}
 
-\begin{figure}[h]
-\centering
-\includegraphics[width=\textwidth]{positioning_re2_1.pdf}
-\captionsetup{font=small}
-\caption*{\small\textbf{Fig.~R12.} Problem-specific instantiation of two standard RL
-mechanisms for cooperative maneuvering-swarm interception. (a) The $t_{go}$-consensus
-reward (Eq.~70) contracts an initial time-to-go dispersion to a common impact instant---a
-learned salvo constraint, not generic agreement. (b) The dual-clip ratio bound
-(Eqs.~53--54) caps the commanded terminal-overload increment on negative-advantage
-samples (which \emph{are} the aggressive overload commands), acting as a load-factor
-saturation guard; the single clip leaves it unbounded. (c) Measured payoff of the
-integrated instantiation vs.\ baseline: higher interception success rate, bounded terminal
-$E_n$, and halved cross-seed reward variance.}
-\end{figure}
+\loc Section~IV, in the opening paragraph of ``ART-MAPPO: Attention-Residual and
+Trust-Aware MAPPO for Cooperative Swarm Interception.'' We removed Dual-Clip and
+adaptive KL from the list of task-oriented modules and deleted the claim that they
+directly constrain guidance-command variations against actuator saturation. Their role
+is now stated as policy-update stabilization during training.
+
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+Building on the distributed consensus-based IDBO target assignment, we propose
+the Attention-Residual and Trust-aware MAPPO (ART-MAPPO) algorithm for the
+cooperative guidance of defending UAV swarms under the Centralized Training
+with Decentralized Execution (CTDE) paradigm. ART-MAPPO augments the standard
+MAPPO framework with {\color{red}three synergistic modules:}\hladd{two
+task-oriented modules:} a kinematics-aware attention-residual network for
+extracting cross-coupled engagement features{\color{red},}\hladd{ and} a
+trust-modulated exploration mechanism for discovering cooperative tactics
+within the safe flight envelope{\color{red}, and a dual-clip PPO with adaptive KL
+penalty for constraining guidance command variations against actuator
+saturation}\hladd{. Dual-Clip PPO and adaptive KL regularization are used to
+stabilize policy updates during training}.
+\end{tcolorbox}
+
+\medskip
+\noindent\textbf{(3) Correcting the stated consequence of large importance-ratio
+variations.}
+
+\loc Section~IV, at the beginning of ``Robust Optimization via Dual-Clip and
+Adaptive KL.'' The previous text linked importance-ratio variations directly to
+oscillatory terminal acceleration commands. It has been replaced by the corresponding
+optimization-level consequence: increased variance of policy updates.
+
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+Aggressive exploration
+{\color{red}inherently induces} \hladd{can induce}
+substantial variations in the importance-sampling ratio
+$r_t(\boldsymbol{\vartheta}) =
+\pi_{\boldsymbol{\vartheta}}(\mathbf{a}_t \mid o_t) /
+\pi_{\boldsymbol{\vartheta}_{\mathrm{old}}}(\mathbf{a}_t \mid o_t)$,
+{\color{red}leading to oscillatory terminal lateral-acceleration commands
+$n_{y_i}$ that can severely compromise flight stability}
+\hladd{increasing the variance of policy updates}.
+\end{tcolorbox}
+
+\medskip
+\noindent\textbf{(4) Correcting the explanation of the standard clipped
+surrogate.}
+
+% \loc Section~IV, immediately after the standard clipped-surrogate equation and
+% before the Dual-Clip objective. We replaced the asserted acceleration-command effect
+% with the actual mini-batch optimization issue caused by large-ratio,
+% negative-advantage samples.
+
+\loc Section~IV-C (\emph{Robust Optimization via Dual-Clip and Adaptive
+KL}), immediately after the standard clipped-surrogate objective in
+Eq.~(48) and before the Dual-Clip objective in Eq.~(49). We replaced the
+asserted acceleration-command effect with the actual mini-batch optimization
+issue caused by large-ratio, negative-advantage samples.
+
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+When $\hat{A}_t < 0$, the standard clip permits
+$r_t(\boldsymbol{\vartheta}) \to \infty$,
+{\color{red}causing catastrophic over-correction of acceleration commands}
+\hladd{allowing large-ratio negative-advantage samples to exert
+disproportionate influence on a mini-batch update}. The Dual-Clip
+objective addresses this by introducing a floor $c > 1+\epsilon$
+applied only when $\hat{A}_t < 0$.
+\end{tcolorbox}
+
+\medskip
+\noindent\textbf{(5) Adding an intuitive explanation of the Dual-Clip
+objective.}
+
+% \loc Section~IV, immediately after the Dual-Clip objective. We added an
+% objective-level explanation that identifies the affected samples and clarifies the role
+% of the additional maximum operation.
+
+\loc Section~IV-C (\emph{Robust Optimization via Dual-Clip and Adaptive
+KL}), immediately after the Dual-Clip objective in Eq.~(49) and before the
+effective probability-ratio constraint in Eq.~(50). We added an
+objective-level explanation that identifies the affected samples and
+clarifies the role of the additional maximum operation.
+
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+\hladd{For a negative-advantage sample, an exceptionally large
+probability ratio can otherwise dominate the mini-batch update. The
+additional maximum limits this negative surrogate contribution, while
+positive-advantage samples retain the standard clipped objective.}
+\end{tcolorbox}
+
+\medskip
+\noindent\textbf{(6) Correcting the interpretation of adaptive KL
+regularization.}
+
+% \loc Section~IV, immediately after the adaptive-KL coefficient update. We removed
+% the direct association between KL divergence and acceleration-limit exceedance and now
+% describe the mechanism in terms of policy-distribution shift and regularization
+% strength.
+
+\loc Section~IV-C (\emph{Robust Optimization via Dual-Clip and Adaptive
+KL}), in the paragraph immediately following the adaptive-KL coefficient
+update in Eq.~(52) and before the value-loss definition in Eq.~(53). We
+removed the direct association between KL divergence and
+acceleration-limit exceedance and now describe the mechanism in terms of
+policy-distribution shift and regularization strength.
+
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+When $\hat{D}_{\mathrm{KL}}>2\delta_{\mathrm{targ}}$, the
+{\color{red}acceleration commands have shifted too aggressively between updates,
+risking acceleration-limit exceedance}\hladd{policy distribution has shifted
+excessively between updates}; the $1.5\times$ increase
+{\color{red}dampens subsequent updates}\hladd{strengthens regularization in
+subsequent updates}. When
+$\hat{D}_{\mathrm{KL}}<0.5\delta_{\mathrm{targ}}$, the $0.9\times$ decay
+permits {\color{red}finer trajectory refinement}\hladd{further policy refinement}.
+\end{tcolorbox}
+
+\medskip
+\noindent\textbf{(7) Clarifying the roles of the terms in the overall training
+loss.}
+
+% \loc Section~IV, immediately after the overall ART-MAPPO loss. We added a concise
+% description that confines Dual-Clip and KL regularization to actor optimization and
+% policy-change regulation, respectively, while distinguishing them from centralized
+% critic training.
+
+\loc Section~IV-C (\emph{Robust Optimization via Dual-Clip and Adaptive
+KL}), in the paragraph immediately following the overall ART-MAPPO loss in
+Eq.~(54) and before the subsequent discussion of its computational cost. We
+added a concise explanation distinguishing the roles of the actor objective,
+KL and entropy regularization, and centralized critic loss.
+
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+\hladd{Minimizing this loss updates the actor through the Dual-Clip
+objective, while the KL and entropy terms regulate policy change and
+exploration. The value-loss term trains the centralized critic.}
+\end{tcolorbox}
+
+\medskip
+\noindent These revisions preserve the mathematical definitions of the reward,
+Dual-Clip objective, and adaptive-KL update, while correcting their positioning and
+interpretation. The revised manuscript no longer claims that generic reward shaping,
+Dual-Clip PPO, or adaptive KL regularization is newly introduced in this work, and it no
+longer presents the latter two training mechanisms as direct physical constraints on
+aircraft acceleration saturation.
 
 
 
