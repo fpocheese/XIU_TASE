@@ -478,7 +478,14 @@ where the three terms correspond to interception probability, adversarial advant
 &+ \sigma(x_{ij})\Biggr) - L_{\max}\Biggr)
 \end{split}
 \end{equation}
-where $\mathcal{N}_i$ is the neighbor set of $u_i$, $\hat{x}_{kj}$ the estimated preference of neighbor $u_k$, and $L_{\max}$ the per-target interceptor capacity. The penalty activates only when the estimated assignment count exceeds $L_{\max}$, steering the swarm toward capacity-feasible solutions.
+where $\mathcal{N}_i$ is the neighbor set of $u_i$, $\hat{x}_{kj}$ the estimated preference of neighbor $u_k$, and $L_{\max}$ the per-target interceptor capacity. 
+The penalty activates only when the estimated assignment count exceeds $L_{\max}$, steering the swarm toward capacity-feasible solutions.
+\hladd{In intuitive terms, each interceptor increases its preference
+for targets that combine high interception likelihood with a strong
+tactical advantage, while the saturation penalty redirects the local search
+when neighboring preferences indicate that a target has reached its
+allocation capacity.}
+
 
 The adversarial advantage $A_{ij}$ fuses temporal, energetic, and geometric factors:
 
@@ -492,7 +499,10 @@ A_{ij} =& \exp\left(-\frac{\Delta t_{ij}}{T_{\max}}\right) \cdot \left(1 - \frac
 &- \sum_{k\neq i} \frac{P_{kj}}{P_{ij} + P_{kj}} \cdot \sigma(\hat{x}_{kj})
 \end{split}
 \end{equation}
-where $\Delta t_{ij}$ is the estimated time-to-intercept; \hladd{$\mathbf{p}_i=[x_i,y_i,z_i]^\top$ and $\mathbf{v}_i=[\dot{x}_i,\dot{y}_i,\dot{z}_i]^\top$ denote the three-dimensional position and velocity vectors of interceptor $u_i$, while $\mathbf{p}_j=[x_j,y_j,z_j]^\top$ and $\mathbf{v}_j=[\dot{x}_j,\dot{y}_j,\dot{z}_j]^\top$ denote those of target $t_j$}; and $v_{\max}$ is the maximum reference speed used for normalization. \hladd{The normalized inner product is the cosine of the three-dimensional angle between the interceptor velocity and the LOS to target $t_j$; the maximum operator assigns zero geometric advantage when the target lies outside the interceptor's forward hemisphere.} The three multiplicative factors encode temporal, energetic, and geometric advantage, respectively, while the subtracted term penalizes competition from other interceptors with high preferences for the same target.
+where $\Delta t_{ij}$ is the estimated time-to-intercept; \hladd{$\mathbf{p}_i=[x_i,y_i,z_i]^\top$ and $\mathbf{v}_i=[\dot{x}_i,\dot{y}_i,\dot{z}_i]^\top$ denote the three-dimensional position and velocity vectors of interceptor $u_i$, while $\mathbf{p}_j=[x_j,y_j,z_j]^\top$ and $\mathbf{v}_j=[\dot{x}_j,\dot{y}_j,\dot{z}_j]^\top$ denote those of target $t_j$}; and $v_{\max}$ is the maximum reference speed used for normalization. 
+\hladd{The normalized inner product is the cosine of the three-dimensional angle between the interceptor velocity and the LOS to target $t_j$; the maximum operator assigns zero geometric advantage when the target lies outside the interceptor's forward hemisphere.} The three multiplicative factors encode temporal, energetic, and geometric advantage, respectively, while the subtracted term penalizes competition from other interceptors with high preferences for the same target.
+
+
 
 The IDBO update mechanism enhances the standard DBO through four adversarial-information-driven operations:
 
@@ -506,7 +516,8 @@ The IDBO update mechanism enhances the standard DBO through four adversarial-inf
 \text{Stealing:} \quad & \mathbf{x}_i^{(t+1)} = \mathbf{x}_i^{(t)} \nonumber \\
 & \quad + \eta_{\mathrm{IDBO}} \cdot \sum_{k \in \mathcal{K}_i} \frac{A_{ij}}{\sum_{l \in \mathcal{K}_i} A_{lj}} \cdot \left(\mathbf{x}_k^{(t)} - \mathbf{x}_i^{(t)}\right) \label{eq:stealing_update}
 \end{align}
-where $\mathbf{A}_i = [A_{i1}, A_{i2}, \dots, A_{iN}]^\top$, $\bar{A}_i$ is the mean of $\mathbf{A}_i$, $\boldsymbol{\xi}_i$ and $\mathbf{n}_i$ are random vectors, $\mathcal{K}_i$ represents UAVs competing for the same targets as $u_i$, and $\alpha, \beta, \gamma_{\mathrm{IDBO}}, \delta, \delta', \eta_{\mathrm{IDBO}}$ are adaptive coefficients that decay linearly with iteration $t$. \hladd{The coefficients $\alpha,\beta,\gamma_{\mathrm{IDBO}},\delta,\delta',\eta_{\mathrm{IDBO}}$ together with the dancing noise scale $\sigma_d$ follow a common linear schedule $c_t=c_0\,(1-t/T)$, where $T$ is the IDBO iteration count, while the elite-recombination weights remain bounded. This schedule is what governs convergence stability. The stochastic parts of the operators---the rolling probe $\beta\,\boldsymbol{\xi}_i\mathrm{e}^{-t/T}$ and the dancing perturbation $\mathbf{n}_i\sim\mathcal{N}(0,\sigma_d^2\mathbf{I})$---scale with $c_t$ and vanish as $c_t\!\to\!0$, so the update degenerates into a deterministic, advantage-weighted local refinement followed by the advantage-adaptive binarization step. A step sequence whose stochastic amplitude decays to zero while retaining an ascent direction satisfies a Robbins--Monro-type sufficient condition~\cite{robbins1951stochastic} for settling at a stable fixed point rather than orbiting it, which is precisely the behavior measured by the swarm-disagreement metric $\Gamma^{(k)}$ in \eqref{eq:convergence}. A controlled ablation that freezes the coefficients confirms this mechanism: non-decaying coefficients keep injecting perturbations and leave a persistent late-stage oscillation in the working assignment, whereas the linear schedule contracts the swarm onto a stable, low-cost equilibrium.} Continuous preferences are binarized via advantage-adaptive thresholding:
+where $\mathbf{A}_i = [A_{i1}, A_{i2}, \dots, A_{iN}]^\top$, $\bar{A}_i$ is the mean of $\mathbf{A}_i$, $\boldsymbol{\xi}_i$ and $\mathbf{n}_i$ are random vectors, $\mathcal{K}_i$ represents UAVs competing for the same targets as $u_i$, and $\alpha, \beta, \gamma_{\mathrm{IDBO}}, \delta, \delta', \eta_{\mathrm{IDBO}}$ are adaptive coefficients that decay linearly with iteration $t$. 
+\hladd{The coefficients $\alpha,\beta,\gamma_{\mathrm{IDBO}},\delta,\delta',\eta_{\mathrm{IDBO}}$ together with the dancing noise scale $\sigma_d$ follow a common linear schedule $c_t=c_0\,(1-t/T)$, where $T$ is the IDBO iteration count, while the elite-recombination weights remain bounded. This schedule is what governs convergence stability. The stochastic parts of the operators---the rolling probe $\beta\,\boldsymbol{\xi}_i\mathrm{e}^{-t/T}$ and the dancing perturbation $\mathbf{n}_i\sim\mathcal{N}(0,\sigma_d^2\mathbf{I})$---scale with $c_t$ and vanish as $c_t\!\to\!0$, so the update degenerates into a deterministic, advantage-weighted local refinement followed by the advantage-adaptive binarization step. A step sequence whose stochastic amplitude decays to zero while retaining an ascent direction satisfies a Robbins--Monro-type sufficient condition~\cite{robbins1951stochastic} for settling at a stable fixed point rather than orbiting it, which is precisely the behavior measured by the swarm-disagreement metric $\Gamma^{(k)}$ in \eqref{eq:convergence}. A controlled ablation that freezes the coefficients confirms this mechanism: non-decaying coefficients keep injecting perturbations and leave a persistent late-stage oscillation in the working assignment, whereas the linear schedule contracts the swarm onto a stable, low-cost equilibrium.} Continuous preferences are binarized via advantage-adaptive thresholding:
 
 \begin{equation}
 \label{eq:thresholding}
@@ -529,6 +540,11 @@ where $\bar{A}_i$ and $\sigma_A$ are the mean and standard deviation of $u_i$'s 
 \mathcal{Z}_{j}^{(k+1)} = \text{Top}_{L_{\max}} \left( \mathcal{Z}_{j}^{(k)} \cup \bigcup_{l \in \mathcal{N}_i} \mathcal{Z}_{j,l}^{(k)} \cup \{(u_i, c_{ij}^{(k+1)})\} \right)
 \end{equation}
 where $\text{Top}_{L_{\max}}(\cdot)$ retains the $L_{\max}$ highest-bid entries. UAV $u_i$ secures a slot for $t_j$ if $|\mathcal{Z}_{j}| < L_{\max}$ or its bid exceeds $\min_{(u_k, c_{kj}) \in \mathcal{Z}_{j}} c_{kj}$, thereby displacing the weakest contributor and prioritizing the most capable interceptors.
+\hladd{Equations~\eqref{eq:thresholding}--\eqref{eq:cbba_update}
+convert the continuous preferences into local assignment candidates. Their
+bids are exchanged among neighboring interceptors so that at most the
+$L_{\max}$ strongest candidates are retained for each target, and repeated
+exchanges bring the local winner lists into agreement.}
 
 As depicted in the procedural flowchart (Fig.~\ref{fig:idbo_flowchart}), the algorithm iterates over three interleaved phases—local optimization (Eqs.~\ref{eq:rolling_update}--\ref{eq:stealing_update}), consensus resolution (Eqs.~\ref{eq:thresholding}--\ref{eq:cbba_update}), and advantage update—until convergence:
 
