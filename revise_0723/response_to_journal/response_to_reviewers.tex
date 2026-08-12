@@ -1106,127 +1106,289 @@ stable under moderate variations around the nominal configuration.
 Provide rigorous discussion on the convergence claims and equilibrium properties.
 \end{reviewercomment}
 
-\rsp We thank the reviewer for this important point. In the original manuscript the
-convergence and equilibrium statements were asserted without stating their assumptions or
-their governing results, and two of them were phrased more strongly than what the method
-actually guarantees. We have made each claim precise: we now state the conditions under
-which it holds, name the established result it rests on with a proper citation, and---where
-the original wording overreached---scope it down to the honest guarantee. The revision
-spans both the assignment layer (IDBO) and the guidance layer (ART-MAPPO). The three
-corresponding revisions are listed below. In each white box, deleted text is shown in red
-and added text is shown in blue, consistent with the revised manuscript.
+\rsp We sincerely thank the reviewer for this important and constructive
+comment. In response, we have expanded the discussion for both
+IDBO and ART-MAPPO. The corresponding revisions are detailed below.
+
 
 \medskip
-\noindent\textbf{(1) Making the IDBO convergence and equilibrium claims
-rigorous.}
+\noindent\textbf{(1) Convergence and fixed-point analysis of IDBO.}
 
-\loc Section~III (\emph{Target Assignment via Distributed Consensus-Based
-IDBO}), in the sentence immediately following the swarm-disagreement
-convergence criterion in Eq.~(26). The single sentence that previously bundled
-three asserted guarantees is replaced by three separately justified properties
-under explicit assumptions (connected communication graph of diameter $D$,
-bounded message delay, elitist retention).
+\rsp We sincerely thank the reviewer for highlighting the need to clarify the
+convergence claims and equilibrium properties of IDBO. We agree that the
+original manuscript did not adequately distinguish the limiting behavior of
+the local metaheuristic search from that of the distributed consensus process.
+Moreover, the previous statements concerning monotonic fitness improvement,
+a fixed iteration bound, and an approximate Nash equilibrium were stronger
+than what follows directly from the implemented algorithm. We have therefore
+removed these statements and reformulated the analysis around two properties
+that can be established under explicit conditions: a stable fixed point of the
+implemented local search and a consensus fixed point of the winner-list update.
+
+For the local search, the revised manuscript specifies the linear decay
+schedule, projection onto the bounded preference domain, and elitist retention
+used by the four IDBO operators. The vanishing coefficients suppress late-stage
+perturbations, and at the terminal value $c_T=0$ the four operators reduce to
+the identity map. Together with elitist retention, this ensures that a retained
+solution remains invariant once no strictly improving candidate is generated.
+
+For the consensus process, we now state the required assumptions explicitly:
+the bids have stabilized, the communication graph is connected with diameter
+$D$, message delay is bounded, and equal bids are resolved deterministically.
+Under these conditions, the top-$L_{\max}$ winner information propagates
+through the network within at most $D$ successful communication rounds.
+Once all local winner lists agree, further applications of the winner-list
+update leave them unchanged. The relevant equilibrium property is therefore a
+consensus fixed point of the distributed assignment update, rather than an
+unsubstantiated game-theoretic Nash equilibrium.
+
+The average-cost convergence results in Fig.~8 and the delay-dependent
+consensus results in Table~IV provide complementary empirical support. IDBO
+reaches a stable cost region within approximately $100$ iterations, while all
+tested communication-delay settings reach common winner lists. These results
+support the predicted behavior under the tested conditions without being used
+as a substitute for the conditional fixed-point analysis.
+
+\medskip
+\noindent\textbf{(i) Local-search limiting behavior.}
+
+\loc Section~III-B (\emph{Distributed Consensus-Based IDBO Framework}),
+immediately after the rolling, dancing, breeding, and stealing operators in
+Eqs.~(16)--(19), and before the advantage-adaptive thresholding operation in
+Eq.~(20). We added the following analysis of the coefficient schedule,
+bounded preference domain, elitist retention, and local-search fixed point:
+
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+\hladd{The coefficients
+$\alpha,\beta,\gamma_{\mathrm{IDBO}},\delta,\delta',
+\eta_{\mathrm{IDBO}}$, together with the dancing-noise scale $\sigma_d$,
+follow the common linear schedule $c_t=c_0(1-t/T)$, where $T$ denotes the
+local IDBO search horizon. During each local search, the candidate
+preferences are projected onto $[0,1]^N$, and the best-so-far candidate is
+retained unless a strictly better candidate is obtained. The coefficient
+schedule progressively attenuates both the directed update terms and the
+stochastic perturbations. In particular, the rolling perturbation
+$\beta\boldsymbol{\xi}_i\mathrm{e}^{-t/T}$ and the dancing perturbation
+$\mathbf{n}_i\sim\mathcal{N}(0,\sigma_d^2\mathbf{I})$ vanish as $t$
+approaches $T$, suppressing late-stage fluctuations in the preference
+population. The schedule therefore satisfies the vanishing-gain condition
+$c_t\to0$ used in Robbins--Monro-type stochastic approximation
+\cite{robbins1951stochastic}. At $c_T=0$, the four update operators reduce
+to the identity map, while elitist retention prevents the incumbent from
+being replaced by an inferior candidate. Consequently, once no strictly
+improving candidate is generated, the retained solution remains invariant
+and constitutes a stable fixed point of the implemented local search.}
+\end{tcolorbox}
+
+\medskip
+\noindent\textbf{(ii) Relationship among thresholding, bidding, and
+consensus.}
+
+\loc Section~III-B, immediately after the top-$L_{\max}$ winner-list update
+in Eq.~(22), and before the three-phase iteration in Eqs.~(23)--(25). We
+clarified that the consensus statement applies after the local preferences
+and bids have stabilized:
+
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+\hladd{Equations~(20)--(22) convert the continuous preferences into local
+assignment candidates. Each consensus update exchanges the current bids
+among neighboring interceptors and retains at most the $L_{\max}$ strongest
+bids for each target. Once the local search has stabilized and the bids no
+longer change, repeated consensus updates propagate the winner information
+through the connected network and bring the local winner lists into
+agreement.}
+\end{tcolorbox}
+
+\medskip
+\noindent\textbf{(iii) Consensus fixed point and assignment feasibility.}
+
+\loc Section~III-B, immediately after the swarm-disagreement convergence
+criterion in Eq.~(26) and before the complexity analysis in Eq.~(27). We
+deleted the previous unqualified claims of monotonic fitness improvement,
+an $N\!\cdot\!D$ iteration bound, and an approximate Nash equilibrium. They
+have been replaced by the following conditional fixed-point analysis:
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
 boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
 {\color{red}The algorithm guarantees monotonic fitness improvement:
 $\Phi^{(k+1)} \geq \Phi^{(k)}$ a.s., where
-$\Phi^{(k)} = \sum_{i=1}^{M} \mathcal{F}_i(\mathbf{x}_i^{(k)})$. Under a
-connected communication graph with finite message delays, consensus is reached
-in at most $N \cdot D$ iterations ($D$: graph diameter). The converged
-assignment $\mathbf{X}^*$ constitutes an $\epsilon$-approximate Nash
-equilibrium:
-$\mathcal{F}_i(\mathbf{x}_i^*) \geq \mathcal{F}_i(\mathbf{x}_i') - \epsilon$,
-$\forall \mathbf{x}_i' \in \mathcal{X}_i$, $\forall i$.}
+$\Phi^{(k)}=\sum_{i=1}^{M}\mathcal{F}_i(\mathbf{x}_i^{(k)})$. Under a
+connected communication graph with finite message delays, consensus is
+reached in at most $N\cdot D$ iterations ($D$: graph diameter). The
+converged assignment $\mathbf{X}^{*}$ constitutes an $\epsilon$-approximate
+Nash equilibrium:
+$\mathcal{F}_i(\mathbf{x}_i^{*})
+\geq\mathcal{F}_i(\mathbf{x}_i')-\epsilon$,
+$\forall\mathbf{x}_i'\in\mathcal{X}_i$, $\forall i$.}
 
 \medskip
-\hladd{Three properties characterize this iteration under a connected
-communication graph with bounded message delay and elitist retention of
-best-so-far solutions. First, the \emph{incumbent} (best-so-far) swarm fitness
-$\Phi_{\mathrm{best}}^{(k)}=\max_{k'\le k}\sum_{i=1}^{M}\mathcal{F}_i(\mathbf{x}_i^{(k')})$
-is non-decreasing by construction, and because the decaying schedule
-$c_t=c_0(1-t/T)$ drives the operators' stochastic amplitude to zero while
-retaining an ascent direction, the working assignment settles at a fixed point
-rather than orbiting it---the standard Robbins--Monro condition for
-stochastic-approximation convergence [Robbins--Monro]. Second, the
-auction-based consensus phase [Eqs.~(21)--(22)] inherits the guarantees of the
-consensus-based bundle algorithm [Choi--Brunet--How]: with a
-diminishing-marginal-gain (submodular) score it reaches a conflict-free
-assignment in at most $N\!\cdot\!D$ communication rounds ($D$: graph diameter).
-Third, the resulting fixed point $\mathbf{X}^\ast$ is
-$\epsilon_{\mathrm{IDBO}}$-\emph{stable}---no interceptor can raise its own
-fitness by more than $\epsilon_{\mathrm{IDBO}}$ through a unilateral
-reassignment,
-$\mathcal{F}_i(\mathbf{x}_i^\ast)\ge\mathcal{F}_i(\mathbf{x}_i')-\epsilon_{\mathrm{IDBO}}$
-for all $\mathbf{x}_i'\in\mathcal{X}_i$ and all $i$, which follows directly from
-the auction best-response at the converged bid prices [Choi--Brunet--How].}
+\hladd{The local optimization and consensus phases have distinct limiting
+properties. The diminishing coefficient schedule and elitist retention
+stabilize the local search as described above. For the consensus phase,
+suppose that the bids remain fixed, the communication graph is connected
+with diameter $D$, messages are delivered with bounded delay, and equal bids
+are resolved deterministically. Under these conditions, the top-$L_{\max}$
+winner information propagates by at least one communication hop in each
+successful round. Consequently, all interceptors obtain the same winner list
+for each target after at most $D$ successful communication rounds. Bounded
+delay increases the elapsed consensus time but does not alter the resulting
+winner lists. Once agreement is reached, further applications of Eq.~(22)
+leave the winner lists unchanged; hence, they form a consensus fixed point.
+Each list contains at most $L_{\max}$ interceptors, and, provided that a
+feasible assignment exists, the subsequent conflict-resolution step enforces
+the constraints in Eq.~(11). Here, $\epsilon_{\mathrm{IDBO}}$ specifies the
+numerical tolerance for winner-list disagreement.}
 \end{tcolorbox}
 
-\medskip
-\noindent\textbf{(2) Grounding the IDBO fixed-point behavior in the
-coefficient-decay schedule.}
 
-\loc Section~III (\emph{Target Assignment via Distributed Consensus-Based
-IDBO}), where the common linear coefficient schedule $c_t=c_0(1-t/T)$ is
-introduced (after the IDBO operator equations). We added an explicit statement
-that the vanishing stochastic amplitude, together with a retained ascent
-direction, is what places the iteration under the Robbins--Monro sufficient
-condition for settling at a stable fixed point rather than orbiting it.
-
-\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
-boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
-\hladd{The coefficients
-$\alpha,\beta,\gamma_{\mathrm{IDBO}},\delta,\delta',\eta_{\mathrm{IDBO}}$
-together with the dancing noise scale $\sigma_d$ follow a common linear schedule
-$c_t=c_0\,(1-t/T)$, where $T$ is the IDBO iteration count, while the
-elite-recombination weights remain bounded. This schedule is what governs
-convergence stability. The stochastic parts of the operators---the rolling
-probe $\beta\,\boldsymbol{\xi}_i\mathrm{e}^{-t/T}$ and the dancing perturbation
-$\mathbf{n}_i\sim\mathcal{N}(0,\sigma_d^2\mathbf{I})$---scale with $c_t$ and
-vanish as $c_t\!\to\!0$, so the update degenerates into a deterministic,
-advantage-weighted local refinement followed by the advantage-adaptive
-binarization step. A step sequence whose stochastic amplitude decays to zero
-while retaining an ascent direction satisfies a Robbins--Monro-type sufficient
-condition [Robbins--Monro] for settling at a stable fixed point rather than
-orbiting it, which is precisely the behavior measured by the swarm-disagreement
-metric $\Gamma^{(k)}$ in Eq.~(26).}
-\end{tcolorbox}
 
 \medskip
-\noindent\textbf{(3) Scoping the policy-convergence statement for ART-MAPPO.}
+\noindent\textbf{(2) Convergence analysis and empirical validation of
+ART-MAPPO.}
 
+\rsp We sincerely thank the reviewer for emphasizing the importance of
+rigorously discussing the convergence behavior of ART-MAPPO. In response, we
+have strengthened this part of the manuscript through both a mechanism-based
+analysis and controlled component ablations.
+
+First, we added a dedicated ``Convergence analysis'' paragraph in
+Section~IV-D. Rather than attributing the learning behavior solely to the
+policy-update objective, the new discussion considers the complete training
+process. It explains the roles of the attention--residual encoder and GRU in
+representation learning, the trust-aware mechanism in regulating exploration,
+and Dual-Clip with adaptive KL regularization in controlling policy updates.
+
+Second, we added a new subsection entitled ``Component Ablation Study'' in
+Section~V-E. The trust-aware mechanism, GRU temporal encoder, and
+attention--residual backbone are removed separately while the reward,
+environment, optimizer, training budget, and remaining modules are retained.
+Removing the trust-aware mechanism reduces the Training AUC from
+$7.354\times10^4$ to $6.037\times10^4$, corresponding to a $17.9\%$
+reduction. Removing the GRU reduces the Training AUC by $13.1\%$ and the final
+reward by $9.2\%$, while replacing the attention--residual backbone with a
+parameter-matched feedforward network reduces the Training AUC by $9.6\%$ and
+the final reward by $6.8\%$. These results provide controlled empirical
+evidence for the contributions of the representation, temporal-encoding, and
+exploration mechanisms to learning efficiency and converged policy quality.
+
+The complete-model comparison in Section~V-C provides further evidence at the
+algorithm level. ART-MAPPO reaches $90\%$ of its observed asymptotic reward by
+episode 5,591, whereas conventional MAPPO requires 7,654 episodes. The
+cross-seed standard deviation is also reduced from $1.34$ to $0.64$. The
+ablation study isolates the representation, temporal-encoding, and trust-aware
+components, while the objectives of Dual-Clip and adaptive KL explain their
+roles in policy-update regulation. Taken together, the mechanism analysis,
+component ablations, and multi-seed comparison support the improved convergence
+efficiency and training stability of ART-MAPPO.
+
+\medskip
 \loc Section~IV-D (\emph{Mechanistic Comparison with Conventional MAPPO}),
-in the ``Convergence guarantees'' paragraph. We state explicitly that, under
-deep function approximation and stochastic multi-agent training, neither
-conventional MAPPO nor ART-MAPPO provides a formal guarantee of monotonic
-policy improvement or global-optimum convergence; Dual-Clip and adaptive KL are
-presented as update-stabilization mechanisms rather than as a stronger formal
-convergence guarantee.
+in the newly added ``Convergence analysis'' paragraph. The revised text reads:
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
 boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
-\hladd{\emph{Convergence guarantees.} With deep neural-network function
-approximation and stochastic multi-agent training, neither conventional MAPPO
-nor ART-MAPPO provides a formal guarantee of monotonic policy improvement or
-convergence to a global optimum. Conventional MAPPO regulates policy updates
-using a fixed clipped surrogate, whereas ART-MAPPO employs the piecewise
-Dual-Clip objective in Eqs.~(49)--(50) and the adaptive KL penalty in Eq.~(52).
-Dual-Clip limits the influence of large-ratio negative-advantage samples, while
-adaptive KL regularization discourages excessive average deviation between
-successive policies. These mechanisms promote more controlled and stable
-optimization, but should not be interpreted as providing a stronger formal
-convergence guarantee.}
+\hladd{\emph{1) Convergence analysis.}
+Conventional MAPPO primarily relies on centralized value estimation, GAE, and
+a fixed clipped surrogate to support policy learning. In ART-MAPPO, the
+attention--residual encoder preserves the coupled kinematic information and
+maintains a direct gradient path, while the GRU incorporates maneuver history
+into the policy representation. This reduces the sensitivity of policy learning
+to instantaneous state variations. The smoothed trust variable changes the
+guided-exploration weight gradually according to relative return, allowing the
+sampling policy to shift steadily toward exploitation as effective cooperative
+behavior develops. During parameter optimization, Dual-Clip limits anomalous
+negative surrogate contributions, and adaptive KL regularization adjusts the
+penalty according to the observed policy deviation. The resulting learning
+process exhibits lower sampling and update variability, promoting a more stable
+approach to the steady training regime than conventional MAPPO.}
 \end{tcolorbox}
 
 \medskip
-\noindent The trust-update map itself is a first-order exponential-smoothing
-recursion bounded in $(0,1)$; its bounded-smoothing behavior is now stated
-explicitly in the manuscript, and the underlying contraction of modulus
-$(1-\alpha_T)$ is derived in our response to Comment~2.3. Two references are
-added to the bibliography: the Robbins--Monro stochastic-approximation result
-for the IDBO fixed-point behavior, and the consensus-based bundle algorithm
-[Choi--Brunet--How] for the $N\!\cdot\!D$ consensus bound. Neither was cited in
-the original manuscript.
+\loc Section~V-E, new subsection \emph{Component Ablation Study}. We added
+one-at-a-time ablations of the trust-aware mechanism, GRU temporal encoder, and
+attention--residual backbone. The corresponding additions are reproduced
+below:
+
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+
+\hladd{To isolate the independent contribution of each proposed component, we
+construct three one-at-a-time ablation controls alongside the complete
+ART-MAPPO model. \emph{``w/o trust-aware mechanism''} disables the
+trust-modulated fusion of the analytical guidance prior and the learned action;
+\emph{``w/o GRU temporal encoder''} replaces recurrent state encoding with a
+memoryless feedforward layer; and \emph{``w/o attention--residual backbone''}
+substitutes a parameter-matched feedforward network while retaining the trust
+and GRU modules. All variants share the same reward, dynamics, optimizer,
+training seed, and training budget, and are evaluated in $1{,}000$
+frozen-policy Case~1 Monte Carlo trials.}
+
+\medskip
+{\color{blue}
+\footnotesize
+\setlength{\tabcolsep}{2.5pt}
+\renewcommand{\arraystretch}{1.12}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{lccccccc}
+\toprule
+Variant
+& Training AUC ($10^4$) $\uparrow$
+& Final reward $\uparrow$
+& ISR (\%) $\uparrow$
+& $E_{co\text{-}time}$ (s) $\downarrow$
+& $E_n$ (g) $\downarrow$
+& $E_t$ (s) $\downarrow$
+& $E_{miss}$ (m) $\downarrow$ \\
+\midrule
+Full ART-MAPPO
+& 7.354 & 8.958 & \textbf{98.7}
+& 0.0505 & 0.0718 & 28.843 & 2.997 \\
+w/o trust-aware mechanism
+& 6.037 & 8.683 & 97.2
+& 0.0545 & 0.0739 & 29.132 & 3.087 \\
+w/o GRU temporal encoder
+& 6.388 & 8.134 & 95.8
+& 0.0732 & 0.0782 & 30.574 & 3.297 \\
+w/o attention--residual backbone
+& 6.651 & 8.353 & 96.1
+& 0.0606 & 0.0847 & 29.853 & 3.507 \\
+\bottomrule
+\end{tabular}%
+}
+}
+
+\medskip
+\hladd{\emph{(i) Trust-aware mechanism.} Removing trust produces the largest
+Training-AUC reduction among the three controls ($-17.9\%$, from
+$7.354\times10^4$ to $6.037\times10^4$), yet the final reward falls by only
+$3.1\%$ and ISR drops by $1.5$~pp. The pronounced difference between the
+cumulative-AUC loss and the end-of-training reward indicates that the
+trust-aware mechanism primarily improves learning efficiency throughout
+training, consistent with its role in regulating the exploration--exploitation
+balance.}
+
+\medskip
+\hladd{\emph{(ii) GRU temporal encoder.} Removing the GRU yields the lowest
+final reward ($-9.2\%$) and the largest ISR degradation ($-2.9$~pp) among the
+three controls. Moreover, $E_{co\text{-}time}$ increases by $45\%$, from
+$0.0505$~s to $0.0732$~s. These results show that retaining temporal engagement
+history is important for learning a stable policy under target maneuvers and
+for maintaining cooperative timing accuracy.}
+
+\medskip
+\hladd{\emph{(iii) Attention--residual backbone.} Replacing the
+attention--residual backbone produces the largest increases in $E_n$
+($+18\%$) and $E_{miss}$ ($+17\%$), while reducing the Training AUC from
+$7.354\times10^4$ to $6.651\times10^4$. The result supports the role of the
+backbone in learning the coupled LOS, relative-motion, and time-to-go features
+required for accurate and stable cooperative guidance.}
+
+\end{tcolorbox}
+
+
+
 
 \clearpage
 
@@ -2151,8 +2313,8 @@ assignment process.
 % =====================================================================
 %  Re3_2
 % =====================================================================
-\subsection*{Comment 3.2}
 
+\subsection*{Comment 3.2}
 \begin{reviewercomment}{Reviewer comment 3.2}
 Also, a more rigorous complexity and scalability analysis is needed for the
 Improved Dung Beetle Optimization algorithm under cooperative deflection
@@ -2160,83 +2322,131 @@ environments where communication delays influence distributed consensus
 efficiency.
 \end{reviewercomment}
 
-\rsp We sincerely thank the reviewer for this important suggestion. We agree
-that the original complexity analysis considered the principal computational
-terms but did not clearly distinguish per-interceptor computational
-scalability from the wall-clock efficiency of distributed consensus under
-communication delay.
+\rsp We sincerely thank the reviewer for this important and constructive
+suggestion. We agree that the computational scalability of IDBO and the
+influence of communication delay on distributed consensus should be analyzed
+separately and supported by quantitative results. Accordingly, we have
+extended both the theoretical analysis in Section~III-B and the experimental
+evaluation in Section~V-B.
 
-We have expanded the analysis following Eq.~(27). The revised discussion
-separates three aspects. First, the per-interceptor optimization,
-communication, and advantage-update costs are
-$O(TPN^2)$, $O(N|\mathcal{N}_i|)$, and $O(N)$, respectively, with a
-per-interceptor memory requirement of $O(PN+N)$. Second, under the
-fixed-target and bounded-neighborhood communication topology considered in
-the distributed implementation, the per-interceptor cost is independent of
-the total number of interceptors $M$, while the aggregate per-round
-computational cost grows linearly with $M$. The explicit
-$|\mathcal{N}_i|$ term also retains the dependence on neighborhood size if
-the communication graph becomes denser.
+The revised theoretical analysis distinguishes the local computational cost
+from the communication-side consensus cost. Based on the per-UAV
+per-iteration complexity in Eq.~(27), we clarify the effects of jointly
+increasing the interceptor and target populations. We further analyze the
+propagation of stabilized winner lists over a connected communication graph:
+the communication time depends on the graph diameter and per-hop delay,
+whereas the processing cost of one consensus round depends on the number of
+targets and neighboring interceptors.
 
-Third, we now distinguish arithmetic complexity from consensus latency. In a
-connected communication graph of diameter $D$, the winning bids for a target
-must propagate across at most $D$ hops. Together with the targetwise auction
-process and a per-hop communication latency $T_{\mathrm{comm}}$, the
-wall-clock consensus time scales as
-$O(ND T_{\mathrm{comm}})$. Consequently, bounded communication delay
-increases the time required for the disagreement metric in Eq.~(26) to
-settle, but does not change the consensus solution or prevent convergence
-when graph connectivity is maintained.
+We also added two quantitative evaluations. The first measures the CPU time
+of IDBO over assignment scales ranging from $10\times4$ to $160\times64$.
+The second evaluates distributed consensus under communication delays from
+$50$ to $450$~ms using the nominal $20\times8$ configuration. The latter
+reports the mean communication steps, mean consensus time, and consensus
+success rate. These additions characterize both computational scalability
+and delay-dependent consensus efficiency without conflating CPU execution
+time with communication latency.
+
+\medskip
+\noindent\textbf{(1) Complexity and communication-scalability analysis.}
 
 \loc Section~III-B (\emph{Distributed Consensus-Based IDBO Framework}),
-immediately following the per-UAV complexity expression in Eq.~(27). The
-complexity definition and the newly added scalability and communication-delay
-analysis are reproduced below:
+immediately after the per-UAV complexity model in Eq.~(27). The following
+analysis has been added:
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
 boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
-The per-UAV per-iteration complexity decomposes as
-\begin{equation*}
-C_{\mathrm{total}}
-=
-O(T\cdot P\cdot N^2)
-+
-O(N\cdot|\mathcal{N}_i|)
-+
-O(N).
-\tag{27}
-\end{equation*}
-Here, $T$ is the IDBO iteration count, $P=O(N)$ is the population size,
-and $|\mathcal{N}_i|$ is the neighborhood size. The three terms account for
-optimization, consensus communication, and advantage update, respectively.
-Communication cost is $O(N\cdot|\mathcal{N}_i|)$ and memory is
-$O(P\cdot N+N)$ per UAV.
-
-\hladd{Because the target set faced by each interceptor and its neighborhood
-size $|\mathcal{N}_i|$ are fixed by the engagement and the communication
-topology rather than by the swarm size $M$, the per-UAV per-iteration cost
-above is independent of $M$; the total per-round cost of the swarm therefore
-grows only linearly with $M$. Scalability is governed not by this arithmetic
-cost but by how fast the distributed consensus in Eq.~(26) settles. Under a
-connected graph with a per-hop communication latency
-$T_{\mathrm{comm}}$, each target's winning bids propagate across the network
-in at most $D$ hops ($D$: graph diameter), so the wall-clock time to reach
-consensus scales as
-$O(N\!\cdot\!D\!\cdot\!T_{\mathrm{comm}})$. Empirically this time stays
-nearly constant as $M$ grows at fixed diameter, and increases only linearly
-with the communication delay and with $D$; a bounded delay thus slows, but
-does not prevent, convergence of the distributed consensus. Detailed
-complexity, scalability, and communication-delay measurements are reported
-in the supplementary response material.}
+\hladd{As $M$ and $N$ increase together, the overall computational workload
+also increases, as quantified by the scalability results in Section~V-B.
+Communication-side scalability is governed by the convergence efficiency of
+the distributed consensus process. Once the bids have stabilized, the winner
+lists for all $N$ targets are exchanged together and propagate through a
+connected graph of diameter $D$ within at most $D$ successful communication
+rounds. The corresponding communication time scales as
+$O(DT_{\mathrm{comm}})$ under bounded per-hop delay
+$T_{\mathrm{comm}}$, while the per-round communication processing cost is
+$O(N|\mathcal{N}_i|)$. The experiments in Section~V-B show that increasing
+communication delay increases both the mean communication steps and the
+consensus time, while all tested cases reach common top-$L_{\max}$ winner
+lists.}
 \end{tcolorbox}
 
 \medskip
-\noindent This revision makes the underlying scalability assumptions
-explicit and distinguishes local computational growth from the effect of
-network diameter and communication latency on distributed-consensus
-efficiency.
+\noindent\textbf{(2) Computational-scalability experiment.}
 
+\loc Section~V-B (\emph{Target Assignment Performance and Spatial
+Topology}), following the target-assignment topology results. We added a
+scale-sweep experiment using five interceptor--target configurations:
 
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+\hladd{To further examine the computational scalability and delay-dependent
+consensus efficiency of IDBO, the nominal $20\times8$ configuration is used
+as the baseline, and the scale sweep considers $10\times4$, $20\times8$,
+$40\times16$, $80\times32$, and $160\times64$. Under a fixed optimization
+budget, the mean CPU times are $0.031$~s, $0.048$~s, and $1.948$~s for the
+representative $10\times4$, $20\times8$, and $160\times64$ configurations,
+respectively. The observed runtime scaling is superlinear over the evaluated
+configurations when the interceptor and target populations are increased
+concurrently. These CPU times quantify the computational cost of IDBO and
+exclude distributed communication latency.}
+\end{tcolorbox}
+
+\medskip
+\noindent\textbf{(3) Delay-dependent consensus experiment.}
+
+\loc Section~V-B, immediately after the computational-scalability analysis.
+We added a communication-delay sweep for the nominal $20\times8$ assignment.
+The corresponding table and analysis are reproduced below:
+
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+
+\begin{center}
+{\color{blue}
+\footnotesize
+\textbf{Delay-dependent consensus performance of IDBO for the nominal
+$20\times8$ assignment.}\\[5pt]
+
+\setlength{\tabcolsep}{4.0pt}
+\renewcommand{\arraystretch}{1.12}
+\begin{tabular}{@{}cccc@{}}
+\hline\hline
+\shortstack{Communication\\delay (ms)} &
+\shortstack{Mean communication\\steps} &
+\shortstack{Mean consensus\\time (s)} &
+\shortstack{Consensus\\success (\%)} \\
+\hline
+50  & 10.6 & 0.53 & 100 \\
+100 & 19.2 & 0.96 & 100 \\
+150 & 27.8 & 1.39 & 100 \\
+250 & 45.0 & 2.25 & 100 \\
+450 & 79.4 & 3.97 & 100 \\
+\hline
+\end{tabular}
+}
+\end{center}
+
+\medskip
+\hladd{The table reports the distributed consensus performance at the nominal
+assignment scale. The $50$-ms case corresponds to the nominal communication
+condition, while the remaining cases provide an extended-delay evaluation.
+The communication-step count is measured on the $50$-ms communication time
+grid. As the communication delay increased from $50$ to $450$~ms, the mean
+number of communication steps required to reach consensus increased from
+$10.6$ to $79.4$, and the corresponding mean consensus time increased from
+$0.53$ to $3.97$~s. Nevertheless, the consensus success rate remained
+$100\%$ under all tested delays. These results show that bounded communication
+delay reduces distributed consensus efficiency but does not prevent
+convergence to a common conflict-free assignment under the tested conditions.}
+\end{tcolorbox}
+
+\medskip
+\noindent These theoretical and experimental additions provide separate
+characterizations of IDBO computational scaling and communication-dependent
+consensus efficiency. In particular, the conclusions concerning successful
+consensus are restricted to the tested bounded-delay conditions rather than
+being presented as an unconditional guarantee.
 
 
 
@@ -2861,85 +3071,44 @@ coordination, control effort, interception time, and terminal accuracy.
 % =====================================================================
 %  Re3_6
 % =====================================================================
-\subsection*{Comment 3.6}
 
+\subsection*{Comment 3.6}
 \begin{reviewercomment}{Reviewer comment 3.6}
-Moreover, I suggest the author explain whether dual-clip PPO with adaptive KL
-regularization introduces additional computational overhead during real-time
-deployment on processors operating in latency constraints within UAV swarms.
+Moreover, I suggest the author explain whether dual-clip PPO with adaptive
+KL regularization introduces additional computational overhead during
+real-time deployment on processors operating in latency constraints within
+UAV swarms.
 \end{reviewercomment}
 
 \rsp We sincerely thank the reviewer for raising this important practical
-question. We agree that the computational roles of Dual-Clip and adaptive KL
-regularization during training and deployment should be clearly
-distinguished.
+issue. We agree that the computational costs incurred during offline policy
+optimization should be clearly distinguished from those incurred during
+real-time execution. In the adopted training-and-deployment framework,
+Dual-Clip and adaptive KL regularization are evaluated only when optimizing
+the training loss in Eq.~(54). After training, each interceptor executes only
+the forward pass of its deployed actor; the Dual-Clip operation, KL-divergence
+estimation, and adaptation of $\beta_{\mathrm{KL}}$ are not evaluated.
+Therefore, although these mechanisms introduce additional operations during
+offline training, they add no incremental computation to the real-time
+inference path. We have clarified this point explicitly in the revised
+manuscript.
 
-Both mechanisms are used exclusively during offline policy optimization.
-Dual-Clip modifies the actor surrogate through scalar comparison operations,
-while adaptive KL regularization estimates the policy log-ratio and updates
-the scalar penalty coefficient $\beta_{\mathrm{KL}}$. These operations are
-part of the training loss in Eq.~(54) and are not included in the deployed
-actor network under the CTDE framework. Consequently, each interceptor
-executes only its local actor forward pass during real-time guidance.
+\medskip
+\noindent\textbf{Clarification of real-time computational overhead.}
 
-The measured inference time is approximately $0.30$~ms for a single
-interceptor. An aggregate forward pass for a 20-agent swarm requires
-$3.98$~ms on the server-class CPU used for the corresponding throughput
-test. Both are well below the $50$~ms guidance cycle. In particular, the
-single-interceptor value represents the relevant decentralized onboard
-execution load; an individual interceptor does not execute the policies of
-all 20 agents. Because Dual-Clip and adaptive KL are absent from this
-inference path, they introduce no additional real-time execution latency.
-
-For completeness, we also measured their offline training overhead. Their
-combined additional cost is approximately $0.013$~ms per gradient update,
-which is below $0.01\%$ of the complete policy-update time and is negligible
-compared with the neural-network forward and backward passes.
-
-\loc Section~IV-C (\emph{Robust Optimization via Dual-Clip and Adaptive
-KL}), immediately following the overall ART-MAPPO loss in Eq.~(54) and its
-optimization description. The following computational-cost discussion has
-been added:
+\loc Section~IV-C (\emph{Robust Optimization via Dual-Clip and Adaptive KL}),
+immediately after the overall ART-MAPPO loss in Eq.~(54). The following
+clarification has been added:
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
 boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
-The overall training loss is
-\begin{equation*}
-\mathcal{L}(\boldsymbol{\vartheta},\phi)
-=
--J^{\mathrm{DC}}(\boldsymbol{\vartheta})
-+\beta_{\mathrm{KL}}\hat{D}_{\mathrm{KL}}
-+c_vL_V(\phi)
--c_eS[\pi_{\boldsymbol{\vartheta}}].
-\tag{54}
-\end{equation*}
-
-\hladd{It is worth clarifying the computational cost of the dual-clip
-surrogate and the adaptive-KL penalty for latency-constrained deployment.
-Both mechanisms act only on the training loss in Eq.~(54): the dual-clip
-branch is a scalar $\max/\min$ selection on the advantage sign, and the
-adaptive-KL term is a log-ratio estimate plus a scalar update of
-$\beta_{\mathrm{KL}}$. Neither appears in the deployed policy. At execution
-each interceptor runs only the actor forward pass, which on the deployed
-network completes in about $0.30$~ms per decision (single interceptor) and
-$3.98$~ms for a $20$-agent swarm on a server-class CPU---well inside the
-$50$~ms guidance cycle---while the dual-clip and adaptive-KL operations
-contribute exactly $0$~ms because they are absent from this path. During
-offline training the two mechanisms are evaluated once per gradient step and
-add only a small constant per update ($\approx0.013$~ms, i.e., below
-$0.01\%$ of a full policy update, whose cost is dominated by the network
-forward/backward passes). Consequently they introduce no additional
-real-time overhead on the onboard processor, and their cost during training
-is negligible relative to the network forward/backward passes.}
+\hladd{Dual-Clip and adaptive KL regularization are confined to offline
+training and are absent from the inference path of the deployed actor.
+Consequently, they introduce no incremental computational overhead during
+real-time execution.}
 \end{tcolorbox}
 
-\medskip
-\noindent The revised discussion therefore confirms that Dual-Clip and
-adaptive KL regularization affect only offline training and do not increase
-the latency or computational complexity of decentralized actor inference
-during real-time deployment.
 
-% \clearpage
 
 % =====================================================================
 %  Re3_7
