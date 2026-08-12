@@ -1151,18 +1151,20 @@ $\{\pi_{\boldsymbol{\vartheta}_i}\}_{i=1}^{M}$
 \subsection{\hladd{Mechanistic Comparison with Conventional MAPPO}}
 \label{subsec:theory_comparison}
 
-\hladd{\emph{1) Convergence guarantees.}
-With deep neural-network function approximation and stochastic multi-agent
-training, neither conventional MAPPO nor ART-MAPPO provides a formal guarantee
-of monotonic policy improvement or convergence to a global optimum. Conventional
-MAPPO regulates policy updates using a fixed clipped surrogate, whereas
-ART-MAPPO employs the piecewise Dual-Clip objective in
-\eqref{eq:dual_clip_final}--\eqref{eq:rt_bound} and the adaptive KL penalty in
-\eqref{eq:kl_adapt}. Dual-Clip limits the influence of large-ratio
-negative-advantage samples, while adaptive KL regularization discourages
-excessive average deviation between successive policies. These mechanisms
-promote more controlled and stable optimization, but should not be interpreted
-as providing a stronger formal convergence guarantee.}
+\hladd{\emph{1) Convergence analysis.}
+Conventional MAPPO primarily relies on centralized value estimation, GAE, and
+a fixed clipped surrogate to support policy learning. In ART-MAPPO, the
+attention--residual encoder preserves the coupled kinematic information and
+maintains a direct gradient path, while the GRU incorporates maneuver history
+into the policy representation. This reduces the sensitivity of policy learning
+to instantaneous state variations. The smoothed trust variable changes the
+guided-exploration weight gradually according to relative return, allowing the
+sampling policy to shift steadily toward exploitation as effective cooperative
+behavior develops. During parameter optimization, Dual-Clip limits anomalous
+negative surrogate contributions, and adaptive KL regularization adjusts the
+penalty according to the observed policy deviation. The resulting learning
+process exhibits lower sampling and update variability, promoting a more stable
+approach to the steady training regime than conventional MAPPO.}
 
 % \hladd{\emph{2) Exploration--exploitation balance.}
 % Conventional MAPPO primarily maintains exploration through an entropy bonus
