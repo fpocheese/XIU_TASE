@@ -1,0 +1,36 @@
+% Suggested minimal manuscript text only. It has NOT been written to main.tex.
+% Recommended location: replace the complexity paragraph surrounding Eq. (27).
+
+\hladd{Let $M$, $N$, $P$, $T$, $\Delta_i$, and $L_{\max}$ denote the
+numbers of interceptors and targets, the IDBO population size, the local-search
+iterations, the communication degree of interceptor $i$, and the per-target
+winner capacity, respectively. In the full-swarm reference implementation, the
+pairwise competition term requires $O(NM^2)$ operations per candidate, giving
+$O(TPNM^2)$ as the dominant computational upper bound. In a distributed
+implementation restricted to the neighbor set $\mathcal N_i$, the corresponding
+per-interceptor term reduces to $O(TPN\Delta_i)$. Each consensus exchange merges
+at most $L_{\max}$ records per target and neighbor, requiring
+$O\!\left(N\Delta_iL_{\max}\log(\Delta_iL_{\max})\right)$ operations and
+$O(N\Delta_iL_{\max})$ communicated records.}
+
+\hladd{For a connected communication graph of diameter $D$, a static set of
+winner records propagates in $O(D(d+1))$ exchanges when the bounded additional
+single-hop delay is $d$ exchange periods; $O(ND(d+1))$ is a conservative bound
+when the CBBA bundle is constructed sequentially over the targets. In the
+assignment-only experiments, the 20-interceptor/8-target case is used as the
+nominal setting. All static delayed runs reached the same verified
+Top-$L_{\max}$ fixed point, while the consensus time increased approximately
+linearly with delay and graph diameter. Under coordinated target deflection and
+a 2-s reallocation interval, delays up to 100 ms recovered before the next
+update in all tested sequences, whereas 200--400 ms delays caused substantial
+tracking degradation. Hence, static convergence additionally requires the
+online consensus time to remain shorter than the reallocation interval in a
+time-varying engagement.}
+
+% Optional figure caption:
+\hladd{Complexity and delay-dependent scalability of the IDBO assignment layer.
+(a) Measured runtime versus joint interceptor--target problem size, with the
+nominal $20\times8$ setting highlighted. (b) Static consensus latency versus
+additional per-hop delay. (c) Consensus latency versus communication-graph
+diameter. (d) Dynamic winner-set agreement and recovery rate under coordinated
+target deflection.}

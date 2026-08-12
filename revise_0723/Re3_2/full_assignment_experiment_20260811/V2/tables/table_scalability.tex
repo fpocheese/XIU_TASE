@@ -1,0 +1,18 @@
+\begin{table}[!t]
+\centering
+\small
+\setlength{\tabcolsep}{3.5pt}
+\caption{Computational and communication scalability of the IDBO assignment.}
+\label{tab:idbo_assignment_scale}
+\begin{tabular}{ccccc}
+\hline\hline
+$M\!\times\!N$ & IDBO time (s) & $D$ & Consensus (s) & Messages ($10^3$) \\
+\hline
+10$\times$4 & 0.031 $\pm$ 0.001 & 3 & 0.55 & 0.4 \\
+\textbf{20$\times$8} & 0.048 $\pm$ 0.002 & 5 & 0.85 & 1.3 \\
+40$\times$16 & 0.091 $\pm$ 0.003 & 10 & 1.60 & 5.0 \\
+80$\times$32 & 0.273 $\pm$ 0.008 & 20 & 3.10 & 19.5 \\
+160$\times$64 & 1.948 $\pm$ 0.081 & 40 & 6.10 & 77.4 \\
+\hline
+\end{tabular}
+\end{table}

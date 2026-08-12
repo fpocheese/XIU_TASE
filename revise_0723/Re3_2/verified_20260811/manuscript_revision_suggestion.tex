@@ -1,0 +1,27 @@
+% Suggested minimal manuscript revision. DO NOT compile into main.tex automatically.
+% Recommended location: replace/expand the paragraph surrounding Eq. (27),
+% at the end of Section III-B.
+
+\hladd{Let $\Delta_i=|\mathcal{N}_i|$ denote the communication degree of
+interceptor $i$. More explicitly, merging the Top-$L_{\max}$ records received
+from its neighbors requires
+$O\!\left(N\Delta_iL_{\max}\log(\Delta_iL_{\max})\right)$ operations and
+$O(N\Delta_iL_{\max})$ received records per exchange. Because $L_{\max}$ is a
+small fixed capacity, these terms reduce to $O(N\Delta_i)$ in
+Eq.~\eqref{eq:complexity}. Consequently, for bounded communication degree and
+fixed $N$, $P$, and $T$, the total per-round computation and communication of
+the swarm grow linearly with the interceptor number $M$.}
+
+\hladd{For a connected graph of diameter $D$, a winning bid requires at most
+$D$ hops to propagate under a static assignment snapshot. If the maximum
+single-hop delay is $d_{\max}$ communication rounds, the conservative CBBA
+consensus bound becomes
+$O\!\left(ND(d_{\max}+1)\right)$ exchange rounds, or
+$O\!\left(ND(d_{\max}+1)T_{\mathrm{ex}}\right)$ in wall-clock time, where
+$T_{\mathrm{ex}}$ is the communication-exchange period. Thus, bounded delay
+does not alter the static Top-$L_{\max}$ fixed point when the graph remains
+connected and messages are eventually delivered, but it increases the
+consensus time. In a time-varying engagement, the allocation snapshot must be
+updated on a time scale longer than the consensus interval to avoid decisions
+based on stale bids.}
+

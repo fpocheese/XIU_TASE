@@ -1,0 +1,9 @@
+{
+  "local_runtime_loglog_exponent_vs_P": 0.8636650263492854,
+  "delay_fixed_points_all_verified": true,
+  "topology_fixed_points_all_verified": true,
+  "scaling_fixed_points_all_verified": true,
+  "scenario": "current manuscript Table II ranges",
+  "local_runtime_code": "/home/uav/00gao_xueshu/DT_PAPER/XIU_tase_paper_V1/revise_0723/idbo_paper/idbo_paper.py",
+  "consensus_model": "isolated delayed Top-L winner-set propagation"
+}

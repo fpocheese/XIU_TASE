@@ -1,0 +1,6 @@
+delay_rounds,graph_diameter_D,rounds_mean,rounds_std,all_fixed_points_verified
+0,5,8.0,0.0,True
+1,5,13.0,0.0,True
+2,5,18.0,0.0,True
+4,5,28.0,0.0,True
+8,5,48.0,0.0,True

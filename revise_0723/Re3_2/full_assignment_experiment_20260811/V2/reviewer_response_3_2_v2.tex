@@ -1,0 +1,72 @@
+% Reviewer-response draft. The manuscript itself has not been modified.
+\begin{reviewercomment}{Comment 3.2}
+Also, a more rigorous complexity and scalability analysis is needed for the
+Improved Dung Beetle Optimization algorithm under cooperative deflection
+environments where communication delays influence distributed consensus
+efficiency.
+\end{reviewercomment}
+
+\rsp We sincerely thank the reviewer for this important suggestion. In
+response, we conducted a dedicated assignment-layer study that separates the
+computational cost of IDBO from the communication cost of its distributed
+Top-$L_{\max}$ consensus. No downstream guidance or interception simulation is
+included in this study. The nominal problem contains 20 interceptors and 8
+targets, consistent with the revised manuscript. The scalability sweep preserves
+this ratio and considers $10\!\times\!4$, $20\!\times\!8$,
+$40\!\times\!16$, $80\!\times\!32$, and $160\!\times\!64$ assignments.
+
+For the current full-swarm reference implementation, each candidate contains an
+$M\times N$ preference matrix, and the pairwise competition term evaluates an
+$M\times M$ matrix for each target. Its dominant computational upper bound is
+therefore $O(TPNM^2)$, whereas a distributed implementation restricted to a
+bounded neighbor set of degree $\Delta_i$ has a per-interceptor local-search
+cost of $O(TPN\Delta_i)$. Merging the Top-$L_{\max}$ records from the
+neighboring interceptors requires
+$O\!\left(N\Delta_iL_{\max}\log(\Delta_iL_{\max})\right)$ operations and
+$O(N\Delta_iL_{\max})$ communicated records per exchange. For a static
+assignment snapshot, parallel winner-record propagation requires
+$O(D(d+1))$ exchanges, where $D$ is the graph diameter and $d$ is the bounded
+additional delay measured in exchange periods; $O(ND(d+1))$ remains a
+conservative CBBA bundle-construction bound.
+
+The measured IDBO runtime grew approximately linearly with the local population
+size (log--log slope 0.84). When the interceptor and target numbers were enlarged
+together at the nominal ratio, the fitted exponent was 1.45. At a fixed
+optimization budget, the CPU times were $0.048$ s for the nominal
+$20\!\times\!8$ problem and $1.948$ s for $160\!\times\!64$. We therefore no
+longer describe joint problem-size growth as unconditionally linear.
+
+We next generated 20 independent three-dimensional $20\!\times\!8$ assignment
+snapshots and explicitly delayed each neighbor-to-neighbor winner-record
+message. A data-link exchange period of 50 ms was used, and the additional
+per-hop delay was varied over $0$, $50$, $100$, $200$, and $400$ ms. The mean
+times to the verified global Top-$L_{\max}$ fixed point were, respectively,
+$0.53\pm0.08$, $0.96\pm0.17$, $1.39\pm0.25$,
+$2.25\pm0.42$, and $3.97\pm0.76$ s. Every one of the 100 runs reached the
+same checked fixed point. At a fixed 100-ms delay, increasing the communication
+diameter from $D=1,3,4,5,$ to $10$ increased the consensus time from
+$0.25,0.55,0.70,0.85,$ to $1.60$ s, confirming the predicted linear dependence
+on the propagation diameter.
+
+Finally, to expose the limitation of the static result, we constructed eight
+independent cooperative-deflection sequences, each containing 30 assignment
+snapshots. The targets executed coordinated alternating lateral deflection, and
+the allocation was refreshed every 2 s. For additional delays of
+$0,50,100,200,$ and $400$ ms, the mean winner-set agreement was
+$0.938,0.876,0.814,0.697,$ and $0.545$, while the fractions of changed
+allocations that recovered before the next update were
+$100\%,100\%,100\%,41.2\%,$ and $0.9\%$, respectively. Thus, bounded delay
+preserves the eventual fixed point for a static snapshot, but excessive delay
+relative to the reallocation period prevents the distributed replicas from
+tracking a rapidly changing assignment. The revised discussion now states the
+required operating condition explicitly: the consensus time should remain
+shorter than the reallocation interval. The full protocol, raw CSV data,
+reproducible code, tables, and vector figures are provided with this response.
+
+% Suggested response figure:
+% V2/figures/idbo_assignment_complexity_delay.pdf
+% Suggested dynamic-tracking figure:
+% V2/figures/idbo_dynamic_consensus_tracking.pdf
+% Suggested tables:
+% V2/tables/table_delay_dynamic.tex
+% V2/tables/table_scalability.tex

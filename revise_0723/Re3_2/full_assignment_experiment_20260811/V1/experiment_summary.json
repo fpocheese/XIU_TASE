@@ -1,0 +1,14 @@
+{
+  "algorithm_version": "V1",
+  "population_slope": 0.7095214920726235,
+  "joint_size_slope": 0.5445087022073549,
+  "python": "3.10.12",
+  "numpy": "1.24.2",
+  "all_static_fixed_points": true,
+  "dynamic_mean_epoch_change": 0.3220523653755345,
+  "runtime_rows": 9,
+  "delay_rows": 5,
+  "topology_rows": 5,
+  "scaling_rows": 5,
+  "dynamic_rows": 5
+}

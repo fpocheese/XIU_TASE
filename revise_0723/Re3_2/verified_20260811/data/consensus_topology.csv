@@ -1,0 +1,6 @@
+topology,graph_diameter_D,mean_degree,consensus_rounds,fixed_point_verified
+complete,1,19.0,5,True
+ring-k4,3,8.0,9,True
+ring-k3,4,6.0,11,True
+ring-k2,5,4.0,13,True
+ring-k1,10,2.0,23,True

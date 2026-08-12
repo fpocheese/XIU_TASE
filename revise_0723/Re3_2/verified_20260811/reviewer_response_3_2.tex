@@ -1,0 +1,49 @@
+% Suggested response only. This file is not included in or written to main.tex.
+\begin{reviewercomment}{Reviewer comment 3.2}
+Also, a more rigorous complexity and scalability analysis is needed for the
+Improved Dung Beetle Optimization algorithm under cooperative deflection
+environments where communication delays influence distributed consensus
+efficiency.
+\end{reviewercomment}
+
+\rsp We sincerely thank the reviewer for this important suggestion. We agree
+that the local optimization cost and the delay-dependent consensus cost should
+be analyzed separately. We have therefore expanded the complexity analysis and
+performed a controlled scalability study using the current IDBO implementation
+and the Top-$L_{\max}$ winner-set update used by the distributed assignment.
+
+Let $M$, $N$, $P$, $T$, $\Delta_i$, and $L_{\max}$ denote the numbers of
+interceptors and targets, the local IDBO population size, the local-search
+horizon, the degree of interceptor $i$ in the communication graph, and the
+per-target winner capacity, respectively. The per-interceptor computation is
+\[
+C_i=O(TPN^2)+O\!\left(N\Delta_iL_{\max}
+\log(\Delta_iL_{\max})\right)+O(N),
+\]
+where the three terms correspond to local IDBO search, Top-$L_{\max}$ neighbor
+merging, and advantage/bid updating. When $\Delta_i$ and $L_{\max}$ are bounded,
+the total per-round swarm cost grows linearly with $M$, and the communication
+payload per exchange is $O(MN\bar{\Delta}L_{\max})$.
+
+We additionally evaluated the two factors that govern consensus latency. For a
+20-interceptor/8-target instance on a connected four-neighbor ring
+($D=5$), increasing the bounded per-hop delay from
+$d=0,1,2,4,$ and $8$ additional exchange rounds increased the time to verified
+consensus from $8,13,18,28,$ and $48$ exchange rounds, respectively. At a fixed
+one-round delay, changing the communication-graph diameter from
+$D=1,3,4,5,$ and $10$ required $5,9,11,13,$ and $23$ rounds. Thus, consensus
+latency increases approximately linearly with both bounded message delay and
+graph diameter. In a separate bounded-degree scaling test with $N=8$, the
+number of directed packets per exchange was $40,80,160,320,$ and $640$ for
+$M=10,20,40,80,$ and $160$, confirming linear per-exchange communication growth.
+All delayed-consensus runs reached and were explicitly checked against the same
+global Top-$L_{\max}$ fixed point.
+
+These fixed-point results apply to a static assignment snapshot on a connected
+graph with finite delay and eventual message delivery. In a rapidly changing
+engagement, stale bids can affect the transient assignment; therefore, the
+consensus time must remain shorter than the reallocation interval. We have added
+this assumption and the corresponding complexity/scalability discussion to the
+revised manuscript, while the complete protocol, raw data, and reproducible code
+are provided in the supplementary response material.
+

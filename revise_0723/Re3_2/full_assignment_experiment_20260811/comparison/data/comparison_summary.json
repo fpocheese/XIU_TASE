@@ -1,0 +1,6 @@
+{
+  "paired_scenes": 30,
+  "v1_cost_mean": 0.4278748323486929,
+  "v2_cost_mean": 0.5395056636937267,
+  "v2_minus_v1_cost_percent": 26.089599786056404
+}
