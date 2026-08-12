@@ -960,7 +960,7 @@ The complete ART-MAPPO workflow, integrating all three modules described above, 
 
 \begin{figure*}[!t]
 \centering
-\includegraphics[width=7.3in]{rlsuanfa.pdf}
+\includegraphics[width=7.3in]{rlsuanfa_3d.pdf}
 \caption{\hladd{Overall workflow of the ART-MAPPO algorithm for cooperative swarm interception, showing the interaction among the attention-residual network, trust-modulated exploration, dual-clip adaptive KL optimization, and the three-dimensional acceleration-command output.}}
 \label{fig:algorithm_flow}
 \end{figure*}
@@ -1989,7 +1989,7 @@ To rigorously quantify the robustness of the proposed framework, 1000 independen
 
 Based on the statistical distributions, three key findings emerge:
 
-\emph{(i) Interception reliability and precision.} \hladd{The Interception Success Rates (ISRs) directly reflect the algorithms' adaptability to aggressive target maneuvers. While PN achieves a respectable 94.40\% against the evasive target (Case~1), its performance precipitously degrades to 17.50\% when facing the continuous weaving target (Case~2). Conversely, ART-MAPPO sustains exceptional ISRs of 98.70\% and 97.1\%, demonstrating profound robustness against continuous, high-frequency line-of-sight (LOS) oscillations. Furthermore, the $E_{miss}$ boxplots confirm that ART-MAPPO consistently achieves a lower median miss distance with a significantly narrower interquartile range (IQR), ensuring lethal precision even under worst-case initializations.}
+\emph{(i) Interception reliability and precision.} \hladd{The Interception Success Rates (ISRs) directly reflect the algorithms' adaptability to aggressive target maneuvers. While PN achieves a respectable 94.40\% against the evasive target (Case~1), its performance precipitously degrades to 17.50\% when facing the continuous weaving target (Case~2). Conversely, ART-MAPPO sustains exceptional ISRs of 98.7\% and 97.1\%, demonstrating profound robustness against continuous, high-frequency line-of-sight (LOS) oscillations. Furthermore, the $E_{miss}$ boxplots confirm that ART-MAPPO consistently achieves a lower median miss distance with a significantly narrower interquartile range (IQR), ensuring lethal precision even under worst-case initializations.}
 \hladd{Failure-case analysis was conducted on the 13 unsuccessful trials in
 Case~1 and 29 in Case~2. For unsuccessful interception, the interceptor
 swarm starts from an unfavorable engagement geometry, with its initial flight
