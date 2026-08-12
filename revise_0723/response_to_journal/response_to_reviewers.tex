@@ -65,9 +65,11 @@ Interception Strategy for Maneuvering Swarms with Target Assignment''
 \end{center}
 \bigskip
 
-\noindent\textbf{Response to the Associate Editor.}\quad
-We sincerely thank the Associate Editor for the careful synthesis of the
-reviewers' concerns and for the constructive guidance. We agree that the
+\noindent Dear Editor and Reviewers,
+
+\medskip
+\noindent We sincerely thank the Editor and the Reviewers for their careful
+evaluation of our manuscript and constructive comments. We agree that the
 original manuscript required substantial improvement in presentation,
 theoretical rigor, and practical validation. In the revised manuscript, we
 have added a concise notation table, complete pseudocode for IDBO and
@@ -83,7 +85,7 @@ were conducted on this HIL platform.
 We further added controlled component ablations, sensitivity
 analyses of the IDBO assignment weights, reward weights, and training
 hyperparameters, as well as robustness studies covering partial interceptor
-failures, unsuccessful and delayed engagements, and an unseen bang--bang
+failures, unsuccessful and delayed engagements, and an unseen bang-bang
 maneuver pattern. The IDBO convergence conditions, computational complexity,
 and communication-delay-dependent scalability have been expanded. For
 ART-MAPPO, we added a comparison with conventional MAPPO regarding
@@ -2976,7 +2978,7 @@ We therefore introduced an additional Case~3 employing bang-bang evasion,
 which differs from the hybrid evasive maneuver in Case~1 and the continuous
 sinusoidal maneuver in Case~2. The trained ART-MAPPO policy is kept frozen
 and applied directly to Case~3 without retraining or fine-tuning; the
-bang--bang maneuver is not included in its training data. Accordingly, this
+bang-bang maneuver is not included in its training data. Accordingly, this
 experiment evaluates zero-shot generalization to an unseen target-maneuver
 pattern rather than adaptation through additional learning.
 
@@ -3001,7 +3003,7 @@ left=9pt,right=9pt,top=7pt,bottom=7pt]
 \hladd{\emph{(iv) Generalization to unseen attack patterns.}
 To further evaluate the proposed method under unseen attack patterns,
 additional Monte Carlo experiments were conducted in Case~3, where the
-attackers adopted bang--bang evasion. Over $1{,}000$ independent trials, the
+attackers adopted bang-bang evasion. Over $1{,}000$ independent trials, the
 proposed method achieves a cooperative interception success rate of
 $96.4\%$, with $E_{co\text{-}time}=0.051$~s and
 $E_{miss}=1.44$~m, demonstrating effective temporal coordination and
@@ -3011,7 +3013,7 @@ terminal accuracy under this additional maneuvering threat (Fig.~37).}
 \centering
 \includegraphics[width=0.72\textwidth]{case3_bangbang_metrics_box4.pdf}
 \captionof*{figure}{\hladd{Fig.~37. Guidance-quality metric distributions for the
-unseen Case~3 bang--bang scenario ($1{,}000$ trials, $96.4\%$ ISR):
+unseen Case~3 bang-bang scenario ($1{,}000$ trials, $96.4\%$ ISR):
 (a)~$E_{co\text{-}time}$, (b)~$E_n$, (c)~$E_{miss}$,
 (d)~$E_t$. Diamonds mark means.}}
 \end{center}
