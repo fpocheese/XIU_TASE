@@ -125,7 +125,8 @@ guidance. The complete addition is reproduced below.
 following the reference list.
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
-boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+coltext=addblue,fontupper=\color{addblue},boxrule=0.6pt,arc=2pt,
+left=9pt,right=9pt,top=7pt,bottom=7pt]
 {\color{addblue}
 
 \noindent\textbf{Appendix A: Summary of Key Variables and Symbols}
@@ -318,7 +319,8 @@ immediately after the convergence criterion in Eq.~(26) and before the
 per-UAV complexity analysis in Eq.~(27).
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
-boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+coltext=addblue,fontupper=\color{addblue},boxrule=0.6pt,arc=2pt,
+left=9pt,right=9pt,top=7pt,bottom=7pt]
 \begin{algorithm}[H]
 \color{addblue}
 \fontsize{9pt}{11.0476pt}\selectfont
@@ -387,7 +389,8 @@ KL}), immediately after the ART-MAPPO workflow in Fig.~5 and before
 Section~IV-D (\emph{Mechanistic Comparison with Conventional MAPPO}).
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
-boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+coltext=addblue,fontupper=\color{addblue},boxrule=0.6pt,arc=2pt,
+left=9pt,right=9pt,top=7pt,bottom=7pt]
 \begin{algorithm}[H]
 \color{addblue}
 \fontsize{9pt}{11.0476pt}\selectfont
@@ -854,7 +857,8 @@ independent embedded computers and communicate with the engagement simulator
 through a physical network.
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
-boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+coltext=addblue,fontupper=\color{addblue},boxrule=0.6pt,arc=2pt,
+left=9pt,right=9pt,top=7pt,bottom=7pt]
 \hladd{\emph{2) HIL Platform:}
 As shown in Fig.7, the three-dimensional interception experiment is further implemented on a
 HIL platform. The policies of defenders $D_0$--$D_4$ are
@@ -961,26 +965,24 @@ accuracy and interception efficiency. Overall, the nominal configuration
 provides a balanced operating point among interception reliability, terminal
 accuracy, temporal coordination, and control economy.}
 
-\end{tcolorbox}
-
-\begin{table}[h]
+\par\medskip
+{\scriptsize
+\captionsetup{font=scriptsize}
 \centering
-\scriptsize
-\caption*{\hladd{Table~VIII. Sensitivity Analysis of ART-MAPPO
+\captionof*{table}{\hladd{Table~VII. Sensitivity Analysis of ART-MAPPO
 Reward-Function Weighting Coefficients.}}
-\renewcommand{\arraystretch}{1.15}
-\setlength{\tabcolsep}{3.5pt}
+\renewcommand{\arraystretch}{1.10}
+\setlength{\tabcolsep}{2.5pt}
 {\color{blue}
-\resizebox{0.98\textwidth}{!}{%
 \begin{tabular}{@{}llccccc@{}}
 \hline\hline
 Weight
 & $s$
-& ISR (\%) $\uparrow$
-& $E_{co\text{-}time}$ (s) $\downarrow$
-& $E_n$ (g) $\downarrow$
-& $E_t$ (s) $\downarrow$
-& $E_{miss}$ (m) $\downarrow$ \\
+& \shortstack{ISR (\%)\\$\uparrow$}
+& \shortstack{$E_{co\text{-}time}$ (s)\\$\downarrow$}
+& \shortstack{$E_n$ (g)\\$\downarrow$}
+& \shortstack{$E_t$ (s)\\$\downarrow$}
+& \shortstack{$E_{miss}$ (m)\\$\downarrow$} \\
 \midrule
 
 \multirow{5}{*}{\shortstack[l]{$w_1$\\(dist.)}}
@@ -1022,9 +1024,10 @@ Weight
 & 1.25          & 98.3          & 0.0518          & 0.0630          & 29.200          & 3.120 \\
 & 1.50          & 97.5          & 0.0545          & 0.0560          & 29.850          & 3.350 \\
 \bottomrule
-\end{tabular}%
-}}
-\end{table}
+\end{tabular}
+}
+\par}
+\end{tcolorbox}
 
 \medskip
 \noindent\textbf{(2) ART-MAPPO training-hyperparameter sensitivity.}
@@ -1033,7 +1036,8 @@ Weight
 \emph{3) Training-Hyperparameter Sensitivity} and Table~VII.
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
-boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+coltext=addblue,fontupper=\color{addblue},boxrule=0.6pt,arc=2pt,
+left=9pt,right=9pt,top=7pt,bottom=7pt]
 \hladd{\emph{3) Training-Hyperparameter Sensitivity.}
 The initial learning rate $\eta_0$, PPO clipping factor $\epsilon$, and
 target KL divergence $\delta_{\mathrm{targ}}$ are independently varied to
@@ -1049,12 +1053,11 @@ sensitive to moderate hyperparameter variations and that the nominal
 configuration provides a robust balance between learning efficiency and
 converged performance.}
 
-\end{tcolorbox}
-
-\begin{table}[h]
+\par\medskip
+{\scriptsize
+\captionsetup{font=scriptsize}
 \centering
-\scriptsize
-\caption*{\hladd{Table~VII. Sensitivity analysis of ART-MAPPO training
+\captionof*{table}{\hladd{Table~VIII. Sensitivity analysis of ART-MAPPO training
 hyperparameters.}}
 \renewcommand{\arraystretch}{1.10}
 \setlength{\tabcolsep}{4.0pt}
@@ -1095,7 +1098,8 @@ hyperparameters.}}
 \hline
 \end{tabular}
 }
-\end{table}
+\par}
+\end{tcolorbox}
 
 \medskip
 \noindent These additions quantify the sensitivity of ART-MAPPO to both
@@ -1186,7 +1190,7 @@ $\mathbf{n}_i\sim\mathcal{N}(0,\sigma_d^2\mathbf{I})$ vanish as $t$
 approaches $T$, suppressing late-stage fluctuations in the preference
 population. The schedule therefore satisfies the vanishing-gain condition
 $c_t\to0$ used in Robbins--Monro-type stochastic approximation
-\cite{robbins1951stochastic}. At $c_T=0$, the four update operators reduce
+[46]. At $c_T=0$, the four update operators reduce
 to the identity map, while elitist retention prevents the incumbent from
 being replaced by an inferior candidate. Consequently, once no strictly
 improving candidate is generated, the retained solution remains invariant
@@ -1224,16 +1228,6 @@ have been replaced by the following conditional fixed-point analysis:
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
 boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
-{\color{red}The algorithm guarantees monotonic fitness improvement:
-$\Phi^{(k+1)} \geq \Phi^{(k)}$ a.s., where
-$\Phi^{(k)}=\sum_{i=1}^{M}\mathcal{F}_i(\mathbf{x}_i^{(k)})$. Under a
-connected communication graph with finite message delays, consensus is
-reached in at most $N\cdot D$ iterations ($D$: graph diameter). The
-converged assignment $\mathbf{X}^{*}$ constitutes an $\epsilon$-approximate
-Nash equilibrium:
-$\mathcal{F}_i(\mathbf{x}_i^{*})
-\geq\mathcal{F}_i(\mathbf{x}_i')-\epsilon$,
-$\forall\mathbf{x}_i'\in\mathcal{X}_i$, $\forall i$.}
 
 \medskip
 \hladd{The local optimization and consensus phases have distinct limiting
@@ -1335,13 +1329,16 @@ memoryless feedforward layer; and \emph{``w/o attention--residual backbone''}
 substitutes a parameter-matched feedforward network while retaining the trust
 and GRU modules. All variants share the same reward, dynamics, optimizer,
 training seed, and training budget, and are evaluated in $1{,}000$
-frozen-policy Case~1 Monte Carlo trials.}
+frozen-policy Case~1 Monte Carlo trials.  Table~V
+summarises the results.  Critically, the three controls exhibit \emph{module-specific} rather
+than uniformly ordered degradation, providing direct evidence that each component carries a
+distinct and non-redundant role.}
 
 \medskip
 {\color{blue}
-\footnotesize
-\setlength{\tabcolsep}{2.5pt}
-\renewcommand{\arraystretch}{1.12}
+\scriptsize
+\setlength{\tabcolsep}{1.5pt}
+\renewcommand{\arraystretch}{1.10}
 \resizebox{\linewidth}{!}{%
 \begin{tabular}{lccccccc}
 \toprule
@@ -1707,15 +1704,15 @@ exploration.}
 
 \hladd{The sigmoid term maps the normalized relative return
 $\tilde{R}_i^{(k)}$ to a bounded performance reference in $(0,1)$.
-Equation~(42) combines the previous trust level and the current performance
-reference with the weights $1-\alpha_T$ and $\alpha_T$, respectively,
-yielding a smoothed trust estimate. The smoothing process tracks changes in
-relative performance while attenuating episode-to-episode return
-fluctuations. Sustained above-average returns keep the performance reference
-above $0.5$ and bias the smoothed trust estimate toward a correspondingly
-higher level, thereby reducing the probability assigned to the guided
-exploratory policy; sustained below-average returns produce the opposite
-allocation.}
+Equation (42) combines the previous trust level and
+the current performance reference with the weights $1-\alpha_T$ and
+$\alpha_T$, respectively, yielding a smoothed trust estimate. The
+smoothing process tracks changes in relative performance while attenuating
+episode-to-episode return fluctuations. Sustained above-average returns
+keep the performance reference above $0.5$ and bias the smoothed trust
+estimate toward a correspondingly higher level, thereby reducing the
+probability assigned to the guided exploratory policy; sustained
+below-average returns produce the opposite allocation.}
 \end{tcolorbox}
 
 \medskip
@@ -1767,7 +1764,7 @@ The object of study in this paper is the fixed-wing UAV, and the interception
 problem is
 {\color{red}reduced to a two-dimensional horizontal plane}
 \hladd{formulated in three-dimensional space},
-as shown in Fig.~\ref{jianmo}.
+as shown in Fig.2.
 
 \begin{equation*}
 {\color{blue}
@@ -1808,7 +1805,7 @@ r=\|\mathbf{r}_{AD}\|_2,\\
 
 \hladd{Here, $r$ and $\boldsymbol{\ell}_{AD}$ denote the
 three-dimensional relative distance and LOS unit vector, respectively.
-As illustrated in Fig.~\ref{jianmo}, $q_{ij}^{\gamma}$ and
+As illustrated in Fig.2, $q_{ij}^{\gamma}$ and
 $q_{ij}^{\theta}$ are the corresponding LOS azimuth and elevation angles.}
 
 \begin{equation*}
@@ -1850,12 +1847,13 @@ delayed and noisy Cartesian states, and communication packet loss is included
 in the information exchange process.
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
-boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
-\hladd{\emph{1) Communication Delay and Sensing Uncertainty:}
+coltext=addblue,fontupper=\color{addblue},boxrule=0.6pt,arc=2pt,
+left=9pt,right=9pt,top=7pt,bottom=7pt]
+\emph{1) Communication Delay and Sensing Uncertainty:}
 Communication and sensing nonidealities are incorporated into the
 three-dimensional simulation. The position and velocity measurements used to
 construct the defender observations are delayed and corrupted by independent
-zero-mean Gaussian noise,}
+zero-mean Gaussian noise,
 
 \begin{equation*}
 {\color{blue}
@@ -1869,19 +1867,19 @@ zero-mean Gaussian noise,}
 \tag{71}
 \end{equation*}
 
-\hladd{Here,
-$\boldsymbol{\eta}_p\sim
-\mathcal{N}(\mathbf{0},\sigma_p^2\mathbf{I}_3)$ and
-$\boldsymbol{\eta}_v\sim
-\mathcal{N}(\mathbf{0},\sigma_v^2\mathbf{I}_3)$.
+where
+$\boldsymbol{\eta}_p\sim\mathcal{N}(\mathbf{0},\sigma_p^2\mathbf{I}_3)$
+and
+$\boldsymbol{\eta}_v\sim\mathcal{N}(\mathbf{0},\sigma_v^2\mathbf{I}_3)$.
 The nominal settings are
 $\tau_s=50$~ms,
 $\sigma_p=1$~m, and
 $\sigma_v=0.3$~m/s.
 All derived observation variables, including the LOS geometry, closing speed,
 and time-to-go, are recomputed from the delayed noisy Cartesian states.
-The communication process is subject to a $1\%$ packet-loss rate, with the
-latest valid state packet retained when a packet is lost.}
+The communication process is subject to a $50$~ms communication delay and 
+a $1\%$ packet-loss rate, with the latest valid state packet retained 
+when a packet is lost.
 \end{tcolorbox}
 
 \medskip
@@ -1895,10 +1893,11 @@ independent NVIDIA Jetson NX computers, while the engagement dynamics and
 remaining agents are executed on the simulation server.
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
-boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
-\hladd{\emph{2) Hardware-in-the-Loop Semi-Physical Validation:}
-The three-dimensional interception experiment is further implemented on a
-hardware-in-the-loop platform. The policies of defenders $D_0$--$D_4$ are
+coltext=addblue,fontupper=\color{addblue},boxrule=0.6pt,arc=2pt,
+left=9pt,right=9pt,top=7pt,bottom=7pt]
+\hladd{\emph{2) HIL Platform:}
+As shown in Fig.7, the three-dimensional interception experiment is further implemented on a
+HIL platform. The policies of defenders $D_0$--$D_4$ are
 deployed on five independent NVIDIA Jetson NX computers, with one defender
 assigned to each node. The corresponding target-assignment algorithm is also
 executed on the Jetson NX nodes. The engagement dynamics, attacker cluster,
@@ -1906,13 +1905,13 @@ and software policies of the remaining defenders $D_5$--$D_n$ are executed on
 the simulation server. The server and Jetson NX nodes exchange observations,
 actions, and target-assignment results through a physical TCP Ethernet network
 under the communication conditions described above.}
-\end{tcolorbox}
-
-\begin{figure}[h]
+\par\medskip
+\begin{center}
 \centering
 \includegraphics[width=0.78\textwidth]{TASE_HIL.png}
-\caption*{\hladd{Fig.~7. Hardware-in-the-loop validation platform.}}
-\end{figure}
+\captionof*{figure}{\hladd{Fig.~7. HIL platform.}}
+\end{center}
+\end{tcolorbox}
 
 \medskip
 \noindent\textbf{(4) Use of the revised environment in the reported
@@ -2026,7 +2025,6 @@ $D_2={\color{red}1500}\hladd{1600}$\,m, and
 $D_3={\color{red}1600}\hladd{100}$\,m.
 \hladd{The initial horizontal position is specified by the radial coordinate
 $r$ and polar angle $\varphi$ about the defended-area center.}
-Table~\ref{chushicanshu} summarizes the UAV kinematic parameters.
 \end{tcolorbox}
 
 \medskip
@@ -2112,7 +2110,7 @@ against these highly dynamic threats.}
 \noindent\emph{Case~2: Interception against Continuous Weaving Targets}
 
 This scenario evaluates the robustness of the proposed framework against the
-sinusoidal penetration maneuver~\cite{Zarchan1995969}, which represents a
+sinusoidal penetration maneuver [48], which represents a
 highly agile and continuous weaving threat. Such maneuvers induce
 high-frequency oscillations in the line-of-sight (LOS) rate, severely
 challenging both the guidance stability and the temporal coordination of the
@@ -2137,11 +2135,12 @@ including Table~IV and the corresponding component-level analysis. The
 complete added subsection is reproduced below.
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
-boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+coltext=addblue,fontupper=\color{addblue},boxrule=0.6pt,arc=2pt,
+left=9pt,right=9pt,top=7pt,bottom=7pt]
 \hladd{\emph{Component Ablation Study}}
 
 \medskip
-\hladd{To isolate the independent contribution of each proposed component,
+To isolate the independent contribution of each proposed component,
 we construct three one-at-a-time ablation controls alongside the complete
 ART-MAPPO model. \emph{``w/o trust-aware mechanism''} disables the
 trust-modulated fusion of the analytical guidance prior and the learned
@@ -2151,21 +2150,20 @@ attention--residual backbone''} substitutes a parameter-matched feedforward
 network while retaining the trust and GRU modules. All variants share the
 same reward, dynamics, optimiser, training seed, and budget, and are
 evaluated in 1000 frozen-policy Case~1 Monte Carlo trials.
-Table~IV summarises the results. Critically, the three controls exhibit
+Table~V summarises the results. Critically, the three controls exhibit
 \emph{module-specific} rather than uniformly ordered degradation, providing
 direct evidence that each component carries a distinct and non-redundant
-role.}
-\end{tcolorbox}
+role.
 
-\begin{table}[h]
+\par\medskip
+{\scriptsize
+\captionsetup{font=scriptsize}
 \centering
-\scriptsize
-\caption*{\hladd{Table~IV. Component ablation of ART-MAPPO: 1000-trial
+\captionof*{table}{\hladd{Table~V. Component ablation of ART-MAPPO: 1000-trial
 Case~1 Monte Carlo evaluation.}}
-\renewcommand{\arraystretch}{1.12}
-\setlength{\tabcolsep}{3.5pt}
+\renewcommand{\arraystretch}{1.10}
+\setlength{\tabcolsep}{1.5pt}
 {\color{blue}
-\resizebox{0.98\textwidth}{!}{%
 \begin{tabular}{lccccccc}
 \toprule
 Variant
@@ -2193,41 +2191,41 @@ w/o attention--residual backbone
 & 6.651 & 8.353 & 96.1
 & 0.0606 & 0.0847 & 29.853 & 3.507 \\
 \bottomrule
-\end{tabular}%
-}}
-\end{table}
+\end{tabular}
+}
+\par}
+\end{tcolorbox}
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+coltext=addblue,fontupper=\color{addblue},
 boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
-\hladd{\emph{(i) Trust-aware mechanism.} Removing trust produces the largest
-training-AUC reduction among the three controls ($-17.9\%$, from
-$7.354\!\times\!10^4$ to $6.037\!\times\!10^4$), yet the final reward falls
-by only $3.1\%$ and ISR drops by $1.5$~pp. The pronounced gap between
-cumulative-AUC loss and end-of-training reward confirms that the trust-aware
-mechanism primarily accelerates learning efficiency throughout training, not
-merely raises the asymptotic policy ceiling---consistent with its design role
-of dynamically regulating exploration--exploitation balance.}
+\emph{(i) Trust-aware mechanism.}  Removing trust produces the largest training-AUC
+reduction among the three controls ($-17.9\%$, from $7.354\!\times\!10^4$ to
+$6.037\!\times\!10^4$), yet the final reward falls by only $3.1\%$ and ISR drops by
+$1.5$~pp.  The pronounced gap between cumulative-AUC loss and end-of-training reward confirms
+that the trust-aware mechanism primarily accelerates learning efficiency throughout training,
+not merely raises the asymptotic policy ceiling---consistent with its design role of
+dynamically regulating exploration--exploitation balance.
+
 
 \medskip
-\hladd{\emph{(ii) GRU temporal encoder.} The GRU removal yields the lowest
-final reward ($-9.2\%$) and the largest ISR degradation ($-2.9$~pp) among
-all controls. Most distinctively, $E_{co\text{-}time}$ increases by $45\%$
-(from $0.0505$~s to $0.0732$~s), far exceeding the $6\%$ increase in
-$E_t$. Without temporal history, the policy can no longer reliably track
-target manoeuvres or reconcile interceptor time-to-go estimates, leading to
-simultaneous degradation in both final policy quality and cooperative timing
-precision.}
+\emph{(ii) GRU temporal encoder.}  The GRU removal yields the lowest final reward
+($-9.2\%$) and the largest ISR degradation ($-2.9$~pp) among all controls.  Most
+distinctively, $E_{co\text{-}time}$ increases by $45\%$ (from $0.0505$~s to $0.0732$~s),
+far exceeding the $6\%$ increase in $E_t$.  Without temporal history, the policy can no
+longer reliably track target manoeuvres or reconcile interceptor time-to-go estimates,
+leading to simultaneous degradation in both final policy quality and cooperative timing
+precision.
 
 \medskip
-\hladd{\emph{(iii) Attention--residual backbone.} Removing the attentive
-backbone yields the largest increases in $E_n$ ($+18\%$, from $0.0718$~g
-to $0.0847$~g) and $E_{miss}$ ($+17\%$, from $2.997$~m to $3.507$~m)
-across all three ablations, while $E_t$ changes by only $3.5\%$. This
-non-uniform degradation demonstrates that the backbone contributes primarily
-to control-relevant feature extraction and terminal precision rather than
-engagement duration---matching its theoretical role of resolving the coupled
-LOS, relative-motion, and time-to-go state features needed for
-low-lateral-acceleration precision guidance.}
+\emph{(iii) Attention--residual backbone.}  Removing the attentive backbone yields the
+largest increases in $E_n$ ($+18\%$, from $0.0718$~g to $0.0847$~g) and $E_{miss}$
+($+17\%$, from $2.997$~m to $3.507$~m) across all three ablations, while $E_t$ changes by
+only $3.5\%$.  This non-uniform degradation demonstrates that the backbone contributes
+primarily to control-relevant feature extraction and terminal precision rather than
+engagement duration---matching its theoretical role of resolving the coupled LOS,
+relative-motion, and time-to-go state features needed for low-lateral-acceleration precision guidance.
+
 \end{tcolorbox}
 
 \medskip
@@ -2293,25 +2291,23 @@ in Eq.~(24). The following explanation has been added:
 boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
 \hladd{The coefficients
 $\alpha,\beta,\gamma_{\mathrm{IDBO}},\delta,\delta',
-\eta_{\mathrm{IDBO}}$ together with the dancing noise scale $\sigma_d$
-follow a common linear schedule
-$c_t=c_0\,(1-t/T)$, where $T$ is the IDBO iteration count, while the
-elite-recombination weights remain bounded. This schedule is what governs
-convergence stability. The stochastic parts of the operators---the rolling
-probe $\beta\,\boldsymbol{\xi}_i\mathrm{e}^{-t/T}$ and the dancing
-perturbation
-$\mathbf{n}_i\sim\mathcal{N}(0,\sigma_d^2\mathbf{I})$---scale with $c_t$
-and vanish as $c_t\!\to\!0$, so the update degenerates into a deterministic,
-advantage-weighted local refinement followed by the advantage-adaptive
-binarization step. A step sequence whose stochastic amplitude decays to zero
-while retaining an ascent direction satisfies a Robbins--Monro-type
-sufficient condition~\cite{robbins1951stochastic} for settling at a stable
-fixed point rather than orbiting it, which is precisely the behavior measured
-by the swarm-disagreement metric $\Gamma^{(k)}$ in Eq.~(30). A controlled
-ablation that freezes the coefficients confirms this mechanism:
-non-decaying coefficients keep injecting perturbations and leave a persistent
-late-stage oscillation in the working assignment, whereas the linear
-schedule contracts the swarm onto a stable, low-cost equilibrium.}
+\eta_{\mathrm{IDBO}}$, together with the dancing-noise scale $\sigma_d$,
+follow the common linear schedule $c_t=c_0(1-t/T)$, where $T$ denotes the
+local IDBO search horizon. During each local search, the candidate
+preferences are projected onto $[0,1]^N$, and the best-so-far candidate is
+retained unless a strictly better candidate is obtained. The coefficient
+schedule progressively attenuates both the directed update terms and the
+stochastic perturbations. In particular, the rolling perturbation
+$\beta\boldsymbol{\xi}_i\mathrm{e}^{-t/T}$ and the dancing perturbation
+$\mathbf{n}_i\sim\mathcal{N}(0,\sigma_d^2\mathbf{I})$ vanish as $t$
+approaches $T$, suppressing late-stage fluctuations in the preference
+population. The schedule therefore satisfies the vanishing-gain condition
+$c_t\to0$ used in Robbins--Monro-type stochastic approximation
+[46]. At $c_T=0$, the four update operators reduce
+to the identity map, while elitist retention prevents the incumbent from
+being replaced by an inferior candidate. Consequently, once no strictly
+improving candidate is generated, the retained solution remains invariant
+and constitutes a stable fixed point of the implemented local search.}
 \end{tcolorbox}
 
 \medskip
@@ -2416,12 +2412,12 @@ boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
 
 \begin{center}
 {\color{blue}
-\footnotesize
+\scriptsize
 \textbf{Delay-dependent consensus performance of IDBO for the nominal
 $20\times8$ assignment.}\\[5pt]
 
 \setlength{\tabcolsep}{4.0pt}
-\renewcommand{\arraystretch}{1.12}
+\renewcommand{\arraystretch}{1.10}
 \begin{tabular}{@{}cccc@{}}
 \hline\hline
 \shortstack{Communication\\delay (ms)} &
@@ -2504,31 +2500,27 @@ boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
 \hladd{\emph{Component Ablation Study}}
 
 \medskip
-\hladd{To isolate the independent contribution of each proposed component,
-we construct three one-at-a-time ablation controls alongside the complete
-ART-MAPPO model. \emph{``w/o trust-aware mechanism''} disables the
-trust-modulated fusion of the analytical guidance prior and the learned
-action; \emph{``w/o GRU temporal encoder''} replaces recurrent state
-encoding with a memoryless feedforward layer; \emph{``w/o
-attention--residual backbone''} substitutes a parameter-matched feedforward
-network while retaining the trust and GRU modules. All variants share the
-same reward, dynamics, optimiser, training seed, and budget, and are
-evaluated in 1000 frozen-policy Case~1 Monte Carlo trials. Table~IV
-summarises the results. Critically, the three controls exhibit
-\emph{module-specific} rather than uniformly ordered degradation, providing
-direct evidence that each component carries a distinct and non-redundant
-role.}
-\end{tcolorbox}
+\hladd{To isolate the independent contribution of each proposed component, we construct three
+one-at-a-time ablation controls alongside the complete ART-MAPPO model.
+\emph{``w/o trust-aware mechanism''} disables the trust-modulated fusion of the analytical
+guidance prior and the learned action; \emph{``w/o GRU temporal encoder''} replaces recurrent
+state encoding with a memoryless feedforward layer; \emph{``w/o attention--residual backbone''}
+substitutes a parameter-matched feedforward network while retaining the trust and GRU modules.
+All variants share the same reward, dynamics, optimiser, training seed, and budget, and are
+evaluated in 1000 frozen-policy Case~1 Monte Carlo trials.  Table~V
+summarises the results.  Critically, the three controls exhibit \emph{module-specific} rather
+than uniformly ordered degradation, providing direct evidence that each component carries a
+distinct and non-redundant role.}
 
-\begin{table}[h]
+\par\medskip
+{\scriptsize
+\captionsetup{font=scriptsize}
 \centering
-\scriptsize
-\caption*{\hladd{Table~IV. Component ablation of ART-MAPPO: 1000-trial
+\captionof*{table}{\hladd{Table~V. Component ablation of ART-MAPPO: 1000-trial
 Case~1 Monte Carlo evaluation.}}
-\renewcommand{\arraystretch}{1.12}
-\setlength{\tabcolsep}{3.5pt}
+\renewcommand{\arraystretch}{1.10}
+\setlength{\tabcolsep}{1.5pt}
 {\color{blue}
-\resizebox{0.98\textwidth}{!}{%
 \begin{tabular}{lccccccc}
 \toprule
 Variant
@@ -2557,41 +2549,41 @@ w/o attention--residual backbone
 & 6.651 & 8.353 & 96.1
 & 0.0606 & 0.0847 & 29.853 & 3.507 \\
 \bottomrule
-\end{tabular}%
-}}
-\end{table}
+\end{tabular}
+}
+\par}
+\end{tcolorbox}
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+coltext=addblue,fontupper=\color{addblue},
 boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
-\hladd{\emph{(i) Trust-aware mechanism.} Removing trust produces the largest
-training-AUC reduction among the three controls ($-17.9\%$, from
-$7.354\!\times\!10^4$ to $6.037\!\times\!10^4$), yet the final reward falls
-by only $3.1\%$ and ISR drops by $1.5$~pp. The pronounced gap between
-cumulative-AUC loss and end-of-training reward confirms that the trust-aware
-mechanism primarily accelerates learning efficiency throughout training, not
-merely raises the asymptotic policy ceiling---consistent with its design role
-of dynamically regulating exploration--exploitation balance.}
+\emph{(i) Trust-aware mechanism.}  Removing trust produces the largest training-AUC
+reduction among the three controls ($-17.9\%$, from $7.354\!\times\!10^4$ to
+$6.037\!\times\!10^4$), yet the final reward falls by only $3.1\%$ and ISR drops by
+$1.5$~pp.  The pronounced gap between cumulative-AUC loss and end-of-training reward confirms
+that the trust-aware mechanism primarily accelerates learning efficiency throughout training,
+not merely raises the asymptotic policy ceiling---consistent with its design role of
+dynamically regulating exploration--exploitation balance.
+
 
 \medskip
-\hladd{\emph{(ii) GRU temporal encoder.} The GRU removal yields the lowest
-final reward ($-9.2\%$) and the largest ISR degradation ($-2.9$~pp) among
-all controls. Most distinctively, $E_{co\text{-}time}$ increases by $45\%$
-(from $0.0505$~s to $0.0732$~s), far exceeding the $6\%$ increase in
-$E_t$. Without temporal history, the policy can no longer reliably track
-target manoeuvres or reconcile interceptor time-to-go estimates, leading to
-simultaneous degradation in both final policy quality and cooperative timing
-precision.}
+\emph{(ii) GRU temporal encoder.}  The GRU removal yields the lowest final reward
+($-9.2\%$) and the largest ISR degradation ($-2.9$~pp) among all controls.  Most
+distinctively, $E_{co\text{-}time}$ increases by $45\%$ (from $0.0505$~s to $0.0732$~s),
+far exceeding the $6\%$ increase in $E_t$.  Without temporal history, the policy can no
+longer reliably track target manoeuvres or reconcile interceptor time-to-go estimates,
+leading to simultaneous degradation in both final policy quality and cooperative timing
+precision.
 
 \medskip
-\hladd{\emph{(iii) Attention--residual backbone.} Removing the attentive
-backbone yields the largest increases in $E_n$ ($+18\%$, from $0.0718$~g
-to $0.0847$~g) and $E_{miss}$ ($+17\%$, from $2.997$~m to $3.507$~m)
-across all three ablations, while $E_t$ changes by only $3.5\%$. This
-non-uniform degradation demonstrates that the backbone contributes primarily
-to control-relevant feature extraction and terminal precision rather than
-engagement duration---matching its theoretical role of resolving the coupled
-LOS, relative-motion, and time-to-go state features needed for
-low-lateral-acceleration precision guidance.}
+\emph{(iii) Attention--residual backbone.}  Removing the attentive backbone yields the
+largest increases in $E_n$ ($+18\%$, from $0.0718$~g to $0.0847$~g) and $E_{miss}$
+($+17\%$, from $2.997$~m to $3.507$~m) across all three ablations, while $E_t$ changes by
+only $3.5\%$.  This non-uniform degradation demonstrates that the backbone contributes
+primarily to control-relevant feature extraction and terminal precision rather than
+engagement duration---matching its theoretical role of resolving the coupled LOS,
+relative-motion, and time-to-go state features needed for low-lateral-acceleration precision guidance.
+
 \end{tcolorbox}
 
 \medskip
@@ -2715,43 +2707,47 @@ boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
 \hladd{\emph{Mechanistic Comparison with Conventional MAPPO}}
 
 \medskip
-\hladd{\emph{1) Convergence guarantees.}
-With deep neural-network function approximation and stochastic multi-agent
-training, neither conventional MAPPO nor ART-MAPPO provides a formal
-guarantee of monotonic policy improvement or convergence to a global optimum.
-Conventional MAPPO regulates policy updates using a fixed clipped surrogate,
-whereas ART-MAPPO employs the piecewise Dual-Clip objective in
-Eqs.~(49)--(50) and the adaptive KL penalty in Eq.~(52). Dual-Clip limits
-the influence of large-ratio negative-advantage samples, while adaptive KL
-regularization discourages excessive average deviation between successive
-policies. These mechanisms promote more controlled and stable optimization,
-but should not be interpreted as providing a stronger formal convergence
-guarantee.}
+\hladd{\emph{1) Convergence analysis.}
+Conventional MAPPO primarily relies on centralized value estimation, GAE, and
+a fixed clipped surrogate to support policy learning. In ART-MAPPO, the
+attention--residual encoder preserves the coupled kinematic information and
+maintains a direct gradient path, while the GRU incorporates maneuver history
+into the policy representation. This reduces the sensitivity of policy learning
+to instantaneous state variations. The smoothed trust variable changes the
+guided-exploration weight gradually according to relative return, allowing the
+sampling policy to shift steadily toward exploitation as effective cooperative
+behavior develops. During parameter optimization, Dual-Clip limits anomalous
+negative surrogate contributions, and adaptive KL regularization adjusts the
+penalty according to the observed policy deviation. The resulting learning
+process exhibits lower sampling and update variability, promoting a more stable
+approach to the steady training regime than conventional MAPPO.}
+
 
 \medskip
 \hladd{\emph{2) Exploration--exploitation balance.}
 In the conventional MAPPO baseline adopted in this study, stochastic action
-sampling and a fixed-coefficient entropy bonus provide an exploration
-incentive that is not explicitly conditioned on agent-specific performance.
-ART-MAPPO retains entropy regularization and additionally introduces the
-trust-modulated mechanism in Eqs.~(42)--(43). For a fixed normalized return,
-the trust recursion is a contraction toward a performance-dependent target;
-during training, it acts as a bounded, exponentially smoothed tracker of
-relative agent performance. Agents that persistently achieve above-average
-returns are gradually assigned greater weight to their learned policies,
-whereas below-average agents retain a larger task-informed policy component.
-ART-MAPPO therefore adapts the intensity and structure of exploration across
-agents, rather than relying solely on a uniform entropy incentive.}
+sampling and a fixed-coefficient entropy bonus provide an exploration incentive
+that is not explicitly conditioned on agent-specific performance. ART-MAPPO
+retains entropy regularization and additionally introduces the trust-modulated
+mechanism in (42)--(43). For a
+fixed normalized return, the trust recursion is a contraction toward a
+performance-dependent target; during training, it acts as a bounded,
+exponentially smoothed tracker of relative agent performance. Agents that
+persistently achieve above-average returns are gradually assigned greater
+weight to their learned policies, whereas below-average agents retain a larger
+task-informed policy component. ART-MAPPO therefore adapts the intensity and
+structure of exploration across agents, rather than relying solely on a uniform
+entropy incentive. }
 
 \medskip
 \hladd{\emph{3) Policy robustness.}
 The fixed clipping mechanism of conventional MAPPO cannot adjust its
 regularization strength according to the policy deviation realized during
-training. In ART-MAPPO, the adaptive KL mechanism strengthens the penalty
-when the empirical KL divergence is excessive and relaxes it when the
-divergence remains below the target range. Combined with Dual-Clip, this
-feedback reduces the sensitivity of policy optimization to abnormal
-mini-batches and abrupt inter-update changes.}
+training. In ART-MAPPO, the adaptive KL mechanism strengthens the penalty when
+the empirical KL divergence is excessive and relaxes it when the divergence
+remains below the target range. Combined with Dual-Clip, this feedback reduces
+the sensitivity of policy optimization to abnormal mini-batches and abrupt
+inter-update changes. }
 \end{tcolorbox}
 
 \medskip
@@ -2905,32 +2901,33 @@ The complete additions are reproduced below.
 paragraph \emph{1) IDBO Assignment-Weight Sensitivity} and Table~V.
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
-boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+coltext=addblue,fontupper=\color{addblue},boxrule=0.6pt,arc=2pt,
+left=9pt,right=9pt,top=7pt,bottom=7pt]
 \hladd{\emph{1) IDBO Assignment-Weight Sensitivity.}
 The coefficients $w_{1,\mathrm{IDBO}}$ and $w_{2,\mathrm{IDBO}}$ represent
 the relative emphasis on interception reachability and three-dimensional
 engagement geometry, respectively. The sensitivity analysis is conducted in
 Case~1 using 1,000 end-to-end Monte Carlo trials for each setting. As shown
-in Table~V, larger $w_{1,\mathrm{IDBO}}$ tends to reduce
-$E_{co\text{-}time}$ because reachability-oriented assignments require less
-arrival-time adjustment, although the resulting engagement geometry may
-demand greater terminal acceleration and prolong the interception.
-Increasing $w_{2,\mathrm{IDBO}}$ improves the approach geometry and reduces
-the maneuvering demand, but the weaker emphasis on reachability increases
-the difficulty of temporal coordination. The growth of $E_{miss}$ toward
-either end of the weighting range shows that terminal accuracy deteriorates
-when either assignment criterion is excessively emphasized.}
-\end{tcolorbox}
+in Table VI, larger $w_{1,\mathrm{IDBO}}$ tends
+to reduce $E_{co\text{-}time}$ because reachability-oriented assignments
+require less arrival-time adjustment, although the resulting engagement
+geometry may demand greater terminal acceleration and prolong the
+interception. Increasing $w_{2,\mathrm{IDBO}}$ improves the approach
+geometry and reduces the maneuvering demand, but the weaker emphasis on
+reachability increases the difficulty of temporal coordination. The growth
+of $E_{miss}$ toward either end of the weighting range shows that terminal
+accuracy deteriorates when either assignment criterion is excessively
+emphasized.}
 
-\begin{table}[h]
+\par\medskip
+{\scriptsize
+\captionsetup{font=scriptsize}
 \centering
-\scriptsize
-\caption*{\hladd{Table~V. Sensitivity Analysis of the IDBO
+\captionof*{table}{\hladd{Table~VI. Sensitivity Analysis of the IDBO
 Assignment-Probability Weighting Coefficients.}}
 \setlength{\tabcolsep}{1.8pt}
-\renewcommand{\arraystretch}{1.15}
+\renewcommand{\arraystretch}{1.10}
 {\color{blue}
-\resizebox{0.98\textwidth}{!}{%
 \begin{tabular}{@{}cccccccc@{}}
 \hline\hline
 \shortstack{\phantom{X}\\$w_{1,\mathrm{IDBO}}$\\\phantom{X}}
@@ -2970,9 +2967,10 @@ Assignment-Probability Weighting Coefficients.}}
 0.85 & 0.15 & 130.3 & 13.3 & 0.0440 & 0.0897 & 29.730 & 3.270 \\
 0.90 & 0.10 & 126.0 & 13.7 & 0.0448 & 0.0952 & 29.690 & 3.420 \\
 \hline
-\end{tabular}%
-}}
-\end{table}
+\end{tabular}
+}
+\par}
+\end{tcolorbox}
 
 \medskip
 \noindent\textbf{(2) ART-MAPPO reward-weight sensitivity.}
@@ -2981,40 +2979,40 @@ Assignment-Probability Weighting Coefficients.}}
 \emph{2) ART-MAPPO Reward-Weight Sensitivity} and Table~VI.
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
-boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+coltext=addblue,fontupper=\color{addblue},boxrule=0.6pt,arc=2pt,
+left=9pt,right=9pt,top=7pt,bottom=7pt]
 \hladd{\emph{2) ART-MAPPO Reward-Weight Sensitivity.}
 The sensitivity of the reward design is evaluated in Case~1 using a
-one-at-a-time perturbation of the five weights in the reward function. Each
-weight is scaled by
-$s\in\{0.50,0.75,1.00,1.25,1.50\}$, while the remaining weights are fixed
-at their nominal values. Table~VI reports the resulting ISR,
-temporal-coordination error, terminal lateral acceleration, interception
-time, and miss distance. The results reveal clear and physically
-interpretable metric--weight relationships. Increasing $w_1$ improves
-terminal accuracy but requires moderately higher terminal lateral
-acceleration, whereas $w_2$ has a comparatively mild effect and mainly
-refines the interception geometry. The terminal-hit weight $w_3$ primarily
-governs interception reliability; reducing it to half of its nominal value
-decreases ISR to $93.8\%$, while further increasing it provides only
-marginal reliability improvement at the cost of higher lateral acceleration.
+one-at-a-time perturbation of the five weights in
+(62). Each weight is scaled by
+$s\in{0.50,0.75,1.00,1.25,1.50}$, while the remaining weights are fixed at
+their nominal values. Table~VII reports the resulting
+ISR, temporal-coordination error, terminal lateral acceleration, interception time, and
+miss distance. The results reveal clear and physically interpretable
+metric--weight relationships. Increasing $w_1$ improves terminal accuracy but
+requires moderately higher terminal lateral acceleration, whereas $w_2$ has a comparatively
+mild effect and mainly refines the interception geometry. The terminal-hit
+weight $w_3$ primarily governs interception reliability; reducing it to half
+of its nominal value decreases ISR to $93.8\%$, while further increasing it
+provides only marginal reliability improvement at the cost of higher lateral acceleration.
 The coordination weight $w_4$ most strongly affects
-$E_{co\text{-}time}$, which decreases from $0.0830$~s to $0.0375$~s as
-the weight increases. In contrast, $w_5$ directly regulates control effort,
-reducing $E_n$ from $0.0910$~g to $0.0560$~g, with a moderate loss in
-terminal accuracy and interception efficiency. Overall, the nominal
-configuration provides a balanced operating point among interception
-reliability, terminal accuracy, temporal coordination, and control economy.}
-\end{tcolorbox}
+$E_{co\text{-}time}$, which decreases from $0.0830$~s to $0.0375$~s as the
+weight increases. In contrast, $w_5$ directly regulates control effort,
+reducing $E_n$ from $0.0910$~g to $0.0560$~g, with a moderate loss in terminal
+accuracy and interception efficiency. Overall, the nominal configuration
+provides a balanced operating point among interception reliability, terminal
+accuracy, temporal coordination, and control economy.}
 
-\begin{table}[h]
+
+\par\medskip
+{\scriptsize
+\captionsetup{font=scriptsize}
 \centering
-\scriptsize
-\caption*{\hladd{Table~VI. Sensitivity Analysis of ART-MAPPO
+\captionof*{table}{\hladd{Table~VII. Sensitivity Analysis of ART-MAPPO
 Reward-Function Weighting Coefficients.}}
-\setlength{\tabcolsep}{3.5pt}
-\renewcommand{\arraystretch}{1.15}
+\setlength{\tabcolsep}{2.5pt}
+\renewcommand{\arraystretch}{1.10}
 {\color{blue}
-\resizebox{0.98\textwidth}{!}{%
 \begin{tabular}{@{}llccccc@{}}
 \hline\hline
 Weight
@@ -3065,9 +3063,10 @@ Weight
 & 1.25          & 98.3          & 0.0518          & 0.0630          & 29.200          & 3.120 \\
 & 1.50          & 97.5          & 0.0545          & 0.0560          & 29.850          & 3.350 \\
 \bottomrule
-\end{tabular}%
-}}
-\end{table}
+\end{tabular}
+}
+\par}
+\end{tcolorbox}
 
 \medskip
 \noindent These additions quantify how alternative tactical priorities in
@@ -3188,19 +3187,19 @@ zero-mean Gaussian noise,}
 \tag{71}
 \end{equation*}
 
-\hladd{Here,
-$\boldsymbol{\eta}_p\sim
-\mathcal{N}(\mathbf{0},\sigma_p^2\mathbf{I}_3)$ and
-$\boldsymbol{\eta}_v\sim
-\mathcal{N}(\mathbf{0},\sigma_v^2\mathbf{I}_3)$.
+\hladd{where
+$\boldsymbol{\eta}_p\sim\mathcal{N}(\mathbf{0},\sigma_p^2\mathbf{I}_3)$
+and
+$\boldsymbol{\eta}_v\sim\mathcal{N}(\mathbf{0},\sigma_v^2\mathbf{I}_3)$.
 The nominal settings are
 $\tau_s=50$~ms,
 $\sigma_p=1$~m, and
 $\sigma_v=0.3$~m/s.
 All derived observation variables, including the LOS geometry, closing speed,
 and time-to-go, are recomputed from the delayed noisy Cartesian states.
-The communication process is subject to a $1\%$ packet-loss rate, with the
-latest valid state packet retained when a packet is lost.}
+The communication process is subject to a $50$~ms communication delay and 
+a $1\%$ packet-loss rate, with the latest valid state packet retained 
+when a packet is lost.}
 \end{tcolorbox}
 
 \medskip
@@ -3211,7 +3210,8 @@ newly added item \emph{(v) Robustness to partial interceptor failures} and
 Fig.~38.
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
-boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+coltext=addblue,fontupper=\color{addblue},boxrule=0.6pt,arc=2pt,
+left=9pt,right=9pt,top=7pt,bottom=7pt]
 \hladd{\emph{(v) Robustness to partial interceptor failures.}
 To evaluate robustness to partial interceptor failures, 1,000 end-to-end
 Monte Carlo trials are conducted for each case. In each trial, two
@@ -3222,20 +3222,20 @@ interceptor swarm performs cooperative guidance using ART-MAPPO.
 
 Despite the reduced number of available interceptors, the proposed algorithm
 achieves ISRs of $95.4\%$ in Case~1 and $93.9\%$ in Case~2. The statistical
-distributions in Fig.~38 further show that the surviving swarm retains
-terminal accuracy and effective temporal coordination while requiring
-relatively low terminal lateral acceleration. These results demonstrate that
-the proposed algorithm maintains stable cooperative interception performance
-under partial interceptor failures.}
-\end{tcolorbox}
-
-\begin{figure}[h]
+distributions in Fig.~38 further show that
+the surviving swarm retains terminal accuracy and effective temporal
+coordination while requiring relatively low terminal lateral acceleration.
+These results demonstrate that the proposed algorithm maintains stable
+cooperative interception performance under partial interceptor failures.}
+\par\medskip
+\begin{center}
 \centering
 \includegraphics[width=0.72\textwidth]
 {partial_interceptor_failure_reference_v5_boxplots_real.pdf}
-\caption*{\hladd{Fig.~38. Performance distributions under two-interceptor
+\captionof*{figure}{\hladd{Fig.~38. Performance distributions under two-interceptor
 failures in Cases~1 and~2.}}
-\end{figure}
+\end{center}
+\end{tcolorbox}
 
 \medskip
 \noindent These additions evaluate the proposed framework under both
@@ -3292,7 +3292,7 @@ revised text is reproduced below:
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
 boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
-\emph{(i) Interception reliability and precision.} The Interception Success
+\emph{(i) Interception reliability and precision.} \hladd{The Interception Success
 Rates (ISRs) directly reflect the algorithms' adaptability to aggressive
 target maneuvers. While PN achieves a respectable $94.40\%$ against the
 evasive target (Case~1), its performance precipitously degrades to $17.50\%$
@@ -3302,7 +3302,7 @@ robustness against continuous, high-frequency line-of-sight (LOS)
 oscillations. Furthermore, the $E_{miss}$ boxplots confirm that ART-MAPPO
 consistently achieves a lower median miss distance with a significantly
 narrower interquartile range (IQR), ensuring lethal precision even under
-worst-case initializations.
+worst-case initializations.}
 
 \hladd{Failure-case analysis was conducted on the 13 unsuccessful trials in
 Case~1 and 29 in Case~2. For unsuccessful interception, the interceptor
@@ -3372,7 +3372,8 @@ newly added item \emph{(iv) Generalization to unseen attack patterns} and
 Fig.~37. The corresponding addition is reproduced below:
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
-boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+coltext=addblue,fontupper=\color{addblue},boxrule=0.6pt,arc=2pt,
+left=9pt,right=9pt,top=7pt,bottom=7pt]
 \hladd{\emph{(iv) Generalization to unseen attack patterns.}
 To further evaluate the proposed method under unseen attack patterns,
 additional Monte Carlo experiments were conducted in Case~3, where the
@@ -3381,16 +3382,16 @@ proposed method achieves a cooperative interception success rate of
 $96.4\%$, with $E_{co\text{-}time}=0.051$~s and
 $E_{miss}=1.44$~m, demonstrating effective temporal coordination and
 terminal accuracy under this additional maneuvering threat (Fig.~37).}
-\end{tcolorbox}
-
-\begin{figure}[h]
+\par\medskip
+\begin{center}
 \centering
 \includegraphics[width=0.72\textwidth]{case3_bangbang_metrics_box4.pdf}
-\caption*{\hladd{Fig.~37. Guidance-quality metric distributions for the
+\captionof*{figure}{\hladd{Fig.~37. Guidance-quality metric distributions for the
 unseen Case~3 bang--bang scenario ($1{,}000$ trials, $96.4\%$ ISR):
 (a)~$E_{co\text{-}time}$, (b)~$E_n$, (c)~$E_{miss}$, and
 (d)~$E_t$. Diamonds mark means.}}
-\end{figure}
+\end{center}
+\end{tcolorbox}
 
 \medskip
 \noindent This additional zero-shot experiment provides direct evidence of
@@ -3453,7 +3454,7 @@ The object of study in this paper is the fixed-wing UAV, and the interception
 problem is
 {\color{red}reduced to a two-dimensional horizontal plane}
 \hladd{formulated in three-dimensional space},
-as shown in Fig.~\ref{jianmo}.
+as shown in Fig.~2.
 
 \begin{equation*}
 {\color{blue}
@@ -3533,24 +3534,25 @@ the newly added paragraph \emph{Hardware-in-the-Loop Semi-Physical
 Validation}, together with the platform architecture shown in Fig.~7.
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
-boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
-\hladd{\emph{2) Hardware-in-the-Loop Semi-Physical Validation:}
-The three-dimensional interception experiment is further implemented on a
-hardware-in-the-loop platform. The policies of defenders $D_0$--$D_4$ are
+coltext=addblue,fontupper=\color{addblue},boxrule=0.6pt,arc=2pt,
+left=9pt,right=9pt,top=7pt,bottom=7pt]
+\hladd{\emph{2) HIL Platform:}
+As shown in Fig.~7, the three-dimensional interception experiment is further implemented on a
+HIL platform. The policies of defenders $D_0$--$D_4$ are
 deployed on five independent NVIDIA Jetson NX computers, with one defender
 assigned to each node. The corresponding target-assignment algorithm is also
 executed on the Jetson NX nodes. The engagement dynamics, attacker cluster,
-and software policies of the remaining defenders $D_5$--$D_n$ are executed
-on the simulation server. The server and Jetson NX nodes exchange
-observations, actions, and target-assignment results through a physical TCP
-Ethernet network under the communication conditions described above.}
-\end{tcolorbox}
-
-\begin{figure}[h]
+and software policies of the remaining defenders $D_5$--$D_n$ are executed on
+the simulation server. The server and Jetson NX nodes exchange observations,
+actions, and target-assignment results through a physical TCP Ethernet network
+under the communication conditions described above.}
+\par\medskip
+\begin{center}
 \centering
 \includegraphics[width=0.72\textwidth]{TASE_HIL.png}
-\caption*{\hladd{Fig.~7. Hardware-in-the-loop validation platform.}}
-\end{figure}
+\captionof*{figure}{\hladd{Fig.~7. HIL platform.}}
+\end{center}
+\end{tcolorbox}
 
 
 \medskip
