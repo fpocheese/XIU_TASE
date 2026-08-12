@@ -520,7 +520,26 @@ The IDBO update mechanism enhances the standard DBO through four adversarial-inf
 & \quad + \eta_{\mathrm{IDBO}} \cdot \sum_{k \in \mathcal{K}_i} \frac{A_{ij}}{\sum_{l \in \mathcal{K}_i} A_{lj}} \cdot \left(\mathbf{x}_k^{(t)} - \mathbf{x}_i^{(t)}\right) \label{eq:stealing_update}
 \end{align}
 where $\mathbf{A}_i = [A_{i1}, A_{i2}, \dots, A_{iN}]^\top$, $\bar{A}_i$ is the mean of $\mathbf{A}_i$, $\boldsymbol{\xi}_i$ and $\mathbf{n}_i$ are random vectors, $\mathcal{K}_i$ represents UAVs competing for the same targets as $u_i$, and $\alpha, \beta, \gamma_{\mathrm{IDBO}}, \delta, \delta', \eta_{\mathrm{IDBO}}$ are adaptive coefficients that decay linearly with iteration $t$. 
-\hladd{The coefficients $\alpha,\beta,\gamma_{\mathrm{IDBO}},\delta,\delta',\eta_{\mathrm{IDBO}}$ together with the dancing noise scale $\sigma_d$ follow a common linear schedule $c_t=c_0\,(1-t/T)$, where $T$ is the IDBO iteration count, while the elite-recombination weights remain bounded. This schedule is what governs convergence stability. The stochastic parts of the operators---the rolling probe $\beta\,\boldsymbol{\xi}_i\mathrm{e}^{-t/T}$ and the dancing perturbation $\mathbf{n}_i\sim\mathcal{N}(0,\sigma_d^2\mathbf{I})$---scale with $c_t$ and vanish as $c_t\!\to\!0$, so the update degenerates into a deterministic, advantage-weighted local refinement followed by the advantage-adaptive binarization step. A step sequence whose stochastic amplitude decays to zero while retaining an ascent direction satisfies a Robbins--Monro-type sufficient condition~\cite{robbins1951stochastic} for settling at a stable fixed point rather than orbiting it, which is precisely the behavior measured by the swarm-disagreement metric $\Gamma^{(k)}$ in \eqref{eq:convergence}. A controlled ablation that freezes the coefficients confirms this mechanism: non-decaying coefficients keep injecting perturbations and leave a persistent late-stage oscillation in the working assignment, whereas the linear schedule contracts the swarm onto a stable, low-cost equilibrium.} Continuous preferences are binarized via advantage-adaptive thresholding:
+\hladd{The coefficients
+$\alpha,\beta,\gamma_{\mathrm{IDBO}},\delta,\delta',
+\eta_{\mathrm{IDBO}}$, together with the dancing-noise scale $\sigma_d$,
+follow the common linear schedule $c_t=c_0(1-t/T)$, where $T$ denotes the
+local IDBO search horizon. During each local search, the candidate
+preferences are projected onto $[0,1]^N$, and the best-so-far candidate is
+retained unless a strictly better candidate is obtained. The coefficient
+schedule progressively attenuates both the directed update terms and the
+stochastic perturbations. In particular, the rolling perturbation
+$\beta\boldsymbol{\xi}_i\mathrm{e}^{-t/T}$ and the dancing perturbation
+$\mathbf{n}_i\sim\mathcal{N}(0,\sigma_d^2\mathbf{I})$ vanish as $t$
+approaches $T$, suppressing late-stage fluctuations in the preference
+population. The schedule therefore satisfies the vanishing-gain condition
+$c_t\to0$ used in Robbins--Monro-type stochastic approximation
+\cite{robbins1951stochastic}. At $c_T=0$, the four update operators reduce
+to the identity map, while elitist retention prevents the incumbent from
+being replaced by an inferior candidate. Consequently, once no strictly
+improving candidate is generated, the retained solution remains invariant
+and constitutes a stable fixed point of the implemented local search.}
+Continuous preferences are binarized via advantage-adaptive thresholding:
 
 \begin{equation}
 \label{eq:thresholding}
@@ -544,10 +563,12 @@ where $\bar{A}_i$ and $\sigma_A$ are the mean and standard deviation of $u_i$'s 
 \end{equation}
 where $\text{Top}_{L_{\max}}(\cdot)$ retains the $L_{\max}$ highest-bid entries. UAV $u_i$ secures a slot for $t_j$ if $|\mathcal{Z}_{j}| < L_{\max}$ or its bid exceeds $\min_{(u_k, c_{kj}) \in \mathcal{Z}_{j}} c_{kj}$, thereby displacing the weakest contributor and prioritizing the most capable interceptors.
 \hladd{Equations~\eqref{eq:thresholding}--\eqref{eq:cbba_update}
-convert the continuous preferences into local assignment candidates. Their
-bids are exchanged among neighboring interceptors so that at most the
-$L_{\max}$ strongest candidates are retained for each target, and repeated
-exchanges bring the local winner lists into agreement.}
+convert the continuous preferences into local assignment candidates. Each
+consensus update exchanges the current bids among neighboring interceptors
+and retains at most the $L_{\max}$ strongest bids for each target. Once the
+local search has stabilized and the bids no longer change, repeated consensus
+updates propagate the winner information through the connected network and
+bring the local winner lists into agreement.}
 
 As depicted in the procedural flowchart (Fig.~\ref{fig:idbo_flowchart}), the algorithm iterates over three interleaved phases—local optimization (Eqs.~\ref{eq:rolling_update}--\ref{eq:stealing_update}), consensus resolution (Eqs.~\ref{eq:thresholding}--\ref{eq:cbba_update}), and advantage update—until convergence:
 
@@ -571,7 +592,28 @@ Here, $\mathcal{H}$ updates adversarial advantages given the consensus assignmen
 \label{eq:convergence}
 \Gamma^{(k)} = \frac{1}{M} \sum_{i=1}^{M} \left\| \mathbf{z}_i^{(k)} - \frac{1}{|\mathcal{N}_i|} \sum_{j \in \mathcal{N}_i} \mathbf{z}_j^{(k)} \right\|_0 < \epsilon_{\mathrm{IDBO}}
 \end{equation}
-where $\|\cdot\|_0$ counts disagreeing entries and $\epsilon_{\mathrm{IDBO}}$ is a convergence threshold. \hldel{The algorithm guarantees monotonic fitness improvement: $\Phi^{(k+1)} \geq \Phi^{(k)}$ a.s., where $\Phi^{(k)} = \sum_{i=1}^{M} \mathcal{F}_i(\mathbf{x}_i^{(k)})$. Under a connected communication graph with finite message delays, consensus is reached in at most $N \cdot D$ iterations ($D$: graph diameter). The converged assignment $\mathbf{X}^*$ constitutes an $\epsilon$-approximate Nash equilibrium: $\mathcal{F}_i(\mathbf{x}_i^*) \geq \mathcal{F}_i(\mathbf{x}_i') - \epsilon$, $\forall \mathbf{x}_i' \in \mathcal{X}_i$, $\forall i$.} \hladd{Three properties characterize this iteration under a connected communication graph with bounded message delay and elitist retention of best-so-far solutions. First, the \emph{incumbent} (best-so-far) swarm fitness $\Phi_{\mathrm{best}}^{(k)}=\max_{k'\le k}\sum_{i=1}^{M}\mathcal{F}_i(\mathbf{x}_i^{(k')})$ is non-decreasing by construction, and because the decaying schedule $c_t=c_0(1-t/T)$ drives the operators' stochastic amplitude to zero while retaining an ascent direction, the working assignment settles at a fixed point rather than orbiting it---the standard Robbins--Monro condition for stochastic-approximation convergence~\cite{robbins1951stochastic}. Second, the auction-based consensus phase~\eqref{eq:bid_formulation}--\eqref{eq:cbba_update} inherits the guarantees of the consensus-based bundle algorithm~\cite{choi2009consensus}: with a diminishing-marginal-gain (submodular) score it reaches a conflict-free assignment in at most $N\!\cdot\!D$ communication rounds ($D$: graph diameter). Third, the resulting fixed point $\mathbf{X}^\ast$ is $\epsilon_{\mathrm{IDBO}}$-\emph{stable}---no interceptor can raise its own fitness by more than $\epsilon_{\mathrm{IDBO}}$ through a unilateral reassignment, $\mathcal{F}_i(\mathbf{x}_i^\ast)\ge\mathcal{F}_i(\mathbf{x}_i')-\epsilon_{\mathrm{IDBO}}$ for all $\mathbf{x}_i'\in\mathcal{X}_i$ and all $i$, which follows directly from the auction best-response at the converged bid prices~\cite{choi2009consensus}. The empirical convergence of the swarm-disagreement metric $\Gamma^{(k)}$ and the near-linear growth of consensus rounds with $D$ are reported in the supplementary response material. The complete per-interceptor procedure is summarized in Algorithm~\ref{alg:idbo}.}
+where $\|\cdot\|_0$ counts disagreeing entries and $\epsilon_{\mathrm{IDBO}}$ is a convergence threshold. 
+\hldel{The algorithm guarantees monotonic fitness improvement: $\Phi^{(k+1)} \geq \Phi^{(k)}$ a.s., where $\Phi^{(k)} = \sum_{i=1}^{M} \mathcal{F}_i(\mathbf{x}_i^{(k)})$. Under a connected communication graph with finite message delays, consensus is reached in at most $N \cdot D$ iterations ($D$: graph diameter). The converged assignment $\mathbf{X}^*$ constitutes an $\epsilon$-approximate Nash equilibrium: $\mathcal{F}_i(\mathbf{x}_i^*) \geq \mathcal{F}_i(\mathbf{x}_i') - \epsilon$, $\forall \mathbf{x}_i' \in \mathcal{X}_i$, $\forall i$.} 
+% \hladd{Three properties characterize this iteration under a connected communication graph with bounded message delay and elitist retention of best-so-far solutions. First, the \emph{incumbent} (best-so-far) swarm fitness $\Phi_{\mathrm{best}}^{(k)}=\max_{k'\le k}\sum_{i=1}^{M}\mathcal{F}_i(\mathbf{x}_i^{(k')})$ is non-decreasing by construction, and because the decaying schedule $c_t=c_0(1-t/T)$ drives the operators' stochastic amplitude to zero while retaining an ascent direction, the working assignment settles at a fixed point rather than orbiting it---the standard Robbins--Monro condition for stochastic-approximation convergence~\cite{robbins1951stochastic}. Second, the auction-based consensus phase~\eqref{eq:bid_formulation}--\eqref{eq:cbba_update} inherits the guarantees of the consensus-based bundle algorithm~\cite{choi2009consensus}: with a diminishing-marginal-gain (submodular) score it reaches a conflict-free assignment in at most $N\!\cdot\!D$ communication rounds ($D$: graph diameter). Third, the resulting fixed point $\mathbf{X}^\ast$ is $\epsilon_{\mathrm{IDBO}}$-\emph{stable}---no interceptor can raise its own fitness by more than $\epsilon_{\mathrm{IDBO}}$ through a unilateral reassignment, $\mathcal{F}_i(\mathbf{x}_i^\ast)\ge\mathcal{F}_i(\mathbf{x}_i')-\epsilon_{\mathrm{IDBO}}$ for all $\mathbf{x}_i'\in\mathcal{X}_i$ and all $i$, which follows directly from the auction best-response at the converged bid prices~\cite{choi2009consensus}. The empirical convergence of the swarm-disagreement metric $\Gamma^{(k)}$ and the near-linear growth of consensus rounds with $D$ are reported in the supplementary response material. The complete per-interceptor procedure is summarized in Algorithm~\ref{alg:idbo}.}
+\hladd{The local optimization and consensus phases have distinct limiting
+properties. The diminishing coefficient schedule and elitist retention
+stabilize the local search as described above. For the consensus phase,
+suppose that the bids remain fixed, the communication graph is connected
+with diameter $D$, messages are delivered with bounded delay, and equal bids
+are resolved deterministically. Under these conditions, the top-$L_{\max}$
+winner information propagates by at least one communication hop in each
+successful round. Consequently, all interceptors obtain the same winner list
+for each target after at most $D$ successful communication rounds. Bounded
+delay increases the elapsed consensus time but does not alter the resulting
+winner lists. Once agreement is reached, further applications of
+\eqref{eq:cbba_update} leave the winner lists unchanged; hence, they form a
+consensus fixed point. Each list contains at most $L_{\max}$ interceptors, and,
+provided that a feasible assignment exists, the subsequent conflict-resolution
+step enforces the constraints in \eqref{eq:optimization_formulation}. Here,
+$\epsilon_{\mathrm{IDBO}}$ specifies the numerical tolerance for winner-list
+disagreement.}
+
+
 
 \begin{algorithm}[!t]
 \caption{\hladd{IDBO Target Assignment}}
@@ -586,6 +628,7 @@ where $\|\cdot\|_0$ counts disagreeing entries and $\epsilon_{\mathrm{IDBO}}$ is
     \STATE Set the linearly decaying coefficients $c_t=c_0(1-t/T)$ for the four IDBO operators
     \STATE Evaluate all local candidates with $\mathcal{F}_i$~\eqref{eq:idbo_fitness}
     \STATE Generate candidates using the rolling, dancing, breeding, and stealing operators according to \eqref{eq:rolling_update}--\eqref{eq:stealing_update}
+    \STATE Project the candidate preferences onto $[0,1]^N$ and retain the current best candidate unless a strictly better candidate is obtained
   \ENDFOR
   \STATE Select and binarize the best local preference using~\eqref{eq:thresholding}; compute the target bids using~\eqref{eq:bid_formulation}
   \STATE Exchange local records with $\mathcal{N}_i$, update the top-$L_{\max}$ winner lists using~\eqref{eq:cbba_update}, and resolve assignment conflicts subject to the constraints in~\eqref{eq:optimization_formulation}
@@ -602,15 +645,21 @@ The per-UAV per-iteration complexity decomposes as:
 \label{eq:complexity}
 C_{\text{total}} = O(T \cdot P \cdot N^2) + O(N \cdot |\mathcal{N}_i|) + O(N)
 \end{equation}
-where $T$ is the IDBO iteration count, $P = O(N)$ the population size, and $|\mathcal{N}_i|$ the neighborhood size. The three terms account for optimization, consensus communication, and advantage update, respectively. Communication cost is $O(N \cdot |\mathcal{N}_i|)$ and memory is $O(P \cdot N + N)$ per UAV. \hladd{Because the target set faced by each interceptor and its neighborhood size $|\mathcal{N}_i|$ are fixed by the engagement and the communication topology rather than by the swarm size $M$, the per-UAV per-iteration cost above is independent of $M$; the total per-round cost of the swarm therefore grows only linearly with $M$. Scalability is governed not by this arithmetic cost but by how fast the distributed consensus in \eqref{eq:convergence} settles. Under a connected graph with a per-hop communication latency $T_{\mathrm{comm}}$, each target's winning bids propagate across the network in at most $D$ hops ($D$: graph diameter), so the wall-clock time to reach consensus scales as $O(N\!\cdot\!D\!\cdot\!T_{\mathrm{comm}})$. Empirically this time stays nearly constant as $M$ grows at fixed diameter, and increases only linearly with the communication delay and with $D$; a bounded delay thus slows, but does not prevent, convergence of the distributed consensus. Detailed complexity, scalability, and communication-delay measurements are reported in the supplementary response material.}
-
-
-
-
-
-
-
-
+where $T$ is the IDBO iteration count, $P = O(N)$ the population size, and $|\mathcal{N}_i|$ the neighborhood size. The three terms account for optimization, consensus communication, and advantage update, respectively. Communication cost is $O(N \cdot |\mathcal{N}_i|)$ and memory is $O(P \cdot N + N)$ per UAV. 
+% \hladd{Because the target set faced by each interceptor and its neighborhood size $|\mathcal{N}_i|$ are fixed by the engagement and the communication topology rather than by the swarm size $M$, the per-UAV per-iteration cost above is independent of $M$; the total per-round cost of the swarm therefore grows only linearly with $M$. Scalability is governed not by this arithmetic cost but by how fast the distributed consensus in \eqref{eq:convergence} settles. Under a connected graph with a per-hop communication latency $T_{\mathrm{comm}}$, each target's winning bids propagate across the network in at most $D$ hops ($D$: graph diameter), so the wall-clock time to reach consensus scales as $O(N\!\cdot\!D\!\cdot\!T_{\mathrm{comm}})$. Empirically, the consensus time increases approximately linearly with the communication delay and with $D$. Bounded delay slows but does not prevent convergence for a static assignment snapshot; under time-varying cooperative deflection, the consensus time must remain shorter than the reallocation interval. Detailed complexity, scalability, and communication-delay measurements are reported in Section~\ref{subsec:assignment_results}.}
+\hladd{As $M$ and $N$ increase together, the overall computational workload
+also increases, as quantified by the scalability results in
+Section~\ref{subsec:assignment_results}. Communication-side scalability is
+governed by the convergence efficiency of the distributed consensus process.
+Once the bids have stabilized, the winner lists for all $N$ targets are
+exchanged together and propagate through a connected graph of diameter $D$
+within at most $D$ successful communication rounds. The corresponding
+communication time scales as $O(DT_{\mathrm{comm}})$ under bounded per-hop
+delay $T_{\mathrm{comm}}$, while the per-round communication processing cost
+is $O(N|\mathcal{N}_i|)$. The experiments in
+Section~\ref{subsec:assignment_results} show that increasing communication
+delay increases both the mean communication steps and the consensus time,
+while all tested cases reach common top-$L_{\max}$ winner lists.}
 
 
 
@@ -889,24 +938,16 @@ where $c_v > 0$ and $c_e > 0$ are the value and entropy weighting coefficients.
 \hladd{Minimizing this loss updates the actor through the Dual-Clip
 objective, while the KL and entropy terms regulate policy change and
 exploration. The value-loss term trains the centralized critic.}
+\hladd{Dual-Clip and adaptive KL regularization are confined to offline
+training and are absent from the inference path of the deployed actor.
+Consequently, they introduce no incremental computational overhead during
+real-time execution.}
 The learning rate follows a cosine annealing schedule $\eta(k) = \eta_{\min} + \frac{1}{2}(\eta_0 - \eta_{\min})(1 + \cos(\pi k / K))$, facilitating coarse trajectory optimization early in training and fine-grained terminal-guidance refinement in later epochs.
 
-\hladd{It is worth clarifying the computational cost of the dual-clip surrogate and the adaptive-KL
-penalty for latency-constrained deployment. Both mechanisms act only on the training loss
-in Eq.~\eqref{eq:total_loss}: the dual-clip branch is a scalar $\max/\min$ selection on the
-advantage sign, and the adaptive-KL term is a log-ratio estimate plus a scalar update of
-$\beta_{\mathrm{KL}}$. Neither appears in the deployed policy. At execution each interceptor runs
-only the actor forward pass, which on the deployed network completes in
-about $0.30$~ms per decision (single interceptor) and $3.98$~ms for a $20$-agent swarm on a
-server-class CPU---well inside the $50$~ms guidance cycle---while the dual-clip and adaptive-KL
-operations contribute exactly $0$~ms because they are absent from this path. During offline
-training the two mechanisms are evaluated once per gradient step and add only a small constant
-per update ($\approx 0.013$~ms, i.e. below $0.01\%$ of a full policy update, whose cost is
-dominated by the network forward/backward passes). Consequently they introduce no additional real-time overhead
-on the onboard processor, and their cost during training is negligible relative to the network
-forward/backward passes.}
 
-The complete ART-MAPPO workflow, integrating all three modules described above, is illustrated in Fig.~\ref{fig:algorithm_flow}. \hladd{The corresponding training procedure under the CTDE paradigm is detailed in Algorithm~\ref{alg:artmappo}.}
+
+The complete ART-MAPPO workflow, integrating all three modules described above, is illustrated in Fig.~\ref{fig:algorithm_flow}. 
+\hladd{The corresponding training procedure under the CTDE paradigm is detailed in Algorithm~\ref{alg:artmappo}.}
 
 \begin{figure*}[!t]
 \centering
@@ -1347,33 +1388,8 @@ Here, Eq.~\eqref{E1} measures the mean deviation of individual time-to-go values
 
 All training and evaluation were performed on an Intel Core i7-9700F CPU / Nvidia RTX 3090
 GPU server running Ubuntu 18.04.
-The simulation step size was 0.05\,s.
+The simulation step size was 50\,ms.
 Table~\ref{table2} summarizes the key hyperparameters of ART-MAPPO.
-
-% \begin{table*}[!t]
-% \centering
-% \renewcommand{\arraystretch}{1.4}
-% \caption{ART-MAPPO Algorithm Parameters \hladd{and Their Optimization Roles}}
-% \label{table2}
-% \begin{tabular}{lll}
-% \hline\hline
-% Parameter & Value & \hladd{Role in optimization} \\ \hline
-% PPO clipping factor ($\epsilon$) & 0.2 & \hladd{Pessimistic ratio bound (positive advantage)} \\
-% Dual-clip parameter ($c$) & 3.0 & \hladd{Saturation bound (negative advantage)} \\
-% Target KL divergence ($\delta_{\text{targ}}$) & 0.02 & \hladd{Adaptive-KL feedback setpoint} \\
-% Entropy bonus coefficient ($c_e$) & 0.01 & \hladd{Exploration bonus in unified loss} \\
-% GAE parameter ($\lambda_{\mathrm{GAE}}$) & 0.97 & \hladd{Advantage bias--variance trade-off} \\
-% \hladd{Discount factor ($\gamma_{\mathrm{RL}}$)} & \hladd{0.99} & \hladd{Effective horizon weighting} \\
-% LR schedule & Cosine Annealing & \hladd{Learning-rate annealing schedule} \\
-% Optimizer & AdamW & \hladd{Gradient-based optimizer} \\
-% Mini-batch number & 4 & \hladd{Mini-batches per PPO epoch} \\
-% Buffer size & 4096 & \hladd{Rollout buffer capacity} \\
-% Learning rate & $3\times10^{-4}$ & \hladd{AdamW step size} \\
-% Attention heads ($H$) & 4 & \hladd{Multi-head attention width} \\
-% Residual blocks ($L$) & 2 & \hladd{Actor--critic network depth} \\ \hline
-% \end{tabular}
-% \end{table*}
-
 
 \begin{table}[t]
 \centering
@@ -1406,11 +1422,6 @@ $V_A\in[10,40]$\,m/s. To simulate a directional swarm attack toward the high-val
 $D_{\text{UAV}}$ are uniformly distributed within a disk of radius $D_3$\,m with
 $V_D\in[10,40]$\,m/s and $\gamma_D\in[0,2\pi]$.
 \hladd{The initial altitudes are $z_A=120$~m and $z_D=0$~m, and the initial flight-path angles are $\theta_A=\theta_D=0$.}
-% \hladd{In the three-dimensional scenario, the defenders start near the defended center at
-% low altitude and the attackers start at higher altitude, so that every engagement requires
-% simultaneous horizontal and vertical closure; the initial flight-path angles $\theta$ are set
-% from the initial defender--target elevation and the attackers descend toward the defended
-% region while executing the case-specific three-dimensional maneuvers described below.}
 
 
 \begin{figure}[!t]
@@ -1441,7 +1452,7 @@ $A_{\text{UAV}}$ & \shortstack{$r\sim U[D_1,D_2]$, \hladd{$\varphi_A\sim U[0,2\p
 \end{table*}
 
 Two dynamic engagement scenarios are designed to evaluate cooperative guidance performance.
-\hladd{A third scenario, Case~3, is used in Section~\ref{subsec:montecarlo} to provide additional validation of the proposed method under an unseen bang--bang attack pattern.}
+\hladd{A third scenario, is used in Section~\ref{subsec:montecarlo} to provide additional validation of the proposed method under an unseen bang--bang attack pattern.}
 The scenario configurations are listed in Table~\ref{changjingqingkuang}.
 
 
@@ -1459,91 +1470,8 @@ Case 2 & 20 & 8 & Sinusoidal Maneuver \\
 \end{tabular}
 \end{table}
 
-%% ==== Re2_4 / Re3_7 / Re3_10: environmental modeling, uncertainty, and HIL ====
-% \hladd{\emph{1) Communication Delay and Sensing Uncertainty:} Beyond the UAV dynamics, the
-% environment explicitly models delayed communication and imperfect sensing. Every defender
-% receives the relative position and velocity packets used to build its observation
-% Eq.~\eqref{eq:observation_space} only after a finite transport delay, and each Cartesian
-% component is corrupted by zero-mean Gaussian error,}
-% \begin{equation}
-% \label{eq:noise_model}
-% {\color{blue}
-% \widehat{\mathbf{p}}(t)=\mathbf{p}(t-\tau_s)+\boldsymbol{\eta}_p,\quad
-% \widehat{\mathbf{v}}(t)=\mathbf{v}(t-\tau_s)+\boldsymbol{\eta}_v,}
-% \end{equation}
-% \hladd{with $\boldsymbol{\eta}_p\sim\mathcal{N}(\mathbf{0},\sigma_p^2\mathbf{I}_3)$ and
-% $\boldsymbol{\eta}_v\sim\mathcal{N}(\mathbf{0},\sigma_v^2\mathbf{I}_3)$. Range, altitude
-% difference, LOS direction, closing speed, heading, pitch, velocity-to-LOS angle, and
-% time-to-go are all recomputed from these delayed noisy Cartesian states, so no independent
-% noise is added to the derived quantities. Command packets are additionally subject to a
-% first-order actuation response and a small probability of loss, in which case the last
-% successfully received command is held. Table~\ref{tab:uncertainty_settings} lists the settings
-% in physical units.}
 
-% \begin{table}[!t]
-% \centering
-% \caption{\hladd{Communication Delay and Observation-Uncertainty Settings}}
-% \label{tab:uncertainty_settings}
-% \renewcommand{\arraystretch}{1.2}
-% \footnotesize
-% \begin{tabular}{@{}p{0.30\linewidth}p{0.22\linewidth}p{0.38\linewidth}@{}}
-% \hline\hline
-% {\color{blue}Observed quantity} & {\color{blue}Delay / response} & {\color{blue}Error distribution} \\
-% \hline
-% {\color{blue}Position $x,y,z$} & {\color{blue}$\tau_s=100$\,ms} & {\color{blue}Mean $0$; per-component $\sigma_p=3$\,m} \\
-% {\color{blue}Velocity $v_x,v_y,v_z$} & {\color{blue}$\tau_s=100$\,ms} & {\color{blue}Mean $0$; per-component $\sigma_v=0.3$\,m/s} \\
-% {\color{blue}Derived geometry, $t_{go}$} & {\color{blue}$100$\,ms} & {\color{blue}Recomputed from $\widehat{\mathbf{p}},\widehat{\mathbf{v}}$} \\
-% {\color{blue}Command channel} & {\color{blue}$50$\,ms} & {\color{blue}First-order hold; $1\%$ packet loss} \\
-% \hline\hline
-% \end{tabular}
-% \end{table}
-
-% \hladd{\emph{2) Hardware-in-the-Loop Semi-Physical Validation:} To move beyond a pure software
-% study and improve practical credibility, the three-dimensional experiment is executed as a
-% hardware-in-the-loop (HIL) semi-physical setup. Five interceptor policy endpoints ($D_0$--$D_4$)
-% run on separate NVIDIA Jetson NX embedded computers, each maintaining its own recurrent state,
-% observation-delay line, and actuator-delay line, exactly as they would on a physical
-% interceptor. The remaining interceptors and all attackers evolve in the mathematical simulator,
-% which exchanges state and command packets with the NX nodes over the network under the delay,
-% noise, and packet-loss channel of Table~\ref{tab:uncertainty_settings}. This closed loop
-% therefore validates the decentralized-execution assumption of the CTDE design on real
-% processors and real inter-node communication, rather than in a single monolithic simulation.
-% The platform architecture is shown in Fig.~\ref{fig:hil_platform}: a server (Ubuntu~22.04,
-% Core~i9-10900K, RTX~3080) runs the engagement-state update, the attacker cluster, and the
-% software policies of the remaining interceptors ($D_5$--$D_n$), while five Jetson NX nodes
-% (one per hardware policy endpoint $D_0$--$D_4$) execute online inference and target-assignment
-% modules; server and embedded sides are interconnected through a physical TCP Ethernet link over a
-% TP-LINK switch, carrying the observation downlink and the action/target-assignment uplink.}
-
-% \begin{figure}[!t]
-% \centering
-% \includegraphics[width=0.48\textwidth]{TASE_HIL.png}
-% \caption{\hladd{Hardware-in-the-loop, semi-physical validation platform.}}
-% % \caption{\hladd{Hardware-in-the-loop, semi-physical validation platform. 
-% % The server side (Ubuntu~22.04, Core~i9-10900K, RTX~3080) hosts the engagement-state update, the attacker
-% % cluster, and the software policies of interceptors $D_5$--$D_n$; the five hardware policy
-% % endpoints $D_0$--$D_4$ run online inference and target assignment on separate NVIDIA Jetson~NX
-% % embedded computers. The two sides communicate over a physical TCP Ethernet link (TP-LINK switch),
-% % exchanging the observation downlink and the action/target-assignment uplink under the delay,
-% % noise, and packet-loss channel of Table~\ref{tab:uncertainty_settings}. In the diagram the agent
-% % index $A_k$ labels the policy of interceptor $D_k$, i.e. $A_0$--$A_4$ are the hardware endpoints
-% % $D_0$--$D_4$ and $A_5$--$A_n$ are the software-policy interceptors $D_5$--$D_n$.}}
-% \label{fig:hil_platform}
-% \end{figure}
-
-% \hladd{Under the channel conditions of Table~\ref{tab:uncertainty_settings}, the framework
-% exhibits graceful degradation across all three classes of non-ideality. The jump-rejection
-% filter reduces the root-mean-square LOS-rate estimation error by roughly a factor of six
-% relative to the unfiltered estimate, and this attenuation is preserved even when the noise
-% standard deviation is quadrupled. The nominal $1\%$ command-packet loss introduces a
-% range-hold error on the order of a few tenths of a metre---small relative to the terminal
-% lethal radius---and the error remains bounded even at a $20\%$ loss rate. Because IDBO
-% enforces a per-target capacity of two to three interceptors, the probability that any target
-% is left completely undefended stays near $4\%$ at a $10\%$ per-unit failure rate, and the
-% cooperative arrival-time spread of approximately $0.1$\,s is preserved as long as at least
-% one assigned interceptor per target survives.}
-
-
+\hladd{The hardware-in-the-loop (HIL) experimental environment is configured as follows.}
 \hladd{\emph{1) Communication Delay and Sensing Uncertainty:}
 Communication and sensing nonidealities are incorporated into the
 three-dimensional simulation. The position and velocity measurements used to
@@ -1570,12 +1498,12 @@ $\sigma_p=1$~m, and
 $\sigma_v=0.3$~m/s.
 All derived observation variables, including the LOS geometry, closing speed,
 and time-to-go, are recomputed from the delayed noisy Cartesian states.
-The communication process is subject to a $1\%$ packet-loss rate, with the
-latest valid state packet retained when a packet is lost.}
-
-\hladd{\emph{2) Hardware-in-the-Loop Semi-Physical Validation:}
-The three-dimensional interception experiment is further implemented on a
-hardware-in-the-loop platform. The policies of defenders $D_0$--$D_4$ are
+The communication process is subject to a $50$~ms communication delay and 
+a $1\%$ packet-loss rate, with the latest valid state packet retained 
+when a packet is lost.}
+\hladd{\emph{2) HIL Platform:}
+As shown in Fig.~\ref{fig:hil_platform}, the three-dimensional interception experiment is further implemented on a
+HIL platform. The policies of defenders $D_0$--$D_4$ are
 deployed on five independent NVIDIA Jetson NX computers, with one defender
 assigned to each node. The corresponding target-assignment algorithm is also
 executed on the Jetson NX nodes. The engagement dynamics, attacker cluster,
@@ -1587,7 +1515,7 @@ under the communication conditions described above.}
 \begin{figure}[!t]
 \centering
 \includegraphics[width=0.48\textwidth]{TASE_HIL.png}
-\caption{\hladd{Hardware-in-the-loop validation platform.}}
+\caption{\hladd{HIL platform.}}
 \label{fig:hil_platform}
 \end{figure}
 
@@ -1599,7 +1527,8 @@ under the communication conditions described above.}
 
 To evaluate the IDBO algorithm, it is benchmarked against PSO, GWO, SSA, BOA, and standard DBO in case 1. 
 
-Fig.~\ref{fig:convergence} illustrates the statistical performance in terms of average cost convergence over iterations. IDBO significantly outperforms the baselines, reaching the lowest steady-state cost within 100~iterations. \begin{figure}[!ht] 
+Fig.~\ref{fig:convergence} illustrates the statistical performance in terms of average cost convergence over iterations. IDBO significantly outperforms the baselines, reaching the lowest steady-state cost within 100~iterations. 
+\begin{figure}[!ht] 
 \centering 
 \includegraphics[width=3.25in]{convergence.png} 
 \caption{Average cost convergence over iterations for target assignment algorithms.} 
@@ -1623,6 +1552,56 @@ The optimal assignment mapping generated by the algorithm is visualized in Fig.~
 \caption{Visualized spatial topology of the target assignment results.}
 \label{fig:assignment_topology}
 \end{figure}
+
+\hladd{To further examine the computational scalability and delay-dependent
+consensus efficiency of IDBO, the nominal $20\times8$ configuration is used
+as the baseline, and the scale sweep considers $10\times4$, $20\times8$,
+$40\times16$, $80\times32$, and $160\times64$. Under a fixed
+optimization budget, the mean CPU times are $0.031$~s, $0.048$~s, and
+$1.948$~s for the representative $10\times4$, $20\times8$, and
+$160\times64$ configurations, respectively. 
+The observed runtime scaling is superlinear over the evaluated configurations
+when the interceptor and target populations are increased concurrently.
+These CPU times quantify the computational cost of
+IDBO and exclude distributed communication latency.}
+
+
+\begin{table}[!t]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{2.8pt}
+\renewcommand{\arraystretch}{1.12}
+\caption{\hladd{Delay-dependent consensus performance of IDBO for the
+nominal $20\times8$ assignment.}}
+\label{tab:idbo_delay_scalability}
+\hladd{\begin{tabular}{@{}cccc@{}}
+\hline\hline
+\shortstack{Communication\\delay (ms)} &
+\shortstack{Mean communication\\steps} &
+\shortstack{Mean consensus\\time (s)} &
+\shortstack{Consensus\\success (\%)} \\
+\hline
+50  & 10.6 & 0.53 & 100 \\
+100 & 19.2 & 0.96 & 100 \\
+150 & 27.8 & 1.39 & 100 \\
+250 & 45.0 & 2.25 & 100 \\
+450 & 79.4 & 3.97 & 100 \\
+\hline
+\end{tabular}}
+\end{table}
+
+\hladd{Table~\ref{tab:idbo_delay_scalability} reports the distributed
+consensus performance at the nominal assignment scale. The $50$-ms case
+corresponds to the nominal communication condition, while the remaining cases
+provide an extended-delay evaluation. The communication-step count is measured
+on the $50$-ms communication time grid. As the communication delay increased
+from $50$ to $450$~ms, the mean number of communication steps required to
+reach consensus increased from
+$10.6$ to $79.4$, and the corresponding mean consensus time increased from
+$0.53$ to $3.97$~s. Nevertheless, the consensus success rate remained
+$100\%$ under all tested delays. These results show that bounded communication
+delay reduces distributed consensus efficiency but does not prevent convergence
+to a common conflict-free assignment under the tested conditions.}
 
 
 
@@ -1685,7 +1664,7 @@ in Case~1.}}
 \begin{figure}[!ht]
 \centering
 \includegraphics[width=3.15in]{\vfig{mappo/mappo_nopn_trajectory.png}}
-\caption{Engagement trajectories of the defending swarm using ART-MAPPO in Case~1.}
+\caption{\hladd{Engagement trajectories of the defending swarm using ART-MAPPO in Case~1.}}
 \label{fig:case1_mappo_traj}
 \end{figure}
 
@@ -1741,7 +1720,7 @@ baseline in Case~1.}}
 \begin{figure}[!ht]
 \centering
 \includegraphics[width=3.15in]{\pncasefig{pn_nopn_trajectory.png}}
-\caption{Engagement trajectories of the defending swarm using the PN baseline in Case~1.}
+\caption{\hladd{Engagement trajectories of the defending swarm using the PN baseline in Case~1.}}
 \label{fig:case1_pn_traj}
 \end{figure}
 
@@ -1778,7 +1757,7 @@ Beyond individual interception capabilities, a core requirement of swarm defense
 \begin{figure}[!ht]
 \centering
 \includegraphics[width=3.2in]{\vfig{mappo/mappo_nopn_tgo.png}}
-\caption{Time-to-go ($t_{go}$) profiles of the defending swarm using ART-MAPPO in Case~1. Interceptors assigned to the same target actively synchronize their remaining flight times to guarantee a simultaneous saturation strike.}
+\caption{\hladd{Time-to-go ($t_{go}$) profiles of the defending swarm using ART-MAPPO in Case~1. Interceptors assigned to the same target actively synchronize their remaining flight times to guarantee a simultaneous saturation strike.}}
 \label{fig:case1_mappo_tgo}
 \end{figure}
 
@@ -1787,7 +1766,7 @@ Consequently, Fig.~\ref{fig:case1_time_sync} explicitly validates the ultimate t
 \begin{figure}[!ht]
 \centering
 \includegraphics[width=3.0in]{\vfig{mappo/mappo_nopn_time_sync.png}}
-\caption{Terminal arrival time differences $\Delta t$ within each coordinated interceptor group under ART-MAPPO. The near-zero $\Delta t$ values explicitly validate the successful execution of temporally synchronized saturation strikes.}
+\caption{\hladd{Terminal arrival time differences $\Delta t$ within each coordinated interceptor group under ART-MAPPO. The near-zero $\Delta t$ values explicitly validate the successful execution of temporally synchronized saturation strikes.}}
 \label{fig:case1_time_sync}
 \end{figure}
 
@@ -1814,7 +1793,7 @@ targets in Case~2.}}
 \begin{figure}[!ht]
 \centering
 \includegraphics[width=3.15in]{\vfig{mappo/mappo_sin_trajectory.png}}
-\caption{Engagement trajectories of the defending swarm using ART-MAPPO against continuous weaving targets (Case~2).}
+\caption{\hladd{Engagement trajectories of the defending swarm using ART-MAPPO against continuous weaving targets in Case~2.}}
 \label{fig:case2_mappo_traj}
 \end{figure}
 
@@ -1867,7 +1846,7 @@ baseline in Case~2.}}
 \begin{figure}[!ht]
 \centering
 \includegraphics[width=3.15in]{\pncasefig{pn_sin_trajectory.png}}
-\caption{Engagement trajectories of the defending swarm using the PN baseline in Case~2.}
+\caption{\hladd{Engagement trajectories of the defending swarm using the PN baseline in Case~2.}}
 \label{fig:case2_pn_traj}
 \end{figure}
 
@@ -1903,7 +1882,7 @@ The continuous maneuvering of the targets also disrupts conventional coordinatio
 \begin{figure}[!ht]
 \centering
 \includegraphics[width=3.2in]{\vfig{mappo/mappo_sin_tgo.png}}
-\caption{Time-to-go ($t_{go}$) profiles of the defending swarm using ART-MAPPO in Case~2. Interceptors actively synchronize their remaining flight times despite the continuous high-G maneuvers of the targets.}
+\caption{\hladd{Time-to-go ($t_{go}$) profiles of the defending swarm using ART-MAPPO in Case~2. Interceptors actively synchronize their remaining flight times despite the continuous high-G maneuvers of the targets.}}
 \label{fig:case2_mappo_tgo}
 \end{figure}
 
@@ -1912,7 +1891,7 @@ Consequently, the ultimate validation of ART-MAPPO's saturation strike capabilit
 \begin{figure}[!ht]
 \centering
 \includegraphics[width=3.0in]{\vfig{mappo/mappo_sin_time_sync.png}}
-\caption{Terminal arrival time differences $\Delta t$ for Case~2. The remarkably low variance ($\le 0.30$\,s) proves that ART-MAPPO preserves strict temporal synchronization even against continuous weaving targets.}
+\caption{\hladd{Terminal arrival time differences $\Delta t$ for Case~2. The remarkably low variance ($\le 0.30$\,s) proves that ART-MAPPO preserves strict temporal synchronization even against continuous weaving targets.}}
 \label{fig:case2_time_sync}
 \end{figure}
 
@@ -1995,7 +1974,7 @@ To rigorously quantify the robustness of the proposed framework, 1000 independen
 \centering
 \subfloat[Case~1]{\includegraphics[width=3.5in]{nopn_mc_boxplot_compare.png}}\\
 \subfloat[Case~2]{\includegraphics[width=3.5in]{sin_mc_boxplot_compare.png}}
-\caption{Boxplots of Monte Carlo trials comparing ART-MAPPO and PN (data derived from successful interceptions).}
+\caption{\hladd{Boxplots of Monte Carlo trials comparing ART-MAPPO and PN (data derived from successful interceptions).}}
 \label{fig:mc_boxplots}
 \end{figure}
 
@@ -2017,7 +1996,7 @@ effective closure under unfavorable initial heading geometry and sustained
 target maneuvering, whereas the latter results from persistent within-group
 time-to-go differences caused by path asymmetry.}
 
-\hladd{\emph{(ii) Terminal lateral acceleration and operational efficiency.} The metric $E_n$ denotes the terminal lateral acceleration, which is a critical constraint for flight safety. As depicted in the boxplots, ART-MAPPO's $E_n$ is tightly clustered around a safe median of $\approx0.08$\,g (Case~1) and $\approx0.20$\,g (Case~2). In contrast, particularly in Case~2, PN's $E_n$ distribution is concentrated near the 1.0\,g upper bound, exposing severe terminal actuator saturation as PN reacts to the sinusoidal maneuvers. Additionally, ART-MAPPO bounds the engagement duration $E_t$ within a tight and predictable time window, reflecting effective forward-energy management and rapid closure.}
+\emph{(ii) Terminal lateral acceleration and operational efficiency.} The metric $E_n$ denotes the terminal lateral acceleration, which is a critical constraint for flight safety. As depicted in the boxplots, ART-MAPPO's $E_n$ is tightly clustered around a safe median of $\approx0.08$\,g (Case~1) and $\approx0.20$\,g (Case~2). In contrast, particularly in Case~2, PN's $E_n$ distribution is concentrated near the 1.0\,g upper bound, exposing severe terminal actuator saturation as PN reacts to the sinusoidal maneuvers. Additionally, ART-MAPPO bounds the engagement duration $E_t$ within a tight and predictable time window, reflecting effective forward-energy management and rapid closure.
 
 \emph{(iii) Robust temporal coordination.} The metric $E_{co\text{-}time}$ evaluates the temporal synchronization of the defending swarm. Across the successful Monte Carlo trials in both highly dynamic scenarios, ART-MAPPO maintains a median $E_{co\text{-}time}$ well below 0.10\,s. This consistently tight distribution confirms that the proposed algorithm can reliably shape the swarm's velocity profile to satisfy the strict temporal requirements for simultaneous saturation strikes, effectively neutralizing the risk of sequential piecemeal defeat.
 
@@ -2425,22 +2404,20 @@ converged performance.}
 
 In this paper, the cooperative interception problem of UAV swarms against highly dynamic and
 maneuverable attacking UAV swarms has been investigated, explicitly accounting for real-time
-decision requirements, coordinated engagement effectiveness, and \hladd{terminal lateral-acceleration risk}.
+decision requirements, coordinated engagement effectiveness, and terminal lateral-acceleration risk.
 The problem is formulated by jointly considering target assignment and cooperative guidance,
 and an intelligent temporally coordinated interception framework is developed.
 A fast IDBO-based target assignment mechanism enables efficient and accurate resource
 allocation in dynamic environments.
 The ART-MAPPO cooperative guidance strategy under the CTDE paradigm improves learning
 stability and training efficiency in large-scale adversarial settings.
-Extensive \hladd{three-dimensional} simulations\hladd{, together with a hardware-in-the-loop
-semi-physical study incorporating communication delay, sensing noise, and packet loss,}
-demonstrate accelerated target assignment, enhanced interception efficiency, improved
+Extensive simulations demonstrate accelerated target assignment, enhanced interception efficiency, improved
 interception success rates, and effective alleviation of terminal acceleration saturation.
 
 For future work, promising directions include cooperative interception under incomplete
 information, dynamic target reassignment in unknown environments, time-constrained assignment
 with explicit completion deadlines, and integration with realistic constraints such as
-\hldel{communication delays,} limited bandwidth and heterogeneous UAV capabilities.
+limited bandwidth and heterogeneous UAV capabilities.
 
 
 % ---- Bibliography ----
@@ -2466,10 +2443,10 @@ with explicit completion deadlines, and integration with realistic constraints s
 \setlength{\tabcolsep}{1.8pt}
 \renewcommand{\arraystretch}{1.10}
 \begin{tabular}{@{}
->{\centering\arraybackslash}p{0.70in}
->{\raggedright\arraybackslash}p{0.92in}
->{\centering\arraybackslash}p{0.70in}
->{\raggedright\arraybackslash}p{0.92in}@{}}
+>{\centering\arraybackslash}m{0.70in}
+>{\raggedright\arraybackslash}m{0.92in}
+>{\centering\arraybackslash}m{0.70in}
+>{\raggedright\arraybackslash}m{0.92in}@{}}
 \toprule
 \textbf{Symbol} & \textbf{Description}
 & \textbf{Symbol} & \textbf{Description} \\
