@@ -34,12 +34,12 @@
    \sbox0{$\displaystyle #1$}%
    \rlap{\usebox0}%
    \rule[0.5\dimexpr\ht0-\dp0\relax]{\wd0}{0.6pt}}}
-% Graphics live in the original manuscript folder
-\graphicspath{{../orign_paper/}{../HIL_fig/}{../Re2_6/}{../Re3_8/}{../Re3_7/}{../Re3_9/}{../Re3_5/}}
+% Graphics used by the revised manuscript are consolidated in all_fig
+\graphicspath{{all_fig/}}
 % 3D (V10) result figures for the revised simulation section
-\newcommand{\vfig}[1]{../../new_sim_fig/fig_and_data/figures_v10/#1}
+\newcommand{\vfig}[1]{all_fig/#1}
 % Updated PN results for the two maneuvering-target cases
-\newcommand{\pncasefig}[1]{../../new_sim_fig/temp_pn_case12/final_legacy_3d_tgo_reasonable_nxny/figures_v9_original_method/#1}
+\newcommand{\pncasefig}[1]{all_fig/#1}
 
 % theorem/lemma environments
 \newtheorem{theorem}{Theorem}
@@ -1655,7 +1655,7 @@ In this scenario, the attacking UAVs ($A_{\text{UAV}}$) initially execute a cons
 
 \begin{figure}[!ht]
 \centering
-\includegraphics[width=3.15in]{\vfig{mappo/mappo_nopn_trajectory_3d.png}}
+\includegraphics[width=3.15in]{\vfig{mappo_nopn_trajectory_3d.png}}
 \caption{\hladd{Three-dimensional engagement trajectories of the defending swarm using ART-MAPPO
 in Case~1.}}
 \label{fig:case1_mappo_traj_3d}
@@ -1663,7 +1663,7 @@ in Case~1.}}
 
 \begin{figure}[!ht]
 \centering
-\includegraphics[width=3.15in]{\vfig{mappo/mappo_nopn_trajectory.png}}
+\includegraphics[width=3.15in]{\vfig{mappo_nopn_trajectory.png}}
 \caption{\hladd{Engagement trajectories of the defending swarm using ART-MAPPO in Case~1.}}
 \label{fig:case1_mappo_traj}
 \end{figure}
@@ -1672,27 +1672,27 @@ in Case~1.}}
 
 \begin{figure}[!ht]
 \centering
-\includegraphics[width=3.1in]{\vfig{mappo/standalone_duav_legend.png}}\\[-2pt]
-\subfloat[\hladd{Lateral acceleration $n_y$}]{\includegraphics[width=3.15in]{\vfig{mappo/mappo_nopn_ny.png}}}\\[-2pt]
-\subfloat[\hladd{Heading angle $\gamma_D$}]{\includegraphics[width=3.15in]{\vfig{mappo/mappo_nopn_heading.png}}}
+\includegraphics[width=3.1in]{\vfig{standalone_duav_legend.png}}\\[-2pt]
+\subfloat[\hladd{Lateral acceleration $n_y$}]{\includegraphics[width=3.15in]{\vfig{mappo_nopn_ny.png}}}\\[-2pt]
+\subfloat[\hladd{Heading angle $\gamma_D$}]{\includegraphics[width=3.15in]{\vfig{mappo_nopn_heading.png}}}
 \caption{\hladd{Lateral acceleration and heading-angle response of ART-MAPPO in Case~1.}}
 \label{fig:case1_mappo_yaw}
 \end{figure}
 
 \begin{figure}[!ht]
 \centering
-\includegraphics[width=3.1in]{\vfig{mappo/standalone_duav_legend.png}}\\[-2pt]
-\subfloat[\hladd{Normal acceleration $n_z$}]{\includegraphics[width=3.15in]{\vfig{mappo/mappo_nopn_nz.png}}}\\[-2pt]
-\subfloat[\hladd{Flight-path angle $\theta_D$}]{\includegraphics[width=3.15in]{\vfig{mappo/mappo_nopn_pitch.png}}}
+\includegraphics[width=3.1in]{\vfig{standalone_duav_legend.png}}\\[-2pt]
+\subfloat[\hladd{Normal acceleration $n_z$}]{\includegraphics[width=3.15in]{\vfig{mappo_nopn_nz.png}}}\\[-2pt]
+\subfloat[\hladd{Flight-path angle $\theta_D$}]{\includegraphics[width=3.15in]{\vfig{mappo_nopn_pitch.png}}}
 \caption{\hladd{Normal acceleration and flight-path-angle response of ART-MAPPO in Case~1.}}
 \label{fig:case1_mappo_pitch}
 \end{figure}
 
 \begin{figure}[!ht]
 \centering
-\includegraphics[width=3.1in]{\vfig{mappo/standalone_duav_legend.png}}\\[-2pt]
-\subfloat[\hladd{Axial acceleration $n_x$}]{\includegraphics[width=3.15in]{\vfig{mappo/mappo_nopn_nx.png}}}\\[-2pt]
-\subfloat[Velocity $V_D$]{\includegraphics[width=3.15in]{\vfig{mappo/mappo_nopn_velocity.png}}}
+\includegraphics[width=3.1in]{\vfig{standalone_duav_legend.png}}\\[-2pt]
+\subfloat[\hladd{Axial acceleration $n_x$}]{\includegraphics[width=3.15in]{\vfig{mappo_nopn_nx.png}}}\\[-2pt]
+\subfloat[Velocity $V_D$]{\includegraphics[width=3.15in]{\vfig{mappo_nopn_velocity.png}}}
 \caption{\hladd{Axial acceleration and speed response of ART-MAPPO in Case~1.}}
 \label{fig:case1_mappo_axial}
 \end{figure}
@@ -1756,7 +1756,7 @@ Beyond individual interception capabilities, a core requirement of swarm defense
 
 \begin{figure}[!ht]
 \centering
-\includegraphics[width=3.2in]{\vfig{mappo/mappo_nopn_tgo.png}}
+\includegraphics[width=3.2in]{\vfig{mappo_nopn_tgo.png}}
 \caption{\hladd{Time-to-go ($t_{go}$) profiles of the defending swarm using ART-MAPPO in Case~1. Interceptors assigned to the same target actively synchronize their remaining flight times to guarantee a simultaneous saturation strike.}}
 \label{fig:case1_mappo_tgo}
 \end{figure}
@@ -1765,7 +1765,7 @@ Consequently, Fig.~\ref{fig:case1_time_sync} explicitly validates the ultimate t
 
 \begin{figure}[!ht]
 \centering
-\includegraphics[width=3.0in]{\vfig{mappo/mappo_nopn_time_sync.png}}
+\includegraphics[width=3.0in]{\vfig{mappo_nopn_time_sync.png}}
 \caption{\hladd{Terminal arrival time differences $\Delta t$ within each coordinated interceptor group under ART-MAPPO. The near-zero $\Delta t$ values explicitly validate the successful execution of temporally synchronized saturation strikes.}}
 \label{fig:case1_time_sync}
 \end{figure}
@@ -1784,7 +1784,7 @@ This scenario evaluates the robustness of the proposed framework against the sin
 
 \begin{figure}[!ht]
 \centering
-\includegraphics[width=3.15in]{\vfig{mappo/mappo_sin_trajectory_3d.png}}
+\includegraphics[width=3.15in]{\vfig{mappo_sin_trajectory_3d.png}}
 \caption{\hladd{Three-dimensional ART-MAPPO engagement trajectories against continuous weaving
 targets in Case~2.}}
 \label{fig:case2_mappo_traj_3d}
@@ -1792,7 +1792,7 @@ targets in Case~2.}}
 
 \begin{figure}[!ht]
 \centering
-\includegraphics[width=3.15in]{\vfig{mappo/mappo_sin_trajectory.png}}
+\includegraphics[width=3.15in]{\vfig{mappo_sin_trajectory.png}}
 \caption{\hladd{Engagement trajectories of the defending swarm using ART-MAPPO against continuous weaving targets in Case~2.}}
 \label{fig:case2_mappo_traj}
 \end{figure}
@@ -1801,27 +1801,27 @@ targets in Case~2.}}
 
 \begin{figure}[!ht]
 \centering
-\includegraphics[width=3.1in]{\vfig{mappo/standalone_duav_legend.png}}\\[-2pt]
-\subfloat[\hladd{Lateral acceleration $n_y$}]{\includegraphics[width=3.15in]{\vfig{mappo/mappo_sin_ny.png}}}\\[-2pt]
-\subfloat[\hladd{Heading angle $\gamma_D$}]{\includegraphics[width=3.15in]{\vfig{mappo/mappo_sin_heading.png}}}
+\includegraphics[width=3.1in]{\vfig{standalone_duav_legend.png}}\\[-2pt]
+\subfloat[\hladd{Lateral acceleration $n_y$}]{\includegraphics[width=3.15in]{\vfig{mappo_sin_ny.png}}}\\[-2pt]
+\subfloat[\hladd{Heading angle $\gamma_D$}]{\includegraphics[width=3.15in]{\vfig{mappo_sin_heading.png}}}
 \caption{\hladd{Lateral acceleration and heading-angle response of ART-MAPPO in Case~2.}}
 \label{fig:case2_mappo_yaw}
 \end{figure}
 
 \begin{figure}[!ht]
 \centering
-\includegraphics[width=3.1in]{\vfig{mappo/standalone_duav_legend.png}}\\[-2pt]
-\subfloat[\hladd{Normal acceleration $n_z$}]{\includegraphics[width=3.15in]{\vfig{mappo/mappo_sin_nz.png}}}\\[-2pt]
-\subfloat[\hladd{Flight-path angle $\theta_D$}]{\includegraphics[width=3.15in]{\vfig{mappo/mappo_sin_pitch.png}}}
+\includegraphics[width=3.1in]{\vfig{standalone_duav_legend.png}}\\[-2pt]
+\subfloat[\hladd{Normal acceleration $n_z$}]{\includegraphics[width=3.15in]{\vfig{mappo_sin_nz.png}}}\\[-2pt]
+\subfloat[\hladd{Flight-path angle $\theta_D$}]{\includegraphics[width=3.15in]{\vfig{mappo_sin_pitch.png}}}
 \caption{\hladd{Normal acceleration and flight-path-angle response of ART-MAPPO in Case~2.}}
 \label{fig:case2_mappo_pitch}
 \end{figure}
 
 \begin{figure}[!ht]
 \centering
-\includegraphics[width=3.1in]{\vfig{mappo/standalone_duav_legend.png}}\\[-2pt]
-\subfloat[\hladd{Axial acceleration $n_x$}]{\includegraphics[width=3.15in]{\vfig{mappo/mappo_sin_nx.png}}}\\[-2pt]
-\subfloat[Velocity $V_D$]{\includegraphics[width=3.15in]{\vfig{mappo/mappo_sin_velocity.png}}}
+\includegraphics[width=3.1in]{\vfig{standalone_duav_legend.png}}\\[-2pt]
+\subfloat[\hladd{Axial acceleration $n_x$}]{\includegraphics[width=3.15in]{\vfig{mappo_sin_nx.png}}}\\[-2pt]
+\subfloat[Velocity $V_D$]{\includegraphics[width=3.15in]{\vfig{mappo_sin_velocity.png}}}
 \caption{\hladd{Axial acceleration and speed response of ART-MAPPO in Case~2.}}
 \label{fig:case2_mappo_axial}
 \end{figure}
@@ -1881,7 +1881,7 @@ The continuous maneuvering of the targets also disrupts conventional coordinatio
 
 \begin{figure}[!ht]
 \centering
-\includegraphics[width=3.2in]{\vfig{mappo/mappo_sin_tgo.png}}
+\includegraphics[width=3.2in]{\vfig{mappo_sin_tgo.png}}
 \caption{\hladd{Time-to-go ($t_{go}$) profiles of the defending swarm using ART-MAPPO in Case~2. Interceptors actively synchronize their remaining flight times despite the continuous high-G maneuvers of the targets.}}
 \label{fig:case2_mappo_tgo}
 \end{figure}
@@ -1890,7 +1890,7 @@ Consequently, the ultimate validation of ART-MAPPO's saturation strike capabilit
 
 \begin{figure}[!ht]
 \centering
-\includegraphics[width=3.0in]{\vfig{mappo/mappo_sin_time_sync.png}}
+\includegraphics[width=3.0in]{\vfig{mappo_sin_time_sync.png}}
 \caption{\hladd{Terminal arrival time differences $\Delta t$ for Case~2. The remarkably low variance ($\le 0.30$\,s) proves that ART-MAPPO preserves strict temporal synchronization even against continuous weaving targets.}}
 \label{fig:case2_time_sync}
 \end{figure}
