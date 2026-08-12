@@ -7,6 +7,7 @@
 \usepackage{graphicx}
 \usepackage{xcolor}
 \usepackage{booktabs}
+\usepackage{array}
 \usepackage{multirow}
 \usepackage{caption}
 \usepackage[most]{tcolorbox}
@@ -130,141 +131,148 @@ boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
 \noindent\textbf{Appendix A: Summary of Key Variables and Symbols}
 
 \medskip
-\noindent Table~A summarizes the principal variables and symbols used
+\noindent Table~IX consolidates the principal variables and symbols used
 throughout the paper.
 
 \medskip
 \begin{center}
-\textbf{Key Variables and Symbols in Sections II--IV}
+\textbf{Table IX}\par\vspace{-1pt}
+\textbf{Key Variables and Symbols}
 
-\scriptsize
-\setlength{\tabcolsep}{2.5pt}
+\fontsize{7pt}{8pt}\selectfont
+\setlength{\tabcolsep}{3.0pt}
 \renewcommand{\arraystretch}{1.10}
-\begin{tabular}{@{}p{0.92in}p{1.55in}p{0.92in}p{1.55in}@{}}
+\newcommand{\symcell}[1]{\makebox[\linewidth][c]{#1}}
+\newcommand{\desccell}[1]{\raggedright #1\let\\\tabularnewline}
+\begin{tabular}{@{}
+>{\centering\arraybackslash}m{0.90in}
+>{\raggedright\arraybackslash}m{1.55in}
+>{\centering\arraybackslash}m{0.90in}
+>{\raggedright\arraybackslash}m{1.55in}@{}}
 \toprule
-\textbf{Symbol} & \textbf{Description}
-& \textbf{Symbol} & \textbf{Description} \\
+\symcell{\textbf{Symbol}} & \desccell{\textbf{Description}}
+& \symcell{\textbf{Symbol}} & \desccell{\textbf{Description}} \\
 \midrule
 
 \multicolumn{4}{@{}l}{\textit{Engagement model}}\\[1pt]
 
-$(x,y,z)$
-& UAV position coordinates
-& $V,\gamma,\theta$
-& Speed, heading, and flight-path angle \\
+\symcell{$(x,y,z)$}
+& \desccell{UAV position coordinates}
+& \symcell{$V,\gamma,\theta$}
+& \desccell{Speed, heading, and flight-path angle} \\
 
-\shortstack{$\mathbf{p}_A,\mathbf{p}_D$\\
-$\mathbf{v}_A,\mathbf{v}_D$}
-& Attacker/defender positions and velocities
-& $\mathbf{r}_{AD},\boldsymbol{\ell}_{AD}$
-& Relative-position vector and LOS unit vector \\
+\symcell{\shortstack{$\mathbf{p}_A,\mathbf{p}_D$\\
+$\mathbf{v}_A,\mathbf{v}_D$}}
+& \desccell{Attacker/defender positions and velocities}
+& \symcell{$\mathbf{r}_{AD},\boldsymbol{\ell}_{AD}$}
+& \desccell{Relative-position vector and LOS unit vector} \\
 
-$r,\dot r$
-& Relative range and range rate
-& $q^\gamma,q^\theta$
-& LOS azimuth and elevation \\
+\symcell{$r,\dot r$}
+& \desccell{Relative range and range rate}
+& \symcell{$q^\gamma,q^\theta$}
+& \desccell{LOS azimuth and elevation} \\
 
-$n_x,n_y,n_z$
-& Axial, lateral, and normal accelerations
-& $t_{go}$
-& Estimated time-to-go \\
+\symcell{$n_x,n_y,n_z$}
+& \desccell{Axial, lateral, and normal accelerations}
+& \symcell{$t_{go}$}
+& \desccell{Estimated time-to-go} \\
 
-$\operatorname{ZEM}$
-& Zero-effort-miss distance
-&
-& \\[2pt]
+\symcell{$\operatorname{ZEM}$}
+& \desccell{Zero-effort-miss distance}
+& \symcell{}
+& \desccell{} \\[2pt]
 
 \multicolumn{4}{@{}l}{\textit{IDBO target assignment}}\\[1pt]
 
-$\mathcal{U},\mathcal{T}$
-& Interceptor and target sets
-& $M,N$
-& Numbers of interceptors and targets \\
+\symcell{$\mathcal{U},\mathcal{T}$}
+& \desccell{Interceptor and target sets}
+& \symcell{$M,N$}
+& \desccell{Numbers of interceptors and targets} \\
 
-$X_{ij}$
-& Binary assignment of $u_i$ to $t_j$
-& $P_{ij}$
-& Composite interception probability \\
+\symcell{$X_{ij}$}
+& \desccell{Binary assignment of $u_i$ to $t_j$}
+& \symcell{$P_{ij}$}
+& \desccell{Composite interception probability} \\
 
-\shortstack{$w_{1,\mathrm{IDBO}}$\\
-$w_{2,\mathrm{IDBO}}$}
-& Reachability and geometry weights
-& $L_{\max}$
-& Per-target interceptor capacity \\
+\symcell{\shortstack{$w_{1,\mathrm{IDBO}}$\\
+$w_{2,\mathrm{IDBO}}$}}
+& \desccell{Reachability and geometry weights}
+& \symcell{$L_{\max}$}
+& \desccell{Per-target interceptor capacity} \\
 
-$\mathbf{x}_i$
-& Target-preference vector of $u_i$
-& $\mathcal{F}_i$
-& Local IDBO fitness \\
+\symcell{$\mathbf{x}_i$}
+& \desccell{Target-preference vector of $u_i$}
+& \symcell{$\mathcal{F}_i$}
+& \desccell{Local IDBO fitness} \\
 
-$A_{ij}$
-& Adversarial advantage for pair $(i,j)$
-& $\Psi_{ij}$
-& Assignment-saturation penalty \\
+\symcell{$A_{ij}$}
+& \desccell{Adversarial advantage for pair $(i,j)$}
+& \symcell{$\Psi_{ij}$}
+& \desccell{Assignment-saturation penalty} \\
 
-$\mathcal{N}_i$
-& Communication-neighbor set of $u_i$
-& \shortstack{$c_{ij}$\\$\mathcal{Z}_j$}
-& Bid and winner list for target $t_j$ \\
+\symcell{$\mathcal{N}_i$}
+& \desccell{Communication-neighbor set of $u_i$}
+& \symcell{\shortstack{$c_{ij}$\\$\mathcal{Z}_j$}}
+& \desccell{Bid and winner list for target $t_j$} \\
 
-$c_t$
-& Common IDBO decay schedule
-& \shortstack{$\Gamma^{(k)}$\\$\epsilon_{\mathrm{IDBO}}$}
-& Swarm disagreement and convergence tolerance \\[2pt]
+\symcell{$c_t$}
+& \desccell{Common IDBO decay schedule}
+& \symcell{\shortstack{$\Gamma^{(k)}$\\$\epsilon_{\mathrm{IDBO}}$}}
+& \desccell{Swarm disagreement and convergence tolerance} \\[2pt]
 
 \multicolumn{4}{@{}l}{\textit{ART-MAPPO cooperative guidance}}\\[1pt]
 
-$\mathbf{o}_i^{(t)}$
-& Local observation of interceptor $i$
-& $s_t$
-& Centralized global state \\
+\symcell{$\mathbf{o}_i^{(t)}$}
+& \desccell{Local observation of interceptor $i$}
+& \symcell{$s_t$}
+& \desccell{Centralized global state} \\
 
-$\mathbf{A}_j$
-& Attention matrix of head $j$
-& $\mathbf{c}_t$
-& GRU hidden state \\
+\symcell{$\mathbf{A}_j$}
+& \desccell{Attention matrix of head $j$}
+& \symcell{$\mathbf{c}_t$}
+& \desccell{GRU hidden state} \\
 
-$\pi_{\boldsymbol{\vartheta}_i}$
-& Decentralized actor policy
-& $V_\phi(s_t)$
-& Centralized critic value \\
+\symcell{$\pi_{\boldsymbol{\vartheta}_i}$}
+& \desccell{Decentralized actor policy}
+& \symcell{$V_\phi(s_t)$}
+& \desccell{Centralized critic value} \\
 
-$\mathbf{a}_i$
-& Three-axis acceleration command
-& $\mathcal{T}_i^{(k)}$
-& Smoothed trust level \\
+\symcell{$\mathbf{a}_i$}
+& \desccell{Three-axis acceleration command}
+& \symcell{$\mathcal{T}_i^{(k)}$}
+& \desccell{Smoothed trust level} \\
 
-$\tilde{R}_i^{(k)}$
-& Normalized relative return
-& \shortstack{$\beta(\mathcal{T}_i)$\\
-$\pi_{\mathrm{guided}}^i$}
-& Guided-policy weight and distribution \\
+\symcell{$\tilde{R}_i^{(k)}$}
+& \desccell{Normalized relative return}
+& \symcell{\shortstack{$\beta(\mathcal{T}_i)$\\
+$\pi_{\mathrm{guided}}^i$}}
+& \desccell{Guided-policy weight and distribution} \\
 
-$\hat{A}_t$
-& GAE advantage estimate
-& \shortstack{$r_t(\boldsymbol{\vartheta})$\\$\epsilon$}
-& Probability ratio and PPO clip threshold \\
+\symcell{$\hat{A}_t$}
+& \desccell{GAE advantage estimate}
+& \symcell{\shortstack{$r_t(\boldsymbol{\vartheta})$\\$\epsilon$}}
+& \desccell{Probability ratio and PPO clip threshold} \\
 
-$J^{\mathrm{DC}},c$
-& Dual-Clip objective and floor
-& \shortstack{$\hat{D}_{\mathrm{KL}}$\\
-$\beta_{\mathrm{KL}},\delta_{\mathrm{targ}}$}
-& KL estimate, penalty coefficient, and target \\
+\symcell{$J^{\mathrm{DC}},c$}
+& \desccell{Dual-Clip objective and floor}
+& \symcell{\shortstack{$\hat{D}_{\mathrm{KL}}$\\
+$\beta_{\mathrm{KL}},\delta_{\mathrm{targ}}$}}
+& \desccell{KL estimate, penalty coefficient, and target} \\
 
-$r_i^{(t)}$
-& Per-step composite reward
-& $w_1,\ldots,w_5$
-& Reward-component weights \\
+\symcell{$r_i^{(t)}$}
+& \desccell{Per-step composite reward}
+& \symcell{$w_1,\ldots,w_5$}
+& \desccell{Reward-component weights} \\
 
-$\mathcal{G}_i$
-& Same-target interceptor group
-& $\bar{t}_{go}^{(t)}$
-& Group mean time-to-go \\
+\symcell{$\mathcal{G}_i$}
+& \desccell{Same-target interceptor group}
+& \symcell{$\bar{t}_{go}^{(t)}$}
+& \desccell{Group mean time-to-go} \\
 
-$L_V(\phi)$
-& Centralized critic value loss
-& $\mathcal{L}(\boldsymbol{\vartheta},\phi)$
-& Overall training loss \\
+\symcell{$L_V(\phi)$}
+& \desccell{Centralized critic value loss}
+& \symcell{$\mathcal{L}(\boldsymbol{\vartheta},\phi)$}
+& \desccell{Overall training loss} \\
 
 \bottomrule
 \end{tabular}
@@ -311,10 +319,11 @@ per-UAV complexity analysis in Eq.~(27).
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
 boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
-{\color{addblue}
-\noindent\textbf{Algorithm 1: IDBO Target Assignment}
-
-\medskip
+\begin{algorithm}[H]
+\color{addblue}
+\fontsize{9pt}{11.0476pt}\selectfont
+\captionsetup{labelfont={color=addblue},textfont={color=addblue}}
+\caption{IDBO Target Assignment}
 \begin{algorithmic}[1]
 \REQUIRE Interceptor and target sets $\mathcal{U},\mathcal{T}$;
 engagement states; communication graph; capacity $L_{\max}$;
@@ -343,6 +352,10 @@ set $k\!\leftarrow\!0$
     \STATE Generate candidates using the rolling, dancing, breeding,
     and stealing operators according to Eqs.~(16)--(19)
 
+    \STATE Project the candidate preferences onto $[0,1]^N$ and retain
+    the current best candidate unless a strictly better candidate is
+    obtained
+
   \ENDFOR
 
   \STATE Select and binarize the best local preference using Eq.~(20);
@@ -363,7 +376,7 @@ set $k\!\leftarrow\!0$
 \STATE \textbf{return} $\mathbf{X}^{\ast}$
 
 \end{algorithmic}
-}
+\end{algorithm}
 \end{tcolorbox}
 
 \medskip
@@ -375,10 +388,11 @@ Section~IV-D (\emph{Mechanistic Comparison with Conventional MAPPO}).
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
 boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
-{\color{addblue}
-\noindent\textbf{Algorithm 2: ART-MAPPO for Cooperative Swarm Interception}
-
-\medskip
+\begin{algorithm}[H]
+\color{addblue}
+\fontsize{9pt}{11.0476pt}\selectfont
+\captionsetup{labelfont={color=addblue},textfont={color=addblue}}
+\caption{ART-MAPPO for Cooperative Swarm Interception}
 \begin{algorithmic}[1]
 
 \REQUIRE Actor parameters
@@ -475,7 +489,7 @@ $\mu_R$ and $\sigma_R^2$
 $\{\pi_{\boldsymbol{\vartheta}_i}\}_{i=1}^{M}$
 
 \end{algorithmic}
-}
+\end{algorithm}
 \end{tcolorbox}
 
 
@@ -552,10 +566,7 @@ $\mathbf{v}_j=[\dot{x}_j,\dot{y}_j,\dot{z}_j]^\top$ denote those of target
 $t_j$.}
 
 \medskip
-\hladd{The normalized inner product is the cosine of the three-dimensional
-angle between the interceptor velocity and the LOS to target $t_j$; the
-maximum operator assigns zero geometric advantage when the target lies
-outside the interceptor's forward hemisphere.}
+\hladd{The normalized inner product is the cosine of the three-dimensional angle between the interceptor velocity and the LOS to target $t_j$; the maximum operator assigns zero geometric advantage when the target lies outside the interceptor's forward hemisphere.} The three multiplicative factors encode temporal, energetic, and geometric advantage, respectively, while the subtracted term penalizes competition from other interceptors with high preferences for the same target.
 \end{tcolorbox}
 
 \medskip
@@ -567,27 +578,27 @@ We explained how the decaying coefficients progressively suppress the
 stochastic components of the four update operators.
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
-boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
-\hladd{The coefficients
+coltext=addblue,fontupper=\color{addblue},boxrule=0.6pt,arc=2pt,
+left=9pt,right=9pt,top=7pt,bottom=7pt]
+The coefficients
 $\alpha,\beta,\gamma_{\mathrm{IDBO}},\delta,\delta',
-\eta_{\mathrm{IDBO}}$ together with the dancing noise scale $\sigma_d$
-follow a common linear schedule $c_t=c_0\,(1-t/T)$, where $T$ is the IDBO
-iteration count, while the elite-recombination weights remain bounded. This
-schedule is what governs convergence stability. The stochastic parts of the
-operators---the rolling probe
-$\beta\,\boldsymbol{\xi}_i\mathrm{e}^{-t/T}$ and the dancing perturbation
-$\mathbf{n}_i\sim\mathcal{N}(0,\sigma_d^2\mathbf{I})$---scale with $c_t$ and
-vanish as $c_t\!\to\!0$, so the update degenerates into a deterministic,
-advantage-weighted local refinement followed by the advantage-adaptive
-binarization step. A step sequence whose stochastic amplitude decays to zero
-while retaining an ascent direction satisfies a Robbins--Monro-type
-sufficient condition for settling at a stable fixed point rather than
-orbiting it, which is precisely the behavior measured by the
-swarm-disagreement metric $\Gamma^{(k)}$ in Eq.~(30). A controlled ablation
-that freezes the coefficients confirms this mechanism: non-decaying
-coefficients keep injecting perturbations and leave a persistent late-stage
-oscillation in the working assignment, whereas the linear schedule contracts
-the swarm onto a stable, low-cost equilibrium.}
+\eta_{\mathrm{IDBO}}$, together with the dancing-noise scale $\sigma_d$,
+follow the common linear schedule $c_t=c_0(1-t/T)$, where $T$ denotes the
+local IDBO search horizon. During each local search, the candidate
+preferences are projected onto $[0,1]^N$, and the best-so-far candidate is
+retained unless a strictly better candidate is obtained. The coefficient
+schedule progressively attenuates both the directed update terms and the
+stochastic perturbations. In particular, the rolling perturbation
+$\beta\boldsymbol{\xi}_i\mathrm{e}^{-t/T}$ and the dancing perturbation
+$\mathbf{n}_i\sim\mathcal{N}(0,\sigma_d^2\mathbf{I})$ vanish as $t$
+approaches $T$, suppressing late-stage fluctuations in the preference
+population. The schedule therefore satisfies the vanishing-gain condition
+$c_t\to0$ used in Robbins--Monro-type stochastic approximation
+[46]. At $c_T=0$, the four update operators reduce
+to the identity map, while elitist retention prevents the incumbent from
+being replaced by an inferior candidate. Consequently, once no strictly
+improving candidate is generated, the retained solution remains invariant
+and constitutes a stable fixed point of the implemented local search.
 \end{tcolorbox}
 
 \medskip
@@ -600,11 +611,12 @@ bidding, and winner-list updates in Eqs.~(20)--(22).
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
 boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
-\hladd{Equations~(20)--(22) convert the continuous preferences into local
-assignment candidates. Their bids are exchanged among neighboring
-interceptors so that at most the $L_{\max}$ strongest candidates are retained
-for each target, and repeated exchanges bring the local winner lists into
-agreement.}
+\hladd{Equations~(20)--(22) convert the continuous preferences into local assignment candidates. Each
+consensus update exchanges the current bids among neighboring interceptors
+and retains at most the $L_{\max}$ strongest bids for each target. Once the
+local search has stabilized and the bids no longer change, repeated consensus
+updates propagate the winner information through the connected network and
+bring the local winner lists into agreement.}
 \end{tcolorbox}
 
 \medskip
@@ -651,15 +663,15 @@ and the resulting adjustment of exploration.
 boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
 \hladd{The sigmoid term maps the normalized relative return
 $\tilde{R}_i^{(k)}$ to a bounded performance reference in $(0,1)$.
-Equation~(42) combines the previous trust level and the current performance
-reference with the weights $1-\alpha_T$ and $\alpha_T$, respectively,
-yielding a smoothed trust estimate. The smoothing process tracks changes in
-relative performance while attenuating episode-to-episode return
-fluctuations. Sustained above-average returns keep the performance reference
-above $0.5$ and bias the smoothed trust estimate toward a correspondingly
-higher level, thereby reducing the probability assigned to the guided
-exploratory policy; sustained below-average returns produce the opposite
-allocation.}
+Equation~(42) combines the previous trust level and
+the current performance reference with the weights $1-\alpha_T$ and
+$\alpha_T$, respectively, yielding a smoothed trust estimate. The
+smoothing process tracks changes in relative performance while attenuating
+episode-to-episode return fluctuations. Sustained above-average returns
+keep the performance reference above $0.5$ and bias the smoothed trust
+estimate toward a correspondingly higher level, thereby reducing the
+probability assigned to the guided exploratory policy; sustained
+below-average returns produce the opposite allocation.}
 \end{tcolorbox}
 
 \medskip
@@ -817,18 +829,18 @@ zero-mean Gaussian noise,}
 \end{equation*}
 
 \hladd{where
-$\boldsymbol{\eta}_p\sim
-\mathcal{N}(\mathbf{0},\sigma_p^2\mathbf{I}_3)$ and
-$\boldsymbol{\eta}_v\sim
-\mathcal{N}(\mathbf{0},\sigma_v^2\mathbf{I}_3)$.
+$\boldsymbol{\eta}_p\sim\mathcal{N}(\mathbf{0},\sigma_p^2\mathbf{I}_3)$
+and
+$\boldsymbol{\eta}_v\sim\mathcal{N}(\mathbf{0},\sigma_v^2\mathbf{I}_3)$.
 The nominal settings are
 $\tau_s=50$~ms,
 $\sigma_p=1$~m, and
 $\sigma_v=0.3$~m/s.
 All derived observation variables, including the LOS geometry, closing speed,
 and time-to-go, are recomputed from the delayed noisy Cartesian states.
-The communication process is subject to a $1\%$ packet-loss rate, with the
-latest valid state packet retained when a packet is lost.}
+The communication process is subject to a $50$~ms communication delay and 
+a $1\%$ packet-loss rate, with the latest valid state packet retained 
+when a packet is lost.}
 \end{tcolorbox}
 
 \medskip
@@ -843,9 +855,9 @@ through a physical network.
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
 boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
-\hladd{\emph{2) Hardware-in-the-Loop Semi-Physical Validation:}
-The three-dimensional interception experiment is further implemented on a
-hardware-in-the-loop platform. The policies of defenders $D_0$--$D_4$ are
+\hladd{\emph{2) HIL Platform:}
+As shown in Fig.7, the three-dimensional interception experiment is further implemented on a
+HIL platform. The policies of defenders $D_0$--$D_4$ are
 deployed on five independent NVIDIA Jetson NX computers, with one defender
 assigned to each node. The corresponding target-assignment algorithm is also
 executed on the Jetson NX nodes. The engagement dynamics, attacker cluster,
@@ -867,13 +879,12 @@ above.
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
 boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
-\hladd{We evaluate the complete target-assignment and terminal
-cooperative-guidance process} against two maneuvering scenarios, each
-benchmarked against classical PN.
-\hladd{The experiments are conducted on the HIL platform with communication
-delays, sensing uncertainty and three-dimensional dynamics. The
-target-assignment and cooperative-guidance modules are executed sequentially
-to provide end-to-end validation of the complete interception process.}
+\hladd{We evaluate the complete target-assignment and terminal cooperative-guidance process}
+against two maneuvering scenarios, each benchmarked against classical PN.
+\hladd{The experiments are conducted on the HIL platform with communication delays, sensing
+uncertainty and three-dimensional dynamics. The target-assignment and cooperative-guidance
+modules are executed sequentially to provide end-to-end validation of the complete interception
+process.}
 \end{tcolorbox}
 
 \medskip
@@ -931,31 +942,31 @@ boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
 \hladd{\emph{2) ART-MAPPO Reward-Weight Sensitivity.}
 The sensitivity of the reward design is evaluated in Case~1 using a
 one-at-a-time perturbation of the five weights in
-\eqref{eq:reward_function}. Each weight is scaled by
-$s\in\{0.50,0.75,1.00,1.25,1.50\}$, while the remaining weights are fixed
-at their nominal values. Table~VI reports the resulting ISR,
-temporal-coordination error, terminal lateral acceleration, interception
-time, and miss distance. The results reveal clear and physically
-interpretable metric--weight relationships. Increasing $w_1$ improves
-terminal accuracy but requires moderately higher terminal lateral
-acceleration, whereas $w_2$ has a comparatively mild effect and mainly
-refines the interception geometry. The terminal-hit weight $w_3$ primarily
-governs interception reliability; reducing it to half of its nominal value
-decreases ISR to $93.8\%$, while further increasing it provides only
-marginal reliability improvement at the cost of higher lateral acceleration.
+(62). Each weight is scaled by
+$s\in{0.50,0.75,1.00,1.25,1.50}$, while the remaining weights are fixed at
+their nominal values. Table VII reports the resulting
+ISR, temporal-coordination error, terminal lateral acceleration, interception time, and
+miss distance. The results reveal clear and physically interpretable
+metric--weight relationships. Increasing $w_1$ improves terminal accuracy but
+requires moderately higher terminal lateral acceleration, whereas $w_2$ has a comparatively
+mild effect and mainly refines the interception geometry. The terminal-hit
+weight $w_3$ primarily governs interception reliability; reducing it to half
+of its nominal value decreases ISR to $93.8\%$, while further increasing it
+provides only marginal reliability improvement at the cost of higher lateral acceleration.
 The coordination weight $w_4$ most strongly affects
-$E_{co\text{-}time}$, which decreases from $0.0830$~s to $0.0375$~s as
-the weight increases. In contrast, $w_5$ directly regulates control effort,
-reducing $E_n$ from $0.0910$~g to $0.0560$~g, with a moderate loss in
-terminal accuracy and interception efficiency. Overall, the nominal
-configuration provides a balanced operating point among interception
-reliability, terminal accuracy, temporal coordination, and control economy.}
+$E_{co\text{-}time}$, which decreases from $0.0830$~s to $0.0375$~s as the
+weight increases. In contrast, $w_5$ directly regulates control effort,
+reducing $E_n$ from $0.0910$~g to $0.0560$~g, with a moderate loss in terminal
+accuracy and interception efficiency. Overall, the nominal configuration
+provides a balanced operating point among interception reliability, terminal
+accuracy, temporal coordination, and control economy.}
+
 \end{tcolorbox}
 
 \begin{table}[h]
 \centering
 \scriptsize
-\caption*{\hladd{Table~VI. Sensitivity Analysis of ART-MAPPO
+\caption*{\hladd{Table~VIII. Sensitivity Analysis of ART-MAPPO
 Reward-Function Weighting Coefficients.}}
 \renewcommand{\arraystretch}{1.15}
 \setlength{\tabcolsep}{3.5pt}
@@ -1027,16 +1038,17 @@ boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
 The initial learning rate $\eta_0$, PPO clipping factor $\epsilon$, and
 target KL divergence $\delta_{\mathrm{targ}}$ are independently varied to
 evaluate the sensitivity of ART-MAPPO to its principal training
-hyperparameters. As shown in Table~VII, the performance remains
-comparatively stable around the nominal settings, whereas larger deviations
-generally reduce the Training AUC and final reward. The learning rate shows
-the most pronounced sensitivity, while the clipping factor maintains similar
-performance over $\epsilon\in[0.15,0.25]$. Smaller target-KL values lead to
-more conservative learning, whereas an overly permissive target KL degrades
-both metrics. These results indicate that ART-MAPPO is not overly sensitive
-to moderate hyperparameter variations and that the nominal configuration
-provides a robust balance between learning efficiency and converged
-performance.}
+hyperparameters. As shown in Table VIII, the
+performance remains comparatively stable around the nominal settings, whereas
+larger deviations generally reduce the Training AUC and final reward. The
+learning rate shows the most pronounced sensitivity, while the clipping factor
+maintains similar performance over $\epsilon\in[0.15,0.25]$. Smaller target-KL
+values lead to more conservative learning, whereas an overly permissive target
+KL degrades both metrics. These results indicate that ART-MAPPO is not overly
+sensitive to moderate hyperparameter variations and that the nominal
+configuration provides a robust balance between learning efficiency and
+converged performance.}
+
 \end{tcolorbox}
 
 \begin{table}[h]
