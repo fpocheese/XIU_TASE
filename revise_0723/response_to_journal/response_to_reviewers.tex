@@ -2908,12 +2908,17 @@ because understanding framework limitations remains essential for practical
 battlefield deployment reliability.
 \end{reviewercomment}
 
-\rsp We sincerely thank the reviewer for this important suggestion. We agree
-that interception success rates and aggregate statistical metrics alone do
-not adequately reveal the operating limitations of the proposed framework.
-We have therefore examined the 13 unsuccessful trials in Case~1 and the 29
-unsuccessful trials in Case~2 and added a failure-case analysis to the Monte
-Carlo discussion.
+\rsp We sincerely thank the reviewer for this important suggestion. 
+We agree that failure-case analysis of unsuccessful interception and delayed 
+cooperative engagement scenarios is important for understanding the limitations 
+of the proposed framework. A total of 1,000 independent Monte Carlo trials 
+were conducted for each case. The proposed framework achieved 987 successful 
+interceptions in Case~1 and 971 in Case~2, corresponding to success rates of 98.7\% and 97.1\%, 
+respectively. Accordingly, the remaining 13 trials in Case~1 and 29 trials in Case~2 were unsuccessful. 
+We analyzed all 13 unsuccessful trials in Case~1 and all 29 unsuccessful trials in Case~2. 
+We have added a failure-case analysis for unsuccessful interception and delayed cooperative 
+engagement scenarios to the Monte Carlo discussion.
+
 
 The analysis distinguishes two failure modes. In an unsuccessful
 interception, the interceptor swarm begins from an unfavorable engagement
@@ -2940,17 +2945,6 @@ revised text is reproduced below:
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
 coltext=addblue,fontupper=\color{addblue},boxrule=0.6pt,arc=2pt,
 left=9pt,right=9pt,top=7pt,bottom=7pt]
-\emph{(i) Interception reliability and precision.} \hladd{The Interception Success
-Rates (ISRs) directly reflect the algorithms' adaptability to aggressive
-target maneuvers. While PN achieves a respectable $94.40\%$ against the
-evasive target (Case~1), its performance precipitously degrades to $17.50\%$
-when facing the continuous weaving target (Case~2). Conversely, ART-MAPPO
-sustains exceptional ISRs of $98.7\%$ and $97.1\%$, demonstrating profound
-robustness against continuous, high-frequency line-of-sight (LOS)
-oscillations. Furthermore, the $E_{miss}$ boxplots confirm that ART-MAPPO
-consistently achieves a lower median miss distance with a significantly
-narrower interquartile range (IQR), ensuring lethal precision even under
-worst-case initializations.}
 
 \hladd{Failure-case analysis was conducted on the 13 unsuccessful trials in
 Case~1 and 29 in Case~2. For unsuccessful interception, the interceptor
@@ -2967,11 +2961,6 @@ effective closure under unfavorable initial heading geometry and sustained
 target maneuvering, whereas the latter results from persistent within-group
 time-to-go differences caused by path asymmetry.}
 \end{tcolorbox}
-
-\medskip
-\noindent This addition complements the aggregate Monte Carlo results by
-identifying the specific engagement conditions under which interception
-reachability or within-group temporal synchronization can deteriorate.
 
 
 
