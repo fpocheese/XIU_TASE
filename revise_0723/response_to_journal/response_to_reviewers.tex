@@ -311,8 +311,7 @@ reproduced below for the reviewer's convenience.
 \noindent\textbf{(1) IDBO target-assignment pseudocode.}
 
 \loc Section~III-B (\emph{Distributed Consensus-Based IDBO Framework}),
-immediately after the convergence criterion in Eq.~(26) and before the
-per-UAV complexity analysis in Eq.~(27).
+immediately after Eq.~(26) and before Eq.~(27).
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
 boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
@@ -509,9 +508,8 @@ additions are reproduced in blue in the white boxes.
 \medskip
 \noindent\textbf{(1)}
 \loc Section~III-B (\emph{Distributed Consensus-Based IDBO Framework}),
-immediately after Eqs.~(13)--(14). We added an intuitive interpretation of
-how the fitness function combines target preference with the saturation
-penalty.
+immediately after Eqs.~(13)--(14). We explained how the fitness function
+balances interception benefit against target over-allocation:
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
 boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
@@ -525,9 +523,8 @@ allocation capacity.}
 \medskip
 \noindent\textbf{(2)}
 \loc Section~III-B, in Eq.~(15) and the paragraph immediately following it.
-The geometric factor is expressed through the normalized inner product
-between the interceptor velocity and the target LOS, and its physical
-meaning in the three-dimensional engagement is stated explicitly.
+We clarified the geometric term in Eq.~(15) and its physical meaning in
+three-dimensional engagements:
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
 boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
@@ -559,9 +556,8 @@ $t_j$.}
 \medskip
 \noindent\textbf{(3)}
 \loc Section~III-B, immediately after the rolling, dancing, breeding, and
-stealing operators in Eqs.~(16)--(19), and before the thresholding equation.
-We explained how the decaying coefficients progressively suppress the
-stochastic components of the four update operators.
+stealing operators in Eqs.~(16)--(19) and before Eqs.~(20).
+We explained how the local search stabilizes:
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
 coltext=addblue,fontupper=\color{addblue},boxrule=0.6pt,arc=2pt,
@@ -590,8 +586,8 @@ and constitutes a stable fixed point of the implemented local search.
 \medskip
 \noindent\textbf{(4)}
 \loc Section~III-B, immediately after the neighborhood-consensus update in
-Eq.~(22). We added a concise explanation connecting the thresholding,
-bidding, and winner-list updates in Eqs.~(20)--(22).
+Eq.~(22). We clarified the connection between local optimization and
+distributed consensus:
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
 boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
@@ -606,9 +602,8 @@ bring the local winner lists into agreement.}
 \medskip
 \noindent\textbf{(5)}
 \loc Section~IV-A (\emph{Enhanced Situational Awareness via
-Attention-Residual Network}), immediately after the multi-head attention
-output in Eq.~(31). We clarified the interpretation of the attention matrix
-in Eq.~(30) and the role of the output projection in Eq.~(31).
+Attention-Residual Network}), immediately after Eq.~(31). We explained how
+observable kinematic features are aggregated and mapped for residual fusion:
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
 boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
@@ -621,9 +616,9 @@ latent space for residual fusion with $\mathbf{h}^{(0)}$.}
 
 \medskip
 \noindent\textbf{(6)}
-\loc Section~IV-A, immediately after the residual-block updates in
-Eqs.~(32)--(34), and before the Jacobian analysis in Eq.~(35). We explained
-the distinct functions of the nonlinear branch and the identity shortcut.
+\loc Section~IV-A, immediately after Eqs.~(32)--(34), and before Eq.~(35). 
+We explained how the residual block refines the attended representation
+while retaining the incoming features:
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
 coltext=addblue,fontupper=\color{addblue},boxrule=0.6pt,arc=2pt,
@@ -637,9 +632,8 @@ information at every layer.}
 \medskip
 \noindent\textbf{(7)}
 \loc Section~IV-B (\emph{Trust-Modulated Tactical Exploration}),
-immediately after the trust update in Eq.~(42). We added an intuitive
-explanation of the bounded performance reference, the smoothing operation,
-and the resulting adjustment of exploration.
+immediately after Eq.~(42). We explained how the trust update regulates
+guided exploration according to relative performance:
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
 coltext=addblue,fontupper=\color{addblue},boxrule=0.6pt,arc=2pt,
@@ -660,9 +654,8 @@ below-average returns produce the opposite allocation.}
 \medskip
 \noindent\textbf{(8)}
 \loc Section~IV-C (\emph{Robust Optimization via Dual-Clip and Adaptive
-KL}), immediately after the overall loss in Eq.~(54). We clarified which
-loss terms update the actor and critic and how the remaining terms regulate
-policy change and exploration.
+KL}), immediately after Eq.~(54). We clarified the role of each term in the
+overall loss:
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
 coltext=addblue,fontupper=\color{addblue},boxrule=0.6pt,arc=2pt,
@@ -708,8 +701,6 @@ detailed below.
 \noindent\textbf{(1) Three-dimensional engagement dynamics.}
 
 \loc Section~II-A (\emph{Problem Modeling}), Eqs.~(1)--(3) and (5).
-The planar kinematic, relative-motion, acceleration, and ZEM formulations
-were replaced by their three-dimensional counterparts.
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
 boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
@@ -782,6 +773,21 @@ normal accelerations, and $g$ denotes gravitational acceleration.}
 \right\|_2.}
 \tag{5}
 \end{equation*}
+
+\par\medskip
+\noindent
+\begin{minipage}[t]{0.48\linewidth}
+\centering
+{\setlength{\fboxsep}{1pt}%
+\fcolorbox{red}{white}{\includegraphics[width=0.94\linewidth]{pic02.pdf}}}
+\captionof*{figure}{{\color{red}Fig.~2. Schematic diagram of confrontation and interception.}}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.48\linewidth}
+\centering
+{\setlength{\fboxsep}{1pt}%
+\fcolorbox{addblue}{white}{\includegraphics[width=0.94\linewidth]{pic02-3d.pdf}}}
+\captionof*{figure}{\hladd{Fig.~2. Schematic diagram of confrontation and interception.}}
+\end{minipage}
 \end{tcolorbox}
 
 \medskip
@@ -833,10 +839,7 @@ when a packet is lost.}
 
 \loc Section~V-A, in the newly added paragraph entitled
 \emph{HIL Platform}, immediately following
-Eq.~(71), together with the platform architecture shown in Fig.~7. The
-target-assignment and decentralized policy-inference modules are executed on
-independent embedded computers and communicate with the engagement simulator
-through a physical network.
+Eq.~(71), together with the platform architecture shown in Fig.~7. 
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
 coltext=addblue,fontupper=\color{addblue},boxrule=0.6pt,arc=2pt,
@@ -851,6 +854,12 @@ and software policies of the remaining defenders $D_5$--$D_n$ are executed on
 the simulation server. The server and Jetson NX nodes exchange observations,
 actions, and target-assignment results through a physical TCP Ethernet network
 under the communication conditions described above.}
+\par\medskip
+\begin{center}
+\centering
+\includegraphics[width=0.72\textwidth]{TASE_HIL.png}
+\captionof*{figure}{\hladd{Fig.~7. HIL platform.}}
+\end{center}
 \end{tcolorbox}
 
 \medskip
@@ -1093,19 +1102,16 @@ IDBO and ART-MAPPO. The corresponding revisions are detailed below.
 
 
 \medskip
-\noindent\textbf{(1) Convergence and fixed-point analysis of IDBO.}
+\noindent\textbf{(1) Convergence analysis of IDBO.}
 
-\rsp We added a rigorous discussion of the convergence properties of IDBO.
-The additions are reproduced below.
+\rsp We have expanded the convergence analysis of IDBO. The corresponding revisions are presented below.
 
 \medskip
-\noindent\textbf{(i) Local-search limiting behavior.}
-
+\noindent\textbf{(i)}
 \loc Section~III-B (\emph{Distributed Consensus-Based IDBO Framework}),
 immediately after the rolling, dancing, breeding, and stealing operators in
-Eqs.~(16)--(19), and before the advantage-adaptive thresholding operation in
-Eq.~(20). We added the following analysis of the coefficient schedule,
-bounded preference domain, elitist retention, and local-search fixed point:
+Eqs.~(16)--(19) and before the advantage-adaptive thresholding operation in
+Eq.~(20). We added the following discussion of how the local search stabilizes:
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
 coltext=addblue,fontupper=\color{addblue},boxrule=0.6pt,arc=2pt,
@@ -1132,13 +1138,10 @@ and constitutes a stable fixed point of the implemented local search.}
 \end{tcolorbox}
 
 \medskip
-\noindent\textbf{(ii) Relationship among thresholding, bidding, and
-consensus.}
-
+\noindent\textbf{(ii)}
 \loc Section~III-B, immediately after the top-$L_{\max}$ winner-list update
-in Eq.~(22), and before the three-phase iteration in Eqs.~(23)--(25). We
-clarified that the consensus statement applies after the local preferences
-and bids have stabilized:
+in Eq.~(22) and before the three-phase iteration in Eqs.~(23)--(25). 
+We clarified the connection between local optimization and distributed consensus:
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
 boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
@@ -1152,13 +1155,10 @@ agreement.}
 \end{tcolorbox}
 
 \medskip
-\noindent\textbf{(iii) Consensus fixed point and assignment feasibility.}
-
+\noindent\textbf{(iii)}
 \loc Section~III-B, immediately after the swarm-disagreement convergence
-criterion in Eq.~(26) and before the complexity analysis in Eq.~(27). We
-deleted the previous unqualified claims of monotonic fitness improvement,
-an $N\!\cdot\!D$ iteration bound, and an approximate Nash equilibrium. They
-have been replaced by the following conditional fixed-point analysis:
+criterion in Eq.~(26) and before the complexity analysis in Eq.~(27). 
+We added the following analysis of consensus convergence under explicit conditions:
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
 boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
@@ -1193,6 +1193,7 @@ of ART-MAPPO and a component-ablation study. The additions are reproduced
 below.
 
 \medskip
+\noindent\textbf{(i)}
 \loc Section~IV-D (\emph{Mechanistic Comparison with Conventional MAPPO}),
 in the newly added ``Convergence analysis'' paragraph. The revised text reads:
 
@@ -1216,10 +1217,9 @@ approach to the steady training regime than conventional MAPPO.}
 \end{tcolorbox}
 
 \medskip
-\loc Section~V-E, new subsection \emph{Component Ablation Study}. We added
-one-at-a-time ablations of the trust-aware mechanism, GRU temporal encoder, and
-attention--residual backbone. The corresponding additions are reproduced
-below:
+\noindent\textbf{(ii)}
+\loc Section~V-E, new subsection \emph{Component Ablation Study}. 
+We added the following ablation study to evaluate the independent contribution of each ART-MAPPO component:
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
 coltext=addblue,fontupper=\color{addblue},boxrule=0.6pt,arc=2pt,
@@ -1358,8 +1358,8 @@ blue, consistent with the revised manuscript.
 
 \loc Section~I, in the third item of the contribution list. We removed the statement
 that presented the introduction of a reinforcement-learning reward function itself as
-a core contribution. The revised statement instead identifies the task-specific role
-of the groupwise time-to-go penalty.
+a core contribution. The revised contribution explains how the groupwise time-to-go penalty enables temporal coordination.
+
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
 boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
@@ -1492,7 +1492,7 @@ policy-distribution shift and regularization strength.
 boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
 When $\hat{D}_{\mathrm{KL}}>2\delta_{\mathrm{targ}}$, the
 {\color{red}acceleration commands have shifted too aggressively between updates,
-risking acceleration-limit exceedance}\hladd{policy distribution has shifted
+risking acceleration-limit exceedance} \hladd{policy distribution has shifted
 excessively between updates}; the $1.5\times$ increase
 {\color{red}dampens subsequent updates}\hladd{strengthens regularization in
 subsequent updates}. When
@@ -1501,19 +1501,9 @@ permits {\color{red}finer trajectory refinement}\hladd{further policy refinement
 \end{tcolorbox}
 
 \medskip
-\noindent\textbf{(7) Clarifying the roles of the terms in the overall training
-loss.}
+\noindent\textbf{(7) Clarification of the overall training loss.}
 
-% \loc Section~IV, immediately after the overall ART-MAPPO loss. We added a concise
-% description that confines Dual-Clip and KL regularization to actor optimization and
-% policy-change regulation, respectively, while distinguishing them from centralized
-% critic training.
-
-\loc Section~IV-C (\emph{Robust Optimization via Dual-Clip and Adaptive
-KL}), in the paragraph immediately following the overall ART-MAPPO loss in
-Eq.~(54) and before the subsequent discussion of its computational cost. We
-added a concise explanation distinguishing the roles of the actor objective,
-KL and entropy regularization, and centralized critic loss.
+\loc Section~IV-C (\emph{Robust Optimization via Dual-Clip and Adaptive KL}), immediately after Eq.~(54). We clarified the role of each term in the overall loss:
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
 boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
@@ -1623,13 +1613,6 @@ estimate toward a correspondingly higher level, thereby reducing the
 probability assigned to the guided exploratory policy; sustained
 below-average returns produce the opposite allocation.}
 \end{tcolorbox}
-
-\medskip
-\noindent The revised physical interpretation is now consistent with the
-smoothing process defined by Eq.~(42). In particular, high-trust stability
-results from sustained high performance references together with the
-attenuation of episode-level fluctuations, rather than from an
-unconditionally increasing trust value.
 
 
 
@@ -1743,6 +1726,21 @@ normal accelerations, and $g$ denotes gravitational acceleration.}
 \right\|_2.}
 \tag{5}
 \end{equation*}
+
+\par\medskip
+\noindent
+\begin{minipage}[t]{0.48\linewidth}
+\centering
+{\setlength{\fboxsep}{1pt}%
+\fcolorbox{red}{white}{\includegraphics[width=0.94\linewidth]{pic02.pdf}}}
+\captionof*{figure}{{\color{red}Fig.~2. Schematic diagram of confrontation and interception.}}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.48\linewidth}
+\centering
+{\setlength{\fboxsep}{1pt}%
+\fcolorbox{addblue}{white}{\includegraphics[width=0.94\linewidth]{pic02-3d.pdf}}}
+\captionof*{figure}{\hladd{Fig.~2. Schematic diagram of confrontation and interception.}}
+\end{minipage}
 \end{tcolorbox}
 
 \medskip
@@ -2220,7 +2218,7 @@ The corresponding revisions are provided below.
 \noindent\textbf{(1) Complexity and communication-scalability analysis.}
 
 \loc Section~III-B (\emph{Distributed Consensus-Based IDBO Framework}),
-immediately after the per-UAV complexity model in Eq.~(27). The following
+immediately after the Eq.~(27). The following
 analysis has been added:
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
@@ -3151,6 +3149,21 @@ accelerations, and $g$ denotes gravitational acceleration.}
 \right\|_2.}
 \tag{5}
 \end{equation*}
+
+\par\medskip
+\noindent
+\begin{minipage}[t]{0.48\linewidth}
+\centering
+{\setlength{\fboxsep}{1pt}%
+\fcolorbox{red}{white}{\includegraphics[width=0.94\linewidth]{pic02.pdf}}}
+\captionof*{figure}{{\color{red}Fig.~2. Schematic diagram of confrontation and interception.}}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.48\linewidth}
+\centering
+{\setlength{\fboxsep}{1pt}%
+\fcolorbox{addblue}{white}{\includegraphics[width=0.94\linewidth]{pic02-3d.pdf}}}
+\captionof*{figure}{\hladd{Fig.~2. Schematic diagram of confrontation and interception.}}
+\end{minipage}
 \end{tcolorbox}
 
 \medskip
@@ -3179,18 +3192,6 @@ under the communication conditions described above.}
 \captionof*{figure}{\hladd{Fig.~7. HIL platform.}}
 \end{center}
 \end{tcolorbox}
-
-
-\medskip
-\noindent These revisions provide a semi-physical closed-loop evaluation in
-which the proposed target-assignment and ART-MAPPO guidance algorithms run on
-physical embedded processors and communicate through a physical network,
-while interacting with a real-time three-dimensional engagement simulation.
-
-
-
-
-
 
 
 
