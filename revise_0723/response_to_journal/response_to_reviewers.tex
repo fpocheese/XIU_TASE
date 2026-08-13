@@ -1526,20 +1526,35 @@ exploration. The value-loss term trains the centralized critic.}
 % =====================================================================
 %  Re2_2
 % =====================================================================
-\subsection*{Comment 2.2 }
+
+\subsection*{Comment 2.2}
 
 \begin{reviewercomment}{Reviewer comment 2.2}
-The module schematic diagram on the left side of Fig. 5 lacks clarity in its presentation. h(0) appears at multiple locations, and the flow from h(l) to h(l+1) is unclear.
+The module schematic diagram on the left side of Fig.~5 lacks clarity in its
+presentation. $h^{(0)}$ appears at multiple locations, and the flow from
+$h^{(\ell)}$ to $h^{(\ell+1)}$ is unclear.
 \end{reviewercomment}
 
-\rsp Thank you for your valuable comments. We have revised the manuscript accordingly.
-\begin{figure}[h]
-\centering
-\includegraphics[width=0.5\textwidth]{assignment.pdf}
-\end{figure}
+\rsp We sincerely thank the reviewer for pointing out this presentation
+problem. We agree that the repeated appearance of $\mathbf{h}^{(0)}$ and the
+unclear transition from $\mathbf{h}^{(\ell)}$ to
+$\mathbf{h}^{(\ell+1)}$ reduced the clarity of the original schematic. 
+We have carefully revised the module schematic diagram on the left side of
+Fig.~5 to address these issues. The revised figure is reproduced below.
 
+\medskip
+\loc Section~IV, Fig.~5.
 
-% \clearpage
+\begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
+boxrule=0.6pt,arc=2pt,left=6pt,right=6pt,top=7pt,bottom=7pt]
+\begin{center}
+\includegraphics[width=\linewidth]{rlsuanfa_3d.pdf}
+\captionof*{figure}{\hladd{Fig.~5. Overall workflow of the ART-MAPPO algorithm
+for cooperative swarm interception, showing the interaction among the
+attention-residual network, trust-modulated exploration, dual-clip adaptive
+KL optimization, and the three-dimensional acceleration-command output.}}
+\end{center}
+\end{tcolorbox}
 
 
 
