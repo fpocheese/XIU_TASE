@@ -131,8 +131,7 @@ guidance. The complete addition is reproduced below.
 following the reference list.
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
-coltext=addblue,fontupper=\color{addblue},boxrule=0.6pt,arc=2pt,
-left=9pt,right=9pt,top=7pt,bottom=7pt]
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
 {\color{addblue}
 
 \noindent\textbf{Appendix A: Summary of Key Variables and Symbols}
@@ -316,8 +315,7 @@ immediately after the convergence criterion in Eq.~(26) and before the
 per-UAV complexity analysis in Eq.~(27).
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
-coltext=addblue,fontupper=\color{addblue},boxrule=0.6pt,arc=2pt,
-left=9pt,right=9pt,top=7pt,bottom=7pt]
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
 \begin{algorithm}[H]
 \color{addblue}
 \fontsize{9pt}{11.0476pt}\selectfont
@@ -386,8 +384,7 @@ KL}), immediately after the ART-MAPPO workflow in Fig.~5 and before
 Section~IV-D (\emph{Mechanistic Comparison with Conventional MAPPO}).
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
-coltext=addblue,fontupper=\color{addblue},boxrule=0.6pt,arc=2pt,
-left=9pt,right=9pt,top=7pt,bottom=7pt]
+boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
 \begin{algorithm}[H]
 \color{addblue}
 \fontsize{9pt}{11.0476pt}\selectfont
@@ -629,7 +626,8 @@ Eqs.~(32)--(34), and before the Jacobian analysis in Eq.~(35). We explained
 the distinct functions of the nonlinear branch and the identity shortcut.
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
-boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+coltext=addblue,fontupper=\color{addblue},boxrule=0.6pt,arc=2pt,
+left=9pt,right=9pt,top=7pt,bottom=7pt]
 \hladd{The nonlinear branch refines the attended representation, while
 the shortcut carries the incoming engagement features directly to the next
 block. This structure reduces the need to reconstruct unchanged kinematic
@@ -644,7 +642,8 @@ explanation of the bounded performance reference, the smoothing operation,
 and the resulting adjustment of exploration.
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
-boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+coltext=addblue,fontupper=\color{addblue},boxrule=0.6pt,arc=2pt,
+left=9pt,right=9pt,top=7pt,bottom=7pt]
 \hladd{The sigmoid term maps the normalized relative return
 $\tilde{R}_i^{(k)}$ to a bounded performance reference in $(0,1)$.
 Equation~(42) combines the previous trust level and
@@ -666,7 +665,8 @@ loss terms update the actor and critic and how the remaining terms regulate
 policy change and exploration.
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
-boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+coltext=addblue,fontupper=\color{addblue},boxrule=0.6pt,arc=2pt,
+left=9pt,right=9pt,top=7pt,bottom=7pt]
 \hladd{Minimizing this loss updates the actor through the Dual-Clip
 objective, while the KL and entropy terms regulate policy change and
 exploration. The value-loss term trains the centralized critic.}
@@ -913,7 +913,8 @@ Section~V-G. The complete additions are reproduced below.
 paragraph \emph{2) ART-MAPPO Reward-Weight Sensitivity} and Table~VII.
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
-boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+coltext=addblue,fontupper=\color{addblue},boxrule=0.6pt,arc=2pt,
+left=9pt,right=9pt,top=7pt,bottom=7pt]
 \hladd{\emph{2) ART-MAPPO Reward-Weight Sensitivity.}
 The sensitivity of the reward design is evaluated in Case~1 using a
 one-at-a-time perturbation of the five weights in
@@ -1107,7 +1108,8 @@ Eq.~(20). We added the following analysis of the coefficient schedule,
 bounded preference domain, elitist retention, and local-search fixed point:
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
-boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+coltext=addblue,fontupper=\color{addblue},boxrule=0.6pt,arc=2pt,
+left=9pt,right=9pt,top=7pt,bottom=7pt]
 \hladd{The coefficients
 $\alpha,\beta,\gamma_{\mathrm{IDBO}},\delta,\delta',
 \eta_{\mathrm{IDBO}}$, together with the dancing-noise scale $\sigma_d$,
@@ -1195,7 +1197,8 @@ below.
 in the newly added ``Convergence analysis'' paragraph. The revised text reads:
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
-boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+coltext=addblue,fontupper=\color{addblue},boxrule=0.6pt,arc=2pt,
+left=9pt,right=9pt,top=7pt,bottom=7pt]
 \hladd{\emph{1) Convergence analysis.}
 Conventional MAPPO primarily relies on centralized value estimation, GAE, and
 a fixed clipped surrogate to support policy learning. In ART-MAPPO, the
@@ -1972,7 +1975,8 @@ Robustness}) further reports 1,000 end-to-end Monte Carlo trials for each
 case.
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
-boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+coltext=addblue,fontupper=\color{addblue},boxrule=0.6pt,arc=2pt,
+left=9pt,right=9pt,top=7pt,bottom=7pt]
 \hladd{We evaluate the complete target-assignment and terminal
 cooperative-guidance process} against two maneuvering scenarios, each
 benchmarked against classical PN.
@@ -2265,7 +2269,8 @@ We added a communication-delay sweep for the nominal $20\times8$ assignment.
 The corresponding table and analysis are reproduced below:
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
-boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+coltext=addblue,fontupper=\color{addblue},boxrule=0.6pt,arc=2pt,
+left=9pt,right=9pt,top=7pt,bottom=7pt]
 
 \begin{center}
 {\color{blue}
@@ -2342,7 +2347,8 @@ including Table~V and the corresponding component-level analysis. The
 complete added subsection is reproduced below.
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
-boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+coltext=addblue,fontupper=\color{addblue},boxrule=0.6pt,arc=2pt,
+left=9pt,right=9pt,top=7pt,bottom=7pt]
 \hladd{\emph{Component Ablation Study}}
 
 \medskip
@@ -2932,7 +2938,8 @@ following the ISR and miss-distance discussion and before item
 revised text is reproduced below:
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
-boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
+coltext=addblue,fontupper=\color{addblue},boxrule=0.6pt,arc=2pt,
+left=9pt,right=9pt,top=7pt,bottom=7pt]
 \emph{(i) Interception reliability and precision.} \hladd{The Interception Success
 Rates (ISRs) directly reflect the algorithms' adaptability to aggressive
 target maneuvers. While PN achieves a respectable $94.40\%$ against the
