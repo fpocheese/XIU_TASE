@@ -6,6 +6,7 @@
 \usepackage{amsmath,amssymb}
 \usepackage{graphicx}
 \usepackage{xcolor}
+\usepackage[normalem]{ulem}
 \usepackage{booktabs}
 \usepackage{array}
 \usepackage{multirow}
@@ -23,6 +24,15 @@
 % Colour for text added to the manuscript (matches the blue highlight).
 \definecolor{addblue}{RGB}{0,0,205}
 \newcommand{\hladd}[1]{{\color{addblue}#1}}
+\newcommand{\hldel}[1]{%
+  {\color{red}%
+   \ifmmode
+     \sbox0{$#1$}%
+     \rlap{\usebox0}%
+     \rule[0.5\dimexpr\ht0-\dp0\relax]{\wd0}{0.6pt}%
+   \else
+     \sout{#1}%
+   \fi}}
 
 % Verbatim reviewer comment.
 \newtcolorbox{reviewercomment}[1]{enhanced,breakable,colback=gray!7,
@@ -706,7 +716,7 @@ detailed below.
 boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
 The object of study in this paper is the fixed-wing UAV, and the interception
 problem is
-{\color{red}reduced to a two-dimensional horizontal plane}
+\hldel{reduced to a two-dimensional horizontal plane}
 \hladd{formulated in three-dimensional space}.
 
 
@@ -779,8 +789,12 @@ normal accelerations, and $g$ denotes gravitational acceleration.}
 \begin{minipage}[t]{0.48\linewidth}
 \centering
 {\setlength{\fboxsep}{1pt}%
-\fcolorbox{red}{white}{\includegraphics[width=0.94\linewidth]{pic02.pdf}}}
-\captionof*{figure}{{\color{red}Fig.~2. Schematic diagram of confrontation and interception.}}
+\fcolorbox{red}{white}{%
+\begin{tikzpicture}[baseline=(oldfig14.base)]
+\node[inner sep=0pt] (oldfig14) {\includegraphics[width=0.94\linewidth]{pic02.pdf}};
+\draw[red,line width=1.5pt] (oldfig14.west) -- (oldfig14.east);
+\end{tikzpicture}}}
+\captionof*{figure}{\hldel{Fig.~2. Schematic diagram of confrontation and interception.}}
 \end{minipage}\hfill
 \begin{minipage}[t]{0.48\linewidth}
 \centering
@@ -1350,8 +1364,9 @@ claiming consensus-based reward shaping itself as a new MARL technique. Second,
 Dual-Clip PPO and adaptive KL regularization are now consistently described as
 training-stage mechanisms for stabilizing policy updates, rather than as direct
 constraints on aircraft acceleration commands. The seven corresponding revisions are
-listed below. In each white box, deleted text is shown in red and added text is shown in
-blue, consistent with the revised manuscript.
+listed below. In each white box, deleted text is shown in red with a
+strikethrough and added text is shown in blue, consistent with the revised
+manuscript.
 
 \medskip
 \noindent\textbf{(1) Reframing the third contribution.}
@@ -1363,7 +1378,7 @@ a core contribution. The revised contribution explains how the groupwise time-to
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
 boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
-{\color{red}A cooperative interception method augmented with a reinforcement
+\hldel{A cooperative interception method augmented with a reinforcement
 learning-based reward function is introduced, enabling precise temporal
 coordination. This strategy enhances interception success rates against
 large-scale maneuvering swarm targets by addressing dynamic coordination
@@ -1392,11 +1407,11 @@ Building on the distributed consensus-based IDBO target assignment, we propose
 the Attention-Residual and Trust-aware MAPPO (ART-MAPPO) algorithm for the
 cooperative guidance of defending UAV swarms under the Centralized Training
 with Decentralized Execution (CTDE) paradigm. ART-MAPPO augments the standard
-MAPPO framework with {\color{red}three synergistic modules:} \hladd{two
+MAPPO framework with \hldel{three synergistic modules:} \hladd{two
 task-oriented modules:} a kinematics-aware attention-residual network for
-extracting cross-coupled engagement features{\color{red},}\hladd{ and} a
+extracting cross-coupled engagement features\hldel{,}\hladd{ and} a
 trust-modulated exploration mechanism for discovering cooperative tactics
-within the safe flight envelope{\color{red}, and a dual-clip PPO with adaptive KL
+within the safe flight envelope\hldel{, and a dual-clip PPO with adaptive KL
 penalty for constraining guidance command variations against actuator
 saturation}\hladd{. Dual-Clip PPO and adaptive KL regularization are used to
 stabilize policy updates during training}.
@@ -1414,12 +1429,12 @@ optimization-level consequence: increased variance of policy updates.
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
 boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
 Aggressive exploration
-{\color{red}inherently induces} \hladd{can induce}
+\hldel{inherently induces} \hladd{can induce}
 substantial variations in the importance-sampling ratio
 $r_t(\boldsymbol{\vartheta}) =
 \pi_{\boldsymbol{\vartheta}}(\mathbf{a}_t \mid o_t) /
 \pi_{\boldsymbol{\vartheta}_{\mathrm{old}}}(\mathbf{a}_t \mid o_t)$,
-{\color{red}leading to oscillatory terminal lateral-acceleration commands
+\hldel{leading to oscillatory terminal lateral-acceleration commands
 $n_{y_i}$ that can severely compromise flight stability}
 \hladd{increasing the variance of policy updates}.
 \end{tcolorbox}
@@ -1443,7 +1458,7 @@ issue caused by large-ratio, negative-advantage samples.
 boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
 When $\hat{A}_t < 0$, the standard clip permits
 $r_t(\boldsymbol{\vartheta}) \to \infty$,
-{\color{red}causing catastrophic over-correction of acceleration commands}
+\hldel{causing catastrophic over-correction of acceleration commands}
 \hladd{allowing large-ratio negative-advantage samples to exert
 disproportionate influence on a mini-batch update}. The Dual-Clip
 objective addresses this by introducing a floor $c > 1+\epsilon$
@@ -1491,13 +1506,13 @@ policy-distribution shift and regularization strength.
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
 boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
 When $\hat{D}_{\mathrm{KL}}>2\delta_{\mathrm{targ}}$, the
-{\color{red}acceleration commands have shifted too aggressively between updates,
+\hldel{acceleration commands have shifted too aggressively between updates,
 risking acceleration-limit exceedance} \hladd{policy distribution has shifted
 excessively between updates}; the $1.5\times$ increase
-{\color{red}dampens subsequent updates} \hladd{strengthens regularization in
+\hldel{dampens subsequent updates} \hladd{strengthens regularization in
 subsequent updates}. When
 $\hat{D}_{\mathrm{KL}}<0.5\delta_{\mathrm{targ}}$, the $0.9\times$ decay
-permits {\color{red}finer trajectory refinement} \hladd{further policy refinement}.
+permits \hldel{finer trajectory refinement} \hladd{further policy refinement}.
 \end{tcolorbox}
 
 \medskip
@@ -1558,7 +1573,7 @@ KL optimization, and the three-dimensional acceleration-command output.}}
 \node[inner sep=0pt] (oldfig) {\includegraphics[width=0.98\linewidth]{rlsuanfa.pdf}};
 \draw[red,line width=1.5pt] (oldfig.west) -- (oldfig.east);
 \end{tikzpicture}}}
-\captionof*{figure}{{\color{red}Fig.~5. Overall workflow of the ART-MAPPO
+\captionof*{figure}{\hldel{Fig.~5. Overall workflow of the ART-MAPPO
 algorithm for cooperative swarm interception, showing the interaction among
 the attention-residual network, trust-modulated exploration, and dual-clip
 adaptive KL optimization.}}
@@ -1612,7 +1627,7 @@ where $\sigma(x)=1/(1+e^{-x})$, $\alpha_T\in(0,1)$ is the trust
 update rate, and $\tau_T>0$ is the temperature parameter controlling the
 sensitivity of trust to performance deviations.
 
-{\color{red}When $R_i^{(k)}>\mu_R$, the sigmoid output exceeds $0.5$,
+\hldel{When $R_i^{(k)}>\mu_R$, the sigmoid output exceeds $0.5$,
 driving $\mathcal{T}_i$ upward and reducing exploration; conversely,
 below-average performance lowers $\mathcal{T}_i$ and amplifies
 exploration.}
@@ -1670,7 +1685,7 @@ definitions were replaced by three-dimensional formulations.
 boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
 The object of study in this paper is the fixed-wing UAV, and the interception
 problem is
-{\color{red}reduced to a two-dimensional horizontal plane}
+\hldel{reduced to a two-dimensional horizontal plane}
 \hladd{formulated in three-dimensional space},
 as shown in Fig.2.
 
@@ -1748,8 +1763,12 @@ normal accelerations, and $g$ denotes gravitational acceleration.}
 \begin{minipage}[t]{0.48\linewidth}
 \centering
 {\setlength{\fboxsep}{1pt}%
-\fcolorbox{red}{white}{\includegraphics[width=0.94\linewidth]{pic02.pdf}}}
-\captionof*{figure}{{\color{red}Fig.~2. Schematic diagram of confrontation and interception.}}
+\fcolorbox{red}{white}{%
+\begin{tikzpicture}[baseline=(oldfig24.base)]
+\node[inner sep=0pt] (oldfig24) {\includegraphics[width=0.94\linewidth]{pic02.pdf}};
+\draw[red,line width=1.5pt] (oldfig24.west) -- (oldfig24.east);
+\end{tikzpicture}}}
+\captionof*{figure}{\hldel{Fig.~2. Schematic diagram of confrontation and interception.}}
 \end{minipage}\hfill
 \begin{minipage}[t]{0.48\linewidth}
 \centering
@@ -1911,7 +1930,7 @@ To evaluate the learning efficiency and robustness of the proposed
 ART-MAPPO, comparative training experiments were conducted against standard
 MAPPO, IPPO, IA2C, and IQL. All models were trained over 10,000 episodes
 with a maximum horizon of
-{\color{red}25}\hladd{2500}
+\hldel{25} \hladd{2500}
 steps per episode. 
 \end{tcolorbox}
 
@@ -1927,9 +1946,9 @@ geometry, and the horizontal-position coordinates were clarified.
 boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
 A representative scenario of 20 $D_{\mathrm{UAV}}$ versus 8
 $A_{\mathrm{UAV}}$ is considered, with
-$D_1={\color{red}100}\hladd{1500}$\,m,
-$D_2={\color{red}1500}\hladd{1600}$\,m, and
-$D_3={\color{red}1600}\hladd{100}$\,m.
+$D_1=\hldel{100}\,\hladd{1500}$\,m,
+$D_2=\hldel{1500}\,\hladd{1600}$\,m, and
+$D_3=\hldel{1600}\,\hladd{100}$\,m.
 \hladd{The initial horizontal position is specified by the radial coordinate
 $r$ and polar angle $\varphi$ about the defended-area center.}
 \end{tcolorbox}
@@ -3094,7 +3113,7 @@ formulations were replaced by their three-dimensional counterparts.
 boxrule=0.6pt,arc=2pt,left=9pt,right=9pt,top=7pt,bottom=7pt]
 The object of study in this paper is the fixed-wing UAV, and the interception
 problem is
-{\color{red}reduced to a two-dimensional horizontal plane}
+\hldel{reduced to a two-dimensional horizontal plane}
 \hladd{formulated in three-dimensional space},
 as shown in Fig.~2.
 
@@ -3172,8 +3191,12 @@ accelerations, and $g$ denotes gravitational acceleration.}
 \begin{minipage}[t]{0.48\linewidth}
 \centering
 {\setlength{\fboxsep}{1pt}%
-\fcolorbox{red}{white}{\includegraphics[width=0.94\linewidth]{pic02.pdf}}}
-\captionof*{figure}{{\color{red}Fig.~2. Schematic diagram of confrontation and interception.}}
+\fcolorbox{red}{white}{%
+\begin{tikzpicture}[baseline=(oldfig310.base)]
+\node[inner sep=0pt] (oldfig310) {\includegraphics[width=0.94\linewidth]{pic02.pdf}};
+\draw[red,line width=1.5pt] (oldfig310.west) -- (oldfig310.east);
+\end{tikzpicture}}}
+\captionof*{figure}{\hldel{Fig.~2. Schematic diagram of confrontation and interception.}}
 \end{minipage}\hfill
 \begin{minipage}[t]{0.48\linewidth}
 \centering
