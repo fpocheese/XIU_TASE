@@ -85,7 +85,7 @@ description is consistent with the smoothing process, and rectified the
 reported episode horizon and engagement-region parameters. 
 The evaluation environment has been reformulated as a three-dimensional
 hardware-in-the-loop platform incorporating communication delay, packet loss,
-and sensing uncertainty. All experiments reported in the revised manuscript
+and sensing uncertainty. All evaluations reported in the revised manuscript
 were conducted on this HIL platform.
 We further added controlled component ablations, sensitivity
 analyses of the IDBO assignment weights, reward weights, and training
@@ -263,7 +263,7 @@ $\pi_{\mathrm{guided}}^i$}}
 & \desccell{Dual-Clip objective and floor}
 & \symcell{\shortstack{$\hat{D}_{\mathrm{KL}}$\\
 $\beta_{\mathrm{KL}},\delta_{\mathrm{targ}}$}}
-& \desccell{KL estimate, penalty coefficient, and target} \\
+& \desccell{KL estimate, penalty coefficient, and target KL divergence} \\
 
 \symcell{$r_i^{(t)}$}
 & \desccell{Per-step composite reward}
@@ -304,7 +304,7 @@ reproducibility.
 that the equations in the original manuscript defined the individual
 components of IDBO and ART-MAPPO, but did not provide sufficiently compact
 procedural descriptions for reproducing the complete algorithms. We have
-therefore added two pseudocode boxes to the revised manuscript.The two added algorithms are
+therefore added two pseudocode boxes to the revised manuscript. The two added algorithms are
 reproduced below for the reviewer's convenience.
 
 \medskip
@@ -556,7 +556,7 @@ $t_j$.}
 \medskip
 \noindent\textbf{(3)}
 \loc Section~III-B, immediately after the rolling, dancing, breeding, and
-stealing operators in Eqs.~(16)--(19) and before Eqs.~(20).
+stealing operators in Eqs.~(16)--(19) and before Eq.~(20).
 We explained how the local search stabilizes:
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
@@ -616,7 +616,7 @@ latent space for residual fusion with $\mathbf{h}^{(0)}$.}
 
 \medskip
 \noindent\textbf{(6)}
-\loc Section~IV-A, immediately after Eqs.~(32)--(34), and before Eq.~(35). 
+\loc Section~IV-A, immediately after Eqs.~(32)--(34) and before Eq.~(35). 
 We explained how the residual block refines the attended representation
 while retaining the incoming features:
 
@@ -691,7 +691,7 @@ of practical cooperative interception. In response, we reformulated the
 engagement model in three-dimensional space, incorporated delayed and noisy
 state information into the observation process, and implemented the complete
 target-assignment and cooperative-guidance framework on a hardware-in-the-loop
-(HIL) platform. All experiments reported in the revised manuscript were rerun
+(HIL) platform. All evaluations reported in the revised manuscript were rerun
 on this updated three-dimensional HIL platform under the stated
 communication and sensing conditions; the corresponding results are presented
 in Section~V (\emph{Simulation Verification}). The specific revisions are
@@ -744,7 +744,7 @@ r=\|\mathbf{r}_{AD}\|_2,\\
 
 \hladd{where $r$ and $\boldsymbol{\ell}_{AD}$ denote the
 three-dimensional relative distance and LOS unit vector, respectively.
-As illustrated in Fig.2, $q_{ij}^{\gamma}$ and
+As illustrated in Fig.~2, $q_{ij}^{\gamma}$ and
 $q_{ij}^{\theta}$ are the corresponding LOS azimuth and elevation angles.}
 
 \begin{equation*}
@@ -845,7 +845,7 @@ Eq.~(71), together with the platform architecture shown in Fig.~7.
 coltext=addblue,fontupper=\color{addblue},boxrule=0.6pt,arc=2pt,
 left=9pt,right=9pt,top=7pt,bottom=7pt]
 \hladd{\emph{2) HIL Platform:}
-As shown in Fig.7, the three-dimensional interception experiment is further implemented on a
+As shown in Fig.~7, the three-dimensional interception experiment is further implemented on a
 HIL platform. The policies of defenders $D_0$--$D_4$ are
 deployed on five independent NVIDIA Jetson NX computers, with one defender
 assigned to each node. The corresponding target-assignment algorithm is also
@@ -928,7 +928,7 @@ left=9pt,right=9pt,top=7pt,bottom=7pt]
 The sensitivity of the reward design is evaluated in Case~1 using a
 one-at-a-time perturbation of the five weights in
 (62). Each weight is scaled by
-$s\in{0.50,0.75,1.00,1.25,1.50}$, while the remaining weights are fixed at
+$s\in\{0.50,0.75,1.00,1.25,1.50\}$, while the remaining weights are fixed at
 their nominal values. Table VII reports the resulting
 ISR, temporal-coordination error, terminal lateral acceleration, interception time, and
 miss distance. The results reveal clear and physically interpretable
@@ -1392,7 +1392,7 @@ Building on the distributed consensus-based IDBO target assignment, we propose
 the Attention-Residual and Trust-aware MAPPO (ART-MAPPO) algorithm for the
 cooperative guidance of defending UAV swarms under the Centralized Training
 with Decentralized Execution (CTDE) paradigm. ART-MAPPO augments the standard
-MAPPO framework with {\color{red}three synergistic modules:}\hladd{two
+MAPPO framework with {\color{red}three synergistic modules:} \hladd{two
 task-oriented modules:} a kinematics-aware attention-residual network for
 extracting cross-coupled engagement features{\color{red},}\hladd{ and} a
 trust-modulated exploration mechanism for discovering cooperative tactics
@@ -1494,10 +1494,10 @@ When $\hat{D}_{\mathrm{KL}}>2\delta_{\mathrm{targ}}$, the
 {\color{red}acceleration commands have shifted too aggressively between updates,
 risking acceleration-limit exceedance} \hladd{policy distribution has shifted
 excessively between updates}; the $1.5\times$ increase
-{\color{red}dampens subsequent updates}\hladd{strengthens regularization in
+{\color{red}dampens subsequent updates} \hladd{strengthens regularization in
 subsequent updates}. When
 $\hat{D}_{\mathrm{KL}}<0.5\delta_{\mathrm{targ}}$, the $0.9\times$ decay
-permits {\color{red}finer trajectory refinement}\hladd{further policy refinement}.
+permits {\color{red}finer trajectory refinement} \hladd{further policy refinement}.
 \end{tcolorbox}
 
 \medskip
@@ -1541,7 +1541,7 @@ Fig.~5 to address these issues. The revised figure is reproduced below.
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
 boxrule=0.6pt,arc=2pt,left=6pt,right=6pt,top=7pt,bottom=7pt]
 \begin{center}
-\includegraphics[width=\linewidth]{rlsuanfa_3d.pdf}
+\includegraphics[width=\linewidth]{rlsuanfa_3d_V2.pdf}
 \captionof*{figure}{\hladd{Fig.~5. Overall workflow of the ART-MAPPO algorithm
 for cooperative swarm interception, showing the interaction among the
 attention-residual network, trust-modulated exploration, dual-clip adaptive
@@ -1603,7 +1603,7 @@ exploration.}
 
 \hladd{The sigmoid term maps the normalized relative return
 $\tilde{R}_i^{(k)}$ to a bounded performance reference in $(0,1)$.
-Equation (42) combines the previous trust level and
+Equation~(42) combines the previous trust level and
 the current performance reference with the weights $1-\alpha_T$ and
 $\alpha_T$, respectively, yielding a smoothed trust estimate. The
 smoothing process tracks changes in relative performance while attenuating
@@ -1637,10 +1637,10 @@ while communication delay, sensing uncertainty, and communication packet loss
 are explicitly incorporated into the observation process. In addition, the
 complete target-assignment and cooperative-guidance framework is implemented
 on a hardware-in-the-loop (HIL) platform comprising multiple independent embedded
-computing nodes and a physical communication network. All experiments reported
-in the revised manuscript are based on this updated three-dimensional HIL
-environment and the stated communication and sensing conditions. The specific
-revisions are detailed below.
+computing nodes and a physical communication network. 
+All evaluations reported in the revised manuscript are based on this updated three-dimensional HIL
+environment and the stated communication and sensing conditions. 
+The specific revisions are detailed below.
 
 \medskip
 \noindent\textbf{(1) Extension from planar motion to three-dimensional
@@ -1803,7 +1803,7 @@ remaining agents are executed on the simulation server.
 coltext=addblue,fontupper=\color{addblue},boxrule=0.6pt,arc=2pt,
 left=9pt,right=9pt,top=7pt,bottom=7pt]
 \hladd{\emph{2) HIL Platform:}
-As shown in Fig.7, the three-dimensional interception experiment is further implemented on a
+As shown in Fig.~7, the three-dimensional interception experiment is further implemented on a
 HIL platform. The policies of defenders $D_0$--$D_4$ are
 deployed on five independent NVIDIA Jetson NX computers, with one defender
 assigned to each node. The corresponding target-assignment algorithm is also
@@ -2145,9 +2145,10 @@ large coefficients preserve the exploratory capability needed to search
 among competing interceptor--target assignments. As the iterations proceed,
 the rolling and dancing perturbations diminish, while the magnitudes of the
 breeding- and stealing-directed preference updates are progressively reduced.
-This transition suppresses late-stage assignment oscillations and allows the
-working solution to settle through deterministic, advantage-weighted local
-refinement and subsequent binarization. The corresponding revision is reproduced below.
+This transition suppresses late-stage assignment oscillations and allows
+the retained solution to approach a stable fixed point after
+advantage-adaptive binarization.
+The corresponding revision is reproduced below.
 
 
 \loc Section~III-B (\emph{Distributed Consensus-Based IDBO Framework}),
@@ -2218,7 +2219,7 @@ The corresponding revisions are provided below.
 \noindent\textbf{(1) Complexity and communication-scalability analysis.}
 
 \loc Section~III-B (\emph{Distributed Consensus-Based IDBO Framework}),
-immediately after the Eq.~(27). The following
+immediately after Eq.~(27). The following
 analysis has been added:
 
 \begin{tcolorbox}[enhanced,breakable,colback=white,colframe=addblue!55,
@@ -2645,7 +2646,7 @@ left=9pt,right=9pt,top=7pt,bottom=7pt]
 The sensitivity of the reward design is evaluated in Case~1 using a
 one-at-a-time perturbation of the five weights in
 (62). Each weight is scaled by
-$s\in{0.50,0.75,1.00,1.25,1.50}$, while the remaining weights are fixed at
+$s\in\{0.50,0.75,1.00,1.25,1.50\}$, while the remaining weights are fixed at
 their nominal values. Table~VII reports the resulting
 ISR, temporal-coordination error, terminal lateral acceleration, interception time, and
 miss distance. The results reveal clear and physically interpretable
@@ -3061,7 +3062,7 @@ executed on five independent NVIDIA Jetson NX computers. The engagement
 dynamics, attacking swarm, and software policies of the remaining defenders
 are executed on the simulation server. 
 
-All experiments reported in Section~V were conducted on this platform under
+All evaluations reported in Section~V were conducted on this platform under
 the communication-delay and sensing-uncertainty environment specified in
 Section~V-A (described in our response to Comment~3.7). The specific
 revisions are reproduced below.

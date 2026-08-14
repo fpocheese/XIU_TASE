@@ -249,7 +249,7 @@ target maneuvers.
 
 \end{enumerate}
 
-The paper is structured as follows: Section~\ref{sec:method} presents relevant problem modeling. Section~\ref{sec:target_assignment} and Section~\ref{sec:cooperative_algorithm} provide a detailed description of our approach, including its framework, modules, algorithms, and rationale. Section~\ref{sec:simulation} covers experiments, results, and discussions. Lastly, Section~\ref{sec:conclusion} summarizes the paper and outlines future directions.
+The paper is structured as follows: Section~\ref{sec:method} presents relevant problem modeling. Section~\ref{sec:target_assignment} and Section~\ref{sec:cooperative_algorithm} provide a detailed description of our approach, including its framework, modules, algorithms, and rationale. Section~\ref{sec:simulation} covers experiments, results and discussions. Lastly, Section~\ref{sec:conclusion} summarizes the paper and outlines future directions.
 
 %% ===========================================================
 \section{Backgrounds and Preliminaries}
@@ -311,7 +311,7 @@ three-dimensional relative geometry is
 \mathbf{r}_{AD}&=\mathbf{p}_A-\mathbf{p}_D,\qquad
 r=\|\mathbf{r}_{AD}\|_2,\\
 \boldsymbol{\ell}_{AD}&=\mathbf{r}_{AD}/r,\qquad
-\dot{r}=\boldsymbol{\ell}_{AD}^{\top}(\mathbf{v}_A-\mathbf{v}_D).
+\dot{r}=\boldsymbol{\ell}_{AD}^{\top}(\mathbf{v}_A-\mathbf{v}_D),
 \end{aligned}}
 \end{equation}
 %
@@ -911,7 +911,7 @@ The pseudocode of ART-MAPPO is presented in Algorithm~\ref{alg:artmappo}.
 
 \begin{figure*}[!t]
 \centering
-\includegraphics[width=7.3in]{rlsuanfa_3d.pdf}
+\includegraphics[width=7.3in]{rlsuanfa_3d_V2.pdf}
 \caption{Overall workflow of the ART-MAPPO algorithm for cooperative swarm interception, showing the interaction among the attention-residual network, trust-modulated exploration, dual-clip adaptive KL optimization, and the three-dimensional acceleration-command output.}
 \label{fig:algorithm_flow}
 \end{figure*}
@@ -1334,7 +1334,7 @@ Here, Eq.~\eqref{E1} measures the mean deviation of individual time-to-go values
 \subsection{Experimental Setup and Implementation Details}
 \label{subsec:setup}
 
-All training and evaluation were performed on an Intel Core i7-9700F CPU / Nvidia RTX 3090
+All training were performed on an Intel Core i7-9700F CPU / Nvidia RTX 3090
 GPU server running Ubuntu 18.04.
 The simulation step size was 50\,ms.
 Table~\ref{table2} summarizes the key hyperparameters of ART-MAPPO.
@@ -1400,7 +1400,7 @@ $A_{\text{UAV}}$ & \shortstack{$r\sim U[D_1,D_2]$, $\varphi_A\sim U[0,2\pi)$\\ $
 \end{table*}
 
 Two dynamic engagement scenarios are designed to evaluate cooperative guidance performance.
-A third scenario, is used in Section~\ref{subsec:montecarlo} to provide additional validation of the proposed method under an unseen bang--bang attack pattern.
+The third scenario is used in Section~\ref{subsec:montecarlo} to provide additional validation of the proposed method under an unseen bang--bang attack pattern.
 The scenario configurations are listed in Table~\ref{changjingqingkuang}.
 
 
@@ -2119,7 +2119,7 @@ Weighting Coefficients.}
 The sensitivity of the reward design is evaluated in Case~1 using a
 one-at-a-time perturbation of the five weights in
 \eqref{eq:reward_function}. Each weight is scaled by
-$s\in{0.50,0.75,1.00,1.25,1.50}$, while the remaining weights are fixed at
+$s\in\{0.50,0.75,1.00,1.25,1.50\}$, while the remaining weights are fixed at
 their nominal values. Table~\ref{tab:sensitivity_reward} reports the resulting
 ISR, temporal-coordination error, terminal lateral acceleration, interception time, and
 miss distance. The results reveal clear and physically interpretable
@@ -2373,7 +2373,8 @@ limited bandwidth and heterogeneous UAV capabilities.
 \bibliography{cja-template}
 
 
-
+\FloatBarrier
+\newpage
 
 
 \appendices
@@ -2382,7 +2383,7 @@ limited bandwidth and heterogeneous UAV capabilities.
 
 Table~\ref{tab:notation} consolidates the principal variables and symbols used throughout the paper.
 
-\begin{table}[!hbt]
+\begin{table}[!ht]
 \centering
 \caption{Key Variables and Symbols}
 \label{tab:notation}
@@ -2503,7 +2504,7 @@ $J^{\mathrm{DC}},c$
 & Dual-Clip objective and floor
 & \shortstack{$\hat{D}_{\mathrm{KL}}$\\
 $\beta_{\mathrm{KL}},\delta_{\mathrm{targ}}$}
-& KL estimate, penalty coefficient, and target \\
+& KL estimate, penalty coefficient and target KL divergence \\
 
 $r_i^{(t)}$
 & Per-step composite reward
